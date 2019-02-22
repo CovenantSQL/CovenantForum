@@ -30,7 +30,7 @@ Bebop is a simple discussion board / forum web application.
 
   * Download and compile the bebop binary:
     ```
-    $ go get -u github.com/disintegration/bebop/cmd/bebop
+    $ go get -u github.com/CovenantSQL/bebop/cmd/bebop
     ```
 
   * Inside an empty directory run:

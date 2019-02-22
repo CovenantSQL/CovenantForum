@@ -12,9 +12,9 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/disintegration/bebop/avatar"
-	"github.com/disintegration/bebop/jwt"
-	"github.com/disintegration/bebop/store"
+	"github.com/CovenantSQL/bebop/avatar"
+	"github.com/CovenantSQL/bebop/jwt"
+	"github.com/CovenantSQL/bebop/store"
 )
 
 // Config is an API handler configuration.

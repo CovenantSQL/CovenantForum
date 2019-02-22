@@ -1,6 +1,6 @@
 FROM golang:alpine as builder
 RUN apk add --no-cache ca-certificates
-WORKDIR /go/src/github.com/disintegration/bebop
+WORKDIR /go/src/github.com/CovenantSQL/bebop
 COPY . .
 RUN go generate ./static
 RUN CGO_ENABLED=0 go install ./cmd/bebop

@@ -10,12 +10,12 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 
-	"github.com/disintegration/bebop/api"
-	"github.com/disintegration/bebop/avatar"
-	"github.com/disintegration/bebop/config"
-	"github.com/disintegration/bebop/jwt"
-	"github.com/disintegration/bebop/oauth"
-	"github.com/disintegration/bebop/static"
+	"github.com/CovenantSQL/bebop/api"
+	"github.com/CovenantSQL/bebop/avatar"
+	"github.com/CovenantSQL/bebop/config"
+	"github.com/CovenantSQL/bebop/jwt"
+	"github.com/CovenantSQL/bebop/oauth"
+	"github.com/CovenantSQL/bebop/static"
 )
 
 // startServer configures and starts the bebop web server.

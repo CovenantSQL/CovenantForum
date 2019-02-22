@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/disintegration/bebop/store"
+	"github.com/CovenantSQL/bebop/store"
 )
 
 func (h *Handler) handleGetTopics(w http.ResponseWriter, r *http.Request) {

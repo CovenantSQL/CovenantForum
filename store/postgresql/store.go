@@ -10,7 +10,7 @@ import (
 
 	"github.com/lib/pq"
 
-	"github.com/disintegration/bebop/store"
+	"github.com/CovenantSQL/bebop/store"
 )
 
 // Store is a postgresql implementation of store.

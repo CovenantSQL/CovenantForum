@@ -1,17 +1,17 @@
-// Package mysql provides a MySQL implementation of the bebop data store interface.
-package mysql
+// Package covenantsql provides a CovenantSQL implementation of the bebop data store interface.
+package covenantsql
 
 import (
 	"bytes"
 	"database/sql"
 	"fmt"
-
-	"github.com/go-sql-driver/mysql"
-
+	"github.com/CovenantSQL/CovenantSQL/client"
 	"github.com/CovenantSQL/bebop/store"
+	"log"
+	"strings"
 )
 
-// Store is a mysql implementation of store.
+// Store is a covenantsql implementation of store.
 type Store struct {
 	db           *sql.DB
 	userStore    *userStore
@@ -37,13 +37,13 @@ func (s *Store) Comments() store.CommentStore {
 var _ store.Store = (*Store)(nil)
 
 // Connect connects to a store.
-func Connect(address, username, password, database string) (*Store, error) {
-	connstr := fmt.Sprintf(
-		"%s:%s@tcp(%s)/%s?parseTime=true",
-		username, password, address, database,
-	)
+func Connect(dsn string, configFile string, masterKey string) (*Store, error) {
+	err := client.Init(configFile, []byte(masterKey))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	db, err := sql.Open("mysql", connstr)
+	db, err := sql.Open("covenantsql", dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func placeholders(count int) string {
 }
 
 func isUniqueConstraintError(err error) bool {
-	if err, ok := err.(*mysql.MySQLError); ok && err.Number == 1062 {
+	if err != nil && strings.ContainsAny(err.Error(), "UNIQUE constraint") {
 		return true
 	}
 	return false

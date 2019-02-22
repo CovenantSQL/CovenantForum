@@ -64,6 +64,12 @@ type Config struct {
 			Password string `hcl:"password" envconfig:"BEBOP_STORE_MYSQL_PASSWORD"`
 			Database string `hcl:"database" envconfig:"BEBOP_STORE_MYSQL_DATABASE"`
 		} `hcl:"mysql"`
+
+		CovenantSQL struct {
+			Database  string `hcl:"database" envconfig:"BEBOP_STORE_COVENANTSQL_DATABASE"`
+			Config    string `hcl:"config" envconfig:"BEBOP_STORE_COVENANTSQL_CONFIG"`
+			MasterKey string `hcl:"masterkey" envconfig:"BEBOP_STORE_COVENANTSQL_MASTERKEY"`
+		} `hcl:"covenantsql"`
 	} `hcl:"store"`
 
 	OAuth struct {
@@ -189,6 +195,12 @@ store {
     username = ""
     password = ""
     database = ""
+  }
+
+  covenantsql {
+    database  = ""
+    config    = ""
+    masterkey = ""
   }
 }
 

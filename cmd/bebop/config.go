@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+	"github.com/CovenantSQL/bebop/store/covenantsql"
 	"io/ioutil"
 	"os"
 
-	"github.com/disintegration/bebop/config"
-	"github.com/disintegration/bebop/filestorage"
-	"github.com/disintegration/bebop/store"
-	"github.com/disintegration/bebop/store/mysql"
-	"github.com/disintegration/bebop/store/postgresql"
+	"github.com/CovenantSQL/bebop/config"
+	"github.com/CovenantSQL/bebop/filestorage"
+	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/bebop/store/mysql"
+	"github.com/CovenantSQL/bebop/store/postgresql"
 )
 
 const configFile = "bebop.conf"
@@ -89,6 +90,13 @@ func getStore(cfg *config.Config) (store.Store, error) {
 			cfg.Store.PostgreSQL.SSLMode,
 			cfg.Store.PostgreSQL.SSLRootCert,
 		)
+	case "covenantsql":
+		return covenantsql.Connect(
+			cfg.Store.CovenantSQL.Database,
+			cfg.Store.CovenantSQL.Config,
+			cfg.Store.CovenantSQL.MasterKey,
+		)
 	}
+
 	return nil, fmt.Errorf("unknown store type: %s", cfg.Store.Type)
 }

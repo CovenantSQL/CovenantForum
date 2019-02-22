@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/disintegration/bebop/store"
+	"github.com/CovenantSQL/bebop/store"
 )
 
 // CommentStore is a mock implementation of store.CommentStore.

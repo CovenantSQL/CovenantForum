@@ -1,4 +1,4 @@
-package postgresql
+package covenantsql
 
 import (
 	"database/sql"
@@ -13,7 +13,6 @@ type commentStore struct {
 
 // New creates a new comment.
 func (s *commentStore) New(topicID int64, authorID int64, content string) (int64, error) {
-	var id int64
 	now := time.Now()
 
 	tx, err := s.db.Begin()
@@ -21,16 +20,22 @@ func (s *commentStore) New(topicID int64, authorID int64, content string) (int64
 		return 0, err
 	}
 
-	err = s.db.QueryRow(
-		`insert into comments(topic_id, author_id, content, created_at) values ($1, $2, $3, $4) returning id`,
+	res, err := s.db.Exec(
+		`insert into comments(topic_id, author_id, content, created_at) values (?, ?, ?, ?)`,
 		topicID, authorID, content, now,
-	).Scan(&id)
+	)
 	if err != nil {
 		tx.Rollback()
 		return 0, err
 	}
 
-	_, err = tx.Exec(`update topics set last_comment_at=$1, comment_count=comment_count+1 where id=$2`, now, topicID)
+	id, err := res.LastInsertId()
+	if err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	_, err = tx.Exec(`update topics set last_comment_at=?, comment_count=comment_count+1 where id=?`, now, topicID)
 	if err != nil {
 		tx.Rollback()
 		return 0, err
@@ -61,14 +66,14 @@ func (s *commentStore) scanComment(scanner scanner) (*store.Comment, error) {
 
 // Get finds a comment by ID.
 func (s *commentStore) Get(id int64) (*store.Comment, error) {
-	row := s.db.QueryRow(selectFromComments+` where deleted=false and id=$1`, id)
+	row := s.db.QueryRow(selectFromComments+` where deleted=false and id=?`, id)
 	return s.scanComment(row)
 }
 
 // GetByTopic finds comments by topic.
 func (s *commentStore) GetByTopic(topicID int64, offset, limit int) ([]*store.Comment, int, error) {
 	var count int
-	err := s.db.QueryRow(`select count(*) from comments where deleted=false and topic_id=$1`, topicID).Scan(&count)
+	err := s.db.QueryRow(`select count(*) from comments where deleted=false and topic_id=?`, topicID).Scan(&count)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -78,7 +83,7 @@ func (s *commentStore) GetByTopic(topicID int64, offset, limit int) ([]*store.Co
 	}
 
 	rows, err := s.db.Query(
-		selectFromComments+` where deleted=false and topic_id=$1 order by created_at, id limit $2 offset $3`,
+		selectFromComments+` where deleted=false and topic_id=? order by created_at, id limit ? offset ?`,
 		topicID,
 		limit,
 		offset,
@@ -106,7 +111,7 @@ func (s *commentStore) GetByTopic(topicID int64, offset, limit int) ([]*store.Co
 // SetContent updates comment.Content value.
 func (s *commentStore) SetContent(id int64, content string) error {
 	_, err := s.db.Exec(
-		`update comments set content=$1 where id=$2`,
+		`update comments set content=? where id=?`,
 		content, id,
 	)
 	return err
@@ -119,7 +124,7 @@ func (s *commentStore) Delete(id int64) error {
 		return err
 	}
 
-	_, err = tx.Exec(`update comments set deleted=true where id=$1`, id)
+	_, err = tx.Exec(`update comments set deleted=true where id=?`, id)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -127,10 +132,10 @@ func (s *commentStore) Delete(id int64) error {
 
 	_, err = tx.Exec(
 		`
-		update topics t set 
-			last_comment_at=(select max(created_at) from comments c where c.topic_id=t.id and c.deleted=false),
-			comment_count=t.comment_count-1
-		where t.id=(select topic_id from comments where id = $1)
+		update topics set 
+			last_comment_at=(select max(created_at) from comments where comments.topic_id=topics.id and comments.deleted=false),
+			comment_count=topics.comment_count-1
+		where topics.id=(select topic_id from comments where id = ?)
 		`,
 		id,
 	)

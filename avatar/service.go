@@ -23,8 +23,8 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 	"github.com/satori/go.uuid"
 
-	"github.com/disintegration/bebop/filestorage"
-	"github.com/disintegration/bebop/store"
+	"github.com/CovenantSQL/bebop/filestorage"
+	"github.com/CovenantSQL/bebop/store"
 )
 
 const (

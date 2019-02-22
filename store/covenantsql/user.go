@@ -1,4 +1,4 @@
-package postgresql
+package covenantsql
 
 import (
 	"database/sql"
@@ -13,14 +13,14 @@ type userStore struct {
 
 // New creates a new user.
 func (s *userStore) New(authService string, authID string) (int64, error) {
-	var id int64
-
-	err := s.db.QueryRow(
-		`insert into users(created_at, auth_service, auth_id) values($1, $2, $3) returning id`,
+	res, err := s.db.Exec(
+		`insert into users(created_at, auth_service, auth_id) values(?, ?, ?)`,
 		time.Now(), authService, authID,
-	).Scan(&id)
-
-	return id, err
+	)
+	if err != nil {
+		return 0, err
+	}
+	return res.LastInsertId()
 }
 
 const selectFromUsers = `
@@ -59,7 +59,7 @@ func (s *userStore) scanUser(scanner scanner) (*store.User, error) {
 
 // Get finds a user by ID.
 func (s *userStore) Get(id int64) (*store.User, error) {
-	row := s.db.QueryRow(selectFromUsers+` where id=$1`, id)
+	row := s.db.QueryRow(selectFromUsers+` where id=?`, id)
 	return s.scanUser(row)
 }
 
@@ -80,7 +80,7 @@ func (s *userStore) GetMany(ids []int64) (map[int64]*store.User, error) {
 	}
 
 	rows, err := s.db.Query(
-		selectFromUsers+` where id in (`+placeholders(1, len(params))+`)`,
+		selectFromUsers+` where id in (`+placeholders(len(params))+`)`,
 		params...,
 	)
 	if err != nil {
@@ -133,19 +133,19 @@ func (s *userStore) GetAdmins() ([]*store.User, error) {
 
 // GetByName finds a user by name.
 func (s *userStore) GetByName(name string) (*store.User, error) {
-	row := s.db.QueryRow(selectFromUsers+` where name=$1`, name)
+	row := s.db.QueryRow(selectFromUsers+` where name=?`, name)
 	return s.scanUser(row)
 }
 
 // GetByAuth finds a user by authService and authID.
 func (s *userStore) GetByAuth(authService string, authID string) (*store.User, error) {
-	row := s.db.QueryRow(selectFromUsers+` where auth_service=$1 and auth_id=$2`, authService, authID)
+	row := s.db.QueryRow(selectFromUsers+` where auth_service=? and auth_id=?`, authService, authID)
 	return s.scanUser(row)
 }
 
 // SetName updates user.Name value. It returns ErrConflict if the given name is already taken.
 func (s *userStore) SetName(id int64, name string) error {
-	_, err := s.db.Exec(`update users set name=$1 where id=$2`, name, id)
+	_, err := s.db.Exec(`update users set name=? where id=?`, name, id)
 	if isUniqueConstraintError(err) {
 		return store.ErrConflict
 	}
@@ -154,18 +154,18 @@ func (s *userStore) SetName(id int64, name string) error {
 
 // SetBlocked updates user.Blocked value.
 func (s *userStore) SetBlocked(id int64, blocked bool) error {
-	_, err := s.db.Exec(`update users set blocked=$1 where id=$2`, blocked, id)
+	_, err := s.db.Exec(`update users set blocked=? where id=?`, blocked, id)
 	return err
 }
 
 // SetAdmin updates user.Admin value.
 func (s *userStore) SetAdmin(id int64, admin bool) error {
-	_, err := s.db.Exec(`update users set admin=$1 where id=$2`, admin, id)
+	_, err := s.db.Exec(`update users set admin=? where id=?`, admin, id)
 	return err
 }
 
 // SetAvatar updates user.Avatar value.
 func (s *userStore) SetAvatar(id int64, avatar string) error {
-	_, err := s.db.Exec(`update users set avatar=$1 where id=$2`, avatar, id)
+	_, err := s.db.Exec(`update users set avatar=? where id=?`, avatar, id)
 	return err
 }

@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/disintegration/bebop/jwt"
-	"github.com/disintegration/bebop/store"
-	"github.com/disintegration/bebop/store/mock"
+	"github.com/CovenantSQL/bebop/jwt"
+	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/bebop/store/mock"
 )
 
 func TestHandleGetTopics(t *testing.T) {
