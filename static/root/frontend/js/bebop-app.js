@@ -8,7 +8,60 @@ var BebopApp = new Vue({
     <div>
       <bebop-nav :config="config" :auth="auth"></bebop-nav>
       <bebop-username-modal ref="usernameModal"></bebop-username-modal>
-      <router-view :config="config" :auth="auth"></router-view>
+      <div id="main">
+        <router-view :config="config" :auth="auth"></router-view>
+      </div>
+      
+      <footer class="nav-footer" id="footer">
+        <section class="sitemap">
+        <a href="#/">
+          <img svg-inline class="logoicon" src="http://developers.covenantsql.io/img/logo.svg" alt="covenantsql-logoicon">
+        </a>
+        <div>
+          <h3>Docs</h3>
+          <a href="https://developers.covenantsql.io/docs/intro">Getting Started</a>
+          <a href="https://developers.covenantsql.io/docs/api-json-rpc">API Reference</a>
+        </div>
+        <div>
+          <h3>Community</h3>
+          <a
+            href="https://stackoverflow.com/search?q=covenantsql"
+            target="_blank"
+            rel="noreferrer noopener"
+          >Stack Overflow</a>
+          <a href="https://gitter.im/CovenantSQL/CovenantSQL">Gitter Chat</a>
+          <a href="https://twitter.com/CovenantLabs" target="_blank" rel="noreferrer noopener">Twitter</a>
+        </div>
+        <div>
+          <h3>More</h3>
+          <a href="https://medium.com/@covenant_labs">Blog</a>
+          <a
+            class="github-button"
+            href="https://github.com/CovenantSQL/CovenantSQL"
+            data-icon="octicon-star"
+            data-count-href="/CovenantSQL/CovenantSQL/stargazers"
+            data-show-count="true"
+            data-count-aria-label="# stargazers on GitHub"
+            aria-label="Star this project on GitHub"
+          >Star</a>
+        </div>
+      </section>
+
+      <a
+        href="https://covenantsql.io"
+        target="_blank"
+        rel="noreferrer noopener"
+        class="covenant-icon"
+      >
+        <img
+          src="https://developers.covenantsql.io/img/horizontal_logo.svg"
+          alt="CovenantSQL"
+          width="170"
+          height="45"
+        >
+      </a>
+      </footer>
+
     </div>
   `,
 
@@ -24,7 +77,7 @@ var BebopApp = new Vue({
       { path: "/me", component: BebopUser },
       { path: "/u/:user", component: BebopUser },
     ],
-    scrollBehavior: function(to, from, savedPosition) {
+    scrollBehavior: function (to, from, savedPosition) {
       if (savedPosition) {
         return savedPosition;
       } else {
@@ -33,7 +86,7 @@ var BebopApp = new Vue({
     },
   }),
 
-  data: function() {
+  data: function () {
     return {
       config: {
         title: "",
@@ -46,13 +99,13 @@ var BebopApp = new Vue({
     };
   },
 
-  mounted: function() {
+  mounted: function () {
     this.getConfig()
     this.checkAuth();
   },
 
   methods: {
-    getConfig: function() {
+    getConfig: function () {
       this.$http.get("config.json").then(
         response => {
           this.config = response.body;
@@ -66,11 +119,11 @@ var BebopApp = new Vue({
       );
     },
 
-    signIn: function(provider) {
+    signIn: function (provider) {
       window.open("oauth/begin/" + provider, "", "width=800,height=600");
     },
 
-    signOut: function() {
+    signOut: function () {
       localStorage.removeItem(BEBOP_LOCAL_STORAGE_TOKEN_KEY);
       Vue.http.headers.common["Authorization"] = "";
       this.auth = {
@@ -79,7 +132,7 @@ var BebopApp = new Vue({
       };
     },
 
-    oauthEnd: function() {
+    oauthEnd: function () {
       var result = this.getCookieByName(BEBOP_OAUTH_RESULT_COOKIE);
       var parts = result.split(":");
 
@@ -101,18 +154,18 @@ var BebopApp = new Vue({
       this.oauthSuccess(parts[1]);
     },
 
-    getCookieByName: function(name) {
+    getCookieByName: function (name) {
       var value = "; " + document.cookie;
       var parts = value.split("; " + name + "=");
       if (parts.length === 2) return parts.pop().split(";").shift();
     },
 
-    oauthSuccess: function(token) {
+    oauthSuccess: function (token) {
       localStorage.setItem(BEBOP_LOCAL_STORAGE_TOKEN_KEY, token);
       this.checkAuth();
     },
 
-    oauthError: function(error) {
+    oauthError: function (error) {
       if (error === "UserBlocked") {
         console.log("oauth error: USER IS BLOCKED");
       } else {
@@ -121,7 +174,7 @@ var BebopApp = new Vue({
       this.signOut();
     },
 
-    checkAuth: function() {
+    checkAuth: function () {
       var token = localStorage.getItem(BEBOP_LOCAL_STORAGE_TOKEN_KEY);
       if (token) {
         Vue.http.headers.common["Authorization"] = "Bearer " + token;
@@ -129,7 +182,7 @@ var BebopApp = new Vue({
       this.getMe();
     },
 
-    getMe: function() {
+    getMe: function () {
       this.$http.get("api/v1/me").then(
         response => {
           this.auth = {
@@ -149,7 +202,7 @@ var BebopApp = new Vue({
       );
     },
 
-    setMyName: function() {
+    setMyName: function () {
       this.$refs.usernameModal.show(this.auth.user.id, "", success => {
         if (!success) {
           this.signOut();

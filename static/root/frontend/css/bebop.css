@@ -1,4 +1,4 @@
-body { padding-top: 55px; font-family: Arial, Helvetica, sans-serif; color: #222; }
+body { padding-top: 55px; font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif; font-size: 16px; line-height: 1.5; color: #222; }
 a { color: #375eab; }
 h1 { margin: 12px 5px; font-size: 2.4rem; color: #333; }
 h2 { margin: 11px 5px; font-size: 2.2rem; color: #333; }
@@ -7,10 +7,12 @@ h3 { margin: 10px 5px; font-size: 2.0rem; color: #333; }
 .container { max-width: 800px; }
 .content-container { padding: 0 5px; }
 
-.navbar-default { background-color: #e0ebf5; border-bottom: #d0dbe5 1px solid; }
-.navbar-sign-in { padding: 15px 5px !important; color: #333 !important; }
+.navbar { min-height: 55px; }
+.navbar-default { background-color: #016de6; border-bottom: #d0dbe5 1px solid; }
+.navbar-sign-in { padding: 15px 5px !important; color: white !important; }
 .navbar-user { padding: 8px 15px !important; }
-.navbar-title { color: #000; letter-spacing: 2px; }
+.navbar-title { color: white; letter-spacing: 1px; }
+.navbar-brand { padding: 5px; }
 .nav>li>a:focus, .nav>li>a:hover, .nav .open>a, .nav .open>a:focus, .nav .open>a:hover { background-color: #d0dbe5; }
 
 .avatar-block { display: block; padding:5px; }
@@ -79,3 +81,111 @@ code, pre code {
 }
 
 .pagination { margin: 10px 5px; }
+#main { min-height: 65vh; }
+
+/* footer */
+.nav-footer {
+    background: #20232a;
+    border: none;
+    color: #202020;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    line-height: 24px;
+    padding-bottom: 2em;
+    padding-top: 2em;
+    position: relative;
+  }
+  @media only screen and (min-width: 1024px) {
+    .nav-footer {
+      flex-shrink: 0;
+    }
+  }
+  .nav-footer .sitemap {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto 3em;
+    max-width: 1080px;
+  }
+  .nav-footer .sitemap .logoicon {
+    height: 58px;
+    margin-right: 32px;
+    margin-bottom: 32px;
+    opacity: 0.9;
+    transition: opacity 0.15s ease-in-out;
+  }
+  .nav-footer .sitemap .logoicon:hover {
+    opacity: 1;
+  }
+  .nav-footer .sitemap div {
+    flex: 1;
+  }
+  .nav-footer .sitemap .nav-home {
+    display: table;
+    height: 72px;
+    margin: -12px 20px 0 0;
+    opacity: 0.4;
+    padding: 10px;
+    transition: opacity 0.15s ease-in-out;
+    width: 72px;
+  }
+  .nav-footer .sitemap .nav-home:focus,
+  .nav-footer .sitemap .nav-home:hover {
+    opacity: 1;
+  }
+  @media only screen and (max-width: 735px) {
+    .nav-footer .sitemap {
+      display: flex;
+      flex-direction: column;
+      margin: 0 2em 3em;
+      width: calc(100% - 4em);
+    }
+    .nav-footer .sitemap > div {
+      margin-bottom: 18px;
+    }
+  }
+  .nav-footer .sitemap a {
+    color: hsla(0, 0%, 100%, 0.6);
+    display: block;
+    margin: 2px -10px;
+    padding: 3px 10px;
+  }
+  .nav-footer .sitemap a:focus,
+  .nav-footer .sitemap a:hover,
+  .nav-footer .sitemap h3 > a:focus,
+  .nav-footer .sitemap h3 > a:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-footer .sitemap h3,
+  .nav-footer .sitemap h6 {
+    margin: 0 0 10px;
+  }
+  .nav-footer .sitemap h3,
+  .nav-footer .sitemap h3 > a,
+  .nav-footer .sitemap h6,
+  .nav-footer .sitemap h6 > a {
+    color: #fff;
+  }
+  .nav-footer .sitemap h3 > a,
+  .nav-footer .sitemap h6 > a {
+    margin: 0 -10px;
+  }
+  .nav-footer .covenant-icon {
+    display: block;
+    margin: 1em auto;
+    opacity: 0.4;
+    transition: opacity 0.15s ease-in-out;
+    width: 170px;
+  }
+  .nav-footer .covenant-icon:hover {
+    opacity: 1;
+  }
+  .nav-footer .copyright {
+    color: hsla(0, 0%, 100%, 0.4);
+    text-align: center;
+  }
+  .nav-footer .social {
+    padding: 5px 0;
+  }

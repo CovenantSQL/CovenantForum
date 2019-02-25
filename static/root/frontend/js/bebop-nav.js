@@ -5,7 +5,7 @@ Vue.component("bebop-nav", {
         <div class="navbar-header pull-left">
           <router-link to="/" class="navbar-brand">
             <span class="navbar-title">
-              <i class="fa fa-comments"></i>
+              <img src='http://developers.covenantsql.io/img/logo.svg' alt='logo' />
               {{ config.title }}
             </span>
           </router-link>
@@ -57,7 +57,7 @@ Vue.component("bebop-nav", {
 
   props: ["config", "auth"],
 
-  data: function() {
+  data: function () {
     return {};
   },
 });
