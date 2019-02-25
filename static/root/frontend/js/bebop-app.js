@@ -100,6 +100,7 @@ var BebopApp = new Vue({
     return {
       config: {
         title: "",
+        store: [],
         oauth: [],
       },
       rawConfig: {},
