@@ -81,7 +81,10 @@ code, pre code {
 }
 
 .pagination { margin: 10px 5px; }
+
+/* covenantsql */
 #main { min-height: 65vh; }
+.cqldb.list { float: right; }
 
 /* footer */
 .nav-footer {

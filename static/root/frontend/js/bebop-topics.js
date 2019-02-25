@@ -20,6 +20,9 @@ var BebopTopics = Vue.component("bebop-topics", {
       <div v-else>
 
         <div class="topics-topic-top-buttons">
+          <a class="cqldb list btn btn-primary btn-sm" href={{dbLink}}>
+            <i class="fa fa-external-link-alt"></i> CovenantSQL DB Chain
+          </a>
           <router-link v-if="auth.authenticated" to="/new-topic" class="btn btn-primary btn-sm">
             <i class="fa fa-plus"></i> New Topic
           </router-link>
@@ -79,7 +82,7 @@ var BebopTopics = Vue.component("bebop-topics", {
 
   props: ["config", "auth"],
 
-  data: function() {
+  data: function () {
     return {
       topics: [],
       topicsReady: false,
@@ -87,15 +90,16 @@ var BebopTopics = Vue.component("bebop-topics", {
       users: {},
       usersReady: false,
       error: false,
+      dbLink: 'http://explorer.dbhub.org'
     };
   },
 
   computed: {
-    dataReady: function() {
+    dataReady: function () {
       return this.topicsReady && this.usersReady;
     },
 
-    page: function() {
+    page: function () {
       var page = parseInt(this.$route.params.page, 10);
       if (!page || page < 1) {
         return 1;
@@ -103,7 +107,7 @@ var BebopTopics = Vue.component("bebop-topics", {
       return page;
     },
 
-    lastPage: function() {
+    lastPage: function () {
       if (!this.topicsReady) {
         return 1;
       }
@@ -114,7 +118,7 @@ var BebopTopics = Vue.component("bebop-topics", {
       return p;
     },
 
-    pagination: function() {
+    pagination: function () {
       if (!this.topicsReady) {
         return [];
       }
@@ -123,27 +127,35 @@ var BebopTopics = Vue.component("bebop-topics", {
   },
 
   watch: {
-    page: function(val) {
+    page: function (val) {
       this.load();
     },
   },
 
-  created: function() {
+  created: function () {
     this.load();
   },
 
   methods: {
-    load: function() {
+    load: function () {
       this.topics = [];
       this.topicsReady = false;
       this.topicCount = 0;
       this.users = {};
       this.usersReady = false;
       this.error = false;
+      this.dbLink = ''
       this.getTopics();
     },
 
-    getTopics: function() {
+    getDbLink: function () {
+      var _dsn = this.config && this.config.store.covenantsql && this.config.store.covenantsql.database || ''
+      var dbid = _dsn.split('//')[1] || 'notfound'
+
+      this.dbLink = 'http://explorer.dbhub.org/dbs/' + dbid
+    },
+
+    getTopics: function () {
       var url = "api/v1/topics?limit=" + TOPICS_PER_PAGE;
       if (this.page > 1) {
         var offset = (this.page - 1) * TOPICS_PER_PAGE;
@@ -169,7 +181,7 @@ var BebopTopics = Vue.component("bebop-topics", {
       );
     },
 
-    getUsers: function() {
+    getUsers: function () {
       var url = "api/v1/users";
       var ids = [];
       for (var i = 0; i < this.topics.length; i++) {
@@ -198,7 +210,7 @@ var BebopTopics = Vue.component("bebop-topics", {
       );
     },
 
-    delTopic: function(id) {
+    delTopic: function (id) {
       if (!confirm("Are you sure you want to delete topic " + id + "?")) {
         return;
       }
