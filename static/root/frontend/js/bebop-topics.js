@@ -20,8 +20,8 @@ var BebopTopics = Vue.component("bebop-topics", {
       <div v-else>
 
         <div class="topics-topic-top-buttons">
-          <a class="cqldb list btn btn-primary btn-sm" href={{dbLink}}>
-            <i class="fa fa-external-link-alt"></i> CovenantSQL DB Chain
+          <a target="_blank" class="cqldb list btn btn-primary btn-sm" :href="dbLink">
+            <i class="fa fa-external-link"></i> CovenantSQL DB Chain
           </a>
           <router-link v-if="auth.authenticated" to="/new-topic" class="btn btn-primary btn-sm">
             <i class="fa fa-plus"></i> New Topic
@@ -80,7 +80,7 @@ var BebopTopics = Vue.component("bebop-topics", {
     </div>
   `,
 
-  props: ["config", "auth"],
+  props: ["config", "auth", "rawConfig"],
 
   data: function () {
     return {
@@ -90,11 +90,14 @@ var BebopTopics = Vue.component("bebop-topics", {
       users: {},
       usersReady: false,
       error: false,
-      dbLink: 'http://explorer.dbhub.org'
     };
   },
 
   computed: {
+    dbLink: function () {
+      return 'https://explorer.dbhub.org/dbs/' + window.DBID + '/blocks/'
+    },
+
     dataReady: function () {
       return this.topicsReady && this.usersReady;
     },
@@ -144,15 +147,7 @@ var BebopTopics = Vue.component("bebop-topics", {
       this.users = {};
       this.usersReady = false;
       this.error = false;
-      this.dbLink = ''
       this.getTopics();
-    },
-
-    getDbLink: function () {
-      var _dsn = this.config && this.config.store.covenantsql && this.config.store.covenantsql.database || ''
-      var dbid = _dsn.split('//')[1] || 'notfound'
-
-      this.dbLink = 'http://explorer.dbhub.org/dbs/' + dbid
     },
 
     getTopics: function () {

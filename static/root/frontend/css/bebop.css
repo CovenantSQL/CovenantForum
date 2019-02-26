@@ -85,6 +85,7 @@ code, pre code {
 /* covenantsql */
 #main { min-height: 65vh; }
 .cqldb.list { float: right; }
+img { max-width: 100%; }
 
 /* footer */
 .nav-footer {

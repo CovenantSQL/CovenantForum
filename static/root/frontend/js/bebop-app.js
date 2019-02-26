@@ -1,6 +1,16 @@
 const BEBOP_LOCAL_STORAGE_TOKEN_KEY = "bebop_auth_token";
 const BEBOP_OAUTH_RESULT_COOKIE = "bebop_oauth_result";
 
+// global vars
+window.API_HOST = "http://localhost:3000"
+window.DBID = ""
+
+// lowdb
+const adapter = new LocalStorage('db')
+window.db = low(adapter)
+// init db
+db.defaults({ sql: [], head: {} }).write()
+
 var BebopApp = new Vue({
   el: "#app",
 
@@ -9,7 +19,7 @@ var BebopApp = new Vue({
       <bebop-nav :config="config" :auth="auth"></bebop-nav>
       <bebop-username-modal ref="usernameModal"></bebop-username-modal>
       <div id="main">
-        <router-view :config="config" :auth="auth"></router-view>
+        <router-view :config="config" :auth="auth" :rawConfig="rawConfig"></router-view>
       </div>
       
       <footer class="nav-footer" id="footer">
@@ -90,26 +100,52 @@ var BebopApp = new Vue({
     return {
       config: {
         title: "",
-        store: [],
         oauth: [],
       },
+      rawConfig: {},
       auth: {
         authenticated: false,
         user: {},
       },
+      api: {
+        head: function () { return `${window.API_HOST}/apiproxy.covenantsql/v2/head/${window.DBID}` },
+      }
     };
   },
 
   mounted: function () {
-    this.getConfig()
-    this.checkAuth();
+    this.getConfig().then(this.getBlockHead)
+    this.checkAuth()
+
+    window.getBlockHead = this.getBlockHead
   },
 
   methods: {
+    getBlockHead: function () {
+      if (window.DBID) {
+        let url = this.api.head()
+        console.log('// get current lead block for ', DBID)
+
+        fetch(url).then(res => res.json()).then((d) => {
+          let head = _.get(d, 'data.block', {})
+          console.log('// current head block', head)
+          db.set('head', head).write()
+        }).catch(e => {
+          console.error(e)
+        })
+      }
+    },
+
     getConfig: function () {
-      this.$http.get("config.json").then(
+      return this.$http.get("config.json").then(
         response => {
-          this.config = response.body;
+          this.config = response.body
+          console.log('// raw config response:', response.body.raw)
+          this.rawConfig = response.body.raw
+
+          let _dsn = _.get(this.rawConfig, ['Store', 'CovenantSQL', 'Database'], '')
+          window.DBID = _dsn.split('//')[1] || ''
+
           if (this.config.title) {
             document.title = this.config.title;
           }

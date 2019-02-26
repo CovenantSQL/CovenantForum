@@ -60,4 +60,7 @@ Vue.component("bebop-nav", {
   data: function () {
     return {};
   },
+
+  created: function () {
+  },
 });
