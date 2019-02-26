@@ -90,7 +90,6 @@ var BebopTopics = Vue.component("bebop-topics", {
       users: {},
       usersReady: false,
       error: false,
-      dbLink: 'http://explorer.dbhub.org'
     };
   },
 
@@ -148,7 +147,6 @@ var BebopTopics = Vue.component("bebop-topics", {
       this.users = {};
       this.usersReady = false;
       this.error = false;
-      this.dbLink = ''
       this.getTopics();
     },
 
