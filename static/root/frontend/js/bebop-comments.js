@@ -176,16 +176,13 @@ var BebopComments = Vue.component("bebop-comments", {
       this.error = false;
 
       // async calls
-
       this.getTopic();
       this.getComments();
     },
 
-
-
     getTopic: function () {
       var url = "api/v1/topics/" + this.topicId;
-      return fetch(url).then(
+      return this.$http.get(url).then(
         response => {
           this.topic = response.body.topic;
           this.topicReady = true;

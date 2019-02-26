@@ -1,4 +1,4 @@
-const TOPICS_PER_PAGE = 20;
+const TOPICS_PER_PAGE = 10;
 
 var BebopTopics = Vue.component("bebop-topics", {
   template: `
@@ -95,7 +95,7 @@ var BebopTopics = Vue.component("bebop-topics", {
 
   computed: {
     dbLink: function () {
-      return 'https://explorer.dbhub.org/dbs/' + window.DBID + '/blocks/'
+      return window.API_HOST + '/dbs/' + window.DBID + '/blocks/'
     },
 
     dataReady: function () {
