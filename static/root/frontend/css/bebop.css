@@ -85,6 +85,7 @@ code, pre code {
 /* covenantsql */
 #main { min-height: 65vh; }
 .cqldb.list { float: right; }
+.cqldb.comment { float: right; font-size: 14px; padding: 6px 0; }
 img { max-width: 100%; }
 
 /* footer */

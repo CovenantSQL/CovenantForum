@@ -1,5 +1,19 @@
 const COMMENTS_PER_PAGE = 10
 const API_HOST = window.API_HOST
+const findCommentHashByCreatedAt = (createdAt) => {
+  let sqls = db.get('sql').value()
+  console.log('/////////createdAt', createdAt)
+  let hash = ''
+  sqls.forEach(sql => {
+    sql.queries.forEach(query => {
+      if (_.startsWith(query.pattern, 'insert into comments') && _.get(query, ['args', 3, 'value']) === createdAt) {
+        hash = sql.hash
+      }
+    })
+  })
+  console.log('----------------', hash)
+  return hash
+}
 
 var BebopComments = Vue.component("bebop-comments", {
   template: `
@@ -34,6 +48,9 @@ var BebopComments = Vue.component("bebop-comments", {
         <div v-for="comment in comments" class="card comments-comment" :id="'comment-' + comment.id">
 
           <div class="avatar-block">
+            <div class="cqldb comment">
+              <a :href="comment.createdAt | getCommentSQLRequestHref" :disabled="comment.createdAt | isCommentSQLRequestHrefEmpty">CovenantSQL</a>
+            </div>
             <div class="avatar-block-l">
               <img v-if="users[comment.authorId].avatar" class="img-circle" :src="users[comment.authorId].avatar" width="35" height="35"> 
               <img v-else class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" width="35" height="35"> 
@@ -90,11 +107,6 @@ var BebopComments = Vue.component("bebop-comments", {
       users: {},
       usersReady: false,
       error: false,
-
-      api: {
-        head: function () { return `${API_HOST}/apiproxy.covenantsql/v2/head/${dbid}` },
-        block: function (height) { return `${API_HOST}/apiproxy.covenantsql/v3/count/${dbid}/${height}?page=1&size=999` }
-      }
     };
   },
 
@@ -163,6 +175,17 @@ var BebopComments = Vue.component("bebop-comments", {
     this.load();
   },
 
+  filters: {
+    getCommentSQLRequestHref: function (createdAt) {
+      let hash = findCommentHashByCreatedAt(createdAt)
+      console.log('////////', hash)
+      return !!hash ? `${window.API_HOST}/dbs/${window.DBID}/requests/${hash}` : ''
+    },
+    isCommentSQLRequestHrefEmpty: function (createdAt) {
+      return findCommentHashByCreatedAt(createdAt) === ''
+    }
+  },
+
   methods: {
     load: function () {
       this.topic = {};
@@ -177,12 +200,76 @@ var BebopComments = Vue.component("bebop-comments", {
 
       // async calls
       this.getTopic();
-      this.getComments();
+      this.getComments().then(this.getCommentSQLQueries);
+    },
+
+    getCommentSQLQueries: function () {
+      this.comments.forEach(comment => {
+        const timestamp = (new Date(comment.createdAt)).getTime()
+        const possibleHeight = this.computeTimeHeight(timestamp)
+        console.log('// -- current comment possible height:', possibleHeight)
+
+        this.getTimeRelatedBlocks(possibleHeight)
+      })
+    },
+    writeSQL: function (block) {
+      if (!_.isEmpty(block)) {
+        block.queries.forEach(q => {
+          console.log('// write sql db', q.request)
+          db.get('sql').push(q.request).write()
+        })
+      }
+    },
+    getTimeRelatedBlocks: function (height, offset = 1) {
+      // get [height - offset, height, height + offset] blocks
+      let heightArr = []
+      for (let i = height - offset; i <= height + offset; i++) {
+        if (i > -1) {
+          heightArr.push(i)
+        }
+      }
+
+      console.log('// will get blocks: ', heightArr)
+      let promises = []
+      heightArr.forEach(h => {
+        if (!db.get('blocks').find({ count: h }).value()) {
+          let url = window.BLOCK_API(h)
+
+          let promise = new Promise((resolve, reject) => {
+            fetch(url).then(res => res.json()).then(data => {
+              const block = _.get(data, ['data', 'block'])
+              console.log('// getTimeRelatedBlocks: ', block)
+              db.get('blocks').push(block).write()
+
+              // writeSQL
+              this.writeSQL(block)
+              resolve(block)
+            }).catch(e => {
+              console.error(e)
+              reject(e)
+            })
+          })
+
+          return promise
+        }
+      })
+
+      console.log('// -- wait all promises complete', promises)
+      return Promise.all(promises)
+    },
+    computeTimeHeight: function (unixTimestamp) {
+      let headTimestamp = db.get('head').value().timestamp
+      let headHeight = db.get('head').value().count
+
+      if (headTimestamp && headHeight) {
+        let offset = Math.floor((headTimestamp - unixTimestamp) / (1000 * 60))
+        return headHeight - offset
+      }
     },
 
     getTopic: function () {
       var url = "api/v1/topics/" + this.topicId;
-      return this.$http.get(url).then(
+      this.$http.get(url).then(
         response => {
           this.topic = response.body.topic;
           this.topicReady = true;
@@ -200,7 +287,7 @@ var BebopComments = Vue.component("bebop-comments", {
         var offset = (this.page - 1) * COMMENTS_PER_PAGE;
         url += "&offset=" + offset;
       }
-      this.$http.get(url).then(
+      return this.$http.get(url).then(
         response => {
           this.comments = response.body.comments;
           this.commentCount = response.body.count;

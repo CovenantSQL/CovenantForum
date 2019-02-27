@@ -4,12 +4,14 @@ const BEBOP_OAUTH_RESULT_COOKIE = "bebop_oauth_result";
 // global vars
 window.API_HOST = "http://localhost:3000"
 window.DBID = ""
+window.HEAD_API = () => `${window.API_HOST}/apiproxy.covenantsql/v2/head/${window.DBID}`
+window.BLOCK_API = (height) => `${window.API_HOST}/apiproxy.covenantsql/v3/count/${window.DBID}/${height}?page=1&size=999`
 
 // lowdb
 const adapter = new LocalStorage('db')
 window.db = low(adapter)
 // init db
-db.defaults({ sql: [], head: {} }).write()
+db.defaults({ blocks: [], sql: [], head: {} }).write()
 
 var BebopApp = new Vue({
   el: "#app",
@@ -106,9 +108,6 @@ var BebopApp = new Vue({
       auth: {
         authenticated: false,
         user: {},
-      },
-      api: {
-        head: function () { return `${window.API_HOST}/apiproxy.covenantsql/v2/head/${window.DBID}` },
       }
     };
   },
@@ -123,7 +122,7 @@ var BebopApp = new Vue({
   methods: {
     getBlockHead: function () {
       if (window.DBID) {
-        let url = this.api.head()
+        let url = HEAD_API()
         console.log('// get current lead block for ', DBID)
 
         fetch(url).then(res => res.json()).then((d) => {
