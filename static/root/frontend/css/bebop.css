@@ -83,9 +83,24 @@ code, pre code {
 .pagination { margin: 10px 5px; }
 
 /* covenantsql */
-#main { min-height: 65vh; }
+#main { min-height: 85vh; }
 .cqldb.list { float: right; }
-.cqldb.comment { float: right; font-size: 14px; padding: 6px 0; }
+.cqldb.comment { float: right; font-size: 12px; padding: 6px 0; }
+.cqldb.comment a {
+  padding: 4px 5px;
+  background: #016de6;
+  border-radius: 6px;
+  color: white;
+  text-decoration: none;
+}
+.cqldb.comment a:hover {
+  background: #5098e8;
+}
+.cqldb.comment .disabled {
+  background: grey;
+  pointer-events: none;
+  cursor: not-allowed;
+}
 img { max-width: 100%; }
 
 /* footer */
@@ -98,8 +113,8 @@ img { max-width: 100%; }
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
     line-height: 24px;
-    padding-bottom: 2em;
-    padding-top: 2em;
+    padding-bottom: 20px;
+    padding-top: 20px;
     position: relative;
   }
   @media only screen and (min-width: 1024px) {
@@ -107,10 +122,16 @@ img { max-width: 100%; }
       flex-shrink: 0;
     }
   }
+  .nav-footer .powerby {
+    color: white;
+    font-weight: 600;
+    padding-right: 10px;
+    text-decoration: none;
+  }
   .nav-footer .sitemap {
     display: flex;
     justify-content: space-between;
-    margin: 0 auto 3em;
+    margin: 0 auto 1em;
     max-width: 1080px;
   }
   .nav-footer .sitemap .logoicon {
@@ -154,7 +175,7 @@ img { max-width: 100%; }
     color: hsla(0, 0%, 100%, 0.6);
     display: block;
     margin: 2px -10px;
-    padding: 3px 10px;
+    padding: 0px 10px;
   }
   .nav-footer .sitemap a:focus,
   .nav-footer .sitemap a:hover,
@@ -179,10 +200,10 @@ img { max-width: 100%; }
   }
   .nav-footer .covenant-icon {
     display: block;
-    margin: 1em auto;
+    margin: 0 auto;
     opacity: 0.4;
     transition: opacity 0.15s ease-in-out;
-    width: 170px;
+    width: 300px;
   }
   .nav-footer .covenant-icon:hover {
     opacity: 1;

@@ -2,7 +2,6 @@ const COMMENTS_PER_PAGE = 10
 const API_HOST = window.API_HOST
 const findCommentHashByCreatedAt = (createdAt) => {
   let sqls = db.get('sql').value()
-  console.log('/////////createdAt', createdAt)
   let hash = ''
   sqls.forEach(sql => {
     sql.queries.forEach(query => {
@@ -11,7 +10,6 @@ const findCommentHashByCreatedAt = (createdAt) => {
       }
     })
   })
-  console.log('----------------', hash)
   return hash
 }
 
@@ -49,7 +47,9 @@ var BebopComments = Vue.component("bebop-comments", {
 
           <div class="avatar-block">
             <div class="cqldb comment">
-              <a :href="comment.createdAt | getCommentSQLRequestHref" :disabled="comment.createdAt | isCommentSQLRequestHrefEmpty">CovenantSQL</a>
+              <a target="_blank" :href="comment.createdAt | getCommentSQLRequestHref"  v-bind:class="{ disabled: isCommentSQLRequestHrefEmpty(comment.createdAt) }">
+                <img src="http://developers.covenantsql.io/img/logo.svg" alt="logo" style="width: 19px;">CovenantSQL
+              </a>
             </div>
             <div class="avatar-block-l">
               <img v-if="users[comment.authorId].avatar" class="img-circle" :src="users[comment.authorId].avatar" width="35" height="35"> 
@@ -58,7 +58,7 @@ var BebopComments = Vue.component("bebop-comments", {
             <div class="avatar-block-r">
               <div class="comments-comment-author">{{users[comment.authorId].name}}</div>
               <div class="comments-comment-date">
-                commented <span :title="comment.createdAt|formatTime">{{comment.createdAt}}</span>
+                commented <span :title="comment.createdAt|formatTime">{{comment.createdAt|formatTimeAgo}}</span>
               </div>
             </div>
           </div>
@@ -178,12 +178,9 @@ var BebopComments = Vue.component("bebop-comments", {
   filters: {
     getCommentSQLRequestHref: function (createdAt) {
       let hash = findCommentHashByCreatedAt(createdAt)
-      console.log('////////', hash)
+      console.log('// found hash:', hash)
       return !!hash ? `${window.API_HOST}/dbs/${window.DBID}/requests/${hash}` : ''
     },
-    isCommentSQLRequestHrefEmpty: function (createdAt) {
-      return findCommentHashByCreatedAt(createdAt) === ''
-    }
   },
 
   methods: {
@@ -203,6 +200,9 @@ var BebopComments = Vue.component("bebop-comments", {
       this.getComments().then(this.getCommentSQLQueries);
     },
 
+    isCommentSQLRequestHrefEmpty: function (createdAt) {
+      return findCommentHashByCreatedAt(createdAt) === ''
+    },
     getCommentSQLQueries: function () {
       this.comments.forEach(comment => {
         const timestamp = (new Date(comment.createdAt)).getTime()
@@ -229,7 +229,6 @@ var BebopComments = Vue.component("bebop-comments", {
         }
       }
 
-      console.log('// will get blocks: ', heightArr)
       let promises = []
       heightArr.forEach(h => {
         if (!db.get('blocks').find({ count: h }).value()) {
@@ -254,7 +253,6 @@ var BebopComments = Vue.component("bebop-comments", {
         }
       })
 
-      console.log('// -- wait all promises complete', promises)
       return Promise.all(promises)
     },
     computeTimeHeight: function (unixTimestamp) {

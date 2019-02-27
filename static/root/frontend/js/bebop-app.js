@@ -2,7 +2,7 @@ const BEBOP_LOCAL_STORAGE_TOKEN_KEY = "bebop_auth_token";
 const BEBOP_OAUTH_RESULT_COOKIE = "bebop_oauth_result";
 
 // global vars
-window.API_HOST = "http://localhost:3000"
+window.API_HOST = "https://explorer.dbhub.org"
 window.DBID = ""
 window.HEAD_API = () => `${window.API_HOST}/apiproxy.covenantsql/v2/head/${window.DBID}`
 window.BLOCK_API = (height) => `${window.API_HOST}/apiproxy.covenantsql/v3/count/${window.DBID}/${height}?page=1&size=999`
@@ -25,53 +25,20 @@ var BebopApp = new Vue({
       </div>
       
       <footer class="nav-footer" id="footer">
-        <section class="sitemap">
-        <a href="#/">
-          <img svg-inline class="logoicon" src="http://developers.covenantsql.io/img/logo.svg" alt="covenantsql-logoicon">
-        </a>
-        <div>
-          <h3>Docs</h3>
-          <a href="https://developers.covenantsql.io/docs/intro">Getting Started</a>
-          <a href="https://developers.covenantsql.io/docs/api-json-rpc">API Reference</a>
-        </div>
-        <div>
-          <h3>Community</h3>
-          <a
-            href="https://stackoverflow.com/search?q=covenantsql"
-            target="_blank"
-            rel="noreferrer noopener"
-          >Stack Overflow</a>
-          <a href="https://gitter.im/CovenantSQL/CovenantSQL">Gitter Chat</a>
-          <a href="https://twitter.com/CovenantLabs" target="_blank" rel="noreferrer noopener">Twitter</a>
-        </div>
-        <div>
-          <h3>More</h3>
-          <a href="https://medium.com/@covenant_labs">Blog</a>
-          <a
-            class="github-button"
-            href="https://github.com/CovenantSQL/CovenantSQL"
-            data-icon="octicon-star"
-            data-count-href="/CovenantSQL/CovenantSQL/stargazers"
-            data-show-count="true"
-            data-count-aria-label="# stargazers on GitHub"
-            aria-label="Star this project on GitHub"
-          >Star</a>
-        </div>
-      </section>
-
-      <a
-        href="https://covenantsql.io"
-        target="_blank"
-        rel="noreferrer noopener"
-        class="covenant-icon"
-      >
-        <img
-          src="https://developers.covenantsql.io/img/horizontal_logo.svg"
-          alt="CovenantSQL"
-          width="170"
-          height="45"
+        <a
+          href="https://github.com/CovenantSQL/CovenantSQL"
+          target="_blank"
+          rel="noreferrer noopener"
+          class="covenant-icon"
         >
-      </a>
+          <span class="powerby">Powered by</span>
+          <img
+            src="https://developers.covenantsql.io/img/horizontal_logo.svg"
+            alt="CovenantSQL"
+            width="170"
+            height="45"
+          >
+        </a>
       </footer>
 
     </div>
