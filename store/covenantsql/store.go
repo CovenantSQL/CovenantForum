@@ -39,7 +39,7 @@ var _ store.Store = (*Store)(nil)
 // Connect connects to a store.
 func Connect(dsn string, configFile string, masterKey string) (*Store, error) {
 	err := client.Init(configFile, []byte(masterKey))
-	if err != nil {
+	if err != nil && err != client.ErrAlreadyInitialized {
 		log.Fatal(err)
 	}
 

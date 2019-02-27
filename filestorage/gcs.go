@@ -44,7 +44,7 @@ func (s *GoogleCloudStorage) Save(path string, r io.Reader) error {
 	w.CacheControl = "public, max-age=86400"
 
 	if _, err := io.Copy(w, r); err != nil {
-		return fmt.Errorf("failed to copy file to GCS bucket: %v", err)
+		return fmt.Errorf("failed to copy file to GCS dsn: %v", err)
 	}
 	if err := w.Close(); err != nil {
 		return fmt.Errorf("failed to close GCS writer: %v", err)

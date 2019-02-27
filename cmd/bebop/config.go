@@ -68,6 +68,14 @@ func getFileStorage(cfg *config.Config) (filestorage.FileStorage, error) {
 			cfg.FileStorage.AmazonS3.Region,
 			cfg.FileStorage.AmazonS3.Bucket,
 		)
+	case "covenant_s3":
+		return filestorage.NewCovenantS3(
+			cfg.FileStorage.CovenantS3.Database,
+			cfg.FileStorage.CovenantS3.Config,
+			cfg.FileStorage.CovenantS3.MasterKey,
+			cfg.BaseURL+"/covenant_static",
+			"default",
+		)
 	}
 	return nil, fmt.Errorf("unknown file storage type: %s", cfg.FileStorage.Type)
 }

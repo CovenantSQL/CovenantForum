@@ -44,6 +44,13 @@ type Config struct {
 			Region    string `hcl:"region" envconfig:"BEBOP_FILE_STORAGE_S3_REGION"`
 			Bucket    string `hcl:"bucket" envconfig:"BEBOP_FILE_STORAGE_S3_BUCKET"`
 		} `hcl:"amazon_s3"`
+
+		CovenantS3 struct {
+			Database  string `hcl:"database" envconfig:"BEBOP_STORE_COVENANTSQL_DATABASE"`
+			Config    string `hcl:"config" envconfig:"BEBOP_STORE_COVENANTSQL_CONFIG"`
+			MasterKey string `hcl:"masterkey" envconfig:"BEBOP_STORE_COVENANTSQL_MASTERKEY"`
+		} `hcl:"covenant_s3"`
+
 	} `hcl:"file_storage"`
 
 	Store struct {

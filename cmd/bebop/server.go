@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/CovenantSQL/bebop/filestorage"
 	"net/http"
 	"net/url"
 	"sort"
@@ -84,6 +85,11 @@ func startServer() {
 
 	if cfg.FileStorage.Type == "local" {
 		router.Mount("/static", static.Dir("/static", cfg.FileStorage.Local.Dir))
+	}
+
+	if cfg.FileStorage.Type == "covenant_s3" {
+		router.HandleFunc("/covenant_static/{type}/{name}",
+			fileStorage.(*filestorage.CovenantS3).GetHTTPHandler("/covenant_static/"))
 	}
 
 	router.Get("/config.json", configHandler)
