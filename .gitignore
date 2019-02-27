@@ -28,6 +28,7 @@ bin/
 *.dll
 *.so
 *.dylib
+cmd/bebop/bebop
 
 # Test binary, build with `go test -c`
 *.test
