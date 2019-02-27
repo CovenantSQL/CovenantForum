@@ -68,7 +68,7 @@ func startServer() {
 		logger.Fatalf("failed to init oauth providers: %s", err)
 	}
 
-	configHandler, err := newConfigHandler(cfg.Title, oauthProviders)
+	configHandler, err := newConfigHandler(cfg, oauthProviders)
 	if err != nil {
 		logger.Fatalf("failed to create config handler: %s", err)
 	}
@@ -132,13 +132,15 @@ func initOAuthProviders(cfg *config.Config, h *oauth.Handler) ([]string, error) 
 	return providers, nil
 }
 
-func newConfigHandler(title string, oauthProviders []string) (http.HandlerFunc, error) {
+func newConfigHandler(cfg *config.Config, oauthProviders []string) (http.HandlerFunc, error) {
 	appConfig := struct {
-		Title string   `json:"title"`
-		OAuth []string `json:"oauth"`
+		Title  string         `json:"title"`
+		OAuth  []string       `json:"oauth"`
+		Config *config.Config `json:"raw"`
 	}{
-		Title: title,
-		OAuth: oauthProviders,
+		Title:  cfg.Title,
+		OAuth:  oauthProviders,
+		Config: cfg,
 	}
 
 	sort.Strings(appConfig.OAuth)

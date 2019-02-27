@@ -1,4 +1,5 @@
-const COMMENTS_PER_PAGE = 20;
+const COMMENTS_PER_PAGE = 10
+const API_HOST = window.API_HOST
 
 var BebopComments = Vue.component("bebop-comments", {
   template: `
@@ -40,7 +41,7 @@ var BebopComments = Vue.component("bebop-comments", {
             <div class="avatar-block-r">
               <div class="comments-comment-author">{{users[comment.authorId].name}}</div>
               <div class="comments-comment-date">
-                commented <span :title="comment.createdAt|formatTime">{{comment.createdAt|formatTimeAgo}}</span>
+                commented <span :title="comment.createdAt|formatTime">{{comment.createdAt}}</span>
               </div>
             </div>
           </div>
@@ -77,9 +78,9 @@ var BebopComments = Vue.component("bebop-comments", {
     </div>
   `,
 
-  props: ["config", "auth"],
+  props: ["config", "auth", "dbid"],
 
-  data: function() {
+  data: function () {
     return {
       topic: {},
       topicReady: false,
@@ -89,15 +90,20 @@ var BebopComments = Vue.component("bebop-comments", {
       users: {},
       usersReady: false,
       error: false,
+
+      api: {
+        head: function () { return `${API_HOST}/apiproxy.covenantsql/v2/head/${dbid}` },
+        block: function (height) { return `${API_HOST}/apiproxy.covenantsql/v3/count/${dbid}/${height}?page=1&size=999` }
+      }
     };
   },
 
   computed: {
-    dataReady: function() {
+    dataReady: function () {
       return this.topicReady && this.commentsReady && this.usersReady;
     },
 
-    topicId: function() {
+    topicId: function () {
       var topicId = parseInt(this.$route.params.topic, 10);
       if (!topicId) {
         return 0;
@@ -105,7 +111,7 @@ var BebopComments = Vue.component("bebop-comments", {
       return topicId;
     },
 
-    page: function() {
+    page: function () {
       var page = parseInt(this.$route.params.page, 10);
       if (!page || page < 1) {
         return 1;
@@ -113,7 +119,7 @@ var BebopComments = Vue.component("bebop-comments", {
       return page;
     },
 
-    lastPage: function() {
+    lastPage: function () {
       if (!this.commentsReady) {
         return 1;
       }
@@ -124,7 +130,7 @@ var BebopComments = Vue.component("bebop-comments", {
       return p;
     },
 
-    pagination: function() {
+    pagination: function () {
       if (!this.commentsReady) {
         return [];
       }
@@ -133,13 +139,13 @@ var BebopComments = Vue.component("bebop-comments", {
   },
 
   watch: {
-    page: function(val) {
+    page: function (val) {
       this.load();
     },
-    topicId: function(val) {
+    topicId: function (val) {
       this.load();
     },
-    dataReady: function(val) {
+    dataReady: function (val) {
       if (val && this.$route.params.comment) {
         this.$nextTick(() => {
           $("html, body").animate(
@@ -153,12 +159,12 @@ var BebopComments = Vue.component("bebop-comments", {
     },
   },
 
-  created: function() {
+  created: function () {
     this.load();
   },
 
   methods: {
-    load: function() {
+    load: function () {
       this.topic = {};
       this.topicReady = false;
       this.comments = [];
@@ -168,13 +174,15 @@ var BebopComments = Vue.component("bebop-comments", {
       this.usersReady = false;
       this.waitNewComment = false;
       this.error = false;
+
+      // async calls
       this.getTopic();
       this.getComments();
     },
 
-    getTopic: function() {
+    getTopic: function () {
       var url = "api/v1/topics/" + this.topicId;
-      this.$http.get(url).then(
+      return this.$http.get(url).then(
         response => {
           this.topic = response.body.topic;
           this.topicReady = true;
@@ -186,7 +194,7 @@ var BebopComments = Vue.component("bebop-comments", {
       );
     },
 
-    getComments: function() {
+    getComments: function () {
       var url = "api/v1/comments?topic=" + this.topicId + "&limit=" + COMMENTS_PER_PAGE;
       if (this.page > 0) {
         var offset = (this.page - 1) * COMMENTS_PER_PAGE;
@@ -218,7 +226,7 @@ var BebopComments = Vue.component("bebop-comments", {
       );
     },
 
-    getUsers: function() {
+    getUsers: function () {
       var url = "api/v1/users";
       var ids = [];
       for (var i = 0; i < this.comments.length; i++) {
@@ -247,7 +255,7 @@ var BebopComments = Vue.component("bebop-comments", {
       );
     },
 
-    delComment: function(id) {
+    delComment: function (id) {
       if (!confirm("Are you sure you want to delete comment " + id + "?")) {
         return;
       }
