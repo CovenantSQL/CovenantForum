@@ -30,11 +30,12 @@ Comparison between Traditional and Decentralized forum:
 
 ## Demo 
 
+[Demo forum](https://demo.covenantsql.io/forum/)
 
 
 ## Getting Started
   * [Generate a CovenantSQL config and keypair](https://github.com/CovenantSQL/CovenantSQL/wiki/Testnet-Quickstart).
-  * Get PTC by replying to the [topic](https://explorer.dbhub.org/forum/#/t/2) with your wallet address. 
+  * Get PTC by replying to the [topic](https://demo.covenantsql.io/forum/#/t/2) with your wallet address. 
   * Create a new empty CovenantSQL database with [cql](https://github.com/CovenantSQL/CovenantSQL/wiki/Testnet-Quickstart#4-create-a-database-using-cli).
 
   * Obtain OAuth 2.0 credentials (client_id and secret) from at least one of the providers (Google, Facebook, Github) so users can log into the web application. The OAuth callback url will be `<base_url>/oauth/end/<provider>`. The `<base_url>` is where the bebop web app will be mounted on your site and the `<provider>` is the lowercase provider name. For example, if base_url is `https://my.website.com/forum/`, then the oauth callback url for google will be `https://my.website.com/forum/oauth/end/google`.
@@ -71,3 +72,13 @@ Comparison between Traditional and Decentralized forum:
 ### Comments
 
 ![Comments](screenshot-comments.png)
+
+## Todo
+
+- Make creating new forum easier.
+- Grant low permission on forum database.
+- We are working on [CovenantSQL](https://github.com/CovenantSQL/CovenantSQL).
+
+## License
+
+- Most code is derivated from a simple traditional forum [disintegration/bebop](https://github.com/disintegration/bebop)
