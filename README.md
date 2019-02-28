@@ -70,4 +70,4 @@ Comparison between Traditional and Decentralized forum:
 
 ### Comments
 
-![Comments](screenshot-comments.png)
+![Comments](screenshot-link.png)
