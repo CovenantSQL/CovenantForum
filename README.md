@@ -1,18 +1,18 @@
-# Bebop
+# CovenantForum
 
-Bebop is a simple discussion board / forum web application.
+CovenantForum is a simple **decentralized** forum web app powered by [CovenantSQL](https://github.com/CovenantSQL/CovenantSQL).
+
+## Decentralized forum?
+
+- Data and files are saved in **decentralized database**. Anyone with a permission granted private key and the DSN(Database Serial Num) can serve the forum anywhere.
+- Also, all posts related data are saved on an unique `SQLChain Block` like [this](https://explorer.dbhub.org/dbs/e08d944b4ebd69e12aa69dade1798bb98cea4e2833e55fb6decc1f447fc720a4/requests/f39f9cb46c2821f6354d001fea9a5eaf2b96b06e83c218d46d810f353a039ec8).
+- Anyone can create your "blockchain powered forum" with just few steps.
 
 ## Features
 
+- Static files and database are powered by decentralized database: CovenantSQL.
 - REST API backend written in Go
 - Vue.js-based frontend
-- Two databases are supported: 
-  - PostgreSQL
-  - MySQL
-- Three file-storage backends are supported to store user-uploaded files (e.g. avatars):
-  - Local filesystem
-  - Google Cloud Storage
-  - Amazon S3
 - Social login (OAuth 2.0) via three providers:
   - Google
   - Facebook
@@ -21,10 +21,21 @@ Bebop is a simple discussion board / forum web application.
 - Single binary deploy. All the static assets (frontend JavaScript & CSS files) are embedded into the binary
 - Markdown comments
 - Avatar upload, including animated GIFs. Auto-generated letter-avatars on user creation
+ 
+## Arch
+
+Comparison between Traditional and Decentralized forum:
+
+![](forum-arch.png)
+
+## Demo 
+
+
 
 ## Getting Started
-
-  * Create a new empty database (MySQL оr PostgreSQL) that will be used as a data store and a database user with all privileges granted on this database.
+  * [Generate a CovenantSQL config and keypair](https://github.com/CovenantSQL/CovenantSQL/wiki/Testnet-Quickstart).
+  * Get PTC by replying to the [topic](https://explorer.dbhub.org/forum/#/t/2) with your wallet address. 
+  * Create a new empty CovenantSQL database with [cql](https://github.com/CovenantSQL/CovenantSQL/wiki/Testnet-Quickstart#4-create-a-database-using-cli).
 
   * Obtain OAuth 2.0 credentials (client_id and secret) from at least one of the providers (Google, Facebook, Github) so users can log into the web application. The OAuth callback url will be `<base_url>/oauth/end/<provider>`. The `<base_url>` is where the bebop web app will be mounted on your site and the `<provider>` is the lowercase provider name. For example, if base_url is `https://my.website.com/forum/`, then the oauth callback url for google will be `https://my.website.com/forum/oauth/end/google`.
 
