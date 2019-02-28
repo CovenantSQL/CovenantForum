@@ -69,9 +69,9 @@ Comparison between Traditional and Decentralized forum:
 
 ![Topics](screenshot-topics.png)
 
-### Comments
+### Comments on blockchain
 
-![Comments](screenshot-comments.png)
+![Comments](screenshot-link.png)
 
 ## Todo
 
