@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package controller
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/json"
 	"errors"
@@ -23,12 +24,11 @@ import (
 	"log"
 	"sync"
 
-	"golang.org/x/net/context"
 	"golang.org/x/oauth2"
 	cd "google.golang.org/api/clouddebugger/v2"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/option"
-	"google.golang.org/api/transport"
+	htransport "google.golang.org/api/transport/http"
 )
 
 const (
@@ -92,7 +92,7 @@ type serviceInterface interface {
 }
 
 var newService = func(ctx context.Context, tokenSource oauth2.TokenSource) (serviceInterface, error) {
-	httpClient, endpoint, err := transport.NewHTTPClient(ctx, option.WithTokenSource(tokenSource))
+	httpClient, endpoint, err := htransport.NewClient(ctx, option.WithTokenSource(tokenSource))
 	if err != nil {
 		return nil, err
 	}

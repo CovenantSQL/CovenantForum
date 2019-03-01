@@ -34,7 +34,10 @@ import (
 	"testing"
 	"time"
 
-	bp "github.com/CovenantSQL/CovenantSQL/blockproducer"
+	sqlite3 "github.com/CovenantSQL/go-sqlite3-encrypt"
+	. "github.com/smartystreets/goconvey/convey"
+	yaml "gopkg.in/yaml.v2"
+
 	"github.com/CovenantSQL/CovenantSQL/client"
 	"github.com/CovenantSQL/CovenantSQL/conf"
 	"github.com/CovenantSQL/CovenantSQL/crypto"
@@ -43,13 +46,11 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/proto"
 	"github.com/CovenantSQL/CovenantSQL/route"
 	"github.com/CovenantSQL/CovenantSQL/rpc"
+	"github.com/CovenantSQL/CovenantSQL/test"
 	"github.com/CovenantSQL/CovenantSQL/types"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
 	"github.com/CovenantSQL/CovenantSQL/utils/trace"
-	sqlite3 "github.com/CovenantSQL/go-sqlite3-encrypt"
-	. "github.com/smartystreets/goconvey/convey"
-	yaml "gopkg.in/yaml.v2"
 )
 
 var (
@@ -390,12 +391,12 @@ func TestFullProcess(t *testing.T) {
 		// wait for chain service
 		var ctx1, cancel1 = context.WithTimeout(context.Background(), 1*time.Minute)
 		defer cancel1()
-		err = bp.WaitBPChainService(ctx1, 3*time.Second)
+		err = test.WaitBPChainService(ctx1, 3*time.Second)
 		if err != nil {
 			t.Fatalf("wait for chain service failed: %v", err)
 		}
 
-		dsn, err := client.Create(meta)
+		_, dsn, err := client.Create(meta)
 		So(err, ShouldBeNil)
 		dsnCfg, err := client.ParseDSN(dsn)
 		So(err, ShouldBeNil)
@@ -776,12 +777,12 @@ func benchMiner(b *testing.B, minerCount uint16, bypassSign bool, useEventualCon
 		// wait for chain service
 		var ctx1, cancel1 = context.WithTimeout(context.Background(), 1*time.Minute)
 		defer cancel1()
-		err = bp.WaitBPChainService(ctx1, 3*time.Second)
+		err = test.WaitBPChainService(ctx1, 3*time.Second)
 		if err != nil {
 			b.Fatalf("wait for chain service failed: %v", err)
 		}
 
-		dsn, err = client.Create(meta)
+		_, dsn, err = client.Create(meta)
 		So(err, ShouldBeNil)
 		log.Infof("the created database dsn is %v", dsn)
 		err = ioutil.WriteFile(dsnFile, []byte(dsn), 0666)
@@ -804,7 +805,7 @@ func benchMiner(b *testing.B, minerCount uint16, bypassSign bool, useEventualCon
 
 	benchDB(b, db, minerCount > 0)
 
-	err = client.Drop(dsn)
+	_, err = client.Drop(dsn)
 	So(err, ShouldBeNil)
 	time.Sleep(5 * time.Second)
 	stopNodes()
@@ -887,12 +888,12 @@ func benchOutsideMinerWithTargetMinerList(
 		// wait for chain service
 		var ctx1, cancel1 = context.WithTimeout(context.Background(), 1*time.Minute)
 		defer cancel1()
-		err = bp.WaitBPChainService(ctx1, 3*time.Second)
+		err = test.WaitBPChainService(ctx1, 3*time.Second)
 		if err != nil {
 			b.Fatalf("wait for chain service failed: %v", err)
 		}
 
-		dsn, err = client.Create(meta)
+		_, dsn, err = client.Create(meta)
 		So(err, ShouldBeNil)
 		log.Infof("the created database dsn is %v", dsn)
 

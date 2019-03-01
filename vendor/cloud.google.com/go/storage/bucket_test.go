@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,61 +20,175 @@ import (
 	"testing"
 	"time"
 
-	"cloud.google.com/go/internal/pretty"
+	"cloud.google.com/go/internal/testutil"
+	"github.com/google/go-cmp/cmp"
+	"google.golang.org/api/googleapi"
 	raw "google.golang.org/api/storage/v1"
 )
 
 func TestBucketAttrsToRawBucket(t *testing.T) {
 	t.Parallel()
 	attrs := &BucketAttrs{
-		Name:              "name",
-		ACL:               []ACLRule{{Entity: "bob@example.com", Role: RoleOwner}},
-		DefaultObjectACL:  []ACLRule{{Entity: AllUsers, Role: RoleReader}},
-		Location:          "loc",
-		StorageClass:      "class",
+		Name: "name",
+		ACL:  []ACLRule{{Entity: "bob@example.com", Role: RoleOwner, Domain: "d", Email: "e"}},
+		DefaultObjectACL: []ACLRule{{Entity: AllUsers, Role: RoleReader, EntityID: "eid",
+			ProjectTeam: &ProjectTeam{ProjectNumber: "17", Team: "t"}}},
+		Location:     "loc",
+		StorageClass: "class",
+		RetentionPolicy: &RetentionPolicy{
+			RetentionPeriod: 3 * time.Second,
+		},
+		BucketPolicyOnly:  BucketPolicyOnly{Enabled: true},
 		VersioningEnabled: false,
 		// should be ignored:
 		MetaGeneration: 39,
 		Created:        time.Now(),
 		Labels:         map[string]string{"label": "value"},
+		CORS: []CORS{
+			{
+				MaxAge:          time.Hour,
+				Methods:         []string{"GET", "POST"},
+				Origins:         []string{"*"},
+				ResponseHeaders: []string{"FOO"},
+			},
+		},
+		Encryption: &BucketEncryption{DefaultKMSKeyName: "key"},
+		Logging:    &BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:    &BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		Lifecycle: Lifecycle{
+			Rules: []LifecycleRule{{
+				Action: LifecycleAction{
+					Type:         SetStorageClassAction,
+					StorageClass: "NEARLINE",
+				},
+				Condition: LifecycleCondition{
+					AgeInDays:             10,
+					Liveness:              Live,
+					CreatedBefore:         time.Date(2017, 1, 2, 3, 4, 5, 6, time.UTC),
+					MatchesStorageClasses: []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"},
+					NumNewerVersions:      3,
+				},
+			}, {
+				Action: LifecycleAction{
+					Type: DeleteAction,
+				},
+				Condition: LifecycleCondition{
+					AgeInDays:             30,
+					Liveness:              Live,
+					CreatedBefore:         time.Date(2017, 1, 2, 3, 4, 5, 6, time.UTC),
+					MatchesStorageClasses: []string{"NEARLINE"},
+					NumNewerVersions:      10,
+				},
+			}, {
+				Action: LifecycleAction{
+					Type: DeleteAction,
+				},
+				Condition: LifecycleCondition{
+					Liveness: Archived,
+				},
+			}},
+		},
 	}
 	got := attrs.toRawBucket()
 	want := &raw.Bucket{
 		Name: "name",
 		Acl: []*raw.BucketAccessControl{
-			{Entity: "bob@example.com", Role: "OWNER"},
+			{Entity: "bob@example.com", Role: "OWNER"}, // other fields ignored on create/update
 		},
 		DefaultObjectAcl: []*raw.ObjectAccessControl{
-			{Entity: "allUsers", Role: "READER"},
+			{Entity: "allUsers", Role: "READER"}, // other fields ignored on create/update
 		},
 		Location:     "loc",
 		StorageClass: "class",
-		Versioning:   nil, // ignore VersioningEnabled if flase
-		Labels:       map[string]string{"label": "value"},
+		RetentionPolicy: &raw.BucketRetentionPolicy{
+			RetentionPeriod: 3,
+		},
+		IamConfiguration: &raw.BucketIamConfiguration{
+			BucketPolicyOnly: &raw.BucketIamConfigurationBucketPolicyOnly{
+				Enabled: true,
+			},
+		},
+		Versioning: nil, // ignore VersioningEnabled if false
+		Labels:     map[string]string{"label": "value"},
+		Cors: []*raw.BucketCors{
+			{
+				MaxAgeSeconds:  3600,
+				Method:         []string{"GET", "POST"},
+				Origin:         []string{"*"},
+				ResponseHeader: []string{"FOO"},
+			},
+		},
+		Encryption: &raw.BucketEncryption{DefaultKmsKeyName: "key"},
+		Logging:    &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:    &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		Lifecycle: &raw.BucketLifecycle{
+			Rule: []*raw.BucketLifecycleRule{{
+				Action: &raw.BucketLifecycleRuleAction{
+					Type:         SetStorageClassAction,
+					StorageClass: "NEARLINE",
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					Age:                 10,
+					IsLive:              googleapi.Bool(true),
+					CreatedBefore:       "2017-01-02",
+					MatchesStorageClass: []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"},
+					NumNewerVersions:    3,
+				},
+			}, {
+				Action: &raw.BucketLifecycleRuleAction{
+					Type: DeleteAction,
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					Age:                 30,
+					IsLive:              googleapi.Bool(true),
+					CreatedBefore:       "2017-01-02",
+					MatchesStorageClass: []string{"NEARLINE"},
+					NumNewerVersions:    10,
+				},
+			}, {
+				Action: &raw.BucketLifecycleRuleAction{
+					Type: DeleteAction,
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					IsLive: googleapi.Bool(false),
+				},
+			}},
+		},
 	}
-	msg, ok, err := pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
 
 	attrs.VersioningEnabled = true
+	attrs.RequesterPays = true
 	got = attrs.toRawBucket()
 	want.Versioning = &raw.BucketVersioning{Enabled: true}
-	msg, ok, err = pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+	want.Billing = &raw.BucketBilling{RequesterPays: true}
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
 }
 
 func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 	t.Parallel()
-	au := &BucketAttrsToUpdate{VersioningEnabled: false}
+	au := &BucketAttrsToUpdate{
+		VersioningEnabled:     false,
+		RequesterPays:         false,
+		BucketPolicyOnly:      &BucketPolicyOnly{Enabled: false},
+		DefaultEventBasedHold: false,
+		RetentionPolicy:       &RetentionPolicy{RetentionPeriod: time.Hour},
+		Encryption:            &BucketEncryption{DefaultKMSKeyName: "key2"},
+		Lifecycle: &Lifecycle{
+			Rules: []LifecycleRule{
+				{
+					Action:    LifecycleAction{Type: "Delete"},
+					Condition: LifecycleCondition{AgeInDays: 30},
+				},
+			},
+		},
+		Logging: &BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website: &BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+	}
 	au.SetLabel("a", "foo")
 	au.DeleteLabel("b")
 	au.SetLabel("c", "")
@@ -88,13 +202,32 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 			"a": "foo",
 			"c": "",
 		},
+		Billing: &raw.BucketBilling{
+			RequesterPays:   false,
+			ForceSendFields: []string{"RequesterPays"},
+		},
+		DefaultEventBasedHold: false,
+		RetentionPolicy:       &raw.BucketRetentionPolicy{RetentionPeriod: 3600},
+		IamConfiguration: &raw.BucketIamConfiguration{
+			BucketPolicyOnly: &raw.BucketIamConfigurationBucketPolicyOnly{
+				Enabled: false,
+			},
+		},
+		Encryption: &raw.BucketEncryption{DefaultKmsKeyName: "key2"},
 		NullFields: []string{"Labels.b"},
+		Lifecycle: &raw.BucketLifecycle{
+			Rule: []*raw.BucketLifecycleRule{
+				{
+					Action:    &raw.BucketLifecycleRuleAction{Type: "Delete"},
+					Condition: &raw.BucketLifecycleRuleCondition{Age: 30},
+				},
+			},
+		},
+		Logging:         &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:         &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		ForceSendFields: []string{"DefaultEventBasedHold"},
 	}
-	msg, ok, err := pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
 
@@ -106,14 +239,24 @@ func TestBucketAttrsToUpdateToRawBucket(t *testing.T) {
 		ForceSendFields: []string{"Labels"},
 		NullFields:      []string{"Labels.b"},
 	}
-	msg, ok, err = pretty.Diff(want, got)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if !ok {
+	if msg := testutil.Diff(got, want); msg != "" {
 		t.Error(msg)
 	}
 
+	// Test nulls.
+	au3 := &BucketAttrsToUpdate{
+		RetentionPolicy: &RetentionPolicy{},
+		Encryption:      &BucketEncryption{},
+		Logging:         &BucketLogging{},
+		Website:         &BucketWebsite{},
+	}
+	got = au3.toRawBucket()
+	want = &raw.Bucket{
+		NullFields: []string{"RetentionPolicy", "Encryption", "Logging", "Website"},
+	}
+	if msg := testutil.Diff(got, want); msg != "" {
+		t.Error(msg)
+	}
 }
 
 func TestCallBuilders(t *testing.T) {
@@ -125,7 +268,20 @@ func TestCallBuilders(t *testing.T) {
 	const metagen = 17
 
 	b := c.Bucket("name")
-	bm := b.If(BucketConditions{MetagenerationMatch: metagen})
+	bm := b.If(BucketConditions{MetagenerationMatch: metagen}).UserProject("p")
+
+	equal := func(x, y interface{}) bool {
+		return testutil.Equal(x, y,
+			cmp.AllowUnexported(
+				raw.BucketsGetCall{},
+				raw.BucketsDeleteCall{},
+				raw.BucketsPatchCall{},
+			),
+			cmp.FilterPath(func(p cmp.Path) bool {
+				return p[len(p)-1].Type() == reflect.TypeOf(&raw.Service{})
+			}, cmp.Ignore()),
+		)
+	}
 
 	for i, test := range []struct {
 		callFunc func(*BucketHandle) (interface{}, error)
@@ -137,21 +293,31 @@ func TestCallBuilders(t *testing.T) {
 		{
 			func(b *BucketHandle) (interface{}, error) { return b.newGetCall() },
 			rc.Buckets.Get("name").Projection("full"),
-			func(req interface{}) { req.(*raw.BucketsGetCall).IfMetagenerationMatch(metagen) },
+			func(req interface{}) { req.(*raw.BucketsGetCall).IfMetagenerationMatch(metagen).UserProject("p") },
 		},
 		{
 			func(b *BucketHandle) (interface{}, error) { return b.newDeleteCall() },
 			rc.Buckets.Delete("name"),
-			func(req interface{}) { req.(*raw.BucketsDeleteCall).IfMetagenerationMatch(metagen) },
+			func(req interface{}) { req.(*raw.BucketsDeleteCall).IfMetagenerationMatch(metagen).UserProject("p") },
 		},
 		{
 			func(b *BucketHandle) (interface{}, error) {
-				return b.newPatchCall(&BucketAttrsToUpdate{VersioningEnabled: false})
+				return b.newPatchCall(&BucketAttrsToUpdate{
+					VersioningEnabled: false,
+					RequesterPays:     false,
+				})
 			},
 			rc.Buckets.Patch("name", &raw.Bucket{
-				Versioning: &raw.BucketVersioning{Enabled: false, ForceSendFields: []string{"Enabled"}},
+				Versioning: &raw.BucketVersioning{
+					Enabled:         false,
+					ForceSendFields: []string{"Enabled"},
+				},
+				Billing: &raw.BucketBilling{
+					RequesterPays:   false,
+					ForceSendFields: []string{"RequesterPays"},
+				},
 			}).Projection("full"),
-			func(req interface{}) { req.(*raw.BucketsPatchCall).IfMetagenerationMatch(metagen) },
+			func(req interface{}) { req.(*raw.BucketsPatchCall).IfMetagenerationMatch(metagen).UserProject("p") },
 		},
 	} {
 		got, err := test.callFunc(b)
@@ -159,17 +325,16 @@ func TestCallBuilders(t *testing.T) {
 			t.Fatal(err)
 		}
 		setClientHeader(test.want.Header())
-		if !reflect.DeepEqual(got, test.want) {
+		if !equal(got, test.want) {
 			t.Errorf("#%d: got %#v, want %#v", i, got, test.want)
 		}
-
 		got, err = test.callFunc(bm)
 		if err != nil {
 			t.Fatal(err)
 		}
 		test.metagenFunc(test.want)
-		if !reflect.DeepEqual(got, test.want) {
-			t.Errorf("#%d: got %#v, want %#v", i, got, test.want)
+		if !equal(got, test.want) {
+			t.Errorf("#%d:\ngot  %#v\nwant %#v", i, got, test.want)
 		}
 	}
 
@@ -183,5 +348,114 @@ func TestCallBuilders(t *testing.T) {
 	}
 	if _, err := bm.newPatchCall(&BucketAttrsToUpdate{}); err == nil {
 		t.Errorf("got nil, want error")
+	}
+}
+
+func TestNewBucket(t *testing.T) {
+	labels := map[string]string{"a": "b"}
+	matchClasses := []string{"MULTI_REGIONAL", "REGIONAL", "STANDARD"}
+	aTime := time.Date(2017, 1, 2, 0, 0, 0, 0, time.UTC)
+	rb := &raw.Bucket{
+		Name:                  "name",
+		Location:              "loc",
+		DefaultEventBasedHold: true,
+		Metageneration:        3,
+		StorageClass:          "sc",
+		TimeCreated:           "2017-10-23T04:05:06Z",
+		Versioning:            &raw.BucketVersioning{Enabled: true},
+		Labels:                labels,
+		Billing:               &raw.BucketBilling{RequesterPays: true},
+		Lifecycle: &raw.BucketLifecycle{
+			Rule: []*raw.BucketLifecycleRule{{
+				Action: &raw.BucketLifecycleRuleAction{
+					Type:         "SetStorageClass",
+					StorageClass: "NEARLINE",
+				},
+				Condition: &raw.BucketLifecycleRuleCondition{
+					Age:                 10,
+					IsLive:              googleapi.Bool(true),
+					CreatedBefore:       "2017-01-02",
+					MatchesStorageClass: matchClasses,
+					NumNewerVersions:    3,
+				},
+			}},
+		},
+		RetentionPolicy: &raw.BucketRetentionPolicy{
+			RetentionPeriod: 3,
+			EffectiveTime:   aTime.Format(time.RFC3339),
+		},
+		IamConfiguration: &raw.BucketIamConfiguration{
+			BucketPolicyOnly: &raw.BucketIamConfigurationBucketPolicyOnly{
+				Enabled:    true,
+				LockedTime: aTime.Format(time.RFC3339),
+			},
+		},
+		Cors: []*raw.BucketCors{
+			{
+				MaxAgeSeconds:  3600,
+				Method:         []string{"GET", "POST"},
+				Origin:         []string{"*"},
+				ResponseHeader: []string{"FOO"},
+			},
+		},
+		Acl: []*raw.BucketAccessControl{
+			{Bucket: "name", Role: "READER", Email: "joe@example.com", Entity: "allUsers"},
+		},
+		Encryption: &raw.BucketEncryption{DefaultKmsKeyName: "key"},
+		Logging:    &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:    &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+	}
+	want := &BucketAttrs{
+		Name:                  "name",
+		Location:              "loc",
+		DefaultEventBasedHold: true,
+		MetaGeneration:        3,
+		StorageClass:          "sc",
+		Created:               time.Date(2017, 10, 23, 4, 5, 6, 0, time.UTC),
+		VersioningEnabled:     true,
+		Labels:                labels,
+		RequesterPays:         true,
+		Lifecycle: Lifecycle{
+			Rules: []LifecycleRule{
+				{
+					Action: LifecycleAction{
+						Type:         SetStorageClassAction,
+						StorageClass: "NEARLINE",
+					},
+					Condition: LifecycleCondition{
+						AgeInDays:             10,
+						Liveness:              Live,
+						CreatedBefore:         time.Date(2017, 1, 2, 0, 0, 0, 0, time.UTC),
+						MatchesStorageClasses: matchClasses,
+						NumNewerVersions:      3,
+					},
+				},
+			},
+		},
+		RetentionPolicy: &RetentionPolicy{
+			EffectiveTime:   aTime,
+			RetentionPeriod: 3 * time.Second,
+		},
+		BucketPolicyOnly: BucketPolicyOnly{Enabled: true, LockedTime: aTime},
+		CORS: []CORS{
+			{
+				MaxAge:          time.Hour,
+				Methods:         []string{"GET", "POST"},
+				Origins:         []string{"*"},
+				ResponseHeaders: []string{"FOO"},
+			},
+		},
+		Encryption:       &BucketEncryption{DefaultKMSKeyName: "key"},
+		Logging:          &BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:          &BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		ACL:              []ACLRule{{Entity: "allUsers", Role: RoleReader, Email: "joe@example.com"}},
+		DefaultObjectACL: nil,
+	}
+	got, err := newBucket(rb)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if diff := testutil.Diff(got, want); diff != "" {
+		t.Errorf("got=-, want=+:\n%s", diff)
 	}
 }

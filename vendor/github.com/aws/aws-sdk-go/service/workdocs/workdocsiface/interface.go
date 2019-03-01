@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon WorkDocs.
@@ -154,6 +154,10 @@ type WorkDocsAPI interface {
 	DescribeFolderContentsPages(*workdocs.DescribeFolderContentsInput, func(*workdocs.DescribeFolderContentsOutput, bool) bool) error
 	DescribeFolderContentsPagesWithContext(aws.Context, *workdocs.DescribeFolderContentsInput, func(*workdocs.DescribeFolderContentsOutput, bool) bool, ...request.Option) error
 
+	DescribeGroups(*workdocs.DescribeGroupsInput) (*workdocs.DescribeGroupsOutput, error)
+	DescribeGroupsWithContext(aws.Context, *workdocs.DescribeGroupsInput, ...request.Option) (*workdocs.DescribeGroupsOutput, error)
+	DescribeGroupsRequest(*workdocs.DescribeGroupsInput) (*request.Request, *workdocs.DescribeGroupsOutput)
+
 	DescribeNotificationSubscriptions(*workdocs.DescribeNotificationSubscriptionsInput) (*workdocs.DescribeNotificationSubscriptionsOutput, error)
 	DescribeNotificationSubscriptionsWithContext(aws.Context, *workdocs.DescribeNotificationSubscriptionsInput, ...request.Option) (*workdocs.DescribeNotificationSubscriptionsOutput, error)
 	DescribeNotificationSubscriptionsRequest(*workdocs.DescribeNotificationSubscriptionsInput) (*request.Request, *workdocs.DescribeNotificationSubscriptionsOutput)
@@ -196,6 +200,10 @@ type WorkDocsAPI interface {
 	GetFolderPath(*workdocs.GetFolderPathInput) (*workdocs.GetFolderPathOutput, error)
 	GetFolderPathWithContext(aws.Context, *workdocs.GetFolderPathInput, ...request.Option) (*workdocs.GetFolderPathOutput, error)
 	GetFolderPathRequest(*workdocs.GetFolderPathInput) (*request.Request, *workdocs.GetFolderPathOutput)
+
+	GetResources(*workdocs.GetResourcesInput) (*workdocs.GetResourcesOutput, error)
+	GetResourcesWithContext(aws.Context, *workdocs.GetResourcesInput, ...request.Option) (*workdocs.GetResourcesOutput, error)
+	GetResourcesRequest(*workdocs.GetResourcesInput) (*request.Request, *workdocs.GetResourcesOutput)
 
 	InitiateDocumentVersionUpload(*workdocs.InitiateDocumentVersionUploadInput) (*workdocs.InitiateDocumentVersionUploadOutput, error)
 	InitiateDocumentVersionUploadWithContext(aws.Context, *workdocs.InitiateDocumentVersionUploadInput, ...request.Option) (*workdocs.InitiateDocumentVersionUploadOutput, error)

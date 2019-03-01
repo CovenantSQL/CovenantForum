@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,20 +15,18 @@
 package translate
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
-	"reflect"
 	"strings"
 	"sync"
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
 	"golang.org/x/text/language"
 	"google.golang.org/api/option"
 )
@@ -127,7 +125,7 @@ func TestTranslateURL(t *testing.T) {
 		}
 		got := ft.req.URL.Query()
 		test.want.Add("alt", "json")
-		if !reflect.DeepEqual(got, test.want) {
+		if !testutil.Equal(got, test.want) {
 			t.Errorf("Translate(%s, %v, %+v):\ngot  %s\nwant %s",
 				test.target, test.inputs, test.opts, got, test.want)
 		}

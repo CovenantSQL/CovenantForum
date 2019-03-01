@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,18 @@
 
 // Package translate is a client for the Google Translation API.
 // See https://cloud.google.com/translation for details.
-//
-// This package is experimental and subject to change without notice.
 package translate
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
-	"google.golang.org/api/option"
-	"google.golang.org/api/transport"
-
 	"cloud.google.com/go/internal/version"
 	raw "cloud.google.com/go/translate/internal/translate/v2"
-	"golang.org/x/net/context"
 	"golang.org/x/text/language"
+	"google.golang.org/api/option"
+	htransport "google.golang.org/api/transport/http"
 )
 
 const userAgent = "gcloud-golang-translate/20161115"
@@ -54,7 +51,7 @@ func NewClient(ctx context.Context, opts ...option.ClientOption) (*Client, error
 		option.WithUserAgent(userAgent),
 	}
 	o = append(o, opts...)
-	httpClient, endpoint, err := transport.NewHTTPClient(ctx, o...)
+	httpClient, endpoint, err := htransport.NewClient(ctx, o...)
 	if err != nil {
 		return nil, fmt.Errorf("dialing: %v", err)
 	}
@@ -132,7 +129,7 @@ type Options struct {
 	Model string
 }
 
-// The format of the input text. Used in Options.Format.
+// Format is the format of the input text. Used in Options.Format.
 type Format string
 
 // Constants for Options.Format.
@@ -141,7 +138,7 @@ const (
 	Text Format = "text"
 )
 
-// A Translation contains the results of translating a piece of text.
+// Translation contains the results of translating a piece of text.
 type Translation struct {
 	// Text is the input text translated into the target language.
 	Text string

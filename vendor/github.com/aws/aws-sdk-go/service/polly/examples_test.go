@@ -3,8 +3,8 @@
 package polly_test
 
 import (
-	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -14,7 +14,7 @@ import (
 )
 
 var _ time.Duration
-var _ bytes.Buffer
+var _ strings.Reader
 var _ aws.Config
 
 func parseTime(layout, value string) *time.Time {
@@ -225,6 +225,8 @@ func ExamplePolly_SynthesizeSpeech_shared00() {
 				fmt.Println(polly.ErrCodeMarksNotSupportedForFormatException, aerr.Error())
 			case polly.ErrCodeSsmlMarksNotSupportedForTextTypeException:
 				fmt.Println(polly.ErrCodeSsmlMarksNotSupportedForTextTypeException, aerr.Error())
+			case polly.ErrCodeLanguageNotSupportedException:
+				fmt.Println(polly.ErrCodeLanguageNotSupportedException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

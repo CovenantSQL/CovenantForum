@@ -5,8 +5,10 @@
 package oauth2
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -14,7 +16,7 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
+	"golang.org/x/oauth2/internal"
 )
 
 type mockTransport struct {
@@ -72,7 +74,70 @@ func TestAuthCodeURL_Optional(t *testing.T) {
 	}
 }
 
+func TestURLUnsafeClientConfig(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.Header.Get("Authorization"), "Basic Q0xJRU5UX0lEJTNGJTNGOkNMSUVOVF9TRUNSRVQlM0YlM0Y="; got != want {
+			t.Errorf("Authorization header = %q; want %q", got, want)
+		}
+
+		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
+		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+	}))
+	defer ts.Close()
+	conf := newConf(ts.URL)
+	conf.ClientID = "CLIENT_ID??"
+	conf.ClientSecret = "CLIENT_SECRET??"
+	_, err := conf.Exchange(context.Background(), "exchange-code")
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestExchangeRequest(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.String() != "/token" {
+			t.Errorf("Unexpected exchange request URL %q", r.URL)
+		}
+		headerAuth := r.Header.Get("Authorization")
+		if want := "Basic Q0xJRU5UX0lEOkNMSUVOVF9TRUNSRVQ="; headerAuth != want {
+			t.Errorf("Unexpected authorization header %q, want %q", headerAuth, want)
+		}
+		headerContentType := r.Header.Get("Content-Type")
+		if headerContentType != "application/x-www-form-urlencoded" {
+			t.Errorf("Unexpected Content-Type header %q", headerContentType)
+		}
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			t.Errorf("Failed reading request body: %s.", err)
+		}
+		if string(body) != "code=exchange-code&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
+			t.Errorf("Unexpected exchange payload; got %q", body)
+		}
+		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
+		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+	}))
+	defer ts.Close()
+	conf := newConf(ts.URL)
+	tok, err := conf.Exchange(context.Background(), "exchange-code")
+	if err != nil {
+		t.Error(err)
+	}
+	if !tok.Valid() {
+		t.Fatalf("Token invalid. Got: %#v", tok)
+	}
+	if tok.AccessToken != "90d64460d14870c08c81352a05dedd3465940a7c" {
+		t.Errorf("Unexpected access token, %#v.", tok.AccessToken)
+	}
+	if tok.TokenType != "bearer" {
+		t.Errorf("Unexpected token type, %#v.", tok.TokenType)
+	}
+	scope := tok.Extra("scope")
+	if scope != "user" {
+		t.Errorf("Unexpected value for scope: %v", scope)
+	}
+}
+
+func TestExchangeRequest_CustomParam(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.String() != "/token" {
 			t.Errorf("Unexpected exchange request URL, %v is found.", r.URL)
@@ -89,7 +154,7 @@ func TestExchangeRequest(t *testing.T) {
 		if err != nil {
 			t.Errorf("Failed reading request body: %s.", err)
 		}
-		if string(body) != "code=exchange-code&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
+		if string(body) != "code=exchange-code&foo=bar&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
 			t.Errorf("Unexpected exchange payload, %v is found.", string(body))
 		}
 		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
@@ -97,7 +162,9 @@ func TestExchangeRequest(t *testing.T) {
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
-	tok, err := conf.Exchange(context.Background(), "exchange-code")
+
+	param := SetAuthURLParam("foo", "bar")
+	tok, err := conf.Exchange(context.Background(), "exchange-code", param)
 	if err != nil {
 		t.Error(err)
 	}
@@ -208,17 +275,22 @@ const day = 24 * time.Hour
 func TestExchangeRequest_JSONResponse_Expiry(t *testing.T) {
 	seconds := int32(day.Seconds())
 	for _, c := range []struct {
+		name    string
 		expires string
 		want    bool
 	}{
-		{fmt.Sprintf(`"expires_in": %d`, seconds), true},
-		{fmt.Sprintf(`"expires_in": "%d"`, seconds), true}, // PayPal case
-		{fmt.Sprintf(`"expires": %d`, seconds), true},      // Facebook case
-		{`"expires": false`, false},                        // wrong type
-		{`"expires": {}`, false},                           // wrong type
-		{`"expires": "zzz"`, false},                        // wrong value
+		{"normal", fmt.Sprintf(`"expires_in": %d`, seconds), true},
+		{"paypal", fmt.Sprintf(`"expires_in": "%d"`, seconds), true},
+		{"facebook", fmt.Sprintf(`"expires": %d`, seconds), true},
+		{"issue_239", fmt.Sprintf(`"expires_in": null, "expires": %d`, seconds), true},
+
+		{"wrong_type", `"expires": false`, false},
+		{"wrong_type2", `"expires": {}`, false},
+		{"wrong_value", `"expires": "zzz"`, false},
 	} {
-		testExchangeRequest_JSONResponse_expiry(t, c.expires, c.want)
+		t.Run(c.name, func(t *testing.T) {
+			testExchangeRequest_JSONResponse_expiry(t, c.expires, c.want)
+		})
 	}
 }
 
@@ -259,12 +331,9 @@ func TestExchangeRequest_BadResponse(t *testing.T) {
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
-	tok, err := conf.Exchange(context.Background(), "code")
-	if err != nil {
-		t.Fatal(err)
-	}
-	if tok.AccessToken != "" {
-		t.Errorf("Unexpected access token, %#v.", tok.AccessToken)
+	_, err := conf.Exchange(context.Background(), "code")
+	if err == nil {
+		t.Error("expected error from missing access_token")
 	}
 }
 
@@ -277,16 +346,17 @@ func TestExchangeRequest_BadResponseType(t *testing.T) {
 	conf := newConf(ts.URL)
 	_, err := conf.Exchange(context.Background(), "exchange-code")
 	if err == nil {
-		t.Error("expected error from invalid access_token type")
+		t.Error("expected error from non-string access_token")
 	}
 }
 
 func TestExchangeRequest_NonBasicAuth(t *testing.T) {
+	internal.ResetAuthCache()
 	tr := &mockTransport{
 		rt: func(r *http.Request) (w *http.Response, err error) {
 			headerAuth := r.Header.Get("Authorization")
 			if headerAuth != "" {
-				t.Errorf("Unexpected authorization header, %v is found.", headerAuth)
+				t.Errorf("Unexpected authorization header %q", headerAuth)
 			}
 			return nil, errors.New("no response")
 		},
@@ -295,8 +365,9 @@ func TestExchangeRequest_NonBasicAuth(t *testing.T) {
 	conf := &Config{
 		ClientID: "CLIENT_ID",
 		Endpoint: Endpoint{
-			AuthURL:  "https://accounts.google.com/auth",
-			TokenURL: "https://accounts.google.com/token",
+			AuthURL:   "https://accounts.google.com/auth",
+			TokenURL:  "https://accounts.google.com/token",
+			AuthStyle: AuthStyleInParams,
 		},
 	}
 
@@ -352,21 +423,24 @@ func TestPasswordCredentialsTokenRequest(t *testing.T) {
 }
 
 func TestTokenRefreshRequest(t *testing.T) {
+	internal.ResetAuthCache()
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.String() == "/somethingelse" {
 			return
 		}
 		if r.URL.String() != "/token" {
-			t.Errorf("Unexpected token refresh request URL, %v is found.", r.URL)
+			t.Errorf("Unexpected token refresh request URL %q", r.URL)
 		}
 		headerContentType := r.Header.Get("Content-Type")
 		if headerContentType != "application/x-www-form-urlencoded" {
-			t.Errorf("Unexpected Content-Type header, %v is found.", headerContentType)
+			t.Errorf("Unexpected Content-Type header %q", headerContentType)
 		}
 		body, _ := ioutil.ReadAll(r.Body)
 		if string(body) != "grant_type=refresh_token&refresh_token=REFRESH_TOKEN" {
-			t.Errorf("Unexpected refresh token payload, %v is found.", string(body))
+			t.Errorf("Unexpected refresh token payload %q", body)
 		}
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -400,6 +474,32 @@ func TestFetchWithNoRefreshToken(t *testing.T) {
 	}
 }
 
+func TestTokenRetrieveError(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.String() != "/token" {
+			t.Errorf("Unexpected token refresh request URL, %v is found.", r.URL)
+		}
+		w.Header().Set("Content-type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(`{"error": "invalid_grant"}`))
+	}))
+	defer ts.Close()
+	conf := newConf(ts.URL)
+	_, err := conf.Exchange(context.Background(), "exchange-code")
+	if err == nil {
+		t.Fatalf("got no error, expected one")
+	}
+	_, ok := err.(*RetrieveError)
+	if !ok {
+		t.Fatalf("got %T error, expected *RetrieveError; error was: %v", err, err)
+	}
+	// Test error string for backwards compatibility
+	expected := fmt.Sprintf("oauth2: cannot fetch token: %v\nResponse: %s", "400 Bad Request", `{"error": "invalid_grant"}`)
+	if errStr := err.Error(); errStr != expected {
+		t.Fatalf("got %#v, expected %#v", errStr, expected)
+	}
+}
+
 func TestRefreshToken_RefreshTokenReplacement(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -408,18 +508,14 @@ func TestRefreshToken_RefreshTokenReplacement(t *testing.T) {
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
-	tkr := &tokenRefresher{
-		conf:         conf,
-		ctx:          context.Background(),
-		refreshToken: "OLD_REFRESH_TOKEN",
-	}
+	tkr := conf.TokenSource(context.Background(), &Token{RefreshToken: "OLD_REFRESH_TOKEN"})
 	tk, err := tkr.Token()
 	if err != nil {
 		t.Errorf("got err = %v; want none", err)
 		return
 	}
-	if tk.RefreshToken != tkr.refreshToken {
-		t.Errorf("tokenRefresher.refresh_token = %q; want %q", tkr.refreshToken, tk.RefreshToken)
+	if want := "NEW_REFRESH_TOKEN"; tk.RefreshToken != want {
+		t.Errorf("RefreshToken = %q; want %q", tk.RefreshToken, want)
 	}
 }
 
@@ -432,17 +528,13 @@ func TestRefreshToken_RefreshTokenPreservation(t *testing.T) {
 	defer ts.Close()
 	conf := newConf(ts.URL)
 	const oldRefreshToken = "OLD_REFRESH_TOKEN"
-	tkr := &tokenRefresher{
-		conf:         conf,
-		ctx:          context.Background(),
-		refreshToken: oldRefreshToken,
-	}
-	_, err := tkr.Token()
+	tkr := conf.TokenSource(context.Background(), &Token{RefreshToken: oldRefreshToken})
+	tk, err := tkr.Token()
 	if err != nil {
 		t.Fatalf("got err = %v; want none", err)
 	}
-	if tkr.refreshToken != oldRefreshToken {
-		t.Errorf("tokenRefresher.refreshToken = %q; want %q", tkr.refreshToken, oldRefreshToken)
+	if tk.RefreshToken != oldRefreshToken {
+		t.Errorf("RefreshToken = %q; want %q", tk.RefreshToken, oldRefreshToken)
 	}
 }
 

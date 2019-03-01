@@ -13,62 +13,62 @@ func TestNewPixelGetter(t *testing.T) {
 	var pg *pixelGetter
 	img = image.NewNRGBA(image.Rect(0, 0, 1, 1))
 	pg = newPixelGetter(img)
-	if pg.imgType != itNRGBA || pg.imgNRGBA == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itNRGBA || pg.nrgba == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter NRGBA")
 	}
 	img = image.NewNRGBA64(image.Rect(0, 0, 1, 1))
 	pg = newPixelGetter(img)
-	if pg.imgType != itNRGBA64 || pg.imgNRGBA64 == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itNRGBA64 || pg.nrgba64 == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter NRGBA64")
 	}
 	img = image.NewRGBA(image.Rect(0, 0, 1, 1))
 	pg = newPixelGetter(img)
-	if pg.imgType != itRGBA || pg.imgRGBA == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itRGBA || pg.rgba == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter RGBA")
 	}
 	img = image.NewRGBA64(image.Rect(0, 0, 1, 1))
 	pg = newPixelGetter(img)
-	if pg.imgType != itRGBA64 || pg.imgRGBA64 == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itRGBA64 || pg.rgba64 == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter RGBA64")
 	}
 	img = image.NewGray(image.Rect(0, 0, 1, 1))
 	pg = newPixelGetter(img)
-	if pg.imgType != itGray || pg.imgGray == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itGray || pg.gray == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter Gray")
 	}
 	img = image.NewGray16(image.Rect(0, 0, 1, 1))
 	pg = newPixelGetter(img)
-	if pg.imgType != itGray16 || pg.imgGray16 == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itGray16 || pg.gray16 == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter Gray16")
 	}
 	img = image.NewYCbCr(image.Rect(0, 0, 1, 1), image.YCbCrSubsampleRatio422)
 	pg = newPixelGetter(img)
-	if pg.imgType != itYCbCr || pg.imgYCbCr == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itYCbCr || pg.ycbcr == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter YCbCr")
 	}
 	img = image.NewUniform(color.NRGBA64{0, 0, 0, 0})
 	pg = newPixelGetter(img)
-	if pg.imgType != itGeneric || pg.imgGeneric == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itGeneric || pg.image == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter Generic(Uniform)")
 	}
 	img = image.NewAlpha(image.Rect(0, 0, 1, 1))
 	pg = newPixelGetter(img)
-	if pg.imgType != itGeneric || pg.imgGeneric == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itGeneric || pg.image == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelGetter Generic(Alpha)")
 	}
 }
 
 func comparePixels(px1, px2 pixel, dif float64) bool {
-	if math.Abs(float64(px1.R)-float64(px2.R)) > dif {
+	if math.Abs(float64(px1.r)-float64(px2.r)) > dif {
 		return false
 	}
-	if math.Abs(float64(px1.G)-float64(px2.G)) > dif {
+	if math.Abs(float64(px1.g)-float64(px2.g)) > dif {
 		return false
 	}
-	if math.Abs(float64(px1.B)-float64(px2.B)) > dif {
+	if math.Abs(float64(px1.b)-float64(px2.b)) > dif {
 		return false
 	}
-	if math.Abs(float64(px1.A)-float64(px2.A)) > dif {
+	if math.Abs(float64(px1.a)-float64(px2.a)) > dif {
 		return false
 	}
 	return true
@@ -160,19 +160,29 @@ func TestGetPixel(t *testing.T) {
 		{color.NRGBA{0, 0, 0, 255}, pixel{0, 0, 0, 1}},
 		{color.NRGBA{255, 255, 255, 255}, pixel{1, 1, 1, 1}},
 		{color.NRGBA{50, 100, 150, 255}, pixel{0.196, 0.392, 0.588, 1}},
+		{color.NRGBA{150, 100, 50, 255}, pixel{0.588, 0.392, 0.196, 1}},
 	}
 
 	for _, k := range colors2 {
-		img := image.NewYCbCr(image.Rect(-1, -2, 3, 4), image.YCbCrSubsampleRatio444)
-		pg = newPixelGetter(img)
-		for _, x := range []int{-1, 0, 2} {
-			for _, y := range []int{-2, 0, 3} {
-				iy := img.YOffset(x, y)
-				ic := img.COffset(x, y)
-				img.Y[iy], img.Cb[ic], img.Cr[ic] = color.RGBToYCbCr(k.c.R, k.c.G, k.c.B)
-				px := pg.getPixel(x, y)
-				if !comparePixels(k.px, px, 0.005) {
-					t.Errorf("getPixel %T %v %dx%d %v %v", img, k.c, x, y, k.px, px)
+		for _, sr := range []image.YCbCrSubsampleRatio{
+			image.YCbCrSubsampleRatio444,
+			image.YCbCrSubsampleRatio422,
+			image.YCbCrSubsampleRatio420,
+			image.YCbCrSubsampleRatio440,
+			image.YCbCrSubsampleRatio410,
+			image.YCbCrSubsampleRatio411,
+		} {
+			img := image.NewYCbCr(image.Rect(-1, -2, 3, 4), sr)
+			pg = newPixelGetter(img)
+			for _, x := range []int{-1, 0, 2} {
+				for _, y := range []int{-2, 0, 3} {
+					iy := img.YOffset(x, y)
+					ic := img.COffset(x, y)
+					img.Y[iy], img.Cb[ic], img.Cr[ic] = color.RGBToYCbCr(k.c.R, k.c.G, k.c.B)
+					px := pg.getPixel(x, y)
+					if !comparePixels(k.px, px, 0.005) {
+						t.Errorf("getPixel %T %v %dx%d %v %v", img, k.c, x, y, k.px, px)
+					}
 				}
 			}
 		}
@@ -318,47 +328,67 @@ func TestF32u16(t *testing.T) {
 	}
 }
 
+func TestClampi32(t *testing.T) {
+	testData := []struct {
+		x int32
+		y int32
+	}{
+		{-1, 0},
+		{0, 0},
+		{1, 1},
+		{99, 99},
+		{100, 100},
+		{101, 100},
+	}
+	for _, p := range testData {
+		v := clampi32(p.x, 0, 100)
+		if v != p.y {
+			t.Errorf("clampi32(%d) != %d: %d", p.x, p.y, v)
+		}
+	}
+}
+
 func TestNewPixelSetter(t *testing.T) {
 	var img draw.Image
 	var pg *pixelSetter
 	img = image.NewNRGBA(image.Rect(0, 0, 1, 1))
 	pg = newPixelSetter(img)
-	if pg.imgType != itNRGBA || pg.imgNRGBA == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itNRGBA || pg.nrgba == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter NRGBA")
 	}
 	img = image.NewNRGBA64(image.Rect(0, 0, 1, 1))
 	pg = newPixelSetter(img)
-	if pg.imgType != itNRGBA64 || pg.imgNRGBA64 == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itNRGBA64 || pg.nrgba64 == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter NRGBA64")
 	}
 	img = image.NewRGBA(image.Rect(0, 0, 1, 1))
 	pg = newPixelSetter(img)
-	if pg.imgType != itRGBA || pg.imgRGBA == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itRGBA || pg.rgba == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter RGBA")
 	}
 	img = image.NewRGBA64(image.Rect(0, 0, 1, 1))
 	pg = newPixelSetter(img)
-	if pg.imgType != itRGBA64 || pg.imgRGBA64 == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itRGBA64 || pg.rgba64 == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter RGBA64")
 	}
 	img = image.NewGray(image.Rect(0, 0, 1, 1))
 	pg = newPixelSetter(img)
-	if pg.imgType != itGray || pg.imgGray == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itGray || pg.gray == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter Gray")
 	}
 	img = image.NewGray16(image.Rect(0, 0, 1, 1))
 	pg = newPixelSetter(img)
-	if pg.imgType != itGray16 || pg.imgGray16 == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itGray16 || pg.gray16 == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter Gray16")
 	}
 	img = image.NewPaletted(image.Rect(0, 0, 1, 1), color.Palette{})
 	pg = newPixelSetter(img)
-	if pg.imgType != itPaletted || pg.imgPaletted == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itPaletted || pg.paletted == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter Paletted")
 	}
 	img = image.NewAlpha(image.Rect(0, 0, 1, 1))
 	pg = newPixelSetter(img)
-	if pg.imgType != itGeneric || pg.imgGeneric == nil || !img.Bounds().Eq(pg.imgBounds) {
+	if pg.it != itGeneric || pg.image == nil || !img.Bounds().Eq(pg.bounds) {
 		t.Error("newPixelSetter Generic(Alpha)")
 	}
 }

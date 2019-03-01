@@ -19,6 +19,7 @@ package rpc
 import (
 	"context"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -27,6 +28,8 @@ import (
 	"testing"
 	"time"
 
+	. "github.com/smartystreets/goconvey/convey"
+
 	"github.com/CovenantSQL/CovenantSQL/conf"
 	"github.com/CovenantSQL/CovenantSQL/consistent"
 	"github.com/CovenantSQL/CovenantSQL/crypto/kms"
@@ -34,7 +37,6 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/route"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 const (
@@ -169,11 +171,22 @@ func TestNewPersistentCaller(t *testing.T) {
 	os.Remove(publicKeyStore)
 	defer os.Remove(publicKeyStore)
 
+	var d string
+	var err error
+	if d, err = ioutil.TempDir("", "rpcutil_test_"); err != nil {
+		return
+	}
+
+	// init conf
 	_, testFile, _, _ := runtime.Caller(0)
-	confFile := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/config2.yaml")
+	dupConfFile := filepath.Join(d, "config.yaml")
+	confFile := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/config.yaml")
+	if err = utils.DupConf(confFile, dupConfFile); err != nil {
+		return
+	}
 	privateKeyPath := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/private.key")
 
-	conf.GConf, _ = conf.LoadConfig(confFile)
+	conf.GConf, _ = conf.LoadConfig(dupConfFile)
 	log.Debugf("GConf: %#v", conf.GConf)
 	// reset the once
 	route.Once = sync.Once{}
@@ -238,7 +251,7 @@ func TestNewPersistentCaller(t *testing.T) {
 	}
 
 	// close anonymous ETLS connection, and create new one
-	client.Close()
+	client.ResetClient("DHT.FindNeighbor")
 
 	wg := sync.WaitGroup{}
 	client = NewPersistentCaller(conf.GConf.BP.NodeID)

@@ -25,7 +25,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/CovenantSQL/CovenantSQL/blockproducer"
+	"github.com/CovenantSQL/CovenantSQL/test"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
 )
@@ -58,7 +58,7 @@ func BenchmarkCovenantSQLDriver(b *testing.B) {
 	// wait for chain service
 	var ctx1, cancel1 = context.WithTimeout(context.Background(), 1*time.Minute)
 	defer cancel1()
-	err = blockproducer.WaitBPChainService(ctx1, 3*time.Second)
+	err = test.WaitBPChainService(ctx1, 3*time.Second)
 	if err != nil {
 		b.Fatalf("wait for chain service failed: %v", err)
 	}
@@ -66,7 +66,7 @@ func BenchmarkCovenantSQLDriver(b *testing.B) {
 	// create
 	meta := ResourceMeta{}
 	meta.Node = 3
-	dsn, err := Create(meta)
+	_, dsn, err := Create(meta)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -109,7 +109,7 @@ func BenchmarkCovenantSQLDriver(b *testing.B) {
 	if err != nil {
 		b.Fatal(err)
 	}
-	err = Drop(dsn)
+	_, err = Drop(dsn)
 	if err != nil {
 		b.Fatal(err)
 	}

@@ -3,7 +3,9 @@
 package api
 
 import (
+	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -16,21 +18,35 @@ type service struct {
 }
 
 var mergeServices = map[string]service{
-	"dynamodbstreams": service{
+	"dynamodbstreams": {
 		dstName: "dynamodb",
 		srcName: "streams.dynamodb",
 	},
-	"wafregional": service{
+	"wafregional": {
 		dstName:        "waf",
 		srcName:        "waf-regional",
 		serviceVersion: "2015-08-24",
 	},
 }
 
+var serviceAliaseNames = map[string]string{
+	"costandusagereportservice": "CostandUsageReportService",
+	"elasticloadbalancing":      "ELB",
+	"elasticloadbalancingv2":    "ELBV2",
+	"config":                    "ConfigService",
+}
+
+func (a *API) setServiceAliaseName() {
+	if newName, ok := serviceAliaseNames[a.PackageName()]; ok {
+		a.name = newName
+	}
+}
+
 // customizationPasses Executes customization logic for the API by package name.
 func (a *API) customizationPasses() {
 	var svcCustomizations = map[string]func(*API){
 		"s3":         s3Customizations,
+		"s3control":  s3ControlCustomizations,
 		"cloudfront": cloudfrontCustomizations,
 		"rds":        rdsCustomizations,
 
@@ -38,9 +54,13 @@ func (a *API) customizationPasses() {
 		// to provide endpoint them selves.
 		"cloudsearchdomain": disableEndpointResolving,
 		"iotdataplane":      disableEndpointResolving,
+
+		// MTurk smoke test is invalid. The service requires AWS account to be
+		// linked to Amazon Mechanical Turk Account.
+		"mturk": supressSmokeTest,
 	}
 
-	for k, _ := range mergeServices {
+	for k := range mergeServices {
 		svcCustomizations[k] = mergeServicesCustomizations
 	}
 
@@ -49,14 +69,32 @@ func (a *API) customizationPasses() {
 	}
 }
 
+func supressSmokeTest(a *API) {
+	a.SmokeTests.TestCases = []SmokeTestCase{}
+}
+
 // s3Customizations customizes the API generation to replace values specific to S3.
 func s3Customizations(a *API) {
 	var strExpires *Shape
 
+	var keepContentMD5Ref = map[string]struct{}{
+		"PutObjectInput":  {},
+		"UploadPartInput": {},
+	}
+
 	for name, s := range a.Shapes {
-		// Remove ContentMD5 members
-		if _, ok := s.MemberRefs["ContentMD5"]; ok {
-			delete(s.MemberRefs, "ContentMD5")
+		// Remove ContentMD5 members unless specified otherwise.
+		if _, keep := keepContentMD5Ref[name]; !keep {
+			if _, have := s.MemberRefs["ContentMD5"]; have {
+				delete(s.MemberRefs, "ContentMD5")
+			}
+		}
+
+		// Generate getter methods for API operation fields used by customizations.
+		for _, refName := range []string{"Bucket", "SSECustomerKey", "CopySourceSSECustomerKey"} {
+			if ref, ok := s.MemberRefs[refName]; ok {
+				ref.GenerateGetter = true
+			}
 		}
 
 		// Expires should be a string not time.Time since the format is not
@@ -96,6 +134,22 @@ func s3CustRemoveHeadObjectModeledErrors(a *API) {
 	op.ErrorRefs = []ShapeRef{}
 }
 
+// S3 service operations with an AccountId need accessors to be generated for
+// them so the fields can be dynamically accessed without reflection.
+func s3ControlCustomizations(a *API) {
+	for opName, op := range a.Operations {
+		// Add moving AccountId into the hostname instead of header.
+		if ref, ok := op.InputRef.Shape.MemberRefs["AccountId"]; ok {
+			if op.Endpoint != nil {
+				fmt.Fprintf(os.Stderr, "S3 Control, %s, model already defining endpoint trait, remove this customization.\n", opName)
+			}
+
+			op.Endpoint = &EndpointTrait{HostPrefix: "{AccountId}."}
+			ref.HostLabel = true
+		}
+	}
+}
+
 // cloudfrontCustomizations customized the API generation to replace values
 // specific to CloudFront.
 func cloudfrontCustomizations(a *API) {
@@ -115,7 +169,7 @@ func mergeServicesCustomizations(a *API) {
 	p := strings.Replace(a.path, info.srcName, info.dstName, -1)
 
 	if info.serviceVersion != "" {
-		index := strings.LastIndex(p, "/")
+		index := strings.LastIndex(p, string(filepath.Separator))
 		files, _ := ioutil.ReadDir(p[:index])
 		if len(files) > 1 {
 			panic("New version was introduced")
@@ -131,7 +185,7 @@ func mergeServicesCustomizations(a *API) {
 
 	for n := range a.Shapes {
 		if _, ok := serviceAPI.Shapes[n]; ok {
-			a.Shapes[n].resolvePkg = "github.com/aws/aws-sdk-go/service/" + info.dstName
+			a.Shapes[n].resolvePkg = SDKImportRoot + "/service/" + info.dstName
 		}
 	}
 }

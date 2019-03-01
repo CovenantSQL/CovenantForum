@@ -19,20 +19,17 @@ package blockproducer
 import (
 	"bytes"
 	"sort"
-	"time"
+
+	"github.com/mohae/deepcopy"
+	"github.com/pkg/errors"
 
 	pi "github.com/CovenantSQL/CovenantSQL/blockproducer/interfaces"
 	"github.com/CovenantSQL/CovenantSQL/conf"
 	"github.com/CovenantSQL/CovenantSQL/crypto"
-	"github.com/CovenantSQL/CovenantSQL/crypto/asymmetric"
-	"github.com/CovenantSQL/CovenantSQL/crypto/hash"
-	"github.com/CovenantSQL/CovenantSQL/crypto/kms"
 	"github.com/CovenantSQL/CovenantSQL/proto"
 	"github.com/CovenantSQL/CovenantSQL/types"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
-	"github.com/mohae/deepcopy"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -45,7 +42,7 @@ type metaState struct {
 	dirty, readonly *metaIndex
 }
 
-// MinerInfos is MinerInfo array
+// MinerInfos is MinerInfo array.
 type MinerInfos []*types.MinerInfo
 
 // Len returns the length of the uints array.
@@ -375,63 +372,6 @@ func (s *metaState) transferAccountToken(transfer *types.Transfer) (err error) {
 
 }
 
-func (s *metaState) transferAccountStableBalance(
-	sender, receiver proto.AccountAddress, amount uint64) (err error,
-) {
-	if sender == receiver || amount == 0 {
-		return
-	}
-
-	// Create empty receiver account if not found
-	s.loadOrStoreAccountObject(receiver, &types.Account{Address: receiver})
-
-	var (
-		so, ro     *types.Account
-		sd, rd, ok bool
-	)
-
-	// Load sender and receiver objects
-	if so, sd = s.dirty.accounts[sender]; !sd {
-		if so, ok = s.readonly.accounts[sender]; !ok {
-			err = ErrAccountNotFound
-			return
-		}
-	}
-	if ro, rd = s.dirty.accounts[receiver]; !rd {
-		if ro, ok = s.readonly.accounts[receiver]; !ok {
-			err = ErrAccountNotFound
-			return
-		}
-	}
-
-	// Try transfer
-	var (
-		sb = so.TokenBalance[types.Particle]
-		rb = ro.TokenBalance[types.Particle]
-	)
-	if err = safeSub(&sb, &amount); err != nil {
-		return
-	}
-	if err = safeAdd(&rb, &amount); err != nil {
-		return
-	}
-
-	// Proceed transfer
-	if !sd {
-		var cpy = deepcopy.Copy(so).(*types.Account)
-		so = cpy
-		s.dirty.accounts[sender] = cpy
-	}
-	if !rd {
-		var cpy = deepcopy.Copy(ro).(*types.Account)
-		ro = cpy
-		s.dirty.accounts[receiver] = cpy
-	}
-	so.TokenBalance[types.Particle] = sb
-	ro.TokenBalance[types.Particle] = rb
-	return
-}
-
 func (s *metaState) increaseAccountCovenantBalance(k proto.AccountAddress, amount uint64) error {
 	return s.increaseAccountToken(k, amount, types.Wave)
 }
@@ -454,7 +394,7 @@ func (s *metaState) createSQLChain(addr proto.AccountAddress, id proto.DatabaseI
 	s.dirty.databases[id] = &types.SQLChainProfile{
 		ID:     id,
 		Owner:  addr,
-		Miners: make([]*types.MinerInfo, 0),
+		Miners: make(MinerInfos, 0),
 		Users: []*types.SQLChainUser{
 			{
 				Address:    addr,
@@ -660,21 +600,21 @@ func (s *metaState) matchProvidersWithUser(tx *types.CreateDatabase) (err error)
 				log.Warnf("miner filtered %v", err)
 			}
 			// if got enough, break
-			if uint64(len(miners)) == minerCount {
+			if uint64(miners.Len()) == minerCount {
 				break
 			}
 		}
 	}
 
 	// not enough, find more miner(s)
-	if uint64(len(miners)) < minerCount {
+	if uint64(miners.Len()) < minerCount {
 		if uint64(len(tx.ResourceMeta.TargetMiners)) >= minerCount {
-			err = errors.Wrapf(err, "miners match target are not enough %d:%d", len(miners), minerCount)
+			err = errors.Wrapf(err, "miners match target are not enough %d:%d", miners.Len(), minerCount)
 			return
 		}
 		var newMiners MinerInfos
 		// create new merged map
-		newMiners, err = s.filterNMiners(tx, sender, int(minerCount)-len(miners))
+		newMiners, err = s.filterNMiners(tx, sender, int(minerCount)-miners.Len())
 		if err != nil {
 			return
 		}
@@ -708,7 +648,7 @@ func (s *metaState) matchProvidersWithUser(tx *types.CreateDatabase) (err error)
 		AdvancePayment: tx.AdvancePayment,
 	}
 	// generate genesis block
-	gb, err := s.generateGenesisBlock(dbID, tx.ResourceMeta)
+	gb, err := s.generateGenesisBlock(dbID, tx)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"dbID":         dbID,
@@ -784,7 +724,7 @@ func (s *metaState) filterNMiners(
 	for _, po := range allProviderMap {
 		newMiners, _ = filterAndAppendMiner(newMiners, po, tx, user)
 	}
-	if len(newMiners) < minerCount {
+	if newMiners.Len() < minerCount {
 		err = ErrNoEnoughMiner
 		return
 	}
@@ -794,11 +734,11 @@ func (s *metaState) filterNMiners(
 }
 
 func filterAndAppendMiner(
-	miners []*types.MinerInfo,
+	miners MinerInfos,
 	po *types.ProviderProfile,
 	req *types.CreateDatabase,
 	user proto.AccountAddress,
-) (newMiners []*types.MinerInfo, err error) {
+) (newMiners MinerInfos, err error) {
 	newMiners = miners
 	if !isProviderUserMatch(po.TargetUser, user) {
 		err = ErrMinerUserNotMatch
@@ -1075,6 +1015,7 @@ func (s *metaState) transferSQLChainTokenBalance(transfer *types.Transfer) (err 
 	if transfer.Signee == nil {
 		err = ErrInvalidSender
 		log.WithError(err).Warning("invalid signee in applyTransaction")
+		return
 	}
 
 	realSender, err := crypto.PubKeyHash(transfer.Signee)
@@ -1217,32 +1158,19 @@ func (s *metaState) applyTransaction(tx pi.Transaction) (err error) {
 	return
 }
 
-func (s *metaState) generateGenesisBlock(dbID proto.DatabaseID, resourceMeta types.ResourceMeta) (genesisBlock *types.Block, err error) {
-	// TODO(xq262144): following is stub code, real logic should be implemented in the future
-	emptyHash := hash.Hash{}
-
-	var privKey *asymmetric.PrivateKey
-	if privKey, err = kms.GetLocalPrivateKey(); err != nil {
-		return
-	}
-	var nodeID proto.NodeID
-	if nodeID, err = kms.GetLocalNodeID(); err != nil {
-		return
-	}
-
+func (s *metaState) generateGenesisBlock(dbID proto.DatabaseID, tx *types.CreateDatabase) (genesisBlock *types.Block, err error) {
+	emptyNode := &proto.RawNodeID{}
 	genesisBlock = &types.Block{
 		SignedHeader: types.SignedHeader{
 			Header: types.Header{
-				Version:     0x01000000,
-				Producer:    nodeID,
-				GenesisHash: emptyHash,
-				ParentHash:  emptyHash,
-				Timestamp:   time.Now().UTC(),
+				Version:   0x01000000,
+				Producer:  emptyNode.ToNodeID(),
+				Timestamp: tx.Timestamp,
 			},
 		},
 	}
 
-	err = genesisBlock.PackAndSignBlock(privKey)
+	err = genesisBlock.PackAsGenesis()
 
 	return
 }

@@ -26,6 +26,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/pkg/errors"
+
 	bp "github.com/CovenantSQL/CovenantSQL/blockproducer"
 	"github.com/CovenantSQL/CovenantSQL/blockproducer/interfaces"
 	"github.com/CovenantSQL/CovenantSQL/conf"
@@ -39,7 +41,6 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/types"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -144,8 +145,8 @@ func Init(configFile string, masterKey []byte) (err error) {
 	return
 }
 
-// Create send create database operation to block producer.
-func Create(meta ResourceMeta) (dsn string, err error) {
+// Create sends create database operation to block producer.
+func Create(meta ResourceMeta) (txHash hash.Hash, dsn string, err error) {
 	if atomic.LoadUint32(&driverInitialized) == 0 {
 		err = ErrNotInitialized
 		return
@@ -202,6 +203,7 @@ func Create(meta ResourceMeta) (dsn string, err error) {
 		return
 	}
 
+	txHash = req.Tx.Hash()
 	cfg := NewConfig()
 	cfg.DatabaseID = string(proto.FromAccountAndNonce(clientAddr, uint32(nonceResp.Nonce)))
 	dsn = cfg.FormatDSN()
@@ -209,7 +211,7 @@ func Create(meta ResourceMeta) (dsn string, err error) {
 	return
 }
 
-// WaitDBCreation waits for database creation complete
+// WaitDBCreation waits for database creation complete.
 func WaitDBCreation(ctx context.Context, dsn string) (err error) {
 	dsnCfg, err := ParseDSN(dsn)
 	if err != nil {
@@ -223,12 +225,53 @@ func WaitDBCreation(ctx context.Context, dsn string) (err error) {
 	}
 
 	// wait for creation
-	err = bp.WaitDatabaseCreation(ctx, proto.DatabaseID(dsnCfg.DatabaseID), db, 3*time.Second)
+	err = WaitBPDatabaseCreation(ctx, proto.DatabaseID(dsnCfg.DatabaseID), db, 3*time.Second)
 	return
 }
 
-// Drop send drop database operation to block producer.
-func Drop(dsn string) (err error) {
+// WaitBPDatabaseCreation waits for database creation complete.
+func WaitBPDatabaseCreation(
+	ctx context.Context,
+	dbID proto.DatabaseID,
+	db *sql.DB,
+	period time.Duration,
+) (err error) {
+	var (
+		ticker = time.NewTicker(period)
+		req    = &types.QuerySQLChainProfileReq{
+			DBID: dbID,
+		}
+	)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			if err = rpc.RequestBP(
+				route.MCCQuerySQLChainProfile.String(), req, nil,
+			); err != nil {
+				if !strings.Contains(err.Error(), bp.ErrDatabaseNotFound.Error()) {
+					// err != nil && err != ErrDatabaseNotFound (unexpected error)
+					return
+				}
+			} else {
+				// err == nil (creation done on BP): try to use database connection
+				if db == nil {
+					return
+				}
+				if _, err = db.ExecContext(ctx, "SHOW TABLES"); err == nil {
+					// err == nil (connect to Miner OK)
+					return
+				}
+			}
+		case <-ctx.Done():
+			err = ctx.Err()
+			return
+		}
+	}
+}
+
+// Drop sends drop database operation to block producer.
+func Drop(dsn string) (txHash hash.Hash, err error) {
 	if atomic.LoadUint32(&driverInitialized) == 0 {
 		err = ErrNotInitialized
 		return

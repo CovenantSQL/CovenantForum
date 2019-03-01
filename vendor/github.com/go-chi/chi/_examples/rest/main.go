@@ -48,9 +48,9 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/docgen"
 	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/chi/render"
+	"github.com/go-chi/docgen"
+	"github.com/go-chi/render"
 )
 
 var routes = flag.Bool("routes", false, "Generate router documentation")
@@ -63,6 +63,7 @@ func main() {
 	r.Use(middleware.RequestID)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(middleware.URLFormat)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -327,6 +328,16 @@ type ArticleRequest struct {
 }
 
 func (a *ArticleRequest) Bind(r *http.Request) error {
+	// a.Article is nil if no Article fields are sent in the request. Return an
+	// error to avoid a nil pointer dereference.
+	if a.Article == nil {
+		return errors.New("missing required Article fields.")
+	}
+
+	// a.User is nil if no Userpayload fields are sent in the request. In this app
+	// this won't cause a panic, but checks in this Bind method may be required if
+	// a.User or futher nested fields like a.User.Name are accessed elsewhere.
+
 	// just a post-process after a decode..
 	a.ProtectedID = ""                                 // unset the protected ID
 	a.Article.Title = strings.ToLower(a.Article.Title) // as an example, we down-case
@@ -440,7 +451,7 @@ type User struct {
 // and powerful data persistence adapter.
 type Article struct {
 	ID     string `json:"id"`
-	UserID int64  `json:"user_id` // the author
+	UserID int64  `json:"user_id"` // the author
 	Title  string `json:"title"`
 	Slug   string `json:"slug"`
 }

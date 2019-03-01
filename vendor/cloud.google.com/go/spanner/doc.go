@@ -1,5 +1,5 @@
 /*
-Copyright 2017 Google Inc. All Rights Reserved.
+Copyright 2017 Google LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,11 +19,12 @@ Package spanner provides a client for reading and writing to Cloud Spanner
 databases. See the packages under admin for clients that operate on databases
 and instances.
 
-Note: This package is in alpha. Backwards-incompatible changes may occur
-without notice.
-
 See https://cloud.google.com/spanner/docs/getting-started/go/ for an introduction
 to Cloud Spanner and additional help on using this API.
+
+See https://godoc.org/cloud.google.com/go for authentication, timeouts,
+connection pooling and similar aspects of this package.
+
 
 Creating a Client
 
@@ -32,10 +33,10 @@ of interest:
 
     ctx := context.Background()
     client, err := spanner.NewClient(ctx, "projects/P/instances/I/databases/D")
-    defer client.Close()
     if err != nil {
         // TODO: Handle error.
     }
+    defer client.Close()
 
 Remember to close the client after use to free up the sessions in the session
 pool.
@@ -193,7 +194,7 @@ For Cloud Spanner columns that may contain NULL, use one of the NullXXX types,
 like NullString:
 
     var ns spanner.NullString
-    if err =: row.Column(0, &ns); err != nil {
+    if err := row.Column(0, &ns); err != nil {
         // TODO: Handle error.
     }
     if ns.Valid {
@@ -279,7 +280,7 @@ You pass in a function to ReadWriteTransaction, and the client will handle the
 retries automatically. Use the transaction's BufferWrite method to buffer
 mutations, which will all be executed at the end of the transaction:
 
-    _, err := client.ReadWriteTransaction(ctx, func(txn *spanner.ReadWriteTransaction) error {
+    _, err := client.ReadWriteTransaction(ctx, func(ctx context.Context, txn *spanner.ReadWriteTransaction) error {
         var balance int64
         row, err := txn.ReadRow(ctx, "Accounts", spanner.Key{"alice"}, []string{"balance"})
         if err != nil {
@@ -303,9 +304,23 @@ mutations, which will all be executed at the end of the transaction:
         return nil
     })
 
-Authentication
 
-See examples of authorization and authentication at
-https://godoc.org/cloud.google.com/go#pkg-examples.
+DML and Partitioned DML
+
+Spanner supports DML statements like INSERT, UPDATE and DELETE. Use
+ReadWriteTransaction.Update to run DML statements. It returns the number of rows
+affected. (You can call use ReadWriteTransaction.Query with a DML statement. The first
+call to Next on the resulting RowIterator will return iterator.Done, and the RowCount
+field of the iterator will hold the number of affected rows.)
+
+For large databases, it may be more efficient to partition the DML statement. Use
+client.PartitionedUpdate to run a DML statement in this way. Not all DML statements
+can be partitioned.
+
+Tracing
+
+This client has been instrumented to use OpenCensus tracing (http://opencensus.io).
+To enable tracing, see "Enabling Tracing for a Program" at
+https://godoc.org/go.opencensus.io/trace. OpenCensus tracing requires Go 1.8 or higher.
 */
 package spanner // import "cloud.google.com/go/spanner"

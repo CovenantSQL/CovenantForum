@@ -48,7 +48,7 @@ func (p *colorchanFilter) Draw(dst draw.Image, src image.Image, options *Options
 	if p.lut {
 		var lutSize int
 
-		it := pixGetter.imgType
+		it := pixGetter.it
 		if it == itNRGBA || it == itRGBA || it == itGray || it == itYCbCr {
 			lutSize = 0xff + 1
 		} else {
@@ -62,18 +62,18 @@ func (p *colorchanFilter) Draw(dst draw.Image, src image.Image, options *Options
 		}
 	}
 
-	parallelize(options.Parallelization, srcb.Min.Y, srcb.Max.Y, func(pmin, pmax int) {
-		for y := pmin; y < pmax; y++ {
+	parallelize(options.Parallelization, srcb.Min.Y, srcb.Max.Y, func(start, stop int) {
+		for y := start; y < stop; y++ {
 			for x := srcb.Min.X; x < srcb.Max.X; x++ {
 				px := pixGetter.getPixel(x, y)
 				if useLut {
-					px.R = getFromLut(lut, px.R)
-					px.G = getFromLut(lut, px.G)
-					px.B = getFromLut(lut, px.B)
+					px.r = getFromLut(lut, px.r)
+					px.g = getFromLut(lut, px.g)
+					px.b = getFromLut(lut, px.b)
 				} else {
-					px.R = p.fn(px.R)
-					px.G = p.fn(px.G)
-					px.B = p.fn(px.B)
+					px.r = p.fn(px.r)
+					px.g = p.fn(px.g)
+					px.b = p.fn(px.b)
 				}
 				pixSetter.setPixel(dstb.Min.X+x-srcb.Min.X, dstb.Min.Y+y-srcb.Min.Y, px)
 			}
@@ -235,8 +235,8 @@ func (p *colorFilter) Draw(dst draw.Image, src image.Image, options *Options) {
 	pixGetter := newPixelGetter(src)
 	pixSetter := newPixelSetter(dst)
 
-	parallelize(options.Parallelization, srcb.Min.Y, srcb.Max.Y, func(pmin, pmax int) {
-		for y := pmin; y < pmax; y++ {
+	parallelize(options.Parallelization, srcb.Min.Y, srcb.Max.Y, func(start, stop int) {
+		for y := start; y < stop; y++ {
 			for x := srcb.Min.X; x < srcb.Max.X; x++ {
 				px := pixGetter.getPixel(x, y)
 				pixSetter.setPixel(dstb.Min.X+x-srcb.Min.X, dstb.Min.Y+y-srcb.Min.Y, p.fn(px))
@@ -249,8 +249,8 @@ func (p *colorFilter) Draw(dst draw.Image, src image.Image, options *Options) {
 func Grayscale() Filter {
 	return &colorFilter{
 		fn: func(px pixel) pixel {
-			y := 0.299*px.R + 0.587*px.G + 0.114*px.B
-			return pixel{y, y, y, px.A}
+			y := 0.299*px.r + 0.587*px.g + 0.114*px.b
+			return pixel{y, y, y, px.a}
 		},
 	}
 }
@@ -279,10 +279,10 @@ func Sepia(percentage float32) Filter {
 	bb := 1 - 0.869*adjustAmount
 	return &colorFilter{
 		fn: func(px pixel) pixel {
-			r := px.R*rr + px.G*rg + px.B*rb
-			g := px.R*gr + px.G*gg + px.B*gb
-			b := px.R*br + px.G*bg + px.B*bb
-			return pixel{r, g, b, px.A}
+			r := px.r*rr + px.g*rg + px.b*rb
+			g := px.r*gr + px.g*gg + px.b*gb
+			b := px.r*br + px.g*bg + px.b*bb
+			return pixel{r, g, b, px.a}
 		},
 	}
 }
@@ -292,7 +292,7 @@ func convertHSLToRGB(h, s, l float32) (float32, float32, float32) {
 		return l, l, l
 	}
 
-	_v := func(p, q, t float32) float32 {
+	hueToRGB := func(p, q, t float32) float32 {
 		if t < 0 {
 			t++
 		}
@@ -319,9 +319,9 @@ func convertHSLToRGB(h, s, l float32) (float32, float32, float32) {
 	}
 	p = 2*l - q
 
-	r := _v(p, q, h+1/3.0)
-	g := _v(p, q, h)
-	b := _v(p, q, h-1/3.0)
+	r := hueToRGB(p, q, h+1/3.0)
+	g := hueToRGB(p, q, h)
+	b := hueToRGB(p, q, h-1/3.0)
 
 	return r, g, b
 }
@@ -378,10 +378,10 @@ func Hue(shift float32) Filter {
 
 	return &colorFilter{
 		fn: func(px pixel) pixel {
-			h, s, l := convertRGBToHSL(px.R, px.G, px.B)
+			h, s, l := convertRGBToHSL(px.r, px.g, px.b)
 			h = normalizeHue(h + p)
 			r, g, b := convertHSLToRGB(h, s, l)
-			return pixel{r, g, b, px.A}
+			return pixel{r, g, b, px.a}
 		},
 	}
 }
@@ -396,13 +396,13 @@ func Saturation(percentage float32) Filter {
 
 	return &colorFilter{
 		fn: func(px pixel) pixel {
-			h, s, l := convertRGBToHSL(px.R, px.G, px.B)
+			h, s, l := convertRGBToHSL(px.r, px.g, px.b)
 			s *= p
 			if s > 1 {
 				s = 1
 			}
 			r, g, b := convertHSLToRGB(h, s, l)
-			return pixel{r, g, b, px.A}
+			return pixel{r, g, b, px.a}
 		},
 	}
 }
@@ -430,11 +430,11 @@ func Colorize(hue, saturation, percentage float32) Filter {
 
 	return &colorFilter{
 		fn: func(px pixel) pixel {
-			_, _, l := convertRGBToHSL(px.R, px.G, px.B)
+			_, _, l := convertRGBToHSL(px.r, px.g, px.b)
 			r, g, b := convertHSLToRGB(h, s, l)
-			px.R += (r - px.R) * p
-			px.G += (g - px.G) * p
-			px.B += (b - px.B) * p
+			px.r += (r - px.r) * p
+			px.g += (g - px.g) * p
+			px.b += (b - px.b) * p
 			return px
 		},
 	}
@@ -458,10 +458,25 @@ func ColorBalance(percentageRed, percentageGreen, percentageBlue float32) Filter
 
 	return &colorFilter{
 		fn: func(px pixel) pixel {
-			px.R *= pr
-			px.G *= pg
-			px.B *= pb
+			px.r *= pr
+			px.g *= pg
+			px.b *= pb
 			return px
+		},
+	}
+}
+
+// Threshold creates a filter that applies black/white thresholding to the image.
+// The percentage parameter must be in range (0, 100).
+func Threshold(percentage float32) Filter {
+	p := minf32(maxf32(percentage, 0), 100) / 100
+	return &colorFilter{
+		fn: func(px pixel) pixel {
+			y := 0.299*px.r + 0.587*px.g + 0.114*px.b
+			if y > p {
+				return pixel{1, 1, 1, px.a}
+			}
+			return pixel{0, 0, 0, px.a}
 		},
 	}
 }
@@ -479,7 +494,7 @@ func ColorBalance(percentageRed, percentageGreen, percentageBlue float32) Filter
 //				g = g0 + 0.1 // shift the green channel by 0.1
 //				b = 0        // set the blue channel to 0
 //				a = a0       // preserve the alpha channel
-//				return
+//				return r, g, b, a
 //			},
 //		),
 //	)
@@ -489,7 +504,7 @@ func ColorBalance(percentageRed, percentageGreen, percentageBlue float32) Filter
 func ColorFunc(fn func(r0, g0, b0, a0 float32) (r, g, b, a float32)) Filter {
 	return &colorFilter{
 		fn: func(px pixel) pixel {
-			r, g, b, a := fn(px.R, px.G, px.B, px.A)
+			r, g, b, a := fn(px.r, px.g, px.b, px.a)
 			return pixel{r, g, b, a}
 		},
 	}

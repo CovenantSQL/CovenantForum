@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,140 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package trace is a Google Stackdriver Trace library.
-//
-// This package is still experimental and subject to change.
-//
-// See https://cloud.google.com/trace/api/#data_model for a discussion of traces
-// and spans.
-//
-// To initialize a client that connects to the Stackdriver Trace server, use the
-// NewClient function. Generally you will want to do this on program
-// initialization.
-//
-//   import "cloud.google.com/go/trace"
-//   ...
-//   traceClient, err = trace.NewClient(ctx, projectID)
-//
-// Calling SpanFromRequest will create a new trace span for an incoming HTTP
-// request.  If the request contains a trace context header, it is used to
-// determine the trace ID.  Otherwise, a new trace ID is created.
-//
-//   func handler(w http.ResponseWriter, r *http.Request) {
-//     span := traceClient.SpanFromRequest(r)
-//     defer span.Finish()
-//     ...
-//   }
-//
-// SpanFromRequest and NewSpan returns nil if the *Client is nil, so you can disable
-// tracing by not initializing your *Client variable.  All of the exported
-// functions on *Span do nothing when the *Span is nil.
-//
-// If you need to start traces that don't correspond to an incoming HTTP request,
-// you can use NewSpan to create a root-level span.
-//
-//   span := traceClient.NewSpan("span name")
-//   defer span.Finish()
-//
-// Although a trace span object is created for every request, only a subset of
-// traces are uploaded to the server, for efficiency.  By default, the requests
-// that are traced are those with the tracing bit set in the options field of
-// the trace context header.  Ideally, you should override this behaviour by
-// calling SetSamplingPolicy.  NewLimitedSampler returns an implementation of
-// SamplingPolicy which traces requests that have the tracing bit set, and also
-// randomly traces a specified fraction of requests.  Additionally, it sets a
-// limit on the number of requests traced per second.  The following example
-// traces one in every thousand requests, up to a limit of 5 per second.
-//
-//   p, err := trace.NewLimitedSampler(0.001, 5)
-//   traceClient.SetSamplingPolicy(p)
-//
-// You can create a new span as a child of an existing span with NewChild.
-//
-//   childSpan := span.NewChild(name)
-//   ...
-//   childSpan.Finish()
-//
-// When sending an HTTP request to another server, NewRemoteChild will create
-// a span to represent the time the current program waits for the request to
-// complete, and attach a header to the outgoing request so that the trace will
-// be propagated to the destination server.
-//
-//   childSpan := span.NewRemoteChild(&httpRequest)
-//   ...
-//   childSpan.Finish()
-//
-// Alternatively, if you have access to the X-Cloud-Trace-Context header value
-// but not the underlying HTTP request (this can happen if you are using a
-// different transport or messaging protocol, such as gRPC), you can use
-// SpanFromHeader instead of SpanFromRequest. In that case, you will need to
-// specify the span name explicility, since it cannot be constructed from the
-// HTTP request's URL and method.
-//
-//   func handler(r *somepkg.Request) {
-//     span := traceClient.SpanFromHeader("span name", r.TraceContext())
-//     defer span.Finish()
-//     ...
-//   }
-//
-// Spans can contain a map from keys to values that have useful information
-// about the span.  The elements of this map are called labels.  Some labels,
-// whose keys all begin with the string "trace.cloud.google.com/", are set
-// automatically in the following ways:
-//
-// - SpanFromRequest sets some labels to data about the incoming request.
-//
-// - NewRemoteChild sets some labels to data about the outgoing request.
-//
-// - Finish sets a label to a stack trace, if the stack trace option is enabled
-// in the incoming trace header.
-//
-// - The WithResponse option sets some labels to data about a response.
-// You can also set labels using SetLabel.  If a label is given a value
-// automatically and by SetLabel, the automatically-set value is used.
-//
-//   span.SetLabel(key, value)
-//
-// The WithResponse option can be used when Finish is called.
-//
-//   childSpan := span.NewRemoteChild(outgoingReq)
-//   resp, err := http.DefaultClient.Do(outgoingReq)
-//   ...
-//   childSpan.Finish(trace.WithResponse(resp))
-//
-// When a span created by SpanFromRequest or SpamFromHeader is finished, the
-// finished spans in the corresponding trace -- the span itself and its
-// descendants -- are uploaded to the Stackdriver Trace server using the
-// *Client that created the span.  Finish returns immediately, and uploading
-// occurs asynchronously.  You can use the FinishWait function instead to wait
-// until uploading has finished.
-//
-//   err := span.FinishWait()
-//
-// Using contexts to pass *trace.Span objects through your program will often
-// be a better approach than passing them around explicitly.  This allows trace
-// spans, and other request-scoped or part-of-request-scoped values, to be
-// easily passed through API boundaries.  Various Google Cloud libraries will
-// retrieve trace spans from contexts and automatically create child spans for
-// API requests.
-// See https://blog.golang.org/context for more discussion of contexts.
-// A derived context containing a trace span can be created using NewContext.
-//
-//   span := traceClient.SpanFromRequest(r)
-//   ctx = trace.NewContext(ctx, span)
-//
-// The span can be retrieved from a context elsewhere in the program using
-// FromContext.
-//
-//   func foo(ctx context.Context) {
-//     span := trace.FromContext(ctx).NewChild("in foo")
-//     defer span.Finish()
-//     ...
-//   }
-//
+// Package trace is OBSOLETE. See https://cloud.google.com/trace/docs/setup/go.
 package trace // import "cloud.google.com/go/trace"
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/binary"
 	"encoding/json"
@@ -159,12 +30,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"golang.org/x/net/context"
 	api "google.golang.org/api/cloudtrace/v1"
 	"google.golang.org/api/gensupport"
 	"google.golang.org/api/option"
 	"google.golang.org/api/support/bundler"
-	"google.golang.org/api/transport"
+	htransport "google.golang.org/api/transport/http"
 )
 
 const (
@@ -175,21 +45,45 @@ const (
 	spanKindServer      = `RPC_SERVER`
 	spanKindUnspecified = `SPAN_KIND_UNSPECIFIED`
 	maxStackFrames      = 20
-	labelHost           = `trace.cloud.google.com/http/host`
-	labelMethod         = `trace.cloud.google.com/http/method`
-	labelStackTrace     = `trace.cloud.google.com/stacktrace`
-	labelStatusCode     = `trace.cloud.google.com/http/status_code`
-	labelURL            = `trace.cloud.google.com/http/url`
-	labelSamplingPolicy = `trace.cloud.google.com/sampling_policy`
-	labelSamplingWeight = `trace.cloud.google.com/sampling_weight`
+	labelAgent          = `trace.cloud.google.com/agent`
+)
+
+// Stackdriver Trace API predefined labels.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
+const (
+	LabelComponent          = `trace.cloud.google.com/component`
+	LabelErrorMessage       = `trace.cloud.google.com/error/message`
+	LabelErrorName          = `trace.cloud.google.com/error/name`
+	LabelHTTPClientCity     = `trace.cloud.google.com/http/client_city`
+	LabelHTTPClientCountry  = `trace.cloud.google.com/http/client_country`
+	LabelHTTPClientProtocol = `trace.cloud.google.com/http/client_protocol`
+	LabelHTTPClientRegion   = `trace.cloud.google.com/http/client_region`
+	LabelHTTPHost           = `trace.cloud.google.com/http/host`
+	LabelHTTPMethod         = `trace.cloud.google.com/http/method`
+	LabelHTTPRedirectedURL  = `trace.cloud.google.com/http/redirected_url`
+	LabelHTTPRequestSize    = `trace.cloud.google.com/http/request/size`
+	LabelHTTPResponseSize   = `trace.cloud.google.com/http/response/size`
+	LabelHTTPStatusCode     = `trace.cloud.google.com/http/status_code`
+	LabelHTTPURL            = `trace.cloud.google.com/http/url`
+	LabelHTTPUserAgent      = `trace.cloud.google.com/http/user_agent`
+	LabelPID                = `trace.cloud.google.com/pid`
+	LabelSamplingPolicy     = `trace.cloud.google.com/sampling_policy`
+	LabelSamplingWeight     = `trace.cloud.google.com/sampling_weight`
+	LabelStackTrace         = `trace.cloud.google.com/stacktrace`
+	LabelTID                = `trace.cloud.google.com/tid`
 )
 
 const (
 	// ScopeTraceAppend grants permissions to write trace data for a project.
+	//
+	// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 	ScopeTraceAppend = "https://www.googleapis.com/auth/trace.append"
 
 	// ScopeCloudPlatform grants permissions to view and manage your data
 	// across Google Cloud Platform services.
+	//
+	// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 	ScopeCloudPlatform = "https://www.googleapis.com/auth/cloud-platform"
 )
 
@@ -254,7 +148,10 @@ func nextTraceID() string {
 	return fmt.Sprintf("%016x%016x", id1, id2)
 }
 
-// Client is a client for uploading traces to the Google Stackdriver Trace server.
+// Client is a client for uploading traces to the Google Stackdriver Trace service.
+// A nil Client will no-op for all of its methods.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 type Client struct {
 	service   *api.Service
 	projectID string
@@ -263,13 +160,15 @@ type Client struct {
 }
 
 // NewClient creates a new Google Stackdriver Trace client.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func NewClient(ctx context.Context, projectID string, opts ...option.ClientOption) (*Client, error) {
 	o := []option.ClientOption{
 		option.WithScopes(cloudPlatformScope),
 		option.WithUserAgent(userAgent),
 	}
 	o = append(o, opts...)
-	hc, basePath, err := transport.NewHTTPClient(ctx, o...)
+	hc, basePath, err := htransport.NewClient(ctx, o...)
 	if err != nil {
 		return nil, fmt.Errorf("creating HTTP client for Google Stackdriver Trace API: %v", err)
 	}
@@ -304,19 +203,21 @@ func NewClient(ctx context.Context, projectID string, opts ...option.ClientOptio
 
 // SetSamplingPolicy sets the SamplingPolicy that determines how often traces
 // are initiated by this client.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (c *Client) SetSamplingPolicy(p SamplingPolicy) {
 	if c != nil {
 		c.policy = p
 	}
 }
 
-// SpanFromHeader returns a new trace span, based on a provided request header
-// value. See https://cloud.google.com/trace/docs/faq.
-//
-// It returns nil iff the client is nil.
+// SpanFromHeader returns a new trace span based on a provided request header
+// value or nil iff the client is nil.
 //
 // The trace information and identifiers will be read from the header value.
 // Otherwise, a new trace ID is made and the parent span ID is zero.
+// For the exact format of the header value, see
+// https://cloud.google.com/trace/docs/troubleshooting#force-trace
 //
 // The name of the new span is provided as an argument.
 //
@@ -331,6 +232,8 @@ func (c *Client) SetSamplingPolicy(p SamplingPolicy) {
 // SpanFromHeader, since it provides additional functionality for HTTP
 // requests. In particular, it will set various pieces of request information
 // as labels on the *Span, which is not available from the header alone.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (c *Client) SpanFromHeader(name string, header string) *Span {
 	if c == nil {
 		return nil
@@ -352,9 +255,8 @@ func (c *Client) SpanFromHeader(name string, header string) *Span {
 	return span
 }
 
-// SpanFromRequest returns a new trace span for an HTTP request.
-//
-// It returns nil iff the client is nil.
+// SpanFromRequest returns a new trace span for an HTTP request or nil
+// iff the client is nil.
 //
 // If the incoming HTTP request contains a trace context header, the trace ID,
 // parent span ID, and tracing options will be read from that header.
@@ -369,6 +271,8 @@ func (c *Client) SpanFromHeader(name string, header string) *Span {
 // methods can still be called -- the Finish, FinishWait, and SetLabel methods
 // do nothing.  NewChild does nothing, and returns the same *Span.  TraceID
 // works as usual.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (c *Client) SpanFromRequest(r *http.Request) *Span {
 	if c == nil {
 		return nil
@@ -390,10 +294,13 @@ func (c *Client) SpanFromRequest(r *http.Request) *Span {
 	return span
 }
 
-// NewSpan returns a new trace span with the given name.
+// NewSpan returns a new trace span with the given name or nil iff the
+// client is nil.
 //
 // A new trace and span ID is generated to trace the span.
 // Returned span need to be finished by calling Finish or FinishWait.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (c *Client) NewSpan(name string) *Span {
 	if c == nil {
 		return nil
@@ -427,12 +334,14 @@ func configureSpanFromPolicy(s *Span, p SamplingPolicy, ok bool) {
 	}
 	if d.Sample {
 		// This trace is in the random sample, so set the labels.
-		s.SetLabel(labelSamplingPolicy, d.Policy)
-		s.SetLabel(labelSamplingWeight, fmt.Sprint(d.Weight))
+		s.SetLabel(LabelSamplingPolicy, d.Policy)
+		s.SetLabel(LabelSamplingWeight, fmt.Sprint(d.Weight))
 	}
 }
 
 // NewContext returns a derived context containing the span.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func NewContext(ctx context.Context, s *Span) context.Context {
 	if s == nil {
 		return ctx
@@ -441,6 +350,8 @@ func NewContext(ctx context.Context, s *Span) context.Context {
 }
 
 // FromContext returns the span contained in the context, or nil.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func FromContext(ctx context.Context) *Span {
 	s, _ := ctx.Value(contextKey{}).(*Span)
 	return s
@@ -542,12 +453,19 @@ func (t *trace) constructTrace(spans []*Span) *api.Trace {
 		if t.localOptions&optionStack != 0 {
 			sp.setStackLabel()
 		}
-		sp.SetLabel(labelHost, sp.host)
-		sp.SetLabel(labelURL, sp.url)
-		sp.SetLabel(labelMethod, sp.method)
-		if sp.statusCode != 0 {
-			sp.SetLabel(labelStatusCode, strconv.Itoa(sp.statusCode))
+		if sp.host != "" {
+			sp.SetLabel(LabelHTTPHost, sp.host)
 		}
+		if sp.url != "" {
+			sp.SetLabel(LabelHTTPURL, sp.url)
+		}
+		if sp.method != "" {
+			sp.SetLabel(LabelHTTPMethod, sp.method)
+		}
+		if sp.statusCode != 0 {
+			sp.SetLabel(LabelHTTPStatusCode, strconv.Itoa(sp.statusCode))
+		}
+		sp.SetLabel(labelAgent, userAgent)
 		apiSpans[i] = &sp.span
 	}
 
@@ -564,6 +482,8 @@ func (c *Client) upload(traces []*api.Trace) error {
 }
 
 // Span contains information about one span of a trace.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 type Span struct {
 	trace *trace
 
@@ -580,17 +500,26 @@ type Span struct {
 	statusCode int
 }
 
-func (s *Span) tracing() bool {
+// Traced reports whether the current span is sampled to be traced.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
+func (s *Span) Traced() bool {
+	if s == nil {
+		return false
+	}
 	return s.trace.localOptions&optionTrace != 0
 }
 
 // NewChild creates a new span with the given name as a child of s.
 // If s is nil, does nothing and returns nil.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *Span) NewChild(name string) *Span {
 	if s == nil {
 		return nil
 	}
-	if !s.tracing() {
+	if !s.Traced() {
+		// TODO(jbd): Document this behavior in godoc here and elsewhere.
 		return s
 	}
 	return startNewChild(name, s.trace, s.span.SpanId)
@@ -611,11 +540,13 @@ func (s *Span) NewChild(name string) *Span {
 // set in the incoming request.
 //
 // If s is nil, does nothing and returns nil.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *Span) NewRemoteChild(r *http.Request) *Span {
 	if s == nil {
 		return nil
 	}
-	if !s.tracing() {
+	if !s.Traced() {
 		r.Header[httpHeader] = []string{spanHeader(s.trace.traceID, s.span.ParentSpanId, s.trace.globalOptions)}
 		return s
 	}
@@ -631,6 +562,8 @@ func (s *Span) NewRemoteChild(r *http.Request) *Span {
 // Most users should use NewRemoteChild unless they have specific
 // propagation needs or want to control the naming of their span.
 // Header() does not create a new span.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *Span) Header() string {
 	if s == nil {
 		return ""
@@ -673,6 +606,8 @@ func startNewChild(name string, trace *trace, parentSpanID uint64) *Span {
 }
 
 // TraceID returns the ID of the trace to which s belongs.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *Span) TraceID() string {
 	if s == nil {
 		return ""
@@ -687,11 +622,13 @@ func (s *Span) TraceID() string {
 // If s is nil, does nothing.
 //
 // SetLabel shouldn't be called after Finish or FinishWait.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *Span) SetLabel(key, value string) {
 	if s == nil {
 		return
 	}
-	if !s.tracing() {
+	if !s.Traced() {
 		return
 	}
 	s.spanMu.Lock()
@@ -709,6 +646,8 @@ func (s *Span) SetLabel(key, value string) {
 	s.span.Labels[key] = value
 }
 
+// FinishOption allows users to specify span finalizers.
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 type FinishOption interface {
 	modifySpan(s *Span)
 }
@@ -719,9 +658,12 @@ type withResponse struct {
 
 // WithResponse returns an option that can be passed to Finish that indicates
 // that some labels for the span should be set using the given *http.Response.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func WithResponse(resp *http.Response) FinishOption {
 	return withResponse{resp}
 }
+
 func (u withResponse) modifySpan(s *Span) {
 	if u.Response != nil {
 		s.statusCode = u.StatusCode
@@ -740,11 +682,13 @@ func (u withResponse) modifySpan(s *Span) {
 // If s is a root span (one created by SpanFromRequest) then s, and all its
 // descendant spans that have finished, are uploaded to the Google Stackdriver
 // Trace server asynchronously.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *Span) Finish(opts ...FinishOption) {
 	if s == nil {
 		return
 	}
-	if !s.tracing() {
+	if !s.Traced() {
 		return
 	}
 	s.trace.finish(s, false, opts...)
@@ -752,11 +696,13 @@ func (s *Span) Finish(opts ...FinishOption) {
 
 // FinishWait is like Finish, but if s is a root span, it waits until uploading
 // is finished, then returns an error if one occurred.
+//
+// Deprecated: see https://cloud.google.com/trace/docs/setup/go.
 func (s *Span) FinishWait(opts ...FinishOption) error {
 	if s == nil {
 		return nil
 	}
-	if !s.tracing() {
+	if !s.Traced() {
 		return nil
 	}
 	return s.trace.finish(s, true, opts...)
@@ -807,6 +753,6 @@ func (s *Span) setStackLabel() {
 		lastSigPanic = fn.Name() == "runtime.sigpanic"
 	}
 	if label, err := json.Marshal(stack); err == nil {
-		s.SetLabel(labelStackTrace, string(label))
+		s.SetLabel(LabelStackTrace, string(label))
 	}
 }

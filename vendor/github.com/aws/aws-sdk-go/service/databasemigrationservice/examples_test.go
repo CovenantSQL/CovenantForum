@@ -3,8 +3,8 @@
 package databasemigrationservice_test
 
 import (
-	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -14,7 +14,7 @@ import (
 )
 
 var _ time.Duration
-var _ bytes.Buffer
+var _ strings.Reader
 var _ aws.Config
 
 func parseTime(layout, value string) *time.Time {
@@ -888,6 +888,8 @@ func ExampleDatabaseMigrationService_ImportCertificate_shared00() {
 				fmt.Println(databasemigrationservice.ErrCodeResourceAlreadyExistsFault, aerr.Error())
 			case databasemigrationservice.ErrCodeInvalidCertificateFault:
 				fmt.Println(databasemigrationservice.ErrCodeInvalidCertificateFault, aerr.Error())
+			case databasemigrationservice.ErrCodeResourceQuotaExceededFault:
+				fmt.Println(databasemigrationservice.ErrCodeResourceQuotaExceededFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1155,6 +1157,8 @@ func ExampleDatabaseMigrationService_StartReplicationTask_shared00() {
 				fmt.Println(databasemigrationservice.ErrCodeResourceNotFoundFault, aerr.Error())
 			case databasemigrationservice.ErrCodeInvalidResourceStateFault:
 				fmt.Println(databasemigrationservice.ErrCodeInvalidResourceStateFault, aerr.Error())
+			case databasemigrationservice.ErrCodeAccessDeniedFault:
+				fmt.Println(databasemigrationservice.ErrCodeAccessDeniedFault, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

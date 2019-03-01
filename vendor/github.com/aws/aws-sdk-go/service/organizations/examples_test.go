@@ -3,8 +3,8 @@
 package organizations_test
 
 import (
-	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -14,7 +14,7 @@ import (
 )
 
 var _ time.Duration
-var _ bytes.Buffer
+var _ strings.Reader
 var _ aws.Config
 
 func parseTime(layout, value string) *time.Time {
@@ -60,6 +60,8 @@ func ExampleOrganizations_AcceptHandshake_shared00() {
 				fmt.Println(organizations.ErrCodeServiceException, aerr.Error())
 			case organizations.ErrCodeTooManyRequestsException:
 				fmt.Println(organizations.ErrCodeTooManyRequestsException, aerr.Error())
+			case organizations.ErrCodeAccessDeniedForDependencyException:
+				fmt.Println(organizations.ErrCodeAccessDeniedForDependencyException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -301,6 +303,8 @@ func ExampleOrganizations_CreateOrganization_shared00() {
 				fmt.Println(organizations.ErrCodeServiceException, aerr.Error())
 			case organizations.ErrCodeTooManyRequestsException:
 				fmt.Println(organizations.ErrCodeTooManyRequestsException, aerr.Error())
+			case organizations.ErrCodeAccessDeniedForDependencyException:
+				fmt.Println(organizations.ErrCodeAccessDeniedForDependencyException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -345,6 +349,8 @@ func ExampleOrganizations_CreateOrganization_shared01() {
 				fmt.Println(organizations.ErrCodeServiceException, aerr.Error())
 			case organizations.ErrCodeTooManyRequestsException:
 				fmt.Println(organizations.ErrCodeTooManyRequestsException, aerr.Error())
+			case organizations.ErrCodeAccessDeniedForDependencyException:
+				fmt.Println(organizations.ErrCodeAccessDeniedForDependencyException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1046,6 +1052,8 @@ func ExampleOrganizations_InviteAccountToOrganization_shared00() {
 				fmt.Println(organizations.ErrCodeAccessDeniedException, aerr.Error())
 			case organizations.ErrCodeAWSOrganizationsNotInUseException:
 				fmt.Println(organizations.ErrCodeAWSOrganizationsNotInUseException, aerr.Error())
+			case organizations.ErrCodeAccountOwnerNotVerifiedException:
+				fmt.Println(organizations.ErrCodeAccountOwnerNotVerifiedException, aerr.Error())
 			case organizations.ErrCodeConcurrentModificationException:
 				fmt.Println(organizations.ErrCodeConcurrentModificationException, aerr.Error())
 			case organizations.ErrCodeHandshakeConstraintViolationException:

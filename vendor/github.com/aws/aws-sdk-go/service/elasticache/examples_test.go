@@ -3,8 +3,8 @@
 package elasticache_test
 
 import (
-	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -14,7 +14,7 @@ import (
 )
 
 var _ time.Duration
-var _ bytes.Buffer
+var _ strings.Reader
 var _ aws.Config
 
 func parseTime(layout, value string) *time.Time {
@@ -220,14 +220,14 @@ func ExampleElastiCache_CreateCacheCluster_shared00() {
 func ExampleElastiCache_CreateCacheCluster_shared01() {
 	svc := elasticache.New(session.New())
 	input := &elasticache.CreateCacheClusterInput{
-		AutoMinorVersionUpgrade: aws.Bool(true),
-		CacheClusterId:          aws.String("my-redis"),
-		CacheNodeType:           aws.String("cache.r3.larage"),
-		CacheSubnetGroupName:    aws.String("default"),
-		Engine:                  aws.String("redis"),
-		EngineVersion:           aws.String("3.2.4"),
-		NumCacheNodes:           aws.Int64(1),
-		Port:                    aws.Int64(6379),
+		AutoMinorVersionUpgrade:   aws.Bool(true),
+		CacheClusterId:            aws.String("my-redis"),
+		CacheNodeType:             aws.String("cache.r3.larage"),
+		CacheSubnetGroupName:      aws.String("default"),
+		Engine:                    aws.String("redis"),
+		EngineVersion:             aws.String("3.2.4"),
+		NumCacheNodes:             aws.Int64(1),
+		Port:                      aws.Int64(6379),
 		PreferredAvailabilityZone: aws.String("us-east-1c"),
 		SnapshotRetentionLimit:    aws.Int64(7),
 	}

@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.7
-
 package trace
 
 import (
@@ -23,17 +21,6 @@ import (
 	"strings"
 	"testing"
 )
-
-type noopTransport struct{}
-
-func (rt *noopTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	resp := &http.Response{
-		Status:     "200 OK",
-		StatusCode: 200,
-		Body:       ioutil.NopCloser(strings.NewReader("{}")),
-	}
-	return resp, nil
-}
 
 type recorderTransport struct {
 	ch chan *http.Request

@@ -17,12 +17,22 @@
 package worker
 
 import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"runtime"
+	"sync"
 	"sync/atomic"
 
 	"github.com/CovenantSQL/CovenantSQL/blockproducer/interfaces"
+	"github.com/CovenantSQL/CovenantSQL/conf"
+	"github.com/CovenantSQL/CovenantSQL/consistent"
 	"github.com/CovenantSQL/CovenantSQL/crypto/hash"
 	"github.com/CovenantSQL/CovenantSQL/proto"
+	"github.com/CovenantSQL/CovenantSQL/route"
+	"github.com/CovenantSQL/CovenantSQL/rpc"
 	"github.com/CovenantSQL/CovenantSQL/types"
+	"github.com/CovenantSQL/CovenantSQL/utils"
 )
 
 var (
@@ -172,4 +182,61 @@ func (s *stubBPService) Init() {
 		profile: testOddProfiles,
 	}
 	atomic.StoreUint32(&s.count, 0)
+}
+
+func initNode() (cleanupFunc func(), server *rpc.Server, err error) {
+	var d string
+	if d, err = ioutil.TempDir("", "db_test_"); err != nil {
+		return
+	}
+
+	// init conf
+	_, testFile, _, _ := runtime.Caller(0)
+	pubKeyStoreFile := filepath.Join(d, PubKeyStorePath)
+	os.Remove(pubKeyStoreFile)
+	clientPubKeyStoreFile := filepath.Join(d, PubKeyStorePath+"_c")
+	os.Remove(clientPubKeyStoreFile)
+	dupConfFile := filepath.Join(d, "config.yaml")
+	confFile := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/config.yaml")
+	if err = utils.DupConf(confFile, dupConfFile); err != nil {
+		return
+	}
+	privateKeyPath := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/private.key")
+
+	conf.GConf, _ = conf.LoadConfig(dupConfFile)
+	// reset the once
+	route.Once = sync.Once{}
+	route.InitKMS(clientPubKeyStoreFile)
+
+	var dht *route.DHTService
+
+	// init dht
+	dht, err = route.NewDHTService(pubKeyStoreFile, new(consistent.KMSStorage), true)
+	if err != nil {
+		return
+	}
+
+	// init rpc
+	if server, err = rpc.NewServerWithService(rpc.ServiceMap{route.DHTRPCName: dht}); err != nil {
+		return
+	}
+
+	// init private key
+	masterKey := []byte("")
+	if err = server.InitRPCServer(conf.GConf.ListenAddr, privateKeyPath, masterKey); err != nil {
+		return
+	}
+
+	// start server
+	go server.Serve()
+
+	cleanupFunc = func() {
+		os.RemoveAll(d)
+		server.Listener.Close()
+		server.Stop()
+		// clear the connection pool
+		rpc.GetSessionPoolInstance().Close()
+	}
+
+	return
 }

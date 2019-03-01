@@ -83,6 +83,8 @@ type flushWriter struct {
 }
 
 func (f *flushWriter) Flush() {
+	f.wroteHeader = true
+
 	fl := f.basicWriter.ResponseWriter.(http.Flusher)
 	fl.Flush()
 }
@@ -102,6 +104,8 @@ func (f *httpFancyWriter) CloseNotify() <-chan bool {
 	return cn.CloseNotify()
 }
 func (f *httpFancyWriter) Flush() {
+	f.wroteHeader = true
+
 	fl := f.basicWriter.ResponseWriter.(http.Flusher)
 	fl.Flush()
 }
@@ -111,11 +115,15 @@ func (f *httpFancyWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 }
 func (f *httpFancyWriter) ReadFrom(r io.Reader) (int64, error) {
 	if f.basicWriter.tee != nil {
-		return io.Copy(&f.basicWriter, r)
+		n, err := io.Copy(&f.basicWriter, r)
+		f.basicWriter.bytes += int(n)
+		return n, err
 	}
 	rf := f.basicWriter.ResponseWriter.(io.ReaderFrom)
 	f.basicWriter.maybeWriteHeader()
-	return rf.ReadFrom(r)
+	n, err := rf.ReadFrom(r)
+	f.basicWriter.bytes += int(n)
+	return n, err
 }
 
 var _ http.CloseNotifier = &httpFancyWriter{}
@@ -136,6 +144,8 @@ func (f *http2FancyWriter) CloseNotify() <-chan bool {
 	return cn.CloseNotify()
 }
 func (f *http2FancyWriter) Flush() {
+	f.wroteHeader = true
+
 	fl := f.basicWriter.ResponseWriter.(http.Flusher)
 	fl.Flush()
 }

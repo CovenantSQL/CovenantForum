@@ -17,17 +17,13 @@
 package client
 
 import (
-	"bytes"
 	"database/sql"
-	"fmt"
 	"io/ioutil"
-	"math/rand"
 	"os"
 	"path/filepath"
 	"runtime"
 	"sync"
 	"sync/atomic"
-	"time"
 
 	pi "github.com/CovenantSQL/CovenantSQL/blockproducer/interfaces"
 	"github.com/CovenantSQL/CovenantSQL/conf"
@@ -36,7 +32,6 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/crypto/asymmetric"
 	"github.com/CovenantSQL/CovenantSQL/crypto/hash"
 	"github.com/CovenantSQL/CovenantSQL/crypto/kms"
-	"github.com/CovenantSQL/CovenantSQL/pow/cpuminer"
 	"github.com/CovenantSQL/CovenantSQL/proto"
 	"github.com/CovenantSQL/CovenantSQL/route"
 	"github.com/CovenantSQL/CovenantSQL/rpc"
@@ -56,7 +51,7 @@ var (
 	stubNextNonce pi.AccountNonce = 1
 )
 
-// fake BPDB service
+// fake BPDB service.
 type stubBPService struct{}
 
 func (s *stubBPService) QueryAccountTokenBalance(req *types.QueryAccountTokenBalanceReq,
@@ -88,6 +83,13 @@ func (s *stubBPService) NextAccountNonce(_ *types.NextAccountNonceReq,
 }
 
 func (s *stubBPService) AddTx(req *types.AddTxReq, resp *types.AddTxResp) (err error) {
+	return
+}
+
+func (s *stubBPService) QueryTxState(
+	req *types.QueryTxStateReq, resp *types.QueryTxStateResp) (err error,
+) {
+	resp.State = pi.TransactionStateConfirmed
 	return
 }
 
@@ -139,7 +141,7 @@ func startTestService() (stopTestService func(), tempDir string, err error) {
 	dbID := proto.DatabaseID("db")
 
 	// create sqlchain block
-	block, err = createRandomBlock(rootHash, true)
+	block, err = types.CreateRandomBlock(rootHash, true)
 
 	// get database peers
 	if peers, err = genPeers(1); err != nil {
@@ -204,7 +206,7 @@ func initNode() (cleanupFunc func(), tempDir string, server *rpc.Server, err err
 	os.Remove(clientPubKeyStoreFile)
 	dupConfFile := filepath.Join(tempDir, "config.yaml")
 	confFile := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/config.yaml")
-	if err = dupConf(confFile, dupConfFile); err != nil {
+	if err = utils.DupConf(confFile, dupConfFile); err != nil {
 		return
 	}
 	privateKeyPath := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/private.key")
@@ -249,66 +251,17 @@ func initNode() (cleanupFunc func(), tempDir string, server *rpc.Server, err err
 	// start server
 	go server.Serve()
 
+	// fake database init already processed
+	atomic.StoreUint32(&driverInitialized, 1)
+
 	cleanupFunc = func() {
 		os.RemoveAll(tempDir)
 		server.Listener.Close()
 		server.Stop()
+		// restore database init state
+		atomic.StoreUint32(&driverInitialized, 0)
+		kms.ResetLocalKeyStore()
 	}
-
-	// fake database init already processed
-	atomic.StoreUint32(&driverInitialized, 1)
-
-	return
-}
-
-// copied from sqlchain.xxx_test.
-func createRandomBlock(parent hash.Hash, isGenesis bool) (b *types.Block, err error) {
-	// Generate key pair
-	priv, pub, err := asymmetric.GenSecp256k1KeyPair()
-
-	if err != nil {
-		return
-	}
-
-	h := hash.Hash{}
-	rand.Read(h[:])
-
-	b = &types.Block{
-		SignedHeader: types.SignedHeader{
-			Header: types.Header{
-				Version:     0x01000000,
-				Producer:    proto.NodeID(h.String()),
-				GenesisHash: rootHash,
-				ParentHash:  parent,
-				Timestamp:   time.Now().UTC(),
-			},
-		},
-	}
-
-	if isGenesis {
-		// Compute nonce with public key
-		nonceCh := make(chan cpuminer.NonceInfo)
-		quitCh := make(chan struct{})
-		miner := cpuminer.NewCPUMiner(quitCh)
-		go miner.ComputeBlockNonce(cpuminer.MiningBlock{
-			Data:      pub.Serialize(),
-			NonceChan: nonceCh,
-			Stop:      nil,
-		}, cpuminer.Uint256{A: 0, B: 0, C: 0, D: 0}, 4)
-		nonce := <-nonceCh
-		close(quitCh)
-		close(nonceCh)
-		// Add public key to KMS
-		id := cpuminer.HashBlock(pub.Serialize(), nonce.Nonce)
-		b.SignedHeader.Header.Producer = proto.NodeID(id.String())
-		err = kms.SetPublicKey(proto.NodeID(id.String()), nonce.Nonce, pub)
-
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	err = b.PackAndSignBlock(priv)
 	return
 }
 
@@ -360,22 +313,4 @@ func genPeers(term uint64) (peers *proto.Peers, err error) {
 	}
 	err = peers.Sign(privateKey)
 	return
-}
-
-// duplicate conf file using random new listen addr to avoid failure on concurrent test cases
-func dupConf(confFile string, newConfFile string) (err error) {
-	// replace port in confFile
-	var fileBytes []byte
-	if fileBytes, err = ioutil.ReadFile(confFile); err != nil {
-		return
-	}
-
-	var ports []int
-	if ports, err = utils.GetRandomPorts("127.0.0.1", 4000, 5000, 1); err != nil {
-		return
-	}
-
-	newConfBytes := bytes.Replace(fileBytes, []byte(":2230"), []byte(fmt.Sprintf(":%v", ports[0])), -1)
-
-	return ioutil.WriteFile(newConfFile, newConfBytes, 0644)
 }

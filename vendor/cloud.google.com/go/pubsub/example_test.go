@@ -1,4 +1,4 @@
-// Copyright 2014 Google Inc. All Rights Reserved.
+// Copyright 2014 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
 package pubsub_test
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	"cloud.google.com/go/pubsub"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 )
 
@@ -46,6 +46,18 @@ func ExampleClient_CreateTopic() {
 		// TODO: Handle error.
 	}
 
+	_ = topic // TODO: use the topic.
+}
+
+// Use TopicInProject to refer to a topic that is not in the client's project, such
+// as a public topic.
+func ExampleClient_TopicInProject() {
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	topic := client.TopicInProject("topicName", "another-project-id")
 	_ = topic // TODO: use the topic.
 }
 
@@ -252,14 +264,106 @@ func ExampleSubscription_Receive_maxOutstanding() {
 	}
 }
 
-func ExampleSubscription_ModifyPushConfig() {
+func ExampleSubscription_Update() {
 	ctx := context.Background()
 	client, err := pubsub.NewClient(ctx, "project-id")
 	if err != nil {
 		// TODO: Handle error.
 	}
 	sub := client.Subscription("subName")
-	if err := sub.ModifyPushConfig(ctx, pubsub.PushConfig{Endpoint: "https://example.com/push"}); err != nil {
+	subConfig, err := sub.Update(ctx, pubsub.SubscriptionConfigToUpdate{
+		PushConfig: &pubsub.PushConfig{Endpoint: "https://example.com/push"},
+	})
+	if err != nil {
+		// TODO: Handle error.
+	}
+	_ = subConfig // TODO: Use SubscriptionConfig.
+}
+
+func ExampleSubscription_CreateSnapshot() {
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	sub := client.Subscription("subName")
+	snapConfig, err := sub.CreateSnapshot(ctx, "snapshotName")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	_ = snapConfig // TODO: Use SnapshotConfig.
+}
+
+func ExampleSubscription_SeekToSnapshot() {
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	sub := client.Subscription("subName")
+	snap := client.Snapshot("snapshotName")
+	if err := sub.SeekToSnapshot(ctx, snap); err != nil {
 		// TODO: Handle error.
 	}
 }
+
+func ExampleSubscription_SeekToTime() {
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	sub := client.Subscription("subName")
+	if err := sub.SeekToTime(ctx, time.Now().Add(-time.Hour)); err != nil {
+		// TODO: Handle error.
+	}
+}
+
+func ExampleSnapshot_Delete() {
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	snap := client.Snapshot("snapshotName")
+	if err := snap.Delete(ctx); err != nil {
+		// TODO: Handle error.
+	}
+}
+
+func ExampleClient_Snapshots() {
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// List all snapshots for the project.
+	iter := client.Snapshots(ctx)
+	_ = iter // TODO: iterate using Next.
+}
+
+func ExampleSnapshotConfigIterator_Next() {
+	ctx := context.Background()
+	client, err := pubsub.NewClient(ctx, "project-id")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// List all snapshots for the project.
+	iter := client.Snapshots(ctx)
+	for {
+		snapConfig, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		_ = snapConfig // TODO: use the SnapshotConfig.
+	}
+}
+
+// TODO(jba): write an example for PublishResult.Ready
+// TODO(jba): write an example for Subscription.IAM
+// TODO(jba): write an example for Topic.IAM
+// TODO(jba): write an example for Topic.Stop

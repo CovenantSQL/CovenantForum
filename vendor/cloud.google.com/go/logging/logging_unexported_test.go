@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,15 +17,17 @@
 package logging
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
 	"time"
 
+	"cloud.google.com/go/internal/testutil"
 	"github.com/golang/protobuf/proto"
 	durpb "github.com/golang/protobuf/ptypes/duration"
 	structpb "github.com/golang/protobuf/ptypes/struct"
+	"google.golang.org/api/logging/v2"
 	"google.golang.org/api/support/bundler"
 	mrpb "google.golang.org/genproto/googleapis/api/monitoredres"
 	logtypepb "google.golang.org/genproto/googleapis/logging/type"
@@ -33,7 +35,7 @@ import (
 
 func TestLoggerCreation(t *testing.T) {
 	const logID = "testing"
-	c := &Client{projectID: "PROJECT_ID"}
+	c := &Client{parent: "projects/PROJECT_ID"}
 	customResource := &mrpb.MonitoredResource{
 		Type: "global",
 		Labels: map[string]string{
@@ -98,7 +100,7 @@ func TestLoggerCreation(t *testing.T) {
 		if got, want := gotLogger.commonResource, test.wantLogger.commonResource; !test.defaultResource && !proto.Equal(got, want) {
 			t.Errorf("%v: resource: got %v, want %v", test.options, got, want)
 		}
-		if got, want := gotLogger.commonLabels, test.wantLogger.commonLabels; !reflect.DeepEqual(got, want) {
+		if got, want := gotLogger.commonLabels, test.wantLogger.commonLabels; !testutil.Equal(got, want) {
 			t.Errorf("%v: commonLabels: got %v, want %v", test.options, got, want)
 		}
 		if got, want := gotLogger.bundler.DelayThreshold, test.wantBundler.DelayThreshold; got != want {
@@ -178,6 +180,111 @@ func TestToProtoStruct(t *testing.T) {
 	}
 }
 
+func TestToLogEntryPayload(t *testing.T) {
+	var logger Logger
+	for _, test := range []struct {
+		in         interface{}
+		wantText   string
+		wantStruct *structpb.Struct
+	}{
+		{
+			in:       "string",
+			wantText: "string",
+		},
+		{
+			in: map[string]interface{}{"a": 1, "b": true},
+			wantStruct: &structpb.Struct{
+				Fields: map[string]*structpb.Value{
+					"a": {Kind: &structpb.Value_NumberValue{NumberValue: 1}},
+					"b": {Kind: &structpb.Value_BoolValue{BoolValue: true}},
+				},
+			},
+		},
+		{
+			in: json.RawMessage([]byte(`{"a": 1, "b": true}`)),
+			wantStruct: &structpb.Struct{
+				Fields: map[string]*structpb.Value{
+					"a": {Kind: &structpb.Value_NumberValue{NumberValue: 1}},
+					"b": {Kind: &structpb.Value_BoolValue{BoolValue: true}},
+				},
+			},
+		},
+	} {
+		e, err := logger.toLogEntry(Entry{Payload: test.in})
+		if err != nil {
+			t.Fatalf("%+v: %v", test.in, err)
+		}
+		if test.wantStruct != nil {
+			got := e.GetJsonPayload()
+			if !proto.Equal(got, test.wantStruct) {
+				t.Errorf("%+v: got %s, want %s", test.in, got, test.wantStruct)
+			}
+		} else {
+			got := e.GetTextPayload()
+			if got != test.wantText {
+				t.Errorf("%+v: got %s, want %s", test.in, got, test.wantText)
+			}
+		}
+	}
+}
+
+func TestToLogEntryTrace(t *testing.T) {
+	logger := &Logger{client: &Client{parent: "projects/P"}}
+	// Verify that we get the trace from the HTTP request if it isn't
+	// provided by the caller.
+	u := &url.URL{Scheme: "http"}
+	for _, test := range []struct {
+		in   Entry
+		want logging.LogEntry
+	}{
+		{Entry{}, logging.LogEntry{}},
+		{Entry{Trace: "t1"}, logging.LogEntry{Trace: "t1"}},
+		{
+			Entry{
+				HTTPRequest: &HTTPRequest{
+					Request: &http.Request{URL: u, Header: http.Header{"foo": {"bar"}}},
+				},
+			},
+			logging.LogEntry{},
+		},
+		{
+			Entry{
+				HTTPRequest: &HTTPRequest{
+					Request: &http.Request{
+						URL:    u,
+						Header: http.Header{"X-Cloud-Trace-Context": {"t2"}},
+					},
+				},
+			},
+			logging.LogEntry{Trace: "projects/P/traces/t2"},
+		},
+		{
+			Entry{
+				HTTPRequest: &HTTPRequest{
+					Request: &http.Request{
+						URL:    u,
+						Header: http.Header{"X-Cloud-Trace-Context": {"t3"}},
+					},
+				},
+				Trace: "t4",
+			},
+			logging.LogEntry{Trace: "t4"},
+		},
+		{Entry{Trace: "t1", SpanID: "007"}, logging.LogEntry{Trace: "t1", SpanId: "007"}},
+	} {
+		e, err := logger.toLogEntry(test.in)
+		if err != nil {
+			t.Fatalf("%+v: %v", test.in, err)
+		}
+		if got := e.Trace; got != test.want.Trace {
+			t.Errorf("%+v: got %q, want %q", test.in, got, test.want.Trace)
+		}
+		if got := e.SpanId; got != test.want.SpanId {
+			t.Errorf("%+v: got %q, want %q", test.in, got, test.want.SpanId)
+		}
+	}
+}
+
 func TestFromHTTPRequest(t *testing.T) {
 	const testURL = "http:://example.com/path?q=1"
 	u, err := url.Parse(testURL)
@@ -189,8 +296,8 @@ func TestFromHTTPRequest(t *testing.T) {
 			Method: "GET",
 			URL:    u,
 			Header: map[string][]string{
-				"User-Agent": []string{"user-agent"},
-				"Referer":    []string{"referer"},
+				"User-Agent": {"user-agent"},
+				"Referer":    {"referer"},
 			},
 		},
 		RequestSize:                    100,
@@ -219,6 +326,62 @@ func TestFromHTTPRequest(t *testing.T) {
 	}
 	if !proto.Equal(got, want) {
 		t.Errorf("got  %+v\nwant %+v", got, want)
+	}
+}
+
+func TestMonitoredResource(t *testing.T) {
+	for _, test := range []struct {
+		parent string
+		want   *mrpb.MonitoredResource
+	}{
+		{
+			"projects/P",
+			&mrpb.MonitoredResource{
+				Type:   "project",
+				Labels: map[string]string{"project_id": "P"},
+			},
+		},
+
+		{
+			"folders/F",
+			&mrpb.MonitoredResource{
+				Type:   "folder",
+				Labels: map[string]string{"folder_id": "F"},
+			},
+		},
+		{
+			"billingAccounts/B",
+			&mrpb.MonitoredResource{
+				Type:   "billing_account",
+				Labels: map[string]string{"account_id": "B"},
+			},
+		},
+		{
+			"organizations/123",
+			&mrpb.MonitoredResource{
+				Type:   "organization",
+				Labels: map[string]string{"organization_id": "123"},
+			},
+		},
+		{
+			"unknown/X",
+			&mrpb.MonitoredResource{
+				Type:   "global",
+				Labels: map[string]string{"project_id": "X"},
+			},
+		},
+		{
+			"whatever",
+			&mrpb.MonitoredResource{
+				Type:   "global",
+				Labels: map[string]string{"project_id": "whatever"},
+			},
+		},
+	} {
+		got := monitoredResource(test.parent)
+		if !testutil.Equal(got, test.want) {
+			t.Errorf("%q: got %+v, want %+v", test.parent, got, test.want)
+		}
 	}
 }
 

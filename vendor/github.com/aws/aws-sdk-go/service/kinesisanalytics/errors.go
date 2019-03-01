@@ -58,10 +58,20 @@ const (
 	// in the Amazon Kinesis Streams API Reference.
 	ErrCodeResourceProvisionedThroughputExceededException = "ResourceProvisionedThroughputExceededException"
 
+	// ErrCodeServiceUnavailableException for service response error code
+	// "ServiceUnavailableException".
+	//
+	// The service is unavailable. Back off and retry the operation.
+	ErrCodeServiceUnavailableException = "ServiceUnavailableException"
+
 	// ErrCodeUnableToDetectSchemaException for service response error code
 	// "UnableToDetectSchemaException".
 	//
-	// Data format is not valid, Amazon Kinesis Analytics is not able to detect
+	// Data format is not valid. Amazon Kinesis Analytics is not able to detect
 	// schema for the given streaming source.
 	ErrCodeUnableToDetectSchemaException = "UnableToDetectSchemaException"
+
+	// ErrCodeUnsupportedOperationException for service response error code
+	// "UnsupportedOperationException".
+	ErrCodeUnsupportedOperationException = "UnsupportedOperationException"
 )

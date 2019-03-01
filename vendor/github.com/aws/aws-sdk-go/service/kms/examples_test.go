@@ -3,8 +3,8 @@
 package kms_test
 
 import (
-	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -14,7 +14,7 @@ import (
 )
 
 var _ time.Duration
-var _ bytes.Buffer
+var _ strings.Reader
 var _ aws.Config
 
 func parseTime(layout, value string) *time.Time {
@@ -185,6 +185,12 @@ func ExampleKMS_CreateKey_shared00() {
 				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
 			case kms.ErrCodeTagException:
 				fmt.Println(kms.ErrCodeTagException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
+			case kms.ErrCodeCloudHsmClusterInvalidConfigurationException:
+				fmt.Println(kms.ErrCodeCloudHsmClusterInvalidConfigurationException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -666,6 +672,10 @@ func ExampleKMS_GenerateRandom_shared00() {
 				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
 			case kms.ErrCodeInternalException:
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreNotFoundException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreNotFoundException, aerr.Error())
+			case kms.ErrCodeCustomKeyStoreInvalidStateException:
+				fmt.Println(kms.ErrCodeCustomKeyStoreInvalidStateException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -868,6 +878,10 @@ func ExampleKMS_ListAliases_shared00() {
 				fmt.Println(kms.ErrCodeInvalidMarkerException, aerr.Error())
 			case kms.ErrCodeInternalException:
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
+			case kms.ErrCodeNotFoundException:
+				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1167,6 +1181,8 @@ func ExampleKMS_RetireGrant_shared00() {
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
+			case kms.ErrCodeInvalidArnException:
+				fmt.Println(kms.ErrCodeInvalidArnException, aerr.Error())
 			case kms.ErrCodeInvalidGrantTokenException:
 				fmt.Println(kms.ErrCodeInvalidGrantTokenException, aerr.Error())
 			case kms.ErrCodeInvalidGrantIdException:

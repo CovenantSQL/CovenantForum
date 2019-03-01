@@ -3,76 +3,65 @@
 // Package budgets provides the client and types for making API
 // requests to AWS Budgets.
 //
-// All public APIs for AWS Budgets
+// The AWS Budgets API enables you to use AWS Budgets to plan your service usage,
+// service costs, and instance reservations. The API reference provides descriptions,
+// syntax, and usage examples for each of the actions and data types for AWS
+// Budgets.
+//
+// Budgets provide you with a way to see the following information:
+//
+//    * How close your plan is to your budgeted amount or to the free tier limits
+//
+//    * Your usage-to-date, including how much you've used of your Reserved
+//    Instances (RIs)
+//
+//    * Your current estimated charges from AWS, and how much your predicted
+//    usage will accrue in charges by the end of the month
+//
+//    * How much of your budget has been used
+//
+// AWS updates your budget status several times a day. Budgets track your unblended
+// costs, subscriptions, refunds, and RIs. You can create the following types
+// of budgets:
+//
+//    * Cost budgets - Plan how much you want to spend on a service.
+//
+//    * Usage budgets - Plan how much you want to use one or more services.
+//
+//    * RI utilization budgets - Define a utilization threshold, and receive
+//    alerts when your RI usage falls below that threshold. This lets you see
+//    if your RIs are unused or under-utilized.
+//
+//    * RI coverage budgets - Define a coverage threshold, and receive alerts
+//    when the number of your instance hours that are covered by RIs fall below
+//    that threshold. This lets you see how much of your instance usage is covered
+//    by a reservation.
+//
+// Service Endpoint
+//
+// The AWS Budgets API provides the following endpoint:
+//
+//    * https://budgets.amazonaws.com
+//
+// For information about costs that are associated with the AWS Budgets API,
+// see AWS Cost Management Pricing (https://aws.amazon.com/aws-cost-management/pricing/).
 //
 // See budgets package documentation for more information.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/budgets/
 //
 // Using the Client
 //
-// To use the client for AWS Budgets you will first need
-// to create a new instance of it.
+// To contact AWS Budgets with the SDK use the New function to create
+// a new service client. With that client you can make API requests to the service.
+// These clients are safe to use concurrently.
 //
-// When creating a client for an AWS service you'll first need to have a Session
-// already created. The Session provides configuration that can be shared
-// between multiple service clients. Additional configuration can be applied to
-// the Session and service's client when they are constructed. The aws package's
-// Config type contains several fields such as Region for the AWS Region the
-// client should make API requests too. The optional Config value can be provided
-// as the variadic argument for Sessions and client creation.
-//
-// Once the service's client is created you can use it to make API requests the
-// AWS service. These clients are safe to use concurrently.
-//
-//   // Create a session to share configuration, and load external configuration.
-//   sess := session.Must(session.NewSession())
-//
-//   // Create the service's client with the session.
-//   svc := budgets.New(sess)
-//
-// See the SDK's documentation for more information on how to use service clients.
+// See the SDK's documentation for more information on how to use the SDK.
 // https://docs.aws.amazon.com/sdk-for-go/api/
 //
-// See aws package's Config type for more information on configuration options.
+// See aws.Config documentation for more information on configuring SDK clients.
 // https://docs.aws.amazon.com/sdk-for-go/api/aws/#Config
 //
 // See the AWS Budgets client Budgets for more
-// information on creating the service's client.
+// information on creating client for this service.
 // https://docs.aws.amazon.com/sdk-for-go/api/service/budgets/#New
-//
-// Once the client is created you can make an API request to the service.
-// Each API method takes a input parameter, and returns the service response
-// and an error.
-//
-// The API method will document which error codes the service can be returned
-// by the operation if the service models the API operation's errors. These
-// errors will also be available as const strings prefixed with "ErrCode".
-//
-//   result, err := svc.CreateBudget(params)
-//   if err != nil {
-//       // Cast err to awserr.Error to handle specific error codes.
-//       aerr, ok := err.(awserr.Error)
-//       if ok && aerr.Code() == <error code to check for> {
-//           // Specific error code handling
-//       }
-//       return err
-//   }
-//
-//   fmt.Println("CreateBudget result:")
-//   fmt.Println(result)
-//
-// Using the Client with Context
-//
-// The service's client also provides methods to make API requests with a Context
-// value. This allows you to control the timeout, and cancellation of pending
-// requests. These methods also take request Option as variadic parameter to apply
-// additional configuration to the API request.
-//
-//   ctx := context.Background()
-//
-//   result, err := svc.CreateBudgetWithContext(ctx, params)
-//
-// See the request package documentation for more information on using Context pattern
-// with the SDK.
-// https://docs.aws.amazon.com/sdk-for-go/api/aws/request/
 package budgets

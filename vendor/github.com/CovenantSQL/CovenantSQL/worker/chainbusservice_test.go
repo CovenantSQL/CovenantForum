@@ -28,6 +28,8 @@ import (
 	"testing"
 	"time"
 
+	. "github.com/smartystreets/goconvey/convey"
+
 	"github.com/CovenantSQL/CovenantSQL/blockproducer/interfaces"
 	"github.com/CovenantSQL/CovenantSQL/conf"
 	"github.com/CovenantSQL/CovenantSQL/consistent"
@@ -37,7 +39,7 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/proto"
 	"github.com/CovenantSQL/CovenantSQL/route"
 	"github.com/CovenantSQL/CovenantSQL/rpc"
-	. "github.com/smartystreets/goconvey/convey"
+	"github.com/CovenantSQL/CovenantSQL/utils"
 )
 
 func TestNewBusService(t *testing.T) {
@@ -154,7 +156,7 @@ func initNodeChainBusService() (cleanupFunc func(), server *rpc.Server, err erro
 	os.Remove(clientPubKeyStoreFile)
 	dupConfFile := filepath.Join(d, "config.yaml")
 	confFile := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/config.yaml")
-	if err = dupConf(confFile, dupConfFile); err != nil {
+	if err = utils.DupConf(confFile, dupConfFile); err != nil {
 		return
 	}
 	privateKeyPath := filepath.Join(filepath.Dir(testFile), "../test/node_standalone/private.key")

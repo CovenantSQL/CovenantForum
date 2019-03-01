@@ -33,7 +33,7 @@ func TestUserPermissionFromRole(t *testing.T) {
 		err = json.Unmarshal([]byte(`"Write"`), &r)
 		So(err, ShouldBeNil)
 		So(r, ShouldEqual, Write)
-		err = json.Unmarshal([]byte(`"Read,Write"`), &r)
+		err = r.UnmarshalJSON([]byte(`"Read,Write"`))
 		So(err, ShouldBeNil)
 		So(r, ShouldEqual, ReadWrite)
 	})
@@ -42,8 +42,18 @@ func TestUserPermissionFromRole(t *testing.T) {
 		So(r, ShouldEqual, Void)
 		r.FromString(Read.String())
 		So(r, ShouldEqual, Read)
+		r.FromString(Void.String())
+		So(r, ShouldEqual, Void)
 		r.FromString(ReadWrite.String())
 		So(r, ShouldEqual, ReadWrite)
+		r.FromString(Admin.String())
+		So(r, ShouldEqual, Admin)
+
+		// tricky case
+		trickyStr := "Write,Super"
+		r.FromString(trickyStr)
+		So(r, ShouldEqual, Write|Super)
+		So(r.String(), ShouldEqual, trickyStr)
 	})
 }
 
@@ -93,6 +103,28 @@ func TestUserPermission(t *testing.T) {
 			},
 			{
 				Pattern: "insert into test values(1)",
+			},
+		})
+		So(state, ShouldBeFalse)
+
+		// test patterns limit
+		up := UserPermissionFromRole(Read)
+		up.Patterns = append(up.Patterns, "select 1")
+		up.Patterns = append(up.Patterns, "select 2")
+		// has patterns more than limit
+		_, state = up.HasDisallowedQueryPatterns([]Query{
+			{
+				Pattern: "select 1",
+			},
+			{
+				Pattern: "select 3",
+			},
+		})
+		So(state, ShouldBeTrue)
+		// only has limit patterns
+		_, state = up.HasDisallowedQueryPatterns([]Query{
+			{
+				Pattern: "select 1",
 			},
 		})
 		So(state, ShouldBeFalse)

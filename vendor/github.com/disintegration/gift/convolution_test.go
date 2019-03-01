@@ -6,7 +6,6 @@ import (
 )
 
 func TestConvolution(t *testing.T) {
-
 	testData := []struct {
 		desc                  string
 		kernel                []float32
@@ -229,7 +228,6 @@ func TestConvolution(t *testing.T) {
 }
 
 func TestGaussianBlur(t *testing.T) {
-
 	testData := []struct {
 		desc           string
 		sigma          float32
@@ -320,12 +318,11 @@ func TestGaussianBlur(t *testing.T) {
 }
 
 func TestUnsharpMask(t *testing.T) {
-
 	testData := []struct {
-		desc                    string
-		sigma, amount, thresold float32
-		srcb, dstb              image.Rectangle
-		srcPix, dstPix          []uint8
+		desc                     string
+		sigma, amount, threshold float32
+		srcb, dstb               image.Rectangle
+		srcPix, dstPix           []uint8
 	}{
 		{
 			"unsharp mask (0.3, 1, 0)",
@@ -397,7 +394,7 @@ func TestUnsharpMask(t *testing.T) {
 		src := image.NewGray(d.srcb)
 		src.Pix = d.srcPix
 
-		f := UnsharpMask(d.sigma, d.amount, d.thresold)
+		f := UnsharpMask(d.sigma, d.amount, d.threshold)
 		dst := image.NewGray(f.Bounds(src.Bounds()))
 		f.Draw(dst, src, nil)
 
@@ -411,7 +408,6 @@ func TestUnsharpMask(t *testing.T) {
 }
 
 func TestMean(t *testing.T) {
-
 	testData := []struct {
 		desc           string
 		ksize          int

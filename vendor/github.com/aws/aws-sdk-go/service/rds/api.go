@@ -17,19 +17,18 @@ const opAddRoleToDBCluster = "AddRoleToDBCluster"
 
 // AddRoleToDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the AddRoleToDBCluster operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See AddRoleToDBCluster for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AddRoleToDBCluster method directly
-// instead.
+// See AddRoleToDBCluster for more information on using the AddRoleToDBCluster
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AddRoleToDBClusterRequest method.
 //    req, resp := client.AddRoleToDBClusterRequest(params)
@@ -39,7 +38,7 @@ const opAddRoleToDBCluster = "AddRoleToDBCluster"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBCluster
 func (c *RDS) AddRoleToDBClusterRequest(input *AddRoleToDBClusterInput) (req *request.Request, output *AddRoleToDBClusterOutput) {
 	op := &request.Operation{
 		Name:       opAddRoleToDBCluster,
@@ -53,16 +52,16 @@ func (c *RDS) AddRoleToDBClusterRequest(input *AddRoleToDBClusterInput) (req *re
 
 	output = &AddRoleToDBClusterOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // AddRoleToDBCluster API operation for Amazon Relational Database Service.
 //
-// Associates an Identity and Access Management (IAM) role from an Aurora DB
-// cluster. For more information, see Authorizing Amazon Aurora to Access Other
-// AWS Services On Your Behalf (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html).
+// Associates an Identity and Access Management (IAM) role from an Amazon Aurora
+// DB cluster. For more information, see Authorizing Amazon Aurora MySQL to
+// Access Other AWS Services on Your Behalf (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -73,20 +72,20 @@ func (c *RDS) AddRoleToDBClusterRequest(input *AddRoleToDBClusterInput) (req *re
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeDBClusterRoleAlreadyExistsFault "DBClusterRoleAlreadyExists"
 //   The specified IAM role Amazon Resource Name (ARN) is already associated with
 //   the specified DB cluster.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeDBClusterRoleQuotaExceededFault "DBClusterRoleQuotaExceeded"
 //   You have exceeded the maximum number of IAM roles that can be associated
 //   with the specified DB cluster.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBCluster
 func (c *RDS) AddRoleToDBCluster(input *AddRoleToDBClusterInput) (*AddRoleToDBClusterOutput, error) {
 	req, out := c.AddRoleToDBClusterRequest(input)
 	return out, req.Send()
@@ -108,23 +107,113 @@ func (c *RDS) AddRoleToDBClusterWithContext(ctx aws.Context, input *AddRoleToDBC
 	return out, req.Send()
 }
 
+const opAddRoleToDBInstance = "AddRoleToDBInstance"
+
+// AddRoleToDBInstanceRequest generates a "aws/request.Request" representing the
+// client's request for the AddRoleToDBInstance operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AddRoleToDBInstance for more information on using the AddRoleToDBInstance
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AddRoleToDBInstanceRequest method.
+//    req, resp := client.AddRoleToDBInstanceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBInstance
+func (c *RDS) AddRoleToDBInstanceRequest(input *AddRoleToDBInstanceInput) (req *request.Request, output *AddRoleToDBInstanceOutput) {
+	op := &request.Operation{
+		Name:       opAddRoleToDBInstance,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &AddRoleToDBInstanceInput{}
+	}
+
+	output = &AddRoleToDBInstanceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// AddRoleToDBInstance API operation for Amazon Relational Database Service.
+//
+// Associates an AWS Identity and Access Management (IAM) role with a DB instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation AddRoleToDBInstance for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   * ErrCodeDBInstanceRoleAlreadyExistsFault "DBInstanceRoleAlreadyExists"
+//   The specified RoleArn or FeatureName value is already associated with the
+//   DB instance.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+//   * ErrCodeDBInstanceRoleQuotaExceededFault "DBInstanceRoleQuotaExceeded"
+//   You can't associate any more AWS Identity and Access Management (IAM) roles
+//   with the DB instance because the quota has been reached.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBInstance
+func (c *RDS) AddRoleToDBInstance(input *AddRoleToDBInstanceInput) (*AddRoleToDBInstanceOutput, error) {
+	req, out := c.AddRoleToDBInstanceRequest(input)
+	return out, req.Send()
+}
+
+// AddRoleToDBInstanceWithContext is the same as AddRoleToDBInstance with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AddRoleToDBInstance for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) AddRoleToDBInstanceWithContext(ctx aws.Context, input *AddRoleToDBInstanceInput, opts ...request.Option) (*AddRoleToDBInstanceOutput, error) {
+	req, out := c.AddRoleToDBInstanceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opAddSourceIdentifierToSubscription = "AddSourceIdentifierToSubscription"
 
 // AddSourceIdentifierToSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the AddSourceIdentifierToSubscription operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See AddSourceIdentifierToSubscription for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AddSourceIdentifierToSubscription method directly
-// instead.
+// See AddSourceIdentifierToSubscription for more information on using the AddSourceIdentifierToSubscription
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AddSourceIdentifierToSubscriptionRequest method.
 //    req, resp := client.AddSourceIdentifierToSubscriptionRequest(params)
@@ -134,7 +223,7 @@ const opAddSourceIdentifierToSubscription = "AddSourceIdentifierToSubscription"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddSourceIdentifierToSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddSourceIdentifierToSubscription
 func (c *RDS) AddSourceIdentifierToSubscriptionRequest(input *AddSourceIdentifierToSubscriptionInput) (req *request.Request, output *AddSourceIdentifierToSubscriptionOutput) {
 	op := &request.Operation{
 		Name:       opAddSourceIdentifierToSubscription,
@@ -169,7 +258,7 @@ func (c *RDS) AddSourceIdentifierToSubscriptionRequest(input *AddSourceIdentifie
 //   * ErrCodeSourceNotFoundFault "SourceNotFound"
 //   The requested source could not be found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddSourceIdentifierToSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddSourceIdentifierToSubscription
 func (c *RDS) AddSourceIdentifierToSubscription(input *AddSourceIdentifierToSubscriptionInput) (*AddSourceIdentifierToSubscriptionOutput, error) {
 	req, out := c.AddSourceIdentifierToSubscriptionRequest(input)
 	return out, req.Send()
@@ -195,19 +284,18 @@ const opAddTagsToResource = "AddTagsToResource"
 
 // AddTagsToResourceRequest generates a "aws/request.Request" representing the
 // client's request for the AddTagsToResource operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See AddTagsToResource for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AddTagsToResource method directly
-// instead.
+// See AddTagsToResource for more information on using the AddTagsToResource
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AddTagsToResourceRequest method.
 //    req, resp := client.AddTagsToResourceRequest(params)
@@ -217,7 +305,7 @@ const opAddTagsToResource = "AddTagsToResource"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddTagsToResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddTagsToResource
 func (c *RDS) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *request.Request, output *AddTagsToResourceOutput) {
 	op := &request.Operation{
 		Name:       opAddTagsToResource,
@@ -231,8 +319,7 @@ func (c *RDS) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *requ
 
 	output = &AddTagsToResourceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -254,15 +341,15 @@ func (c *RDS) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *requ
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddTagsToResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddTagsToResource
 func (c *RDS) AddTagsToResource(input *AddTagsToResourceInput) (*AddTagsToResourceOutput, error) {
 	req, out := c.AddTagsToResourceRequest(input)
 	return out, req.Send()
@@ -288,19 +375,18 @@ const opApplyPendingMaintenanceAction = "ApplyPendingMaintenanceAction"
 
 // ApplyPendingMaintenanceActionRequest generates a "aws/request.Request" representing the
 // client's request for the ApplyPendingMaintenanceAction operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ApplyPendingMaintenanceAction for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ApplyPendingMaintenanceAction method directly
-// instead.
+// See ApplyPendingMaintenanceAction for more information on using the ApplyPendingMaintenanceAction
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ApplyPendingMaintenanceActionRequest method.
 //    req, resp := client.ApplyPendingMaintenanceActionRequest(params)
@@ -310,7 +396,7 @@ const opApplyPendingMaintenanceAction = "ApplyPendingMaintenanceAction"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ApplyPendingMaintenanceAction
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ApplyPendingMaintenanceAction
 func (c *RDS) ApplyPendingMaintenanceActionRequest(input *ApplyPendingMaintenanceActionInput) (req *request.Request, output *ApplyPendingMaintenanceActionOutput) {
 	op := &request.Operation{
 		Name:       opApplyPendingMaintenanceAction,
@@ -343,7 +429,13 @@ func (c *RDS) ApplyPendingMaintenanceActionRequest(input *ApplyPendingMaintenanc
 //   * ErrCodeResourceNotFoundFault "ResourceNotFoundFault"
 //   The specified resource ID was not found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ApplyPendingMaintenanceAction
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ApplyPendingMaintenanceAction
 func (c *RDS) ApplyPendingMaintenanceAction(input *ApplyPendingMaintenanceActionInput) (*ApplyPendingMaintenanceActionOutput, error) {
 	req, out := c.ApplyPendingMaintenanceActionRequest(input)
 	return out, req.Send()
@@ -369,19 +461,18 @@ const opAuthorizeDBSecurityGroupIngress = "AuthorizeDBSecurityGroupIngress"
 
 // AuthorizeDBSecurityGroupIngressRequest generates a "aws/request.Request" representing the
 // client's request for the AuthorizeDBSecurityGroupIngress operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See AuthorizeDBSecurityGroupIngress for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the AuthorizeDBSecurityGroupIngress method directly
-// instead.
+// See AuthorizeDBSecurityGroupIngress for more information on using the AuthorizeDBSecurityGroupIngress
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the AuthorizeDBSecurityGroupIngressRequest method.
 //    req, resp := client.AuthorizeDBSecurityGroupIngressRequest(params)
@@ -391,7 +482,7 @@ const opAuthorizeDBSecurityGroupIngress = "AuthorizeDBSecurityGroupIngress"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AuthorizeDBSecurityGroupIngress
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AuthorizeDBSecurityGroupIngress
 func (c *RDS) AuthorizeDBSecurityGroupIngressRequest(input *AuthorizeDBSecurityGroupIngressInput) (req *request.Request, output *AuthorizeDBSecurityGroupIngressOutput) {
 	op := &request.Operation{
 		Name:       opAuthorizeDBSecurityGroupIngress,
@@ -418,9 +509,9 @@ func (c *RDS) AuthorizeDBSecurityGroupIngressRequest(input *AuthorizeDBSecurityG
 // EC2SecurityGroupId for VPC, or (EC2SecurityGroupOwnerId and either EC2SecurityGroupName
 // or EC2SecurityGroupId for non-VPC).
 //
-// You cannot authorize ingress from an EC2 security group in one region to
-// an Amazon RDS DB instance in another. You cannot authorize ingress from a
-// VPC security group in one VPC to an Amazon RDS DB instance in another.
+// You can't authorize ingress from an EC2 security group in one AWS Region
+// to an Amazon RDS DB instance in another. You can't authorize ingress from
+// a VPC security group in one VPC to an Amazon RDS DB instance in another.
 //
 // For an overview of CIDR ranges, go to the Wikipedia Tutorial (http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing).
 //
@@ -433,19 +524,19 @@ func (c *RDS) AuthorizeDBSecurityGroupIngressRequest(input *AuthorizeDBSecurityG
 //
 // Returned Error Codes:
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
 //   * ErrCodeInvalidDBSecurityGroupStateFault "InvalidDBSecurityGroupState"
-//   The state of the DB security group does not allow deletion.
+//   The state of the DB security group doesn't allow deletion.
 //
 //   * ErrCodeAuthorizationAlreadyExistsFault "AuthorizationAlreadyExists"
-//   The specified CIDRIP or EC2 security group is already authorized for the
-//   specified DB security group.
+//   The specified CIDRIP or Amazon EC2 security group is already authorized for
+//   the specified DB security group.
 //
 //   * ErrCodeAuthorizationQuotaExceededFault "AuthorizationQuotaExceeded"
-//   DB security group authorization quota has been reached.
+//   The DB security group authorization quota has been reached.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AuthorizeDBSecurityGroupIngress
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AuthorizeDBSecurityGroupIngress
 func (c *RDS) AuthorizeDBSecurityGroupIngress(input *AuthorizeDBSecurityGroupIngressInput) (*AuthorizeDBSecurityGroupIngressOutput, error) {
 	req, out := c.AuthorizeDBSecurityGroupIngressRequest(input)
 	return out, req.Send()
@@ -467,23 +558,108 @@ func (c *RDS) AuthorizeDBSecurityGroupIngressWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opBacktrackDBCluster = "BacktrackDBCluster"
+
+// BacktrackDBClusterRequest generates a "aws/request.Request" representing the
+// client's request for the BacktrackDBCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BacktrackDBCluster for more information on using the BacktrackDBCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BacktrackDBClusterRequest method.
+//    req, resp := client.BacktrackDBClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/BacktrackDBCluster
+func (c *RDS) BacktrackDBClusterRequest(input *BacktrackDBClusterInput) (req *request.Request, output *BacktrackDBClusterOutput) {
+	op := &request.Operation{
+		Name:       opBacktrackDBCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BacktrackDBClusterInput{}
+	}
+
+	output = &BacktrackDBClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BacktrackDBCluster API operation for Amazon Relational Database Service.
+//
+// Backtracks a DB cluster to a specific time, without creating a new DB cluster.
+//
+// For more information on backtracking, see  Backtracking an Aurora DB Cluster
+// (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Managing.Backtrack.html)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation BacktrackDBCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/BacktrackDBCluster
+func (c *RDS) BacktrackDBCluster(input *BacktrackDBClusterInput) (*BacktrackDBClusterOutput, error) {
+	req, out := c.BacktrackDBClusterRequest(input)
+	return out, req.Send()
+}
+
+// BacktrackDBClusterWithContext is the same as BacktrackDBCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BacktrackDBCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) BacktrackDBClusterWithContext(ctx aws.Context, input *BacktrackDBClusterInput, opts ...request.Option) (*BacktrackDBClusterOutput, error) {
+	req, out := c.BacktrackDBClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCopyDBClusterParameterGroup = "CopyDBClusterParameterGroup"
 
 // CopyDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CopyDBClusterParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CopyDBClusterParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CopyDBClusterParameterGroup method directly
-// instead.
+// See CopyDBClusterParameterGroup for more information on using the CopyDBClusterParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CopyDBClusterParameterGroupRequest method.
 //    req, resp := client.CopyDBClusterParameterGroupRequest(params)
@@ -493,7 +669,7 @@ const opCopyDBClusterParameterGroup = "CopyDBClusterParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterParameterGroup
 func (c *RDS) CopyDBClusterParameterGroupRequest(input *CopyDBClusterParameterGroupInput) (req *request.Request, output *CopyDBClusterParameterGroupOutput) {
 	op := &request.Operation{
 		Name:       opCopyDBClusterParameterGroup,
@@ -523,16 +699,16 @@ func (c *RDS) CopyDBClusterParameterGroupRequest(input *CopyDBClusterParameterGr
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
 //   * ErrCodeDBParameterGroupQuotaExceededFault "DBParameterGroupQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB parameter
+//   The request would result in the user exceeding the allowed number of DB parameter
 //   groups.
 //
 //   * ErrCodeDBParameterGroupAlreadyExistsFault "DBParameterGroupAlreadyExists"
 //   A DB parameter group with the same name exists.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterParameterGroup
 func (c *RDS) CopyDBClusterParameterGroup(input *CopyDBClusterParameterGroupInput) (*CopyDBClusterParameterGroupOutput, error) {
 	req, out := c.CopyDBClusterParameterGroupRequest(input)
 	return out, req.Send()
@@ -558,19 +734,18 @@ const opCopyDBClusterSnapshot = "CopyDBClusterSnapshot"
 
 // CopyDBClusterSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CopyDBClusterSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CopyDBClusterSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CopyDBClusterSnapshot method directly
-// instead.
+// See CopyDBClusterSnapshot for more information on using the CopyDBClusterSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CopyDBClusterSnapshotRequest method.
 //    req, resp := client.CopyDBClusterSnapshotRequest(params)
@@ -580,7 +755,7 @@ const opCopyDBClusterSnapshot = "CopyDBClusterSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterSnapshot
 func (c *RDS) CopyDBClusterSnapshotRequest(input *CopyDBClusterSnapshotInput) (req *request.Request, output *CopyDBClusterSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opCopyDBClusterSnapshot,
@@ -604,63 +779,63 @@ func (c *RDS) CopyDBClusterSnapshotRequest(input *CopyDBClusterSnapshotInput) (r
 // To copy a DB cluster snapshot from a shared manual DB cluster snapshot, SourceDBClusterSnapshotIdentifier
 // must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.
 //
-// You can copy an encrypted DB cluster snapshot from another AWS region. In
-// that case, the region where you call the CopyDBClusterSnapshot action is
-// the destination region for the encrypted DB cluster snapshot to be copied
-// to. To copy an encrypted DB cluster snapshot from another region, you must
-// provide the following values:
+// You can copy an encrypted DB cluster snapshot from another AWS Region. In
+// that case, the AWS Region where you call the CopyDBClusterSnapshot action
+// is the destination AWS Region for the encrypted DB cluster snapshot to be
+// copied to. To copy an encrypted DB cluster snapshot from another AWS Region,
+// you must provide the following values:
 //
-//    * KmsKeyId - The AWS Key Management System (KMS) key identifier for the
-//    key to use to encrypt the copy of the DB cluster snapshot in the destination
-//    region.
+//    * KmsKeyId - The AWS Key Management System (AWS KMS) key identifier for
+//    the key to use to encrypt the copy of the DB cluster snapshot in the destination
+//    AWS Region.
 //
 //    * PreSignedUrl - A URL that contains a Signature Version 4 signed request
-//    for the CopyDBClusterSnapshot action to be called in the source region
-//    where the DB cluster snapshot will be copied from. The pre-signed URL
-//    must be a valid request for the CopyDBClusterSnapshot API action that
-//    can be executed in the source region that contains the encrypted DB cluster
+//    for the CopyDBClusterSnapshot action to be called in the source AWS Region
+//    where the DB cluster snapshot is copied from. The pre-signed URL must
+//    be a valid request for the CopyDBClusterSnapshot API action that can be
+//    executed in the source AWS Region that contains the encrypted DB cluster
 //    snapshot to be copied.
 //
 // The pre-signed URL request must contain the following parameter values:
 //
 // KmsKeyId - The KMS key identifier for the key to use to encrypt the copy
-//    of the DB cluster snapshot in the destination region. This is the same
-//    identifier for both the CopyDBClusterSnapshot action that is called in
-//    the destination region, and the action contained in the pre-signed URL.
+//    of the DB cluster snapshot in the destination AWS Region. This is the
+//    same identifier for both the CopyDBClusterSnapshot action that is called
+//    in the destination AWS Region, and the action contained in the pre-signed
+//    URL.
 //
-// DestinationRegion - The name of the region that the DB cluster snapshot will
-//    be created in.
+// DestinationRegion - The name of the AWS Region that the DB cluster snapshot
+//    will be created in.
 //
 // SourceDBClusterSnapshotIdentifier - The DB cluster snapshot identifier for
 //    the encrypted DB cluster snapshot to be copied. This identifier must be
-//    in the Amazon Resource Name (ARN) format for the source region. For example,
-//    if you are copying an encrypted DB cluster snapshot from the us-west-2
-//    region, then your SourceDBClusterSnapshotIdentifier looks like the following
-//    example: arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115.
+//    in the Amazon Resource Name (ARN) format for the source AWS Region. For
+//    example, if you are copying an encrypted DB cluster snapshot from the
+//    us-west-2 AWS Region, then your SourceDBClusterSnapshotIdentifier looks
+//    like the following example: arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115.
 //
 // To learn how to generate a Signature Version 4 signed request, see  Authenticating
 //    Requests: Using Query Parameters (AWS Signature Version 4) (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
 //    and  Signature Version 4 Signing Process (http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
 //
 //    * TargetDBClusterSnapshotIdentifier - The identifier for the new copy
-//    of the DB cluster snapshot in the destination region.
+//    of the DB cluster snapshot in the destination AWS Region.
 //
 //    * SourceDBClusterSnapshotIdentifier - The DB cluster snapshot identifier
 //    for the encrypted DB cluster snapshot to be copied. This identifier must
-//    be in the ARN format for the source region and is the same value as the
-//    SourceDBClusterSnapshotIdentifier in the pre-signed URL.
+//    be in the ARN format for the source AWS Region and is the same value as
+//    the SourceDBClusterSnapshotIdentifier in the pre-signed URL.
 //
 // To cancel the copy operation once it is in progress, delete the target DB
 // cluster snapshot identified by TargetDBClusterSnapshotIdentifier while that
 // DB cluster snapshot is in "copying" status.
 //
-// For more information on copying encrypted DB cluster snapshots from one region
-// to another, see  Copying a DB Cluster Snapshot in the Same Account, Either
-// in the Same Region or Across Regions (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopyDBClusterSnapshot.CrossRegion)
-// in the Amazon RDS User Guide.
+// For more information on copying encrypted DB cluster snapshots from one AWS
+// Region to another, see  Copying a Snapshot (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html)
+// in the Amazon Aurora User Guide.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -671,24 +846,24 @@ func (c *RDS) CopyDBClusterSnapshotRequest(input *CopyDBClusterSnapshotInput) (r
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterSnapshotAlreadyExistsFault "DBClusterSnapshotAlreadyExistsFault"
-//   User already has a DB cluster snapshot with the given identifier.
+//   The user already has a DB cluster snapshot with the given identifier.
 //
 //   * ErrCodeDBClusterSnapshotNotFoundFault "DBClusterSnapshotNotFoundFault"
-//   DBClusterSnapshotIdentifier does not refer to an existing DB cluster snapshot.
+//   DBClusterSnapshotIdentifier doesn't refer to an existing DB cluster snapshot.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeInvalidDBClusterSnapshotStateFault "InvalidDBClusterSnapshotStateFault"
-//   The supplied value is not a valid DB cluster snapshot state.
+//   The supplied value isn't a valid DB cluster snapshot state.
 //
 //   * ErrCodeSnapshotQuotaExceededFault "SnapshotQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB snapshots.
+//   The request would result in the user exceeding the allowed number of DB snapshots.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterSnapshot
 func (c *RDS) CopyDBClusterSnapshot(input *CopyDBClusterSnapshotInput) (*CopyDBClusterSnapshotOutput, error) {
 	req, out := c.CopyDBClusterSnapshotRequest(input)
 	return out, req.Send()
@@ -714,19 +889,18 @@ const opCopyDBParameterGroup = "CopyDBParameterGroup"
 
 // CopyDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CopyDBParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CopyDBParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CopyDBParameterGroup method directly
-// instead.
+// See CopyDBParameterGroup for more information on using the CopyDBParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CopyDBParameterGroupRequest method.
 //    req, resp := client.CopyDBParameterGroupRequest(params)
@@ -736,7 +910,7 @@ const opCopyDBParameterGroup = "CopyDBParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBParameterGroup
 func (c *RDS) CopyDBParameterGroupRequest(input *CopyDBParameterGroupInput) (req *request.Request, output *CopyDBParameterGroupOutput) {
 	op := &request.Operation{
 		Name:       opCopyDBParameterGroup,
@@ -766,16 +940,16 @@ func (c *RDS) CopyDBParameterGroupRequest(input *CopyDBParameterGroupInput) (req
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
 //   * ErrCodeDBParameterGroupAlreadyExistsFault "DBParameterGroupAlreadyExists"
 //   A DB parameter group with the same name exists.
 //
 //   * ErrCodeDBParameterGroupQuotaExceededFault "DBParameterGroupQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB parameter
+//   The request would result in the user exceeding the allowed number of DB parameter
 //   groups.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBParameterGroup
 func (c *RDS) CopyDBParameterGroup(input *CopyDBParameterGroupInput) (*CopyDBParameterGroupOutput, error) {
 	req, out := c.CopyDBParameterGroupRequest(input)
 	return out, req.Send()
@@ -801,19 +975,18 @@ const opCopyDBSnapshot = "CopyDBSnapshot"
 
 // CopyDBSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CopyDBSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CopyDBSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CopyDBSnapshot method directly
-// instead.
+// See CopyDBSnapshot for more information on using the CopyDBSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CopyDBSnapshotRequest method.
 //    req, resp := client.CopyDBSnapshotRequest(params)
@@ -823,7 +996,7 @@ const opCopyDBSnapshot = "CopyDBSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBSnapshot
 func (c *RDS) CopyDBSnapshotRequest(input *CopyDBSnapshotInput) (req *request.Request, output *CopyDBSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opCopyDBSnapshot,
@@ -845,11 +1018,9 @@ func (c *RDS) CopyDBSnapshotRequest(input *CopyDBSnapshotInput) (req *request.Re
 // Copies the specified DB snapshot. The source DB snapshot must be in the "available"
 // state.
 //
-// You can copy a snapshot from one AWS region to another. In that case, the
-// region where you call the CopyDBSnapshot action is the destination region
-// for the DB snapshot copy.
-//
-// You cannot copy an encrypted, shared DB snapshot from one AWS region to another.
+// You can copy a snapshot from one AWS Region to another. In that case, the
+// AWS Region where you call the CopyDBSnapshot action is the destination AWS
+// Region for the DB snapshot copy.
 //
 // For more information about copying snapshots, see Copying a DB Snapshot (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopyDBSnapshot.html)
 // in the Amazon RDS User Guide.
@@ -866,18 +1037,18 @@ func (c *RDS) CopyDBSnapshotRequest(input *CopyDBSnapshotInput) (req *request.Re
 //   DBSnapshotIdentifier is already used by an existing snapshot.
 //
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
 //   * ErrCodeInvalidDBSnapshotStateFault "InvalidDBSnapshotState"
-//   The state of the DB snapshot does not allow deletion.
+//   The state of the DB snapshot doesn't allow deletion.
 //
 //   * ErrCodeSnapshotQuotaExceededFault "SnapshotQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB snapshots.
+//   The request would result in the user exceeding the allowed number of DB snapshots.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBSnapshot
 func (c *RDS) CopyDBSnapshot(input *CopyDBSnapshotInput) (*CopyDBSnapshotOutput, error) {
 	req, out := c.CopyDBSnapshotRequest(input)
 	return out, req.Send()
@@ -903,19 +1074,18 @@ const opCopyOptionGroup = "CopyOptionGroup"
 
 // CopyOptionGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CopyOptionGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CopyOptionGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CopyOptionGroup method directly
-// instead.
+// See CopyOptionGroup for more information on using the CopyOptionGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CopyOptionGroupRequest method.
 //    req, resp := client.CopyOptionGroupRequest(params)
@@ -925,7 +1095,7 @@ const opCopyOptionGroup = "CopyOptionGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyOptionGroup
 func (c *RDS) CopyOptionGroupRequest(input *CopyOptionGroupInput) (req *request.Request, output *CopyOptionGroupOutput) {
 	op := &request.Operation{
 		Name:       opCopyOptionGroup,
@@ -963,7 +1133,7 @@ func (c *RDS) CopyOptionGroupRequest(input *CopyOptionGroupInput) (req *request.
 //   * ErrCodeOptionGroupQuotaExceededFault "OptionGroupQuotaExceededFault"
 //   The quota of 20 option groups was exceeded for this AWS account.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyOptionGroup
 func (c *RDS) CopyOptionGroup(input *CopyOptionGroupInput) (*CopyOptionGroupOutput, error) {
 	req, out := c.CopyOptionGroupRequest(input)
 	return out, req.Send()
@@ -989,19 +1159,18 @@ const opCreateDBCluster = "CreateDBCluster"
 
 // CreateDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBCluster operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBCluster for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBCluster method directly
-// instead.
+// See CreateDBCluster for more information on using the CreateDBCluster
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBClusterRequest method.
 //    req, resp := client.CreateDBClusterRequest(params)
@@ -1011,7 +1180,7 @@ const opCreateDBCluster = "CreateDBCluster"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBCluster
 func (c *RDS) CreateDBClusterRequest(input *CreateDBClusterInput) (req *request.Request, output *CreateDBClusterOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBCluster,
@@ -1037,8 +1206,8 @@ func (c *RDS) CreateDBClusterRequest(input *CreateDBClusterInput) (req *request.
 // For cross-region replication where the DB cluster identified by ReplicationSourceIdentifier
 // is encrypted, you must also specify the PreSignedUrl parameter.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1049,59 +1218,63 @@ func (c *RDS) CreateDBClusterRequest(input *CreateDBClusterInput) (req *request.
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterAlreadyExistsFault "DBClusterAlreadyExistsFault"
-//   User already has a DB cluster with the given identifier.
+//   The user already has a DB cluster with the given identifier.
 //
 //   * ErrCodeInsufficientStorageClusterCapacityFault "InsufficientStorageClusterCapacity"
-//   There is insufficient storage available for the current action. You may be
-//   able to resolve this error by updating your subnet group to use different
+//   There is insufficient storage available for the current action. You might
+//   be able to resolve this error by updating your subnet group to use different
 //   Availability Zones that have more storage available.
 //
 //   * ErrCodeDBClusterQuotaExceededFault "DBClusterQuotaExceededFault"
-//   User attempted to create a new DB cluster and the user has already reached
+//   The user attempted to create a new DB cluster and the user has already reached
 //   the maximum allowed DB cluster quota.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeInvalidDBSubnetGroupStateFault "InvalidDBSubnetGroupStateFault"
-//   The DB subnet group cannot be deleted because it is in use.
+//   The DB subnet group cannot be deleted because it's in use.
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBClusterParameterGroupNotFoundFault "DBClusterParameterGroupNotFound"
-//   DBClusterParameterGroupName does not refer to an existing DB Cluster parameter
+//   DBClusterParameterGroupName doesn't refer to an existing DB cluster parameter
 //   group.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
 //   Subnets in the DB subnet group should cover at least two Availability Zones
 //   unless there is only one Availability Zone.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBCluster
+//   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//
+//   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBCluster
 func (c *RDS) CreateDBCluster(input *CreateDBClusterInput) (*CreateDBClusterOutput, error) {
 	req, out := c.CreateDBClusterRequest(input)
 	return out, req.Send()
@@ -1123,23 +1296,117 @@ func (c *RDS) CreateDBClusterWithContext(ctx aws.Context, input *CreateDBCluster
 	return out, req.Send()
 }
 
+const opCreateDBClusterEndpoint = "CreateDBClusterEndpoint"
+
+// CreateDBClusterEndpointRequest generates a "aws/request.Request" representing the
+// client's request for the CreateDBClusterEndpoint operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateDBClusterEndpoint for more information on using the CreateDBClusterEndpoint
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateDBClusterEndpointRequest method.
+//    req, resp := client.CreateDBClusterEndpointRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterEndpoint
+func (c *RDS) CreateDBClusterEndpointRequest(input *CreateDBClusterEndpointInput) (req *request.Request, output *CreateDBClusterEndpointOutput) {
+	op := &request.Operation{
+		Name:       opCreateDBClusterEndpoint,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateDBClusterEndpointInput{}
+	}
+
+	output = &CreateDBClusterEndpointOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateDBClusterEndpoint API operation for Amazon Relational Database Service.
+//
+// Creates a new custom endpoint and associates it with an Amazon Aurora DB
+// cluster.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation CreateDBClusterEndpoint for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterEndpointQuotaExceededFault "DBClusterEndpointQuotaExceededFault"
+//   The cluster already has the maximum number of custom endpoints.
+//
+//   * ErrCodeDBClusterEndpointAlreadyExistsFault "DBClusterEndpointAlreadyExistsFault"
+//   The specified custom endpoint can't be created because it already exists.
+//
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterEndpoint
+func (c *RDS) CreateDBClusterEndpoint(input *CreateDBClusterEndpointInput) (*CreateDBClusterEndpointOutput, error) {
+	req, out := c.CreateDBClusterEndpointRequest(input)
+	return out, req.Send()
+}
+
+// CreateDBClusterEndpointWithContext is the same as CreateDBClusterEndpoint with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateDBClusterEndpoint for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) CreateDBClusterEndpointWithContext(ctx aws.Context, input *CreateDBClusterEndpointInput, opts ...request.Option) (*CreateDBClusterEndpointOutput, error) {
+	req, out := c.CreateDBClusterEndpointRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateDBClusterParameterGroup = "CreateDBClusterParameterGroup"
 
 // CreateDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBClusterParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBClusterParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBClusterParameterGroup method directly
-// instead.
+// See CreateDBClusterParameterGroup for more information on using the CreateDBClusterParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBClusterParameterGroupRequest method.
 //    req, resp := client.CreateDBClusterParameterGroupRequest(params)
@@ -1149,7 +1416,7 @@ const opCreateDBClusterParameterGroup = "CreateDBClusterParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterParameterGroup
 func (c *RDS) CreateDBClusterParameterGroupRequest(input *CreateDBClusterParameterGroupInput) (req *request.Request, output *CreateDBClusterParameterGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBClusterParameterGroup,
@@ -1194,8 +1461,8 @@ func (c *RDS) CreateDBClusterParameterGroupRequest(input *CreateDBClusterParamet
 // command to verify that your DB cluster parameter group has been created or
 // modified.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1206,13 +1473,13 @@ func (c *RDS) CreateDBClusterParameterGroupRequest(input *CreateDBClusterParamet
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupQuotaExceededFault "DBParameterGroupQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB parameter
+//   The request would result in the user exceeding the allowed number of DB parameter
 //   groups.
 //
 //   * ErrCodeDBParameterGroupAlreadyExistsFault "DBParameterGroupAlreadyExists"
 //   A DB parameter group with the same name exists.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterParameterGroup
 func (c *RDS) CreateDBClusterParameterGroup(input *CreateDBClusterParameterGroupInput) (*CreateDBClusterParameterGroupOutput, error) {
 	req, out := c.CreateDBClusterParameterGroupRequest(input)
 	return out, req.Send()
@@ -1238,19 +1505,18 @@ const opCreateDBClusterSnapshot = "CreateDBClusterSnapshot"
 
 // CreateDBClusterSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBClusterSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBClusterSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBClusterSnapshot method directly
-// instead.
+// See CreateDBClusterSnapshot for more information on using the CreateDBClusterSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBClusterSnapshotRequest method.
 //    req, resp := client.CreateDBClusterSnapshotRequest(params)
@@ -1260,7 +1526,7 @@ const opCreateDBClusterSnapshot = "CreateDBClusterSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterSnapshot
 func (c *RDS) CreateDBClusterSnapshotRequest(input *CreateDBClusterSnapshotInput) (req *request.Request, output *CreateDBClusterSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBClusterSnapshot,
@@ -1280,8 +1546,8 @@ func (c *RDS) CreateDBClusterSnapshotRequest(input *CreateDBClusterSnapshotInput
 // CreateDBClusterSnapshot API operation for Amazon Relational Database Service.
 //
 // Creates a snapshot of a DB cluster. For more information on Amazon Aurora,
-// see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1292,21 +1558,21 @@ func (c *RDS) CreateDBClusterSnapshotRequest(input *CreateDBClusterSnapshotInput
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterSnapshotAlreadyExistsFault "DBClusterSnapshotAlreadyExistsFault"
-//   User already has a DB cluster snapshot with the given identifier.
+//   The user already has a DB cluster snapshot with the given identifier.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeSnapshotQuotaExceededFault "SnapshotQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB snapshots.
+//   The request would result in the user exceeding the allowed number of DB snapshots.
 //
 //   * ErrCodeInvalidDBClusterSnapshotStateFault "InvalidDBClusterSnapshotStateFault"
-//   The supplied value is not a valid DB cluster snapshot state.
+//   The supplied value isn't a valid DB cluster snapshot state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterSnapshot
 func (c *RDS) CreateDBClusterSnapshot(input *CreateDBClusterSnapshotInput) (*CreateDBClusterSnapshotOutput, error) {
 	req, out := c.CreateDBClusterSnapshotRequest(input)
 	return out, req.Send()
@@ -1332,19 +1598,18 @@ const opCreateDBInstance = "CreateDBInstance"
 
 // CreateDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBInstance method directly
-// instead.
+// See CreateDBInstance for more information on using the CreateDBInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBInstanceRequest method.
 //    req, resp := client.CreateDBInstanceRequest(params)
@@ -1354,7 +1619,7 @@ const opCreateDBInstance = "CreateDBInstance"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstance
 func (c *RDS) CreateDBInstanceRequest(input *CreateDBInstanceInput) (req *request.Request, output *CreateDBInstanceOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBInstance,
@@ -1384,42 +1649,42 @@ func (c *RDS) CreateDBInstanceRequest(input *CreateDBInstanceInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceAlreadyExistsFault "DBInstanceAlreadyExists"
-//   User already has a DB instance with the given identifier.
+//   The user already has a DB instance with the given identifier.
 //
 //   * ErrCodeInsufficientDBInstanceCapacityFault "InsufficientDBInstanceCapacity"
-//   Specified DB instance class is not available in the specified Availability
+//   The specified DB instance class isn't available in the specified Availability
 //   Zone.
 //
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
 //   * ErrCodeInstanceQuotaExceededFault "InstanceQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB instances.
+//   The request would result in the user exceeding the allowed number of DB instances.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
 //   Subnets in the DB subnet group should cover at least two Availability Zones
 //   unless there is only one Availability Zone.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeProvisionedIopsNotAvailableInAZFault "ProvisionedIopsNotAvailableInAZFault"
 //   Provisioned IOPS not available in the specified Availability Zone.
@@ -1428,25 +1693,28 @@ func (c *RDS) CreateDBInstanceRequest(input *CreateDBInstanceInput) (req *reques
 //   The specified option group could not be found.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeStorageTypeNotSupportedFault "StorageTypeNotSupported"
-//   StorageType specified cannot be associated with the DB Instance.
+//   Storage of the StorageType specified can't be associated with the DB instance.
 //
 //   * ErrCodeAuthorizationNotFoundFault "AuthorizationNotFound"
-//   Specified CIDRIP or EC2 security group is not authorized for the specified
-//   DB security group.
+//   The specified CIDRIP or Amazon EC2 security group isn't authorized for the
+//   specified DB security group.
 //
-//   RDS may not also be authorized via IAM to perform necessary actions on your
-//   behalf.
+//   RDS also may not be authorized by using IAM to perform necessary actions
+//   on your behalf.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
 //   * ErrCodeDomainNotFoundFault "DomainNotFoundFault"
-//   Domain does not refer to an existing Active Directory Domain.
+//   Domain doesn't refer to an existing Active Directory domain.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstance
+//   * ErrCodeBackupPolicyNotFoundFault "BackupPolicyNotFoundFault"
+//   The backup policy was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstance
 func (c *RDS) CreateDBInstance(input *CreateDBInstanceInput) (*CreateDBInstanceOutput, error) {
 	req, out := c.CreateDBInstanceRequest(input)
 	return out, req.Send()
@@ -1472,19 +1740,18 @@ const opCreateDBInstanceReadReplica = "CreateDBInstanceReadReplica"
 
 // CreateDBInstanceReadReplicaRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBInstanceReadReplica operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBInstanceReadReplica for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBInstanceReadReplica method directly
-// instead.
+// See CreateDBInstanceReadReplica for more information on using the CreateDBInstanceReadReplica
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBInstanceReadReplicaRequest method.
 //    req, resp := client.CreateDBInstanceReadReplicaRequest(params)
@@ -1494,7 +1761,7 @@ const opCreateDBInstanceReadReplica = "CreateDBInstanceReadReplica"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceReadReplica
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceReadReplica
 func (c *RDS) CreateDBInstanceReadReplicaRequest(input *CreateDBInstanceReadReplicaInput) (req *request.Request, output *CreateDBInstanceReadReplicaOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBInstanceReadReplica,
@@ -1513,73 +1780,20 @@ func (c *RDS) CreateDBInstanceReadReplicaRequest(input *CreateDBInstanceReadRepl
 
 // CreateDBInstanceReadReplica API operation for Amazon Relational Database Service.
 //
-// Creates a DB instance for a DB instance running MySQL, MariaDB, or PostgreSQL
-// that acts as a Read Replica of a source DB instance.
+// Creates a new DB instance that acts as a Read Replica for an existing source
+// DB instance. You can create a Read Replica for a DB instance running MySQL,
+// MariaDB, or PostgreSQL. For more information, see Working with PostgreSQL,
+// MySQL, and MariaDB Read Replicas (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html)
+// in the Amazon RDS User Guide.
 //
-// Amazon Aurora does not support this action. You must call the CreateDBInstance
+// Amazon Aurora doesn't support this action. You must call the CreateDBInstance
 // action to create a DB instance for an Aurora DB cluster.
 //
-// All Read Replica DB instances are created as Single-AZ deployments with backups
-// disabled. All other DB instance attributes (including DB security groups
-// and DB parameter groups) are inherited from the source DB instance, except
-// as specified below.
+// All Read Replica DB instances are created with backups disabled. All other
+// DB instance attributes (including DB security groups and DB parameter groups)
+// are inherited from the source DB instance, except as specified following.
 //
-// The source DB instance must have backup retention enabled.
-//
-// You can create an encrypted Read Replica in a different AWS Region than the
-// source DB instance. In that case, the region where you call the CreateDBInstanceReadReplica
-// action is the destination region of the encrypted Read Replica. The source
-// DB instance must be encrypted.
-//
-// To create an encrypted Read Replica in another AWS Region, you must provide
-// the following values:
-//
-//    * KmsKeyId - The AWS Key Management System (KMS) key identifier for the
-//    key to use to encrypt the Read Replica in the destination region.
-//
-//    * PreSignedUrl - A URL that contains a Signature Version 4 signed request
-//    for the  CreateDBInstanceReadReplica API action in the AWS region that
-//    contains the source DB instance. The PreSignedUrl parameter must be used
-//    when encrypting a Read Replica from another AWS region.
-//
-// The presigned URL must be a valid request for the CreateDBInstanceReadReplica
-//    API action that can be executed in the source region that contains the
-//    encrypted DB instance. The presigned URL request must contain the following
-//    parameter values:
-//
-// DestinationRegion - The AWS Region that the Read Replica is created in. This
-//    region is the same one where the CreateDBInstanceReadReplica action is
-//    called that contains this presigned URL.
-//
-//  For example, if you create an encrypted Read Replica in the us-east-1 region,
-//    and the source DB instance is in the west-2 region, then you call the
-//    CreateDBInstanceReadReplica action in the us-east-1 region and provide
-//    a presigned URL that contains a call to the CreateDBInstanceReadReplica
-//    action in the us-west-2 region. For this example, the DestinationRegion
-//    in the presigned URL must be set to the us-east-1 region.
-//
-// KmsKeyId - The KMS key identifier for the key to use to encrypt the Read
-//    Replica in the destination region. This is the same identifier for both
-//    the CreateDBInstanceReadReplica action that is called in the destination
-//    region, and the action contained in the presigned URL.
-//
-// SourceDBInstanceIdentifier - The DB instance identifier for the encrypted
-//    Read Replica to be created. This identifier must be in the Amazon Resource
-//    Name (ARN) format for the source region. For example, if you create an
-//    encrypted Read Replica from a DB instance in the us-west-2 region, then
-//    your SourceDBInstanceIdentifier would look like this example:  arn:aws:rds:us-west-2:123456789012:instance:mysql-instance1-instance-20161115.
-//
-// To learn how to generate a Signature Version 4 signed request, see  Authenticating
-//    Requests: Using Query Parameters (AWS Signature Version 4) (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
-//    and  Signature Version 4 Signing Process (http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
-//
-//    * DBInstanceIdentifier - The identifier for the encrypted Read Replica
-//    in the destination region.
-//
-//    * SourceDBInstanceIdentifier - The DB instance identifier for the encrypted
-//    Read Replica. This identifier must be in the ARN format for the source
-//    region and is the same value as the SourceDBInstanceIdentifier in the
-//    presigned URL.
+// Your source DB instance must have backup retention enabled.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1590,33 +1804,33 @@ func (c *RDS) CreateDBInstanceReadReplicaRequest(input *CreateDBInstanceReadRepl
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceAlreadyExistsFault "DBInstanceAlreadyExists"
-//   User already has a DB instance with the given identifier.
+//   The user already has a DB instance with the given identifier.
 //
 //   * ErrCodeInsufficientDBInstanceCapacityFault "InsufficientDBInstanceCapacity"
-//   Specified DB instance class is not available in the specified Availability
+//   The specified DB instance class isn't available in the specified Availability
 //   Zone.
 //
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
 //   * ErrCodeInstanceQuotaExceededFault "InstanceQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB instances.
+//   The request would result in the user exceeding the allowed number of DB instances.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
 //   Subnets in the DB subnet group should cover at least two Availability Zones
@@ -1627,8 +1841,8 @@ func (c *RDS) CreateDBInstanceReadReplicaRequest(input *CreateDBInstanceReadRepl
 //   are not all in a common VPC.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeProvisionedIopsNotAvailableInAZFault "ProvisionedIopsNotAvailableInAZFault"
 //   Provisioned IOPS not available in the specified Availability Zone.
@@ -1637,20 +1851,20 @@ func (c *RDS) CreateDBInstanceReadReplicaRequest(input *CreateDBInstanceReadRepl
 //   The specified option group could not be found.
 //
 //   * ErrCodeDBSubnetGroupNotAllowedFault "DBSubnetGroupNotAllowedFault"
-//   Indicates that the DBSubnetGroup should not be specified while creating read
-//   replicas that lie in the same region as the source instance.
+//   The DBSubnetGroup shouldn't be specified while creating read replicas that
+//   lie in the same region as the source instance.
 //
 //   * ErrCodeInvalidDBSubnetGroupFault "InvalidDBSubnetGroupFault"
-//   Indicates the DBSubnetGroup does not belong to the same VPC as that of an
-//   existing cross region read replica of the same source instance.
+//   The DBSubnetGroup doesn't belong to the same VPC as that of an existing cross-region
+//   read replica of the same source instance.
 //
 //   * ErrCodeStorageTypeNotSupportedFault "StorageTypeNotSupported"
-//   StorageType specified cannot be associated with the DB Instance.
+//   Storage of the StorageType specified can't be associated with the DB instance.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceReadReplica
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceReadReplica
 func (c *RDS) CreateDBInstanceReadReplica(input *CreateDBInstanceReadReplicaInput) (*CreateDBInstanceReadReplicaOutput, error) {
 	req, out := c.CreateDBInstanceReadReplicaRequest(input)
 	return out, req.Send()
@@ -1676,19 +1890,18 @@ const opCreateDBParameterGroup = "CreateDBParameterGroup"
 
 // CreateDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBParameterGroup method directly
-// instead.
+// See CreateDBParameterGroup for more information on using the CreateDBParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBParameterGroupRequest method.
 //    req, resp := client.CreateDBParameterGroupRequest(params)
@@ -1698,7 +1911,7 @@ const opCreateDBParameterGroup = "CreateDBParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBParameterGroup
 func (c *RDS) CreateDBParameterGroupRequest(input *CreateDBParameterGroupInput) (req *request.Request, output *CreateDBParameterGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBParameterGroup,
@@ -1748,13 +1961,13 @@ func (c *RDS) CreateDBParameterGroupRequest(input *CreateDBParameterGroupInput) 
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupQuotaExceededFault "DBParameterGroupQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB parameter
+//   The request would result in the user exceeding the allowed number of DB parameter
 //   groups.
 //
 //   * ErrCodeDBParameterGroupAlreadyExistsFault "DBParameterGroupAlreadyExists"
 //   A DB parameter group with the same name exists.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBParameterGroup
 func (c *RDS) CreateDBParameterGroup(input *CreateDBParameterGroupInput) (*CreateDBParameterGroupOutput, error) {
 	req, out := c.CreateDBParameterGroupRequest(input)
 	return out, req.Send()
@@ -1780,19 +1993,18 @@ const opCreateDBSecurityGroup = "CreateDBSecurityGroup"
 
 // CreateDBSecurityGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBSecurityGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBSecurityGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBSecurityGroup method directly
-// instead.
+// See CreateDBSecurityGroup for more information on using the CreateDBSecurityGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBSecurityGroupRequest method.
 //    req, resp := client.CreateDBSecurityGroupRequest(params)
@@ -1802,7 +2014,7 @@ const opCreateDBSecurityGroup = "CreateDBSecurityGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSecurityGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSecurityGroup
 func (c *RDS) CreateDBSecurityGroupRequest(input *CreateDBSecurityGroupInput) (req *request.Request, output *CreateDBSecurityGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBSecurityGroup,
@@ -1824,6 +2036,9 @@ func (c *RDS) CreateDBSecurityGroupRequest(input *CreateDBSecurityGroupInput) (r
 // Creates a new DB security group. DB security groups control access to a DB
 // instance.
 //
+// A DB security group controls access to EC2-Classic DB instances that are
+// not in a VPC.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1837,13 +2052,13 @@ func (c *RDS) CreateDBSecurityGroupRequest(input *CreateDBSecurityGroupInput) (r
 //   exists.
 //
 //   * ErrCodeDBSecurityGroupQuotaExceededFault "QuotaExceeded.DBSecurityGroup"
-//   Request would result in user exceeding the allowed number of DB security
+//   The request would result in the user exceeding the allowed number of DB security
 //   groups.
 //
 //   * ErrCodeDBSecurityGroupNotSupportedFault "DBSecurityGroupNotSupported"
-//   A DB security group is not allowed for this action.
+//   A DB security group isn't allowed for this action.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSecurityGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSecurityGroup
 func (c *RDS) CreateDBSecurityGroup(input *CreateDBSecurityGroupInput) (*CreateDBSecurityGroupOutput, error) {
 	req, out := c.CreateDBSecurityGroupRequest(input)
 	return out, req.Send()
@@ -1869,19 +2084,18 @@ const opCreateDBSnapshot = "CreateDBSnapshot"
 
 // CreateDBSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBSnapshot method directly
-// instead.
+// See CreateDBSnapshot for more information on using the CreateDBSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBSnapshotRequest method.
 //    req, resp := client.CreateDBSnapshotRequest(params)
@@ -1891,7 +2105,7 @@ const opCreateDBSnapshot = "CreateDBSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSnapshot
 func (c *RDS) CreateDBSnapshotRequest(input *CreateDBSnapshotInput) (req *request.Request, output *CreateDBSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBSnapshot,
@@ -1924,15 +2138,15 @@ func (c *RDS) CreateDBSnapshotRequest(input *CreateDBSnapshotInput) (req *reques
 //   DBSnapshotIdentifier is already used by an existing snapshot.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeSnapshotQuotaExceededFault "SnapshotQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB snapshots.
+//   The request would result in the user exceeding the allowed number of DB snapshots.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSnapshot
 func (c *RDS) CreateDBSnapshot(input *CreateDBSnapshotInput) (*CreateDBSnapshotOutput, error) {
 	req, out := c.CreateDBSnapshotRequest(input)
 	return out, req.Send()
@@ -1958,19 +2172,18 @@ const opCreateDBSubnetGroup = "CreateDBSubnetGroup"
 
 // CreateDBSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBSubnetGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateDBSubnetGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateDBSubnetGroup method directly
-// instead.
+// See CreateDBSubnetGroup for more information on using the CreateDBSubnetGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateDBSubnetGroupRequest method.
 //    req, resp := client.CreateDBSubnetGroupRequest(params)
@@ -1980,7 +2193,7 @@ const opCreateDBSubnetGroup = "CreateDBSubnetGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSubnetGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSubnetGroup
 func (c *RDS) CreateDBSubnetGroupRequest(input *CreateDBSubnetGroupInput) (req *request.Request, output *CreateDBSubnetGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateDBSubnetGroup,
@@ -2000,7 +2213,7 @@ func (c *RDS) CreateDBSubnetGroupRequest(input *CreateDBSubnetGroupInput) (req *
 // CreateDBSubnetGroup API operation for Amazon Relational Database Service.
 //
 // Creates a new DB subnet group. DB subnet groups must contain at least one
-// subnet in at least two AZs in the region.
+// subnet in at least two AZs in the AWS Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2014,11 +2227,12 @@ func (c *RDS) CreateDBSubnetGroupRequest(input *CreateDBSubnetGroupInput) (req *
 //   DBSubnetGroupName is already used by an existing DB subnet group.
 //
 //   * ErrCodeDBSubnetGroupQuotaExceededFault "DBSubnetGroupQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB subnet groups.
+//   The request would result in the user exceeding the allowed number of DB subnet
+//   groups.
 //
 //   * ErrCodeDBSubnetQuotaExceededFault "DBSubnetQuotaExceededFault"
-//   Request would result in user exceeding the allowed number of subnets in a
-//   DB subnet groups.
+//   The request would result in the user exceeding the allowed number of subnets
+//   in a DB subnet groups.
 //
 //   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
 //   Subnets in the DB subnet group should cover at least two Availability Zones
@@ -2028,7 +2242,7 @@ func (c *RDS) CreateDBSubnetGroupRequest(input *CreateDBSubnetGroupInput) (req *
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSubnetGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSubnetGroup
 func (c *RDS) CreateDBSubnetGroup(input *CreateDBSubnetGroupInput) (*CreateDBSubnetGroupOutput, error) {
 	req, out := c.CreateDBSubnetGroupRequest(input)
 	return out, req.Send()
@@ -2054,19 +2268,18 @@ const opCreateEventSubscription = "CreateEventSubscription"
 
 // CreateEventSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateEventSubscription operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateEventSubscription for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateEventSubscription method directly
-// instead.
+// See CreateEventSubscription for more information on using the CreateEventSubscription
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateEventSubscriptionRequest method.
 //    req, resp := client.CreateEventSubscriptionRequest(params)
@@ -2076,7 +2289,7 @@ const opCreateEventSubscription = "CreateEventSubscription"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateEventSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateEventSubscription
 func (c *RDS) CreateEventSubscriptionRequest(input *CreateEventSubscriptionInput) (req *request.Request, output *CreateEventSubscriptionOutput) {
 	op := &request.Operation{
 		Name:       opCreateEventSubscription,
@@ -2107,12 +2320,12 @@ func (c *RDS) CreateEventSubscriptionRequest(input *CreateEventSubscriptionInput
 // mydbinstance2 and EventCategories = Availability, Backup.
 //
 // If you specify both the SourceType and SourceIds, such as SourceType = db-instance
-// and SourceIdentifier = myDBInstance1, you will be notified of all the db-instance
+// and SourceIdentifier = myDBInstance1, you are notified of all the db-instance
 // events for the specified source. If you specify a SourceType but do not specify
-// a SourceIdentifier, you will receive notice of the events for that source
-// type for all your RDS sources. If you do not specify either the SourceType
-// nor the SourceIdentifier, you will be notified of events generated from all
-// RDS sources belonging to your customer account.
+// a SourceIdentifier, you receive notice of the events for that source type
+// for all your RDS sources. If you do not specify either the SourceType nor
+// the SourceIdentifier, you are notified of events generated from all RDS sources
+// belonging to your customer account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2143,7 +2356,7 @@ func (c *RDS) CreateEventSubscriptionRequest(input *CreateEventSubscriptionInput
 //   * ErrCodeSourceNotFoundFault "SourceNotFound"
 //   The requested source could not be found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateEventSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateEventSubscription
 func (c *RDS) CreateEventSubscription(input *CreateEventSubscriptionInput) (*CreateEventSubscriptionOutput, error) {
 	req, out := c.CreateEventSubscriptionRequest(input)
 	return out, req.Send()
@@ -2165,23 +2378,116 @@ func (c *RDS) CreateEventSubscriptionWithContext(ctx aws.Context, input *CreateE
 	return out, req.Send()
 }
 
+const opCreateGlobalCluster = "CreateGlobalCluster"
+
+// CreateGlobalClusterRequest generates a "aws/request.Request" representing the
+// client's request for the CreateGlobalCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateGlobalCluster for more information on using the CreateGlobalCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateGlobalClusterRequest method.
+//    req, resp := client.CreateGlobalClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateGlobalCluster
+func (c *RDS) CreateGlobalClusterRequest(input *CreateGlobalClusterInput) (req *request.Request, output *CreateGlobalClusterOutput) {
+	op := &request.Operation{
+		Name:       opCreateGlobalCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateGlobalClusterInput{}
+	}
+
+	output = &CreateGlobalClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateGlobalCluster API operation for Amazon Relational Database Service.
+//
+// Creates an Aurora global database spread across multiple regions. The global
+// database contains a single primary cluster with read-write capability, and
+// a read-only secondary cluster that receives data from the primary cluster
+// through high-speed replication performed by the Aurora storage subsystem.
+//
+// You can create a global database that is initially empty, and then add a
+// primary cluster and a secondary cluster to it. Or you can specify an existing
+// Aurora cluster during the create operation, and this cluster becomes the
+// primary cluster of the global database.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation CreateGlobalCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeGlobalClusterAlreadyExistsFault "GlobalClusterAlreadyExistsFault"
+//
+//   * ErrCodeGlobalClusterQuotaExceededFault "GlobalClusterQuotaExceededFault"
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateGlobalCluster
+func (c *RDS) CreateGlobalCluster(input *CreateGlobalClusterInput) (*CreateGlobalClusterOutput, error) {
+	req, out := c.CreateGlobalClusterRequest(input)
+	return out, req.Send()
+}
+
+// CreateGlobalClusterWithContext is the same as CreateGlobalCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateGlobalCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) CreateGlobalClusterWithContext(ctx aws.Context, input *CreateGlobalClusterInput, opts ...request.Option) (*CreateGlobalClusterOutput, error) {
+	req, out := c.CreateGlobalClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateOptionGroup = "CreateOptionGroup"
 
 // CreateOptionGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateOptionGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See CreateOptionGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the CreateOptionGroup method directly
-// instead.
+// See CreateOptionGroup for more information on using the CreateOptionGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the CreateOptionGroupRequest method.
 //    req, resp := client.CreateOptionGroupRequest(params)
@@ -2191,7 +2497,7 @@ const opCreateOptionGroup = "CreateOptionGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateOptionGroup
 func (c *RDS) CreateOptionGroupRequest(input *CreateOptionGroupInput) (req *request.Request, output *CreateOptionGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreateOptionGroup,
@@ -2226,7 +2532,7 @@ func (c *RDS) CreateOptionGroupRequest(input *CreateOptionGroupInput) (req *requ
 //   * ErrCodeOptionGroupQuotaExceededFault "OptionGroupQuotaExceededFault"
 //   The quota of 20 option groups was exceeded for this AWS account.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateOptionGroup
 func (c *RDS) CreateOptionGroup(input *CreateOptionGroupInput) (*CreateOptionGroupOutput, error) {
 	req, out := c.CreateOptionGroupRequest(input)
 	return out, req.Send()
@@ -2252,19 +2558,18 @@ const opDeleteDBCluster = "DeleteDBCluster"
 
 // DeleteDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBCluster operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBCluster for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBCluster method directly
-// instead.
+// See DeleteDBCluster for more information on using the DeleteDBCluster
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBClusterRequest method.
 //    req, resp := client.DeleteDBClusterRequest(params)
@@ -2274,7 +2579,7 @@ const opDeleteDBCluster = "DeleteDBCluster"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBCluster
 func (c *RDS) DeleteDBClusterRequest(input *DeleteDBClusterInput) (req *request.Request, output *DeleteDBClusterOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBCluster,
@@ -2295,10 +2600,10 @@ func (c *RDS) DeleteDBClusterRequest(input *DeleteDBClusterInput) (req *request.
 //
 // The DeleteDBCluster action deletes a previously provisioned DB cluster. When
 // you delete a DB cluster, all automated backups for that DB cluster are deleted
-// and cannot be recovered. Manual DB cluster snapshots of the specified DB
-// cluster are not deleted.
+// and can't be recovered. Manual DB cluster snapshots of the specified DB cluster
+// are not deleted.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2309,21 +2614,21 @@ func (c *RDS) DeleteDBClusterRequest(input *DeleteDBClusterInput) (req *request.
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeDBClusterSnapshotAlreadyExistsFault "DBClusterSnapshotAlreadyExistsFault"
-//   User already has a DB cluster snapshot with the given identifier.
+//   The user already has a DB cluster snapshot with the given identifier.
 //
 //   * ErrCodeSnapshotQuotaExceededFault "SnapshotQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB snapshots.
+//   The request would result in the user exceeding the allowed number of DB snapshots.
 //
 //   * ErrCodeInvalidDBClusterSnapshotStateFault "InvalidDBClusterSnapshotStateFault"
-//   The supplied value is not a valid DB cluster snapshot state.
+//   The supplied value isn't a valid DB cluster snapshot state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBCluster
 func (c *RDS) DeleteDBCluster(input *DeleteDBClusterInput) (*DeleteDBClusterOutput, error) {
 	req, out := c.DeleteDBClusterRequest(input)
 	return out, req.Send()
@@ -2345,23 +2650,108 @@ func (c *RDS) DeleteDBClusterWithContext(ctx aws.Context, input *DeleteDBCluster
 	return out, req.Send()
 }
 
+const opDeleteDBClusterEndpoint = "DeleteDBClusterEndpoint"
+
+// DeleteDBClusterEndpointRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteDBClusterEndpoint operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteDBClusterEndpoint for more information on using the DeleteDBClusterEndpoint
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteDBClusterEndpointRequest method.
+//    req, resp := client.DeleteDBClusterEndpointRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterEndpoint
+func (c *RDS) DeleteDBClusterEndpointRequest(input *DeleteDBClusterEndpointInput) (req *request.Request, output *DeleteDBClusterEndpointOutput) {
+	op := &request.Operation{
+		Name:       opDeleteDBClusterEndpoint,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteDBClusterEndpointInput{}
+	}
+
+	output = &DeleteDBClusterEndpointOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteDBClusterEndpoint API operation for Amazon Relational Database Service.
+//
+// Deletes a custom endpoint and removes it from an Amazon Aurora DB cluster.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DeleteDBClusterEndpoint for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidDBClusterEndpointStateFault "InvalidDBClusterEndpointStateFault"
+//   The requested operation can't be performed on the endpoint while the endpoint
+//   is in this state.
+//
+//   * ErrCodeDBClusterEndpointNotFoundFault "DBClusterEndpointNotFoundFault"
+//   The specified custom endpoint doesn't exist.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterEndpoint
+func (c *RDS) DeleteDBClusterEndpoint(input *DeleteDBClusterEndpointInput) (*DeleteDBClusterEndpointOutput, error) {
+	req, out := c.DeleteDBClusterEndpointRequest(input)
+	return out, req.Send()
+}
+
+// DeleteDBClusterEndpointWithContext is the same as DeleteDBClusterEndpoint with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteDBClusterEndpoint for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DeleteDBClusterEndpointWithContext(ctx aws.Context, input *DeleteDBClusterEndpointInput, opts ...request.Option) (*DeleteDBClusterEndpointOutput, error) {
+	req, out := c.DeleteDBClusterEndpointRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteDBClusterParameterGroup = "DeleteDBClusterParameterGroup"
 
 // DeleteDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBClusterParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBClusterParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBClusterParameterGroup method directly
-// instead.
+// See DeleteDBClusterParameterGroup for more information on using the DeleteDBClusterParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBClusterParameterGroupRequest method.
 //    req, resp := client.DeleteDBClusterParameterGroupRequest(params)
@@ -2371,7 +2761,7 @@ const opDeleteDBClusterParameterGroup = "DeleteDBClusterParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterParameterGroup
 func (c *RDS) DeleteDBClusterParameterGroupRequest(input *DeleteDBClusterParameterGroupInput) (req *request.Request, output *DeleteDBClusterParameterGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBClusterParameterGroup,
@@ -2385,18 +2775,17 @@ func (c *RDS) DeleteDBClusterParameterGroupRequest(input *DeleteDBClusterParamet
 
 	output = &DeleteDBClusterParameterGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DeleteDBClusterParameterGroup API operation for Amazon Relational Database Service.
 //
 // Deletes a specified DB cluster parameter group. The DB cluster parameter
-// group to be deleted cannot be associated with any DB clusters.
+// group to be deleted can't be associated with any DB clusters.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2408,13 +2797,13 @@ func (c *RDS) DeleteDBClusterParameterGroupRequest(input *DeleteDBClusterParamet
 // Returned Error Codes:
 //   * ErrCodeInvalidDBParameterGroupStateFault "InvalidDBParameterGroupState"
 //   The DB parameter group is in use or is in an invalid state. If you are attempting
-//   to delete the parameter group, you cannot delete it when the parameter group
+//   to delete the parameter group, you can't delete it when the parameter group
 //   is in this state.
 //
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterParameterGroup
 func (c *RDS) DeleteDBClusterParameterGroup(input *DeleteDBClusterParameterGroupInput) (*DeleteDBClusterParameterGroupOutput, error) {
 	req, out := c.DeleteDBClusterParameterGroupRequest(input)
 	return out, req.Send()
@@ -2440,19 +2829,18 @@ const opDeleteDBClusterSnapshot = "DeleteDBClusterSnapshot"
 
 // DeleteDBClusterSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBClusterSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBClusterSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBClusterSnapshot method directly
-// instead.
+// See DeleteDBClusterSnapshot for more information on using the DeleteDBClusterSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBClusterSnapshotRequest method.
 //    req, resp := client.DeleteDBClusterSnapshotRequest(params)
@@ -2462,7 +2850,7 @@ const opDeleteDBClusterSnapshot = "DeleteDBClusterSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterSnapshot
 func (c *RDS) DeleteDBClusterSnapshotRequest(input *DeleteDBClusterSnapshotInput) (req *request.Request, output *DeleteDBClusterSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBClusterSnapshot,
@@ -2486,8 +2874,8 @@ func (c *RDS) DeleteDBClusterSnapshotRequest(input *DeleteDBClusterSnapshotInput
 //
 // The DB cluster snapshot must be in the available state to be deleted.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2498,12 +2886,12 @@ func (c *RDS) DeleteDBClusterSnapshotRequest(input *DeleteDBClusterSnapshotInput
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidDBClusterSnapshotStateFault "InvalidDBClusterSnapshotStateFault"
-//   The supplied value is not a valid DB cluster snapshot state.
+//   The supplied value isn't a valid DB cluster snapshot state.
 //
 //   * ErrCodeDBClusterSnapshotNotFoundFault "DBClusterSnapshotNotFoundFault"
-//   DBClusterSnapshotIdentifier does not refer to an existing DB cluster snapshot.
+//   DBClusterSnapshotIdentifier doesn't refer to an existing DB cluster snapshot.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterSnapshot
 func (c *RDS) DeleteDBClusterSnapshot(input *DeleteDBClusterSnapshotInput) (*DeleteDBClusterSnapshotOutput, error) {
 	req, out := c.DeleteDBClusterSnapshotRequest(input)
 	return out, req.Send()
@@ -2529,19 +2917,18 @@ const opDeleteDBInstance = "DeleteDBInstance"
 
 // DeleteDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBInstance method directly
-// instead.
+// See DeleteDBInstance for more information on using the DeleteDBInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBInstanceRequest method.
 //    req, resp := client.DeleteDBInstanceRequest(params)
@@ -2551,7 +2938,7 @@ const opDeleteDBInstance = "DeleteDBInstance"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstance
 func (c *RDS) DeleteDBInstanceRequest(input *DeleteDBInstanceInput) (req *request.Request, output *DeleteDBInstanceOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBInstance,
@@ -2572,12 +2959,12 @@ func (c *RDS) DeleteDBInstanceRequest(input *DeleteDBInstanceInput) (req *reques
 //
 // The DeleteDBInstance action deletes a previously provisioned DB instance.
 // When you delete a DB instance, all automated backups for that instance are
-// deleted and cannot be recovered. Manual DB snapshots of the DB instance to
+// deleted and can't be recovered. Manual DB snapshots of the DB instance to
 // be deleted by DeleteDBInstance are not deleted.
 //
 // If you request a final DB snapshot the status of the Amazon RDS DB instance
 // is deleting until the DB snapshot is created. The API action DescribeDBInstance
-// is used to monitor the status of this operation. The action cannot be canceled
+// is used to monitor the status of this operation. The action can't be canceled
 // or reverted once submitted.
 //
 // Note that when a DB instance is in a failure state and has a status of failed,
@@ -2585,7 +2972,7 @@ func (c *RDS) DeleteDBInstanceRequest(input *DeleteDBInstanceInput) (req *reques
 // the SkipFinalSnapshot parameter is set to true.
 //
 // If the specified DB instance is part of an Amazon Aurora DB cluster, you
-// cannot delete the DB instance if the following are true:
+// can't delete the DB instance if both of the following conditions are true:
 //
 //    * The DB cluster is a Read Replica of another Amazon Aurora DB cluster.
 //
@@ -2605,21 +2992,26 @@ func (c *RDS) DeleteDBInstanceRequest(input *DeleteDBInstanceInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBSnapshotAlreadyExistsFault "DBSnapshotAlreadyExists"
 //   DBSnapshotIdentifier is already used by an existing snapshot.
 //
 //   * ErrCodeSnapshotQuotaExceededFault "SnapshotQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB snapshots.
+//   The request would result in the user exceeding the allowed number of DB snapshots.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstance
+//   * ErrCodeDBInstanceAutomatedBackupQuotaExceededFault "DBInstanceAutomatedBackupQuotaExceeded"
+//   The quota for retained automated backups was exceeded. This prevents you
+//   from retaining any additional automated backups. The retained automated backups
+//   quota is the same as your DB Instance quota.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstance
 func (c *RDS) DeleteDBInstance(input *DeleteDBInstanceInput) (*DeleteDBInstanceOutput, error) {
 	req, out := c.DeleteDBInstanceRequest(input)
 	return out, req.Send()
@@ -2641,23 +3033,106 @@ func (c *RDS) DeleteDBInstanceWithContext(ctx aws.Context, input *DeleteDBInstan
 	return out, req.Send()
 }
 
+const opDeleteDBInstanceAutomatedBackup = "DeleteDBInstanceAutomatedBackup"
+
+// DeleteDBInstanceAutomatedBackupRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteDBInstanceAutomatedBackup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteDBInstanceAutomatedBackup for more information on using the DeleteDBInstanceAutomatedBackup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteDBInstanceAutomatedBackupRequest method.
+//    req, resp := client.DeleteDBInstanceAutomatedBackupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstanceAutomatedBackup
+func (c *RDS) DeleteDBInstanceAutomatedBackupRequest(input *DeleteDBInstanceAutomatedBackupInput) (req *request.Request, output *DeleteDBInstanceAutomatedBackupOutput) {
+	op := &request.Operation{
+		Name:       opDeleteDBInstanceAutomatedBackup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteDBInstanceAutomatedBackupInput{}
+	}
+
+	output = &DeleteDBInstanceAutomatedBackupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteDBInstanceAutomatedBackup API operation for Amazon Relational Database Service.
+//
+// Deletes automated backups based on the source instance's DbiResourceId value
+// or the restorable instance's resource ID.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DeleteDBInstanceAutomatedBackup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidDBInstanceAutomatedBackupStateFault "InvalidDBInstanceAutomatedBackupState"
+//   The automated backup is in an invalid state. For example, this automated
+//   backup is associated with an active instance.
+//
+//   * ErrCodeDBInstanceAutomatedBackupNotFoundFault "DBInstanceAutomatedBackupNotFound"
+//   No automated backup for this DB instance was found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstanceAutomatedBackup
+func (c *RDS) DeleteDBInstanceAutomatedBackup(input *DeleteDBInstanceAutomatedBackupInput) (*DeleteDBInstanceAutomatedBackupOutput, error) {
+	req, out := c.DeleteDBInstanceAutomatedBackupRequest(input)
+	return out, req.Send()
+}
+
+// DeleteDBInstanceAutomatedBackupWithContext is the same as DeleteDBInstanceAutomatedBackup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteDBInstanceAutomatedBackup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DeleteDBInstanceAutomatedBackupWithContext(ctx aws.Context, input *DeleteDBInstanceAutomatedBackupInput, opts ...request.Option) (*DeleteDBInstanceAutomatedBackupOutput, error) {
+	req, out := c.DeleteDBInstanceAutomatedBackupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteDBParameterGroup = "DeleteDBParameterGroup"
 
 // DeleteDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBParameterGroup method directly
-// instead.
+// See DeleteDBParameterGroup for more information on using the DeleteDBParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBParameterGroupRequest method.
 //    req, resp := client.DeleteDBParameterGroupRequest(params)
@@ -2667,7 +3142,7 @@ const opDeleteDBParameterGroup = "DeleteDBParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBParameterGroup
 func (c *RDS) DeleteDBParameterGroupRequest(input *DeleteDBParameterGroupInput) (req *request.Request, output *DeleteDBParameterGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBParameterGroup,
@@ -2681,15 +3156,14 @@ func (c *RDS) DeleteDBParameterGroupRequest(input *DeleteDBParameterGroupInput) 
 
 	output = &DeleteDBParameterGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DeleteDBParameterGroup API operation for Amazon Relational Database Service.
 //
-// Deletes a specified DBParameterGroup. The DBParameterGroup to be deleted
-// cannot be associated with any DB instances.
+// Deletes a specified DB parameter group. The DB parameter group to be deleted
+// can't be associated with any DB instances.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2701,13 +3175,13 @@ func (c *RDS) DeleteDBParameterGroupRequest(input *DeleteDBParameterGroupInput) 
 // Returned Error Codes:
 //   * ErrCodeInvalidDBParameterGroupStateFault "InvalidDBParameterGroupState"
 //   The DB parameter group is in use or is in an invalid state. If you are attempting
-//   to delete the parameter group, you cannot delete it when the parameter group
+//   to delete the parameter group, you can't delete it when the parameter group
 //   is in this state.
 //
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBParameterGroup
 func (c *RDS) DeleteDBParameterGroup(input *DeleteDBParameterGroupInput) (*DeleteDBParameterGroupOutput, error) {
 	req, out := c.DeleteDBParameterGroupRequest(input)
 	return out, req.Send()
@@ -2733,19 +3207,18 @@ const opDeleteDBSecurityGroup = "DeleteDBSecurityGroup"
 
 // DeleteDBSecurityGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBSecurityGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBSecurityGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBSecurityGroup method directly
-// instead.
+// See DeleteDBSecurityGroup for more information on using the DeleteDBSecurityGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBSecurityGroupRequest method.
 //    req, resp := client.DeleteDBSecurityGroupRequest(params)
@@ -2755,7 +3228,7 @@ const opDeleteDBSecurityGroup = "DeleteDBSecurityGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSecurityGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSecurityGroup
 func (c *RDS) DeleteDBSecurityGroupRequest(input *DeleteDBSecurityGroupInput) (req *request.Request, output *DeleteDBSecurityGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBSecurityGroup,
@@ -2769,8 +3242,7 @@ func (c *RDS) DeleteDBSecurityGroupRequest(input *DeleteDBSecurityGroupInput) (r
 
 	output = &DeleteDBSecurityGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2789,12 +3261,12 @@ func (c *RDS) DeleteDBSecurityGroupRequest(input *DeleteDBSecurityGroupInput) (r
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidDBSecurityGroupStateFault "InvalidDBSecurityGroupState"
-//   The state of the DB security group does not allow deletion.
+//   The state of the DB security group doesn't allow deletion.
 //
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSecurityGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSecurityGroup
 func (c *RDS) DeleteDBSecurityGroup(input *DeleteDBSecurityGroupInput) (*DeleteDBSecurityGroupOutput, error) {
 	req, out := c.DeleteDBSecurityGroupRequest(input)
 	return out, req.Send()
@@ -2820,19 +3292,18 @@ const opDeleteDBSnapshot = "DeleteDBSnapshot"
 
 // DeleteDBSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBSnapshot method directly
-// instead.
+// See DeleteDBSnapshot for more information on using the DeleteDBSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBSnapshotRequest method.
 //    req, resp := client.DeleteDBSnapshotRequest(params)
@@ -2842,7 +3313,7 @@ const opDeleteDBSnapshot = "DeleteDBSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSnapshot
 func (c *RDS) DeleteDBSnapshotRequest(input *DeleteDBSnapshotInput) (req *request.Request, output *DeleteDBSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBSnapshot,
@@ -2861,10 +3332,10 @@ func (c *RDS) DeleteDBSnapshotRequest(input *DeleteDBSnapshotInput) (req *reques
 
 // DeleteDBSnapshot API operation for Amazon Relational Database Service.
 //
-// Deletes a DBSnapshot. If the snapshot is being copied, the copy operation
+// Deletes a DB snapshot. If the snapshot is being copied, the copy operation
 // is terminated.
 //
-// The DBSnapshot must be in the available state to be deleted.
+// The DB snapshot must be in the available state to be deleted.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2875,12 +3346,12 @@ func (c *RDS) DeleteDBSnapshotRequest(input *DeleteDBSnapshotInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidDBSnapshotStateFault "InvalidDBSnapshotState"
-//   The state of the DB snapshot does not allow deletion.
+//   The state of the DB snapshot doesn't allow deletion.
 //
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSnapshot
 func (c *RDS) DeleteDBSnapshot(input *DeleteDBSnapshotInput) (*DeleteDBSnapshotOutput, error) {
 	req, out := c.DeleteDBSnapshotRequest(input)
 	return out, req.Send()
@@ -2906,19 +3377,18 @@ const opDeleteDBSubnetGroup = "DeleteDBSubnetGroup"
 
 // DeleteDBSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBSubnetGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteDBSubnetGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteDBSubnetGroup method directly
-// instead.
+// See DeleteDBSubnetGroup for more information on using the DeleteDBSubnetGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteDBSubnetGroupRequest method.
 //    req, resp := client.DeleteDBSubnetGroupRequest(params)
@@ -2928,7 +3398,7 @@ const opDeleteDBSubnetGroup = "DeleteDBSubnetGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSubnetGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSubnetGroup
 func (c *RDS) DeleteDBSubnetGroupRequest(input *DeleteDBSubnetGroupInput) (req *request.Request, output *DeleteDBSubnetGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDBSubnetGroup,
@@ -2942,8 +3412,7 @@ func (c *RDS) DeleteDBSubnetGroupRequest(input *DeleteDBSubnetGroupInput) (req *
 
 	output = &DeleteDBSubnetGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2962,15 +3431,15 @@ func (c *RDS) DeleteDBSubnetGroupRequest(input *DeleteDBSubnetGroupInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidDBSubnetGroupStateFault "InvalidDBSubnetGroupStateFault"
-//   The DB subnet group cannot be deleted because it is in use.
+//   The DB subnet group cannot be deleted because it's in use.
 //
 //   * ErrCodeInvalidDBSubnetStateFault "InvalidDBSubnetStateFault"
-//   The DB subnet is not in the available state.
+//   The DB subnet isn't in the available state.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSubnetGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSubnetGroup
 func (c *RDS) DeleteDBSubnetGroup(input *DeleteDBSubnetGroupInput) (*DeleteDBSubnetGroupOutput, error) {
 	req, out := c.DeleteDBSubnetGroupRequest(input)
 	return out, req.Send()
@@ -2996,19 +3465,18 @@ const opDeleteEventSubscription = "DeleteEventSubscription"
 
 // DeleteEventSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteEventSubscription operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteEventSubscription for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteEventSubscription method directly
-// instead.
+// See DeleteEventSubscription for more information on using the DeleteEventSubscription
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteEventSubscriptionRequest method.
 //    req, resp := client.DeleteEventSubscriptionRequest(params)
@@ -3018,7 +3486,7 @@ const opDeleteEventSubscription = "DeleteEventSubscription"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteEventSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteEventSubscription
 func (c *RDS) DeleteEventSubscriptionRequest(input *DeleteEventSubscriptionInput) (req *request.Request, output *DeleteEventSubscriptionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteEventSubscription,
@@ -3054,7 +3522,7 @@ func (c *RDS) DeleteEventSubscriptionRequest(input *DeleteEventSubscriptionInput
 //   This error can occur if someone else is modifying a subscription. You should
 //   retry the action.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteEventSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteEventSubscription
 func (c *RDS) DeleteEventSubscription(input *DeleteEventSubscriptionInput) (*DeleteEventSubscriptionOutput, error) {
 	req, out := c.DeleteEventSubscriptionRequest(input)
 	return out, req.Send()
@@ -3076,23 +3544,103 @@ func (c *RDS) DeleteEventSubscriptionWithContext(ctx aws.Context, input *DeleteE
 	return out, req.Send()
 }
 
+const opDeleteGlobalCluster = "DeleteGlobalCluster"
+
+// DeleteGlobalClusterRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteGlobalCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteGlobalCluster for more information on using the DeleteGlobalCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteGlobalClusterRequest method.
+//    req, resp := client.DeleteGlobalClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteGlobalCluster
+func (c *RDS) DeleteGlobalClusterRequest(input *DeleteGlobalClusterInput) (req *request.Request, output *DeleteGlobalClusterOutput) {
+	op := &request.Operation{
+		Name:       opDeleteGlobalCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteGlobalClusterInput{}
+	}
+
+	output = &DeleteGlobalClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteGlobalCluster API operation for Amazon Relational Database Service.
+//
+// Deletes a global database cluster. The primary and secondary clusters must
+// already be detached or destroyed first.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DeleteGlobalCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//
+//   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteGlobalCluster
+func (c *RDS) DeleteGlobalCluster(input *DeleteGlobalClusterInput) (*DeleteGlobalClusterOutput, error) {
+	req, out := c.DeleteGlobalClusterRequest(input)
+	return out, req.Send()
+}
+
+// DeleteGlobalClusterWithContext is the same as DeleteGlobalCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteGlobalCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DeleteGlobalClusterWithContext(ctx aws.Context, input *DeleteGlobalClusterInput, opts ...request.Option) (*DeleteGlobalClusterOutput, error) {
+	req, out := c.DeleteGlobalClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteOptionGroup = "DeleteOptionGroup"
 
 // DeleteOptionGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteOptionGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DeleteOptionGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DeleteOptionGroup method directly
-// instead.
+// See DeleteOptionGroup for more information on using the DeleteOptionGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DeleteOptionGroupRequest method.
 //    req, resp := client.DeleteOptionGroupRequest(params)
@@ -3102,7 +3650,7 @@ const opDeleteOptionGroup = "DeleteOptionGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteOptionGroup
 func (c *RDS) DeleteOptionGroupRequest(input *DeleteOptionGroupInput) (req *request.Request, output *DeleteOptionGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeleteOptionGroup,
@@ -3116,8 +3664,7 @@ func (c *RDS) DeleteOptionGroupRequest(input *DeleteOptionGroupInput) (req *requ
 
 	output = &DeleteOptionGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3137,9 +3684,9 @@ func (c *RDS) DeleteOptionGroupRequest(input *DeleteOptionGroupInput) (req *requ
 //   The specified option group could not be found.
 //
 //   * ErrCodeInvalidOptionGroupStateFault "InvalidOptionGroupStateFault"
-//   The option group is not in the available state.
+//   The option group isn't in the available state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteOptionGroup
 func (c *RDS) DeleteOptionGroup(input *DeleteOptionGroupInput) (*DeleteOptionGroupOutput, error) {
 	req, out := c.DeleteOptionGroupRequest(input)
 	return out, req.Send()
@@ -3165,19 +3712,18 @@ const opDescribeAccountAttributes = "DescribeAccountAttributes"
 
 // DescribeAccountAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAccountAttributes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeAccountAttributes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeAccountAttributes method directly
-// instead.
+// See DescribeAccountAttributes for more information on using the DescribeAccountAttributes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeAccountAttributesRequest method.
 //    req, resp := client.DescribeAccountAttributesRequest(params)
@@ -3187,7 +3733,7 @@ const opDescribeAccountAttributes = "DescribeAccountAttributes"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeAccountAttributes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeAccountAttributes
 func (c *RDS) DescribeAccountAttributesRequest(input *DescribeAccountAttributesInput) (req *request.Request, output *DescribeAccountAttributesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeAccountAttributes,
@@ -3211,7 +3757,7 @@ func (c *RDS) DescribeAccountAttributesRequest(input *DescribeAccountAttributesI
 // The description for a quota includes the quota name, current usage toward
 // that quota, and the quota's maximum value.
 //
-// This command does not take any parameters.
+// This command doesn't take any parameters.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3219,7 +3765,7 @@ func (c *RDS) DescribeAccountAttributesRequest(input *DescribeAccountAttributesI
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeAccountAttributes for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeAccountAttributes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeAccountAttributes
 func (c *RDS) DescribeAccountAttributes(input *DescribeAccountAttributesInput) (*DescribeAccountAttributesOutput, error) {
 	req, out := c.DescribeAccountAttributesRequest(input)
 	return out, req.Send()
@@ -3245,19 +3791,18 @@ const opDescribeCertificates = "DescribeCertificates"
 
 // DescribeCertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCertificates operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeCertificates for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeCertificates method directly
-// instead.
+// See DescribeCertificates for more information on using the DescribeCertificates
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeCertificatesRequest method.
 //    req, resp := client.DescribeCertificatesRequest(params)
@@ -3267,7 +3812,7 @@ const opDescribeCertificates = "DescribeCertificates"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeCertificates
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeCertificates
 func (c *RDS) DescribeCertificatesRequest(input *DescribeCertificatesInput) (req *request.Request, output *DescribeCertificatesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeCertificates,
@@ -3297,9 +3842,9 @@ func (c *RDS) DescribeCertificatesRequest(input *DescribeCertificatesInput) (req
 //
 // Returned Error Codes:
 //   * ErrCodeCertificateNotFoundFault "CertificateNotFound"
-//   CertificateIdentifier does not refer to an existing certificate.
+//   CertificateIdentifier doesn't refer to an existing certificate.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeCertificates
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeCertificates
 func (c *RDS) DescribeCertificates(input *DescribeCertificatesInput) (*DescribeCertificatesOutput, error) {
 	req, out := c.DescribeCertificatesRequest(input)
 	return out, req.Send()
@@ -3321,23 +3866,186 @@ func (c *RDS) DescribeCertificatesWithContext(ctx aws.Context, input *DescribeCe
 	return out, req.Send()
 }
 
+const opDescribeDBClusterBacktracks = "DescribeDBClusterBacktracks"
+
+// DescribeDBClusterBacktracksRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDBClusterBacktracks operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeDBClusterBacktracks for more information on using the DescribeDBClusterBacktracks
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeDBClusterBacktracksRequest method.
+//    req, resp := client.DescribeDBClusterBacktracksRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterBacktracks
+func (c *RDS) DescribeDBClusterBacktracksRequest(input *DescribeDBClusterBacktracksInput) (req *request.Request, output *DescribeDBClusterBacktracksOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDBClusterBacktracks,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDBClusterBacktracksInput{}
+	}
+
+	output = &DescribeDBClusterBacktracksOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeDBClusterBacktracks API operation for Amazon Relational Database Service.
+//
+// Returns information about backtracks for a DB cluster.
+//
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DescribeDBClusterBacktracks for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeDBClusterBacktrackNotFoundFault "DBClusterBacktrackNotFoundFault"
+//   BacktrackIdentifier doesn't refer to an existing backtrack.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterBacktracks
+func (c *RDS) DescribeDBClusterBacktracks(input *DescribeDBClusterBacktracksInput) (*DescribeDBClusterBacktracksOutput, error) {
+	req, out := c.DescribeDBClusterBacktracksRequest(input)
+	return out, req.Send()
+}
+
+// DescribeDBClusterBacktracksWithContext is the same as DescribeDBClusterBacktracks with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeDBClusterBacktracks for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeDBClusterBacktracksWithContext(ctx aws.Context, input *DescribeDBClusterBacktracksInput, opts ...request.Option) (*DescribeDBClusterBacktracksOutput, error) {
+	req, out := c.DescribeDBClusterBacktracksRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeDBClusterEndpoints = "DescribeDBClusterEndpoints"
+
+// DescribeDBClusterEndpointsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDBClusterEndpoints operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeDBClusterEndpoints for more information on using the DescribeDBClusterEndpoints
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeDBClusterEndpointsRequest method.
+//    req, resp := client.DescribeDBClusterEndpointsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterEndpoints
+func (c *RDS) DescribeDBClusterEndpointsRequest(input *DescribeDBClusterEndpointsInput) (req *request.Request, output *DescribeDBClusterEndpointsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDBClusterEndpoints,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeDBClusterEndpointsInput{}
+	}
+
+	output = &DescribeDBClusterEndpointsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeDBClusterEndpoints API operation for Amazon Relational Database Service.
+//
+// Returns information about endpoints for an Amazon Aurora DB cluster.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DescribeDBClusterEndpoints for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterEndpoints
+func (c *RDS) DescribeDBClusterEndpoints(input *DescribeDBClusterEndpointsInput) (*DescribeDBClusterEndpointsOutput, error) {
+	req, out := c.DescribeDBClusterEndpointsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeDBClusterEndpointsWithContext is the same as DescribeDBClusterEndpoints with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeDBClusterEndpoints for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeDBClusterEndpointsWithContext(ctx aws.Context, input *DescribeDBClusterEndpointsInput, opts ...request.Option) (*DescribeDBClusterEndpointsOutput, error) {
+	req, out := c.DescribeDBClusterEndpointsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeDBClusterParameterGroups = "DescribeDBClusterParameterGroups"
 
 // DescribeDBClusterParameterGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterParameterGroups operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBClusterParameterGroups for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBClusterParameterGroups method directly
-// instead.
+// See DescribeDBClusterParameterGroups for more information on using the DescribeDBClusterParameterGroups
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBClusterParameterGroupsRequest method.
 //    req, resp := client.DescribeDBClusterParameterGroupsRequest(params)
@@ -3347,7 +4055,7 @@ const opDescribeDBClusterParameterGroups = "DescribeDBClusterParameterGroups"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameterGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameterGroups
 func (c *RDS) DescribeDBClusterParameterGroupsRequest(input *DescribeDBClusterParameterGroupsInput) (req *request.Request, output *DescribeDBClusterParameterGroupsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBClusterParameterGroups,
@@ -3370,8 +4078,8 @@ func (c *RDS) DescribeDBClusterParameterGroupsRequest(input *DescribeDBClusterPa
 // parameter is specified, the list will contain only the description of the
 // specified DB cluster parameter group.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3382,9 +4090,9 @@ func (c *RDS) DescribeDBClusterParameterGroupsRequest(input *DescribeDBClusterPa
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameterGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameterGroups
 func (c *RDS) DescribeDBClusterParameterGroups(input *DescribeDBClusterParameterGroupsInput) (*DescribeDBClusterParameterGroupsOutput, error) {
 	req, out := c.DescribeDBClusterParameterGroupsRequest(input)
 	return out, req.Send()
@@ -3410,19 +4118,18 @@ const opDescribeDBClusterParameters = "DescribeDBClusterParameters"
 
 // DescribeDBClusterParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterParameters operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBClusterParameters for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBClusterParameters method directly
-// instead.
+// See DescribeDBClusterParameters for more information on using the DescribeDBClusterParameters
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBClusterParametersRequest method.
 //    req, resp := client.DescribeDBClusterParametersRequest(params)
@@ -3432,7 +4139,7 @@ const opDescribeDBClusterParameters = "DescribeDBClusterParameters"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameters
 func (c *RDS) DescribeDBClusterParametersRequest(input *DescribeDBClusterParametersInput) (req *request.Request, output *DescribeDBClusterParametersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBClusterParameters,
@@ -3454,8 +4161,8 @@ func (c *RDS) DescribeDBClusterParametersRequest(input *DescribeDBClusterParamet
 // Returns the detailed parameter list for a particular DB cluster parameter
 // group.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3466,9 +4173,9 @@ func (c *RDS) DescribeDBClusterParametersRequest(input *DescribeDBClusterParamet
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameters
 func (c *RDS) DescribeDBClusterParameters(input *DescribeDBClusterParametersInput) (*DescribeDBClusterParametersOutput, error) {
 	req, out := c.DescribeDBClusterParametersRequest(input)
 	return out, req.Send()
@@ -3494,19 +4201,18 @@ const opDescribeDBClusterSnapshotAttributes = "DescribeDBClusterSnapshotAttribut
 
 // DescribeDBClusterSnapshotAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterSnapshotAttributes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBClusterSnapshotAttributes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBClusterSnapshotAttributes method directly
-// instead.
+// See DescribeDBClusterSnapshotAttributes for more information on using the DescribeDBClusterSnapshotAttributes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBClusterSnapshotAttributesRequest method.
 //    req, resp := client.DescribeDBClusterSnapshotAttributesRequest(params)
@@ -3516,7 +4222,7 @@ const opDescribeDBClusterSnapshotAttributes = "DescribeDBClusterSnapshotAttribut
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshotAttributes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshotAttributes
 func (c *RDS) DescribeDBClusterSnapshotAttributesRequest(input *DescribeDBClusterSnapshotAttributesInput) (req *request.Request, output *DescribeDBClusterSnapshotAttributesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBClusterSnapshotAttributes,
@@ -3557,9 +4263,9 @@ func (c *RDS) DescribeDBClusterSnapshotAttributesRequest(input *DescribeDBCluste
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterSnapshotNotFoundFault "DBClusterSnapshotNotFoundFault"
-//   DBClusterSnapshotIdentifier does not refer to an existing DB cluster snapshot.
+//   DBClusterSnapshotIdentifier doesn't refer to an existing DB cluster snapshot.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshotAttributes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshotAttributes
 func (c *RDS) DescribeDBClusterSnapshotAttributes(input *DescribeDBClusterSnapshotAttributesInput) (*DescribeDBClusterSnapshotAttributesOutput, error) {
 	req, out := c.DescribeDBClusterSnapshotAttributesRequest(input)
 	return out, req.Send()
@@ -3585,19 +4291,18 @@ const opDescribeDBClusterSnapshots = "DescribeDBClusterSnapshots"
 
 // DescribeDBClusterSnapshotsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterSnapshots operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBClusterSnapshots for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBClusterSnapshots method directly
-// instead.
+// See DescribeDBClusterSnapshots for more information on using the DescribeDBClusterSnapshots
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBClusterSnapshotsRequest method.
 //    req, resp := client.DescribeDBClusterSnapshotsRequest(params)
@@ -3607,7 +4312,7 @@ const opDescribeDBClusterSnapshots = "DescribeDBClusterSnapshots"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshots
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshots
 func (c *RDS) DescribeDBClusterSnapshotsRequest(input *DescribeDBClusterSnapshotsInput) (req *request.Request, output *DescribeDBClusterSnapshotsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBClusterSnapshots,
@@ -3629,8 +4334,8 @@ func (c *RDS) DescribeDBClusterSnapshotsRequest(input *DescribeDBClusterSnapshot
 // Returns information about DB cluster snapshots. This API action supports
 // pagination.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3641,9 +4346,9 @@ func (c *RDS) DescribeDBClusterSnapshotsRequest(input *DescribeDBClusterSnapshot
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterSnapshotNotFoundFault "DBClusterSnapshotNotFoundFault"
-//   DBClusterSnapshotIdentifier does not refer to an existing DB cluster snapshot.
+//   DBClusterSnapshotIdentifier doesn't refer to an existing DB cluster snapshot.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshots
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshots
 func (c *RDS) DescribeDBClusterSnapshots(input *DescribeDBClusterSnapshotsInput) (*DescribeDBClusterSnapshotsOutput, error) {
 	req, out := c.DescribeDBClusterSnapshotsRequest(input)
 	return out, req.Send()
@@ -3669,19 +4374,18 @@ const opDescribeDBClusters = "DescribeDBClusters"
 
 // DescribeDBClustersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusters operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBClusters for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBClusters method directly
-// instead.
+// See DescribeDBClusters for more information on using the DescribeDBClusters
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBClustersRequest method.
 //    req, resp := client.DescribeDBClustersRequest(params)
@@ -3691,12 +4395,18 @@ const opDescribeDBClusters = "DescribeDBClusters"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusters
 func (c *RDS) DescribeDBClustersRequest(input *DescribeDBClustersInput) (req *request.Request, output *DescribeDBClustersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBClusters,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -3713,8 +4423,8 @@ func (c *RDS) DescribeDBClustersRequest(input *DescribeDBClustersInput) (req *re
 // Returns information about provisioned Aurora DB clusters. This API supports
 // pagination.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3725,9 +4435,9 @@ func (c *RDS) DescribeDBClustersRequest(input *DescribeDBClustersInput) (req *re
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusters
 func (c *RDS) DescribeDBClusters(input *DescribeDBClustersInput) (*DescribeDBClustersOutput, error) {
 	req, out := c.DescribeDBClustersRequest(input)
 	return out, req.Send()
@@ -3749,23 +4459,72 @@ func (c *RDS) DescribeDBClustersWithContext(ctx aws.Context, input *DescribeDBCl
 	return out, req.Send()
 }
 
+// DescribeDBClustersPages iterates over the pages of a DescribeDBClusters operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDBClusters method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDBClusters operation.
+//    pageNum := 0
+//    err := client.DescribeDBClustersPages(params,
+//        func(page *DescribeDBClustersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RDS) DescribeDBClustersPages(input *DescribeDBClustersInput, fn func(*DescribeDBClustersOutput, bool) bool) error {
+	return c.DescribeDBClustersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDBClustersPagesWithContext same as DescribeDBClustersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeDBClustersPagesWithContext(ctx aws.Context, input *DescribeDBClustersInput, fn func(*DescribeDBClustersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDBClustersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDBClustersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*DescribeDBClustersOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opDescribeDBEngineVersions = "DescribeDBEngineVersions"
 
 // DescribeDBEngineVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBEngineVersions operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBEngineVersions for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBEngineVersions method directly
-// instead.
+// See DescribeDBEngineVersions for more information on using the DescribeDBEngineVersions
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBEngineVersionsRequest method.
 //    req, resp := client.DescribeDBEngineVersionsRequest(params)
@@ -3775,7 +4534,7 @@ const opDescribeDBEngineVersions = "DescribeDBEngineVersions"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBEngineVersions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBEngineVersions
 func (c *RDS) DescribeDBEngineVersionsRequest(input *DescribeDBEngineVersionsInput) (req *request.Request, output *DescribeDBEngineVersionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBEngineVersions,
@@ -3808,7 +4567,7 @@ func (c *RDS) DescribeDBEngineVersionsRequest(input *DescribeDBEngineVersionsInp
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeDBEngineVersions for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBEngineVersions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBEngineVersions
 func (c *RDS) DescribeDBEngineVersions(input *DescribeDBEngineVersionsInput) (*DescribeDBEngineVersionsOutput, error) {
 	req, out := c.DescribeDBEngineVersionsRequest(input)
 	return out, req.Send()
@@ -3880,23 +4639,163 @@ func (c *RDS) DescribeDBEngineVersionsPagesWithContext(ctx aws.Context, input *D
 	return p.Err()
 }
 
+const opDescribeDBInstanceAutomatedBackups = "DescribeDBInstanceAutomatedBackups"
+
+// DescribeDBInstanceAutomatedBackupsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeDBInstanceAutomatedBackups operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeDBInstanceAutomatedBackups for more information on using the DescribeDBInstanceAutomatedBackups
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeDBInstanceAutomatedBackupsRequest method.
+//    req, resp := client.DescribeDBInstanceAutomatedBackupsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBInstanceAutomatedBackups
+func (c *RDS) DescribeDBInstanceAutomatedBackupsRequest(input *DescribeDBInstanceAutomatedBackupsInput) (req *request.Request, output *DescribeDBInstanceAutomatedBackupsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeDBInstanceAutomatedBackups,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeDBInstanceAutomatedBackupsInput{}
+	}
+
+	output = &DescribeDBInstanceAutomatedBackupsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeDBInstanceAutomatedBackups API operation for Amazon Relational Database Service.
+//
+// Displays backups for both current and deleted instances. For example, use
+// this operation to find details about automated backups for previously deleted
+// instances. Current instances with retention periods greater than zero (0)
+// are returned for both the DescribeDBInstanceAutomatedBackups and DescribeDBInstances
+// operations.
+//
+// All parameters are optional.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DescribeDBInstanceAutomatedBackups for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBInstanceAutomatedBackupNotFoundFault "DBInstanceAutomatedBackupNotFound"
+//   No automated backup for this DB instance was found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBInstanceAutomatedBackups
+func (c *RDS) DescribeDBInstanceAutomatedBackups(input *DescribeDBInstanceAutomatedBackupsInput) (*DescribeDBInstanceAutomatedBackupsOutput, error) {
+	req, out := c.DescribeDBInstanceAutomatedBackupsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeDBInstanceAutomatedBackupsWithContext is the same as DescribeDBInstanceAutomatedBackups with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeDBInstanceAutomatedBackups for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeDBInstanceAutomatedBackupsWithContext(ctx aws.Context, input *DescribeDBInstanceAutomatedBackupsInput, opts ...request.Option) (*DescribeDBInstanceAutomatedBackupsOutput, error) {
+	req, out := c.DescribeDBInstanceAutomatedBackupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeDBInstanceAutomatedBackupsPages iterates over the pages of a DescribeDBInstanceAutomatedBackups operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeDBInstanceAutomatedBackups method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeDBInstanceAutomatedBackups operation.
+//    pageNum := 0
+//    err := client.DescribeDBInstanceAutomatedBackupsPages(params,
+//        func(page *DescribeDBInstanceAutomatedBackupsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RDS) DescribeDBInstanceAutomatedBackupsPages(input *DescribeDBInstanceAutomatedBackupsInput, fn func(*DescribeDBInstanceAutomatedBackupsOutput, bool) bool) error {
+	return c.DescribeDBInstanceAutomatedBackupsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeDBInstanceAutomatedBackupsPagesWithContext same as DescribeDBInstanceAutomatedBackupsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeDBInstanceAutomatedBackupsPagesWithContext(ctx aws.Context, input *DescribeDBInstanceAutomatedBackupsInput, fn func(*DescribeDBInstanceAutomatedBackupsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeDBInstanceAutomatedBackupsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeDBInstanceAutomatedBackupsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*DescribeDBInstanceAutomatedBackupsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opDescribeDBInstances = "DescribeDBInstances"
 
 // DescribeDBInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBInstances operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBInstances for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBInstances method directly
-// instead.
+// See DescribeDBInstances for more information on using the DescribeDBInstances
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBInstancesRequest method.
 //    req, resp := client.DescribeDBInstancesRequest(params)
@@ -3906,7 +4805,7 @@ const opDescribeDBInstances = "DescribeDBInstances"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBInstances
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBInstances
 func (c *RDS) DescribeDBInstancesRequest(input *DescribeDBInstancesInput) (req *request.Request, output *DescribeDBInstancesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBInstances,
@@ -3942,9 +4841,9 @@ func (c *RDS) DescribeDBInstancesRequest(input *DescribeDBInstancesInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBInstances
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBInstances
 func (c *RDS) DescribeDBInstances(input *DescribeDBInstancesInput) (*DescribeDBInstancesOutput, error) {
 	req, out := c.DescribeDBInstancesRequest(input)
 	return out, req.Send()
@@ -4020,19 +4919,18 @@ const opDescribeDBLogFiles = "DescribeDBLogFiles"
 
 // DescribeDBLogFilesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBLogFiles operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBLogFiles for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBLogFiles method directly
-// instead.
+// See DescribeDBLogFiles for more information on using the DescribeDBLogFiles
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBLogFilesRequest method.
 //    req, resp := client.DescribeDBLogFilesRequest(params)
@@ -4042,7 +4940,7 @@ const opDescribeDBLogFiles = "DescribeDBLogFiles"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBLogFiles
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBLogFiles
 func (c *RDS) DescribeDBLogFilesRequest(input *DescribeDBLogFilesInput) (req *request.Request, output *DescribeDBLogFilesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBLogFiles,
@@ -4078,9 +4976,9 @@ func (c *RDS) DescribeDBLogFilesRequest(input *DescribeDBLogFilesInput) (req *re
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBLogFiles
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBLogFiles
 func (c *RDS) DescribeDBLogFiles(input *DescribeDBLogFilesInput) (*DescribeDBLogFilesOutput, error) {
 	req, out := c.DescribeDBLogFilesRequest(input)
 	return out, req.Send()
@@ -4156,19 +5054,18 @@ const opDescribeDBParameterGroups = "DescribeDBParameterGroups"
 
 // DescribeDBParameterGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBParameterGroups operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBParameterGroups for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBParameterGroups method directly
-// instead.
+// See DescribeDBParameterGroups for more information on using the DescribeDBParameterGroups
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBParameterGroupsRequest method.
 //    req, resp := client.DescribeDBParameterGroupsRequest(params)
@@ -4178,7 +5075,7 @@ const opDescribeDBParameterGroups = "DescribeDBParameterGroups"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameterGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameterGroups
 func (c *RDS) DescribeDBParameterGroupsRequest(input *DescribeDBParameterGroupsInput) (req *request.Request, output *DescribeDBParameterGroupsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBParameterGroups,
@@ -4216,9 +5113,9 @@ func (c *RDS) DescribeDBParameterGroupsRequest(input *DescribeDBParameterGroupsI
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameterGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameterGroups
 func (c *RDS) DescribeDBParameterGroups(input *DescribeDBParameterGroupsInput) (*DescribeDBParameterGroupsOutput, error) {
 	req, out := c.DescribeDBParameterGroupsRequest(input)
 	return out, req.Send()
@@ -4294,19 +5191,18 @@ const opDescribeDBParameters = "DescribeDBParameters"
 
 // DescribeDBParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBParameters operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBParameters for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBParameters method directly
-// instead.
+// See DescribeDBParameters for more information on using the DescribeDBParameters
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBParametersRequest method.
 //    req, resp := client.DescribeDBParametersRequest(params)
@@ -4316,7 +5212,7 @@ const opDescribeDBParameters = "DescribeDBParameters"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameters
 func (c *RDS) DescribeDBParametersRequest(input *DescribeDBParametersInput) (req *request.Request, output *DescribeDBParametersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBParameters,
@@ -4352,9 +5248,9 @@ func (c *RDS) DescribeDBParametersRequest(input *DescribeDBParametersInput) (req
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameters
 func (c *RDS) DescribeDBParameters(input *DescribeDBParametersInput) (*DescribeDBParametersOutput, error) {
 	req, out := c.DescribeDBParametersRequest(input)
 	return out, req.Send()
@@ -4430,19 +5326,18 @@ const opDescribeDBSecurityGroups = "DescribeDBSecurityGroups"
 
 // DescribeDBSecurityGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBSecurityGroups operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBSecurityGroups for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBSecurityGroups method directly
-// instead.
+// See DescribeDBSecurityGroups for more information on using the DescribeDBSecurityGroups
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBSecurityGroupsRequest method.
 //    req, resp := client.DescribeDBSecurityGroupsRequest(params)
@@ -4452,7 +5347,7 @@ const opDescribeDBSecurityGroups = "DescribeDBSecurityGroups"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSecurityGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSecurityGroups
 func (c *RDS) DescribeDBSecurityGroupsRequest(input *DescribeDBSecurityGroupsInput) (req *request.Request, output *DescribeDBSecurityGroupsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBSecurityGroups,
@@ -4490,9 +5385,9 @@ func (c *RDS) DescribeDBSecurityGroupsRequest(input *DescribeDBSecurityGroupsInp
 //
 // Returned Error Codes:
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSecurityGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSecurityGroups
 func (c *RDS) DescribeDBSecurityGroups(input *DescribeDBSecurityGroupsInput) (*DescribeDBSecurityGroupsOutput, error) {
 	req, out := c.DescribeDBSecurityGroupsRequest(input)
 	return out, req.Send()
@@ -4568,19 +5463,18 @@ const opDescribeDBSnapshotAttributes = "DescribeDBSnapshotAttributes"
 
 // DescribeDBSnapshotAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBSnapshotAttributes operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBSnapshotAttributes for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBSnapshotAttributes method directly
-// instead.
+// See DescribeDBSnapshotAttributes for more information on using the DescribeDBSnapshotAttributes
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBSnapshotAttributesRequest method.
 //    req, resp := client.DescribeDBSnapshotAttributesRequest(params)
@@ -4590,7 +5484,7 @@ const opDescribeDBSnapshotAttributes = "DescribeDBSnapshotAttributes"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshotAttributes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshotAttributes
 func (c *RDS) DescribeDBSnapshotAttributesRequest(input *DescribeDBSnapshotAttributesInput) (req *request.Request, output *DescribeDBSnapshotAttributesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBSnapshotAttributes,
@@ -4631,9 +5525,9 @@ func (c *RDS) DescribeDBSnapshotAttributesRequest(input *DescribeDBSnapshotAttri
 //
 // Returned Error Codes:
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshotAttributes
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshotAttributes
 func (c *RDS) DescribeDBSnapshotAttributes(input *DescribeDBSnapshotAttributesInput) (*DescribeDBSnapshotAttributesOutput, error) {
 	req, out := c.DescribeDBSnapshotAttributesRequest(input)
 	return out, req.Send()
@@ -4659,19 +5553,18 @@ const opDescribeDBSnapshots = "DescribeDBSnapshots"
 
 // DescribeDBSnapshotsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBSnapshots operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBSnapshots for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBSnapshots method directly
-// instead.
+// See DescribeDBSnapshots for more information on using the DescribeDBSnapshots
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBSnapshotsRequest method.
 //    req, resp := client.DescribeDBSnapshotsRequest(params)
@@ -4681,7 +5574,7 @@ const opDescribeDBSnapshots = "DescribeDBSnapshots"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshots
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshots
 func (c *RDS) DescribeDBSnapshotsRequest(input *DescribeDBSnapshotsInput) (req *request.Request, output *DescribeDBSnapshotsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBSnapshots,
@@ -4717,9 +5610,9 @@ func (c *RDS) DescribeDBSnapshotsRequest(input *DescribeDBSnapshotsInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshots
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshots
 func (c *RDS) DescribeDBSnapshots(input *DescribeDBSnapshotsInput) (*DescribeDBSnapshotsOutput, error) {
 	req, out := c.DescribeDBSnapshotsRequest(input)
 	return out, req.Send()
@@ -4795,19 +5688,18 @@ const opDescribeDBSubnetGroups = "DescribeDBSubnetGroups"
 
 // DescribeDBSubnetGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBSubnetGroups operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeDBSubnetGroups for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeDBSubnetGroups method directly
-// instead.
+// See DescribeDBSubnetGroups for more information on using the DescribeDBSubnetGroups
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeDBSubnetGroupsRequest method.
 //    req, resp := client.DescribeDBSubnetGroupsRequest(params)
@@ -4817,7 +5709,7 @@ const opDescribeDBSubnetGroups = "DescribeDBSubnetGroups"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSubnetGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSubnetGroups
 func (c *RDS) DescribeDBSubnetGroupsRequest(input *DescribeDBSubnetGroupsInput) (req *request.Request, output *DescribeDBSubnetGroupsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeDBSubnetGroups,
@@ -4856,9 +5748,9 @@ func (c *RDS) DescribeDBSubnetGroupsRequest(input *DescribeDBSubnetGroupsInput) 
 //
 // Returned Error Codes:
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSubnetGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSubnetGroups
 func (c *RDS) DescribeDBSubnetGroups(input *DescribeDBSubnetGroupsInput) (*DescribeDBSubnetGroupsOutput, error) {
 	req, out := c.DescribeDBSubnetGroupsRequest(input)
 	return out, req.Send()
@@ -4934,19 +5826,18 @@ const opDescribeEngineDefaultClusterParameters = "DescribeEngineDefaultClusterPa
 
 // DescribeEngineDefaultClusterParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEngineDefaultClusterParameters operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeEngineDefaultClusterParameters for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeEngineDefaultClusterParameters method directly
-// instead.
+// See DescribeEngineDefaultClusterParameters for more information on using the DescribeEngineDefaultClusterParameters
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeEngineDefaultClusterParametersRequest method.
 //    req, resp := client.DescribeEngineDefaultClusterParametersRequest(params)
@@ -4956,7 +5847,7 @@ const opDescribeEngineDefaultClusterParameters = "DescribeEngineDefaultClusterPa
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultClusterParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultClusterParameters
 func (c *RDS) DescribeEngineDefaultClusterParametersRequest(input *DescribeEngineDefaultClusterParametersInput) (req *request.Request, output *DescribeEngineDefaultClusterParametersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEngineDefaultClusterParameters,
@@ -4978,8 +5869,8 @@ func (c *RDS) DescribeEngineDefaultClusterParametersRequest(input *DescribeEngin
 // Returns the default engine and system parameter information for the cluster
 // database engine.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4987,7 +5878,7 @@ func (c *RDS) DescribeEngineDefaultClusterParametersRequest(input *DescribeEngin
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeEngineDefaultClusterParameters for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultClusterParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultClusterParameters
 func (c *RDS) DescribeEngineDefaultClusterParameters(input *DescribeEngineDefaultClusterParametersInput) (*DescribeEngineDefaultClusterParametersOutput, error) {
 	req, out := c.DescribeEngineDefaultClusterParametersRequest(input)
 	return out, req.Send()
@@ -5013,19 +5904,18 @@ const opDescribeEngineDefaultParameters = "DescribeEngineDefaultParameters"
 
 // DescribeEngineDefaultParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEngineDefaultParameters operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeEngineDefaultParameters for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeEngineDefaultParameters method directly
-// instead.
+// See DescribeEngineDefaultParameters for more information on using the DescribeEngineDefaultParameters
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeEngineDefaultParametersRequest method.
 //    req, resp := client.DescribeEngineDefaultParametersRequest(params)
@@ -5035,7 +5925,7 @@ const opDescribeEngineDefaultParameters = "DescribeEngineDefaultParameters"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultParameters
 func (c *RDS) DescribeEngineDefaultParametersRequest(input *DescribeEngineDefaultParametersInput) (req *request.Request, output *DescribeEngineDefaultParametersOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEngineDefaultParameters,
@@ -5069,7 +5959,7 @@ func (c *RDS) DescribeEngineDefaultParametersRequest(input *DescribeEngineDefaul
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeEngineDefaultParameters for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultParameters
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultParameters
 func (c *RDS) DescribeEngineDefaultParameters(input *DescribeEngineDefaultParametersInput) (*DescribeEngineDefaultParametersOutput, error) {
 	req, out := c.DescribeEngineDefaultParametersRequest(input)
 	return out, req.Send()
@@ -5145,19 +6035,18 @@ const opDescribeEventCategories = "DescribeEventCategories"
 
 // DescribeEventCategoriesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventCategories operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeEventCategories for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeEventCategories method directly
-// instead.
+// See DescribeEventCategories for more information on using the DescribeEventCategories
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeEventCategoriesRequest method.
 //    req, resp := client.DescribeEventCategoriesRequest(params)
@@ -5167,7 +6056,7 @@ const opDescribeEventCategories = "DescribeEventCategories"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventCategories
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventCategories
 func (c *RDS) DescribeEventCategoriesRequest(input *DescribeEventCategoriesInput) (req *request.Request, output *DescribeEventCategoriesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEventCategories,
@@ -5197,7 +6086,7 @@ func (c *RDS) DescribeEventCategoriesRequest(input *DescribeEventCategoriesInput
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeEventCategories for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventCategories
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventCategories
 func (c *RDS) DescribeEventCategories(input *DescribeEventCategoriesInput) (*DescribeEventCategoriesOutput, error) {
 	req, out := c.DescribeEventCategoriesRequest(input)
 	return out, req.Send()
@@ -5223,19 +6112,18 @@ const opDescribeEventSubscriptions = "DescribeEventSubscriptions"
 
 // DescribeEventSubscriptionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventSubscriptions operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeEventSubscriptions for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeEventSubscriptions method directly
-// instead.
+// See DescribeEventSubscriptions for more information on using the DescribeEventSubscriptions
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeEventSubscriptionsRequest method.
 //    req, resp := client.DescribeEventSubscriptionsRequest(params)
@@ -5245,7 +6133,7 @@ const opDescribeEventSubscriptions = "DescribeEventSubscriptions"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventSubscriptions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventSubscriptions
 func (c *RDS) DescribeEventSubscriptionsRequest(input *DescribeEventSubscriptionsInput) (req *request.Request, output *DescribeEventSubscriptionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEventSubscriptions,
@@ -5287,7 +6175,7 @@ func (c *RDS) DescribeEventSubscriptionsRequest(input *DescribeEventSubscription
 //   * ErrCodeSubscriptionNotFoundFault "SubscriptionNotFound"
 //   The subscription name does not exist.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventSubscriptions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventSubscriptions
 func (c *RDS) DescribeEventSubscriptions(input *DescribeEventSubscriptionsInput) (*DescribeEventSubscriptionsOutput, error) {
 	req, out := c.DescribeEventSubscriptionsRequest(input)
 	return out, req.Send()
@@ -5363,19 +6251,18 @@ const opDescribeEvents = "DescribeEvents"
 
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeEvents for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeEvents method directly
-// instead.
+// See DescribeEvents for more information on using the DescribeEvents
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeEventsRequest method.
 //    req, resp := client.DescribeEventsRequest(params)
@@ -5385,7 +6272,7 @@ const opDescribeEvents = "DescribeEvents"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEvents
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEvents
 func (c *RDS) DescribeEventsRequest(input *DescribeEventsInput) (req *request.Request, output *DescribeEventsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeEvents,
@@ -5422,7 +6309,7 @@ func (c *RDS) DescribeEventsRequest(input *DescribeEventsInput) (req *request.Re
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeEvents for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEvents
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEvents
 func (c *RDS) DescribeEvents(input *DescribeEventsInput) (*DescribeEventsOutput, error) {
 	req, out := c.DescribeEventsRequest(input)
 	return out, req.Send()
@@ -5494,23 +6381,160 @@ func (c *RDS) DescribeEventsPagesWithContext(ctx aws.Context, input *DescribeEve
 	return p.Err()
 }
 
+const opDescribeGlobalClusters = "DescribeGlobalClusters"
+
+// DescribeGlobalClustersRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeGlobalClusters operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeGlobalClusters for more information on using the DescribeGlobalClusters
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeGlobalClustersRequest method.
+//    req, resp := client.DescribeGlobalClustersRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeGlobalClusters
+func (c *RDS) DescribeGlobalClustersRequest(input *DescribeGlobalClustersInput) (req *request.Request, output *DescribeGlobalClustersOutput) {
+	op := &request.Operation{
+		Name:       opDescribeGlobalClusters,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "MaxRecords",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeGlobalClustersInput{}
+	}
+
+	output = &DescribeGlobalClustersOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeGlobalClusters API operation for Amazon Relational Database Service.
+//
+// Returns information about Aurora global database clusters. This API supports
+// pagination.
+//
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DescribeGlobalClusters for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeGlobalClusters
+func (c *RDS) DescribeGlobalClusters(input *DescribeGlobalClustersInput) (*DescribeGlobalClustersOutput, error) {
+	req, out := c.DescribeGlobalClustersRequest(input)
+	return out, req.Send()
+}
+
+// DescribeGlobalClustersWithContext is the same as DescribeGlobalClusters with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeGlobalClusters for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeGlobalClustersWithContext(ctx aws.Context, input *DescribeGlobalClustersInput, opts ...request.Option) (*DescribeGlobalClustersOutput, error) {
+	req, out := c.DescribeGlobalClustersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeGlobalClustersPages iterates over the pages of a DescribeGlobalClusters operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeGlobalClusters method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeGlobalClusters operation.
+//    pageNum := 0
+//    err := client.DescribeGlobalClustersPages(params,
+//        func(page *DescribeGlobalClustersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RDS) DescribeGlobalClustersPages(input *DescribeGlobalClustersInput, fn func(*DescribeGlobalClustersOutput, bool) bool) error {
+	return c.DescribeGlobalClustersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeGlobalClustersPagesWithContext same as DescribeGlobalClustersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeGlobalClustersPagesWithContext(ctx aws.Context, input *DescribeGlobalClustersInput, fn func(*DescribeGlobalClustersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeGlobalClustersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeGlobalClustersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*DescribeGlobalClustersOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opDescribeOptionGroupOptions = "DescribeOptionGroupOptions"
 
 // DescribeOptionGroupOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeOptionGroupOptions operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeOptionGroupOptions for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeOptionGroupOptions method directly
-// instead.
+// See DescribeOptionGroupOptions for more information on using the DescribeOptionGroupOptions
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeOptionGroupOptionsRequest method.
 //    req, resp := client.DescribeOptionGroupOptionsRequest(params)
@@ -5520,7 +6544,7 @@ const opDescribeOptionGroupOptions = "DescribeOptionGroupOptions"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroupOptions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroupOptions
 func (c *RDS) DescribeOptionGroupOptionsRequest(input *DescribeOptionGroupOptionsInput) (req *request.Request, output *DescribeOptionGroupOptionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeOptionGroupOptions,
@@ -5553,7 +6577,7 @@ func (c *RDS) DescribeOptionGroupOptionsRequest(input *DescribeOptionGroupOption
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeOptionGroupOptions for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroupOptions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroupOptions
 func (c *RDS) DescribeOptionGroupOptions(input *DescribeOptionGroupOptionsInput) (*DescribeOptionGroupOptionsOutput, error) {
 	req, out := c.DescribeOptionGroupOptionsRequest(input)
 	return out, req.Send()
@@ -5629,19 +6653,18 @@ const opDescribeOptionGroups = "DescribeOptionGroups"
 
 // DescribeOptionGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeOptionGroups operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeOptionGroups for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeOptionGroups method directly
-// instead.
+// See DescribeOptionGroups for more information on using the DescribeOptionGroups
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeOptionGroupsRequest method.
 //    req, resp := client.DescribeOptionGroupsRequest(params)
@@ -5651,7 +6674,7 @@ const opDescribeOptionGroups = "DescribeOptionGroups"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroups
 func (c *RDS) DescribeOptionGroupsRequest(input *DescribeOptionGroupsInput) (req *request.Request, output *DescribeOptionGroupsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeOptionGroups,
@@ -5689,7 +6712,7 @@ func (c *RDS) DescribeOptionGroupsRequest(input *DescribeOptionGroupsInput) (req
 //   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
 //   The specified option group could not be found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroups
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroups
 func (c *RDS) DescribeOptionGroups(input *DescribeOptionGroupsInput) (*DescribeOptionGroupsOutput, error) {
 	req, out := c.DescribeOptionGroupsRequest(input)
 	return out, req.Send()
@@ -5765,19 +6788,18 @@ const opDescribeOrderableDBInstanceOptions = "DescribeOrderableDBInstanceOptions
 
 // DescribeOrderableDBInstanceOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeOrderableDBInstanceOptions operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeOrderableDBInstanceOptions for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeOrderableDBInstanceOptions method directly
-// instead.
+// See DescribeOrderableDBInstanceOptions for more information on using the DescribeOrderableDBInstanceOptions
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeOrderableDBInstanceOptionsRequest method.
 //    req, resp := client.DescribeOrderableDBInstanceOptionsRequest(params)
@@ -5787,7 +6809,7 @@ const opDescribeOrderableDBInstanceOptions = "DescribeOrderableDBInstanceOptions
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOrderableDBInstanceOptions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOrderableDBInstanceOptions
 func (c *RDS) DescribeOrderableDBInstanceOptionsRequest(input *DescribeOrderableDBInstanceOptionsInput) (req *request.Request, output *DescribeOrderableDBInstanceOptionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeOrderableDBInstanceOptions,
@@ -5820,7 +6842,7 @@ func (c *RDS) DescribeOrderableDBInstanceOptionsRequest(input *DescribeOrderable
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeOrderableDBInstanceOptions for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOrderableDBInstanceOptions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOrderableDBInstanceOptions
 func (c *RDS) DescribeOrderableDBInstanceOptions(input *DescribeOrderableDBInstanceOptionsInput) (*DescribeOrderableDBInstanceOptionsOutput, error) {
 	req, out := c.DescribeOrderableDBInstanceOptionsRequest(input)
 	return out, req.Send()
@@ -5896,19 +6918,18 @@ const opDescribePendingMaintenanceActions = "DescribePendingMaintenanceActions"
 
 // DescribePendingMaintenanceActionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePendingMaintenanceActions operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribePendingMaintenanceActions for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribePendingMaintenanceActions method directly
-// instead.
+// See DescribePendingMaintenanceActions for more information on using the DescribePendingMaintenanceActions
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribePendingMaintenanceActionsRequest method.
 //    req, resp := client.DescribePendingMaintenanceActionsRequest(params)
@@ -5918,7 +6939,7 @@ const opDescribePendingMaintenanceActions = "DescribePendingMaintenanceActions"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribePendingMaintenanceActions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribePendingMaintenanceActions
 func (c *RDS) DescribePendingMaintenanceActionsRequest(input *DescribePendingMaintenanceActionsInput) (req *request.Request, output *DescribePendingMaintenanceActionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribePendingMaintenanceActions,
@@ -5951,7 +6972,7 @@ func (c *RDS) DescribePendingMaintenanceActionsRequest(input *DescribePendingMai
 //   * ErrCodeResourceNotFoundFault "ResourceNotFoundFault"
 //   The specified resource ID was not found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribePendingMaintenanceActions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribePendingMaintenanceActions
 func (c *RDS) DescribePendingMaintenanceActions(input *DescribePendingMaintenanceActionsInput) (*DescribePendingMaintenanceActionsOutput, error) {
 	req, out := c.DescribePendingMaintenanceActionsRequest(input)
 	return out, req.Send()
@@ -5977,19 +6998,18 @@ const opDescribeReservedDBInstances = "DescribeReservedDBInstances"
 
 // DescribeReservedDBInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeReservedDBInstances operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeReservedDBInstances for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeReservedDBInstances method directly
-// instead.
+// See DescribeReservedDBInstances for more information on using the DescribeReservedDBInstances
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeReservedDBInstancesRequest method.
 //    req, resp := client.DescribeReservedDBInstancesRequest(params)
@@ -5999,7 +7019,7 @@ const opDescribeReservedDBInstances = "DescribeReservedDBInstances"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstances
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstances
 func (c *RDS) DescribeReservedDBInstancesRequest(input *DescribeReservedDBInstancesInput) (req *request.Request, output *DescribeReservedDBInstancesOutput) {
 	op := &request.Operation{
 		Name:       opDescribeReservedDBInstances,
@@ -6038,7 +7058,7 @@ func (c *RDS) DescribeReservedDBInstancesRequest(input *DescribeReservedDBInstan
 //   * ErrCodeReservedDBInstanceNotFoundFault "ReservedDBInstanceNotFound"
 //   The specified reserved DB Instance not found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstances
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstances
 func (c *RDS) DescribeReservedDBInstances(input *DescribeReservedDBInstancesInput) (*DescribeReservedDBInstancesOutput, error) {
 	req, out := c.DescribeReservedDBInstancesRequest(input)
 	return out, req.Send()
@@ -6114,19 +7134,18 @@ const opDescribeReservedDBInstancesOfferings = "DescribeReservedDBInstancesOffer
 
 // DescribeReservedDBInstancesOfferingsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeReservedDBInstancesOfferings operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeReservedDBInstancesOfferings for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeReservedDBInstancesOfferings method directly
-// instead.
+// See DescribeReservedDBInstancesOfferings for more information on using the DescribeReservedDBInstancesOfferings
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeReservedDBInstancesOfferingsRequest method.
 //    req, resp := client.DescribeReservedDBInstancesOfferingsRequest(params)
@@ -6136,7 +7155,7 @@ const opDescribeReservedDBInstancesOfferings = "DescribeReservedDBInstancesOffer
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstancesOfferings
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstancesOfferings
 func (c *RDS) DescribeReservedDBInstancesOfferingsRequest(input *DescribeReservedDBInstancesOfferingsInput) (req *request.Request, output *DescribeReservedDBInstancesOfferingsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeReservedDBInstancesOfferings,
@@ -6174,7 +7193,7 @@ func (c *RDS) DescribeReservedDBInstancesOfferingsRequest(input *DescribeReserve
 //   * ErrCodeReservedDBInstancesOfferingNotFoundFault "ReservedDBInstancesOfferingNotFound"
 //   Specified offering does not exist.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstancesOfferings
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstancesOfferings
 func (c *RDS) DescribeReservedDBInstancesOfferings(input *DescribeReservedDBInstancesOfferingsInput) (*DescribeReservedDBInstancesOfferingsOutput, error) {
 	req, out := c.DescribeReservedDBInstancesOfferingsRequest(input)
 	return out, req.Send()
@@ -6250,19 +7269,18 @@ const opDescribeSourceRegions = "DescribeSourceRegions"
 
 // DescribeSourceRegionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSourceRegions operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DescribeSourceRegions for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DescribeSourceRegions method directly
-// instead.
+// See DescribeSourceRegions for more information on using the DescribeSourceRegions
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DescribeSourceRegionsRequest method.
 //    req, resp := client.DescribeSourceRegionsRequest(params)
@@ -6272,7 +7290,7 @@ const opDescribeSourceRegions = "DescribeSourceRegions"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeSourceRegions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeSourceRegions
 func (c *RDS) DescribeSourceRegionsRequest(input *DescribeSourceRegionsInput) (req *request.Request, output *DescribeSourceRegionsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeSourceRegions,
@@ -6291,7 +7309,7 @@ func (c *RDS) DescribeSourceRegionsRequest(input *DescribeSourceRegionsInput) (r
 
 // DescribeSourceRegions API operation for Amazon Relational Database Service.
 //
-// Returns a list of the source AWS regions where the current AWS region can
+// Returns a list of the source AWS Regions where the current AWS Region can
 // create a Read Replica or copy a DB snapshot from. This API action supports
 // pagination.
 //
@@ -6301,7 +7319,7 @@ func (c *RDS) DescribeSourceRegionsRequest(input *DescribeSourceRegionsInput) (r
 //
 // See the AWS API reference guide for Amazon Relational Database Service's
 // API operation DescribeSourceRegions for usage and error information.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeSourceRegions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeSourceRegions
 func (c *RDS) DescribeSourceRegions(input *DescribeSourceRegionsInput) (*DescribeSourceRegionsOutput, error) {
 	req, out := c.DescribeSourceRegionsRequest(input)
 	return out, req.Send()
@@ -6323,23 +7341,106 @@ func (c *RDS) DescribeSourceRegionsWithContext(ctx aws.Context, input *DescribeS
 	return out, req.Send()
 }
 
+const opDescribeValidDBInstanceModifications = "DescribeValidDBInstanceModifications"
+
+// DescribeValidDBInstanceModificationsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeValidDBInstanceModifications operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeValidDBInstanceModifications for more information on using the DescribeValidDBInstanceModifications
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeValidDBInstanceModificationsRequest method.
+//    req, resp := client.DescribeValidDBInstanceModificationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeValidDBInstanceModifications
+func (c *RDS) DescribeValidDBInstanceModificationsRequest(input *DescribeValidDBInstanceModificationsInput) (req *request.Request, output *DescribeValidDBInstanceModificationsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeValidDBInstanceModifications,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeValidDBInstanceModificationsInput{}
+	}
+
+	output = &DescribeValidDBInstanceModificationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeValidDBInstanceModifications API operation for Amazon Relational Database Service.
+//
+// You can call DescribeValidDBInstanceModifications to learn what modifications
+// you can make to your DB instance. You can use this information when you call
+// ModifyDBInstance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation DescribeValidDBInstanceModifications for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeValidDBInstanceModifications
+func (c *RDS) DescribeValidDBInstanceModifications(input *DescribeValidDBInstanceModificationsInput) (*DescribeValidDBInstanceModificationsOutput, error) {
+	req, out := c.DescribeValidDBInstanceModificationsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeValidDBInstanceModificationsWithContext is the same as DescribeValidDBInstanceModifications with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeValidDBInstanceModifications for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) DescribeValidDBInstanceModificationsWithContext(ctx aws.Context, input *DescribeValidDBInstanceModificationsInput, opts ...request.Option) (*DescribeValidDBInstanceModificationsOutput, error) {
+	req, out := c.DescribeValidDBInstanceModificationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDownloadDBLogFilePortion = "DownloadDBLogFilePortion"
 
 // DownloadDBLogFilePortionRequest generates a "aws/request.Request" representing the
 // client's request for the DownloadDBLogFilePortion operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See DownloadDBLogFilePortion for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the DownloadDBLogFilePortion method directly
-// instead.
+// See DownloadDBLogFilePortion for more information on using the DownloadDBLogFilePortion
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the DownloadDBLogFilePortionRequest method.
 //    req, resp := client.DownloadDBLogFilePortionRequest(params)
@@ -6349,7 +7450,7 @@ const opDownloadDBLogFilePortion = "DownloadDBLogFilePortion"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DownloadDBLogFilePortion
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DownloadDBLogFilePortion
 func (c *RDS) DownloadDBLogFilePortionRequest(input *DownloadDBLogFilePortionInput) (req *request.Request, output *DownloadDBLogFilePortionOutput) {
 	op := &request.Operation{
 		Name:       opDownloadDBLogFilePortion,
@@ -6385,12 +7486,12 @@ func (c *RDS) DownloadDBLogFilePortionRequest(input *DownloadDBLogFilePortionInp
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeDBLogFileNotFoundFault "DBLogFileNotFoundFault"
-//   LogFileName does not refer to an existing DB log file.
+//   LogFileName doesn't refer to an existing DB log file.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DownloadDBLogFilePortion
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DownloadDBLogFilePortion
 func (c *RDS) DownloadDBLogFilePortion(input *DownloadDBLogFilePortionInput) (*DownloadDBLogFilePortionOutput, error) {
 	req, out := c.DownloadDBLogFilePortionRequest(input)
 	return out, req.Send()
@@ -6466,19 +7567,18 @@ const opFailoverDBCluster = "FailoverDBCluster"
 
 // FailoverDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the FailoverDBCluster operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See FailoverDBCluster for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the FailoverDBCluster method directly
-// instead.
+// See FailoverDBCluster for more information on using the FailoverDBCluster
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the FailoverDBClusterRequest method.
 //    req, resp := client.FailoverDBClusterRequest(params)
@@ -6488,7 +7588,7 @@ const opFailoverDBCluster = "FailoverDBCluster"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverDBCluster
 func (c *RDS) FailoverDBClusterRequest(input *FailoverDBClusterInput) (req *request.Request, output *FailoverDBClusterOutput) {
 	op := &request.Operation{
 		Name:       opFailoverDBCluster,
@@ -6519,8 +7619,8 @@ func (c *RDS) FailoverDBClusterRequest(input *FailoverDBClusterInput) (req *requ
 // re-establish any existing connections that use those endpoint addresses when
 // the failover is complete.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6531,15 +7631,15 @@ func (c *RDS) FailoverDBClusterRequest(input *FailoverDBClusterInput) (req *requ
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverDBCluster
 func (c *RDS) FailoverDBCluster(input *FailoverDBClusterInput) (*FailoverDBClusterOutput, error) {
 	req, out := c.FailoverDBClusterRequest(input)
 	return out, req.Send()
@@ -6565,19 +7665,18 @@ const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForResource operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ListTagsForResource for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ListTagsForResource method directly
-// instead.
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ListTagsForResourceRequest method.
 //    req, resp := client.ListTagsForResourceRequest(params)
@@ -6587,7 +7686,7 @@ const opListTagsForResource = "ListTagsForResource"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ListTagsForResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ListTagsForResource
 func (c *RDS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
 	op := &request.Operation{
 		Name:       opListTagsForResource,
@@ -6609,7 +7708,8 @@ func (c *RDS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 // Lists all tags on an Amazon RDS resource.
 //
 // For an overview on tagging an Amazon RDS resource, see Tagging Amazon RDS
-// Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html).
+// Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html)
+// in the Amazon RDS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6620,15 +7720,15 @@ func (c *RDS) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ListTagsForResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ListTagsForResource
 func (c *RDS) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
 	return out, req.Send()
@@ -6650,23 +7750,127 @@ func (c *RDS) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsFor
 	return out, req.Send()
 }
 
+const opModifyCurrentDBClusterCapacity = "ModifyCurrentDBClusterCapacity"
+
+// ModifyCurrentDBClusterCapacityRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyCurrentDBClusterCapacity operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyCurrentDBClusterCapacity for more information on using the ModifyCurrentDBClusterCapacity
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifyCurrentDBClusterCapacityRequest method.
+//    req, resp := client.ModifyCurrentDBClusterCapacityRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyCurrentDBClusterCapacity
+func (c *RDS) ModifyCurrentDBClusterCapacityRequest(input *ModifyCurrentDBClusterCapacityInput) (req *request.Request, output *ModifyCurrentDBClusterCapacityOutput) {
+	op := &request.Operation{
+		Name:       opModifyCurrentDBClusterCapacity,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyCurrentDBClusterCapacityInput{}
+	}
+
+	output = &ModifyCurrentDBClusterCapacityOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyCurrentDBClusterCapacity API operation for Amazon Relational Database Service.
+//
+// Set the capacity of an Aurora Serverless DB cluster to a specific value.
+//
+// Aurora Serverless scales seamlessly based on the workload on the DB cluster.
+// In some cases, the capacity might not scale fast enough to meet a sudden
+// change in workload, such as a large number of new transactions. Call ModifyCurrentDBClusterCapacity
+// to set the capacity explicitly.
+//
+// After this call sets the DB cluster capacity, Aurora Serverless can automatically
+// scale the DB cluster based on the cooldown period for scaling up and the
+// cooldown period for scaling down.
+//
+// For more information about Aurora Serverless, see Using Amazon Aurora Serverless
+// (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html)
+// in the Amazon Aurora User Guide.
+//
+// If you call ModifyCurrentDBClusterCapacity with the default TimeoutAction,
+// connections that prevent Aurora Serverless from finding a scaling point might
+// be dropped. For more information about scaling points, see  Autoscaling for
+// Aurora Serverless (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.how-it-works.html#aurora-serverless.how-it-works.auto-scaling)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation ModifyCurrentDBClusterCapacity for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeInvalidDBClusterCapacityFault "InvalidDBClusterCapacityFault"
+//   Capacity isn't a valid Aurora Serverless DB cluster capacity. Valid capacity
+//   values are 2, 4, 8, 16, 32, 64, 128, and 256.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyCurrentDBClusterCapacity
+func (c *RDS) ModifyCurrentDBClusterCapacity(input *ModifyCurrentDBClusterCapacityInput) (*ModifyCurrentDBClusterCapacityOutput, error) {
+	req, out := c.ModifyCurrentDBClusterCapacityRequest(input)
+	return out, req.Send()
+}
+
+// ModifyCurrentDBClusterCapacityWithContext is the same as ModifyCurrentDBClusterCapacity with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyCurrentDBClusterCapacity for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) ModifyCurrentDBClusterCapacityWithContext(ctx aws.Context, input *ModifyCurrentDBClusterCapacityInput, opts ...request.Option) (*ModifyCurrentDBClusterCapacityOutput, error) {
+	req, out := c.ModifyCurrentDBClusterCapacityRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opModifyDBCluster = "ModifyDBCluster"
 
 // ModifyDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBCluster operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBCluster for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBCluster method directly
-// instead.
+// See ModifyDBCluster for more information on using the ModifyDBCluster
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBClusterRequest method.
 //    req, resp := client.ModifyDBClusterRequest(params)
@@ -6676,7 +7880,7 @@ const opModifyDBCluster = "ModifyDBCluster"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBCluster
 func (c *RDS) ModifyDBClusterRequest(input *ModifyDBClusterInput) (req *request.Request, output *ModifyDBClusterOutput) {
 	op := &request.Operation{
 		Name:       opModifyDBCluster,
@@ -6697,9 +7901,9 @@ func (c *RDS) ModifyDBClusterRequest(input *ModifyDBClusterInput) (req *request.
 //
 // Modify a setting for an Amazon Aurora DB cluster. You can change one or more
 // database configuration parameters by specifying these parameters and the
-// new values in the request. For more information on Amazon Aurora, see Aurora
-// on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// new values in the request. For more information on Amazon Aurora, see  What
+// Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6710,43 +7914,43 @@ func (c *RDS) ModifyDBClusterRequest(input *ModifyDBClusterInput) (req *request.
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeInvalidDBSubnetGroupStateFault "InvalidDBSubnetGroupStateFault"
-//   The DB subnet group cannot be deleted because it is in use.
+//   The DB subnet group cannot be deleted because it's in use.
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
 //   * ErrCodeDBClusterParameterGroupNotFoundFault "DBClusterParameterGroupNotFound"
-//   DBClusterParameterGroupName does not refer to an existing DB Cluster parameter
+//   DBClusterParameterGroupName doesn't refer to an existing DB cluster parameter
 //   group.
 //
 //   * ErrCodeInvalidDBSecurityGroupStateFault "InvalidDBSecurityGroupState"
-//   The state of the DB security group does not allow deletion.
+//   The state of the DB security group doesn't allow deletion.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBClusterAlreadyExistsFault "DBClusterAlreadyExistsFault"
-//   User already has a DB cluster with the given identifier.
+//   The user already has a DB cluster with the given identifier.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBCluster
 func (c *RDS) ModifyDBCluster(input *ModifyDBClusterInput) (*ModifyDBClusterOutput, error) {
 	req, out := c.ModifyDBClusterRequest(input)
 	return out, req.Send()
@@ -6768,23 +7972,114 @@ func (c *RDS) ModifyDBClusterWithContext(ctx aws.Context, input *ModifyDBCluster
 	return out, req.Send()
 }
 
+const opModifyDBClusterEndpoint = "ModifyDBClusterEndpoint"
+
+// ModifyDBClusterEndpointRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyDBClusterEndpoint operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyDBClusterEndpoint for more information on using the ModifyDBClusterEndpoint
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifyDBClusterEndpointRequest method.
+//    req, resp := client.ModifyDBClusterEndpointRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterEndpoint
+func (c *RDS) ModifyDBClusterEndpointRequest(input *ModifyDBClusterEndpointInput) (req *request.Request, output *ModifyDBClusterEndpointOutput) {
+	op := &request.Operation{
+		Name:       opModifyDBClusterEndpoint,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyDBClusterEndpointInput{}
+	}
+
+	output = &ModifyDBClusterEndpointOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyDBClusterEndpoint API operation for Amazon Relational Database Service.
+//
+// Modifies the properties of an endpoint in an Amazon Aurora DB cluster.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation ModifyDBClusterEndpoint for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeInvalidDBClusterEndpointStateFault "InvalidDBClusterEndpointStateFault"
+//   The requested operation can't be performed on the endpoint while the endpoint
+//   is in this state.
+//
+//   * ErrCodeDBClusterEndpointNotFoundFault "DBClusterEndpointNotFoundFault"
+//   The specified custom endpoint doesn't exist.
+//
+//   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterEndpoint
+func (c *RDS) ModifyDBClusterEndpoint(input *ModifyDBClusterEndpointInput) (*ModifyDBClusterEndpointOutput, error) {
+	req, out := c.ModifyDBClusterEndpointRequest(input)
+	return out, req.Send()
+}
+
+// ModifyDBClusterEndpointWithContext is the same as ModifyDBClusterEndpoint with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyDBClusterEndpoint for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) ModifyDBClusterEndpointWithContext(ctx aws.Context, input *ModifyDBClusterEndpointInput, opts ...request.Option) (*ModifyDBClusterEndpointOutput, error) {
+	req, out := c.ModifyDBClusterEndpointRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opModifyDBClusterParameterGroup = "ModifyDBClusterParameterGroup"
 
 // ModifyDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBClusterParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBClusterParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBClusterParameterGroup method directly
-// instead.
+// See ModifyDBClusterParameterGroup for more information on using the ModifyDBClusterParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBClusterParameterGroupRequest method.
 //    req, resp := client.ModifyDBClusterParameterGroupRequest(params)
@@ -6794,7 +8089,7 @@ const opModifyDBClusterParameterGroup = "ModifyDBClusterParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterParameterGroup
 func (c *RDS) ModifyDBClusterParameterGroupRequest(input *ModifyDBClusterParameterGroupInput) (req *request.Request, output *DBClusterParameterGroupNameMessage) {
 	op := &request.Operation{
 		Name:       opModifyDBClusterParameterGroup,
@@ -6817,8 +8112,8 @@ func (c *RDS) ModifyDBClusterParameterGroupRequest(input *ModifyDBClusterParamet
 // one parameter, submit a list of the following: ParameterName, ParameterValue,
 // and ApplyMethod. A maximum of 20 parameters can be modified in a single request.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Changes to dynamic parameters are applied immediately. Changes to static
 // parameters require a reboot without failover to the DB cluster associated
@@ -6844,14 +8139,14 @@ func (c *RDS) ModifyDBClusterParameterGroupRequest(input *ModifyDBClusterParamet
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
 //   * ErrCodeInvalidDBParameterGroupStateFault "InvalidDBParameterGroupState"
 //   The DB parameter group is in use or is in an invalid state. If you are attempting
-//   to delete the parameter group, you cannot delete it when the parameter group
+//   to delete the parameter group, you can't delete it when the parameter group
 //   is in this state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterParameterGroup
 func (c *RDS) ModifyDBClusterParameterGroup(input *ModifyDBClusterParameterGroupInput) (*DBClusterParameterGroupNameMessage, error) {
 	req, out := c.ModifyDBClusterParameterGroupRequest(input)
 	return out, req.Send()
@@ -6877,19 +8172,18 @@ const opModifyDBClusterSnapshotAttribute = "ModifyDBClusterSnapshotAttribute"
 
 // ModifyDBClusterSnapshotAttributeRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBClusterSnapshotAttribute operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBClusterSnapshotAttribute for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBClusterSnapshotAttribute method directly
-// instead.
+// See ModifyDBClusterSnapshotAttribute for more information on using the ModifyDBClusterSnapshotAttribute
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBClusterSnapshotAttributeRequest method.
 //    req, resp := client.ModifyDBClusterSnapshotAttributeRequest(params)
@@ -6899,7 +8193,7 @@ const opModifyDBClusterSnapshotAttribute = "ModifyDBClusterSnapshotAttribute"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterSnapshotAttribute
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterSnapshotAttribute
 func (c *RDS) ModifyDBClusterSnapshotAttributeRequest(input *ModifyDBClusterSnapshotAttributeInput) (req *request.Request, output *ModifyDBClusterSnapshotAttributeOutput) {
 	op := &request.Operation{
 		Name:       opModifyDBClusterSnapshotAttribute,
@@ -6945,16 +8239,16 @@ func (c *RDS) ModifyDBClusterSnapshotAttributeRequest(input *ModifyDBClusterSnap
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterSnapshotNotFoundFault "DBClusterSnapshotNotFoundFault"
-//   DBClusterSnapshotIdentifier does not refer to an existing DB cluster snapshot.
+//   DBClusterSnapshotIdentifier doesn't refer to an existing DB cluster snapshot.
 //
 //   * ErrCodeInvalidDBClusterSnapshotStateFault "InvalidDBClusterSnapshotStateFault"
-//   The supplied value is not a valid DB cluster snapshot state.
+//   The supplied value isn't a valid DB cluster snapshot state.
 //
 //   * ErrCodeSharedSnapshotQuotaExceededFault "SharedSnapshotQuotaExceeded"
 //   You have exceeded the maximum number of accounts that you can share a manual
 //   DB snapshot with.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterSnapshotAttribute
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterSnapshotAttribute
 func (c *RDS) ModifyDBClusterSnapshotAttribute(input *ModifyDBClusterSnapshotAttributeInput) (*ModifyDBClusterSnapshotAttributeOutput, error) {
 	req, out := c.ModifyDBClusterSnapshotAttributeRequest(input)
 	return out, req.Send()
@@ -6980,19 +8274,18 @@ const opModifyDBInstance = "ModifyDBInstance"
 
 // ModifyDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBInstance method directly
-// instead.
+// See ModifyDBInstance for more information on using the ModifyDBInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBInstanceRequest method.
 //    req, resp := client.ModifyDBInstanceRequest(params)
@@ -7002,7 +8295,7 @@ const opModifyDBInstance = "ModifyDBInstance"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBInstance
 func (c *RDS) ModifyDBInstanceRequest(input *ModifyDBInstanceInput) (req *request.Request, output *ModifyDBInstanceOutput) {
 	op := &request.Operation{
 		Name:       opModifyDBInstance,
@@ -7023,7 +8316,8 @@ func (c *RDS) ModifyDBInstanceRequest(input *ModifyDBInstanceInput) (req *reques
 //
 // Modifies settings for a DB instance. You can change one or more database
 // configuration parameters by specifying these parameters and the new values
-// in the request.
+// in the request. To learn what modifications you can make to your DB instance,
+// call DescribeValidDBInstanceModifications before you call ModifyDBInstance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7034,34 +8328,34 @@ func (c *RDS) ModifyDBInstanceRequest(input *ModifyDBInstanceInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeInvalidDBSecurityGroupStateFault "InvalidDBSecurityGroupState"
-//   The state of the DB security group does not allow deletion.
+//   The state of the DB security group doesn't allow deletion.
 //
 //   * ErrCodeDBInstanceAlreadyExistsFault "DBInstanceAlreadyExists"
-//   User already has a DB instance with the given identifier.
+//   The user already has a DB instance with the given identifier.
 //
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
 //   * ErrCodeInsufficientDBInstanceCapacityFault "InsufficientDBInstanceCapacity"
-//   Specified DB instance class is not available in the specified Availability
+//   The specified DB instance class isn't available in the specified Availability
 //   Zone.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeProvisionedIopsNotAvailableInAZFault "ProvisionedIopsNotAvailableInAZFault"
 //   Provisioned IOPS not available in the specified Availability Zone.
@@ -7070,25 +8364,28 @@ func (c *RDS) ModifyDBInstanceRequest(input *ModifyDBInstanceInput) (req *reques
 //   The specified option group could not be found.
 //
 //   * ErrCodeDBUpgradeDependencyFailureFault "DBUpgradeDependencyFailure"
-//   The DB upgrade failed because a resource the DB depends on could not be modified.
+//   The DB upgrade failed because a resource the DB depends on can't be modified.
 //
 //   * ErrCodeStorageTypeNotSupportedFault "StorageTypeNotSupported"
-//   StorageType specified cannot be associated with the DB Instance.
+//   Storage of the StorageType specified can't be associated with the DB instance.
 //
 //   * ErrCodeAuthorizationNotFoundFault "AuthorizationNotFound"
-//   Specified CIDRIP or EC2 security group is not authorized for the specified
-//   DB security group.
+//   The specified CIDRIP or Amazon EC2 security group isn't authorized for the
+//   specified DB security group.
 //
-//   RDS may not also be authorized via IAM to perform necessary actions on your
-//   behalf.
+//   RDS also may not be authorized by using IAM to perform necessary actions
+//   on your behalf.
 //
 //   * ErrCodeCertificateNotFoundFault "CertificateNotFound"
-//   CertificateIdentifier does not refer to an existing certificate.
+//   CertificateIdentifier doesn't refer to an existing certificate.
 //
 //   * ErrCodeDomainNotFoundFault "DomainNotFoundFault"
-//   Domain does not refer to an existing Active Directory Domain.
+//   Domain doesn't refer to an existing Active Directory domain.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBInstance
+//   * ErrCodeBackupPolicyNotFoundFault "BackupPolicyNotFoundFault"
+//   The backup policy was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBInstance
 func (c *RDS) ModifyDBInstance(input *ModifyDBInstanceInput) (*ModifyDBInstanceOutput, error) {
 	req, out := c.ModifyDBInstanceRequest(input)
 	return out, req.Send()
@@ -7114,19 +8411,18 @@ const opModifyDBParameterGroup = "ModifyDBParameterGroup"
 
 // ModifyDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBParameterGroup method directly
-// instead.
+// See ModifyDBParameterGroup for more information on using the ModifyDBParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBParameterGroupRequest method.
 //    req, resp := client.ModifyDBParameterGroupRequest(params)
@@ -7136,7 +8432,7 @@ const opModifyDBParameterGroup = "ModifyDBParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBParameterGroup
 func (c *RDS) ModifyDBParameterGroupRequest(input *ModifyDBParameterGroupInput) (req *request.Request, output *DBParameterGroupNameMessage) {
 	op := &request.Operation{
 		Name:       opModifyDBParameterGroup,
@@ -7183,14 +8479,14 @@ func (c *RDS) ModifyDBParameterGroupRequest(input *ModifyDBParameterGroupInput) 
 //
 // Returned Error Codes:
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
 //   * ErrCodeInvalidDBParameterGroupStateFault "InvalidDBParameterGroupState"
 //   The DB parameter group is in use or is in an invalid state. If you are attempting
-//   to delete the parameter group, you cannot delete it when the parameter group
+//   to delete the parameter group, you can't delete it when the parameter group
 //   is in this state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBParameterGroup
 func (c *RDS) ModifyDBParameterGroup(input *ModifyDBParameterGroupInput) (*DBParameterGroupNameMessage, error) {
 	req, out := c.ModifyDBParameterGroupRequest(input)
 	return out, req.Send()
@@ -7216,19 +8512,18 @@ const opModifyDBSnapshot = "ModifyDBSnapshot"
 
 // ModifyDBSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBSnapshot method directly
-// instead.
+// See ModifyDBSnapshot for more information on using the ModifyDBSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBSnapshotRequest method.
 //    req, resp := client.ModifyDBSnapshotRequest(params)
@@ -7238,7 +8533,7 @@ const opModifyDBSnapshot = "ModifyDBSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshot
 func (c *RDS) ModifyDBSnapshotRequest(input *ModifyDBSnapshotInput) (req *request.Request, output *ModifyDBSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opModifyDBSnapshot,
@@ -7258,11 +8553,9 @@ func (c *RDS) ModifyDBSnapshotRequest(input *ModifyDBSnapshotInput) (req *reques
 // ModifyDBSnapshot API operation for Amazon Relational Database Service.
 //
 // Updates a manual DB snapshot, which can be encrypted or not encrypted, with
-// a new engine version. You can update the engine version to either a new major
-// or minor engine version.
+// a new engine version.
 //
-// Amazon RDS supports upgrading a MySQL DB snapshot from MySQL 5.1 to MySQL
-// 5.5.
+// Amazon RDS supports upgrading DB snapshots for MySQL and Oracle.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7273,9 +8566,9 @@ func (c *RDS) ModifyDBSnapshotRequest(input *ModifyDBSnapshotInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshot
 func (c *RDS) ModifyDBSnapshot(input *ModifyDBSnapshotInput) (*ModifyDBSnapshotOutput, error) {
 	req, out := c.ModifyDBSnapshotRequest(input)
 	return out, req.Send()
@@ -7301,19 +8594,18 @@ const opModifyDBSnapshotAttribute = "ModifyDBSnapshotAttribute"
 
 // ModifyDBSnapshotAttributeRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBSnapshotAttribute operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBSnapshotAttribute for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBSnapshotAttribute method directly
-// instead.
+// See ModifyDBSnapshotAttribute for more information on using the ModifyDBSnapshotAttribute
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBSnapshotAttributeRequest method.
 //    req, resp := client.ModifyDBSnapshotAttributeRequest(params)
@@ -7323,7 +8615,7 @@ const opModifyDBSnapshotAttribute = "ModifyDBSnapshotAttribute"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotAttribute
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotAttribute
 func (c *RDS) ModifyDBSnapshotAttributeRequest(input *ModifyDBSnapshotAttributeInput) (req *request.Request, output *ModifyDBSnapshotAttributeOutput) {
 	op := &request.Operation{
 		Name:       opModifyDBSnapshotAttribute,
@@ -7369,16 +8661,16 @@ func (c *RDS) ModifyDBSnapshotAttributeRequest(input *ModifyDBSnapshotAttributeI
 //
 // Returned Error Codes:
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
 //   * ErrCodeInvalidDBSnapshotStateFault "InvalidDBSnapshotState"
-//   The state of the DB snapshot does not allow deletion.
+//   The state of the DB snapshot doesn't allow deletion.
 //
 //   * ErrCodeSharedSnapshotQuotaExceededFault "SharedSnapshotQuotaExceeded"
 //   You have exceeded the maximum number of accounts that you can share a manual
 //   DB snapshot with.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotAttribute
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotAttribute
 func (c *RDS) ModifyDBSnapshotAttribute(input *ModifyDBSnapshotAttributeInput) (*ModifyDBSnapshotAttributeOutput, error) {
 	req, out := c.ModifyDBSnapshotAttributeRequest(input)
 	return out, req.Send()
@@ -7404,19 +8696,18 @@ const opModifyDBSubnetGroup = "ModifyDBSubnetGroup"
 
 // ModifyDBSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBSubnetGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyDBSubnetGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyDBSubnetGroup method directly
-// instead.
+// See ModifyDBSubnetGroup for more information on using the ModifyDBSubnetGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyDBSubnetGroupRequest method.
 //    req, resp := client.ModifyDBSubnetGroupRequest(params)
@@ -7426,7 +8717,7 @@ const opModifyDBSubnetGroup = "ModifyDBSubnetGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSubnetGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSubnetGroup
 func (c *RDS) ModifyDBSubnetGroupRequest(input *ModifyDBSubnetGroupInput) (req *request.Request, output *ModifyDBSubnetGroupOutput) {
 	op := &request.Operation{
 		Name:       opModifyDBSubnetGroup,
@@ -7446,7 +8737,7 @@ func (c *RDS) ModifyDBSubnetGroupRequest(input *ModifyDBSubnetGroupInput) (req *
 // ModifyDBSubnetGroup API operation for Amazon Relational Database Service.
 //
 // Modifies an existing DB subnet group. DB subnet groups must contain at least
-// one subnet in at least two AZs in the region.
+// one subnet in at least two AZs in the AWS Region.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7457,11 +8748,11 @@ func (c *RDS) ModifyDBSubnetGroupRequest(input *ModifyDBSubnetGroupInput) (req *
 //
 // Returned Error Codes:
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeDBSubnetQuotaExceededFault "DBSubnetQuotaExceededFault"
-//   Request would result in user exceeding the allowed number of subnets in a
-//   DB subnet groups.
+//   The request would result in the user exceeding the allowed number of subnets
+//   in a DB subnet groups.
 //
 //   * ErrCodeSubnetAlreadyInUse "SubnetAlreadyInUse"
 //   The DB subnet is already in use in the Availability Zone.
@@ -7474,7 +8765,7 @@ func (c *RDS) ModifyDBSubnetGroupRequest(input *ModifyDBSubnetGroupInput) (req *
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSubnetGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSubnetGroup
 func (c *RDS) ModifyDBSubnetGroup(input *ModifyDBSubnetGroupInput) (*ModifyDBSubnetGroupOutput, error) {
 	req, out := c.ModifyDBSubnetGroupRequest(input)
 	return out, req.Send()
@@ -7500,19 +8791,18 @@ const opModifyEventSubscription = "ModifyEventSubscription"
 
 // ModifyEventSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyEventSubscription operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyEventSubscription for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyEventSubscription method directly
-// instead.
+// See ModifyEventSubscription for more information on using the ModifyEventSubscription
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyEventSubscriptionRequest method.
 //    req, resp := client.ModifyEventSubscriptionRequest(params)
@@ -7522,7 +8812,7 @@ const opModifyEventSubscription = "ModifyEventSubscription"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyEventSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyEventSubscription
 func (c *RDS) ModifyEventSubscriptionRequest(input *ModifyEventSubscriptionInput) (req *request.Request, output *ModifyEventSubscriptionOutput) {
 	op := &request.Operation{
 		Name:       opModifyEventSubscription,
@@ -7541,7 +8831,7 @@ func (c *RDS) ModifyEventSubscriptionRequest(input *ModifyEventSubscriptionInput
 
 // ModifyEventSubscription API operation for Amazon Relational Database Service.
 //
-// Modifies an existing RDS event notification subscription. Note that you cannot
+// Modifies an existing RDS event notification subscription. Note that you can't
 // modify the source identifiers using this call; to change source identifiers
 // for a subscription, use the AddSourceIdentifierToSubscription and RemoveSourceIdentifierFromSubscription
 // calls.
@@ -7577,7 +8867,7 @@ func (c *RDS) ModifyEventSubscriptionRequest(input *ModifyEventSubscriptionInput
 //   * ErrCodeSubscriptionCategoryNotFoundFault "SubscriptionCategoryNotFound"
 //   The supplied category does not exist.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyEventSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyEventSubscription
 func (c *RDS) ModifyEventSubscription(input *ModifyEventSubscriptionInput) (*ModifyEventSubscriptionOutput, error) {
 	req, out := c.ModifyEventSubscriptionRequest(input)
 	return out, req.Send()
@@ -7599,23 +8889,106 @@ func (c *RDS) ModifyEventSubscriptionWithContext(ctx aws.Context, input *ModifyE
 	return out, req.Send()
 }
 
+const opModifyGlobalCluster = "ModifyGlobalCluster"
+
+// ModifyGlobalClusterRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyGlobalCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyGlobalCluster for more information on using the ModifyGlobalCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifyGlobalClusterRequest method.
+//    req, resp := client.ModifyGlobalClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyGlobalCluster
+func (c *RDS) ModifyGlobalClusterRequest(input *ModifyGlobalClusterInput) (req *request.Request, output *ModifyGlobalClusterOutput) {
+	op := &request.Operation{
+		Name:       opModifyGlobalCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyGlobalClusterInput{}
+	}
+
+	output = &ModifyGlobalClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyGlobalCluster API operation for Amazon Relational Database Service.
+//
+// Modify a setting for an Amazon Aurora global cluster. You can change one
+// or more database configuration parameters by specifying these parameters
+// and the new values in the request. For more information on Amazon Aurora,
+// see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation ModifyGlobalCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//
+//   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyGlobalCluster
+func (c *RDS) ModifyGlobalCluster(input *ModifyGlobalClusterInput) (*ModifyGlobalClusterOutput, error) {
+	req, out := c.ModifyGlobalClusterRequest(input)
+	return out, req.Send()
+}
+
+// ModifyGlobalClusterWithContext is the same as ModifyGlobalCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyGlobalCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) ModifyGlobalClusterWithContext(ctx aws.Context, input *ModifyGlobalClusterInput, opts ...request.Option) (*ModifyGlobalClusterOutput, error) {
+	req, out := c.ModifyGlobalClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opModifyOptionGroup = "ModifyOptionGroup"
 
 // ModifyOptionGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyOptionGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ModifyOptionGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ModifyOptionGroup method directly
-// instead.
+// See ModifyOptionGroup for more information on using the ModifyOptionGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ModifyOptionGroupRequest method.
 //    req, resp := client.ModifyOptionGroupRequest(params)
@@ -7625,7 +8998,7 @@ const opModifyOptionGroup = "ModifyOptionGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyOptionGroup
 func (c *RDS) ModifyOptionGroupRequest(input *ModifyOptionGroupInput) (req *request.Request, output *ModifyOptionGroupOutput) {
 	op := &request.Operation{
 		Name:       opModifyOptionGroup,
@@ -7655,12 +9028,12 @@ func (c *RDS) ModifyOptionGroupRequest(input *ModifyOptionGroupInput) (req *requ
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidOptionGroupStateFault "InvalidOptionGroupStateFault"
-//   The option group is not in the available state.
+//   The option group isn't in the available state.
 //
 //   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
 //   The specified option group could not be found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyOptionGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyOptionGroup
 func (c *RDS) ModifyOptionGroup(input *ModifyOptionGroupInput) (*ModifyOptionGroupOutput, error) {
 	req, out := c.ModifyOptionGroupRequest(input)
 	return out, req.Send()
@@ -7686,19 +9059,18 @@ const opPromoteReadReplica = "PromoteReadReplica"
 
 // PromoteReadReplicaRequest generates a "aws/request.Request" representing the
 // client's request for the PromoteReadReplica operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See PromoteReadReplica for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the PromoteReadReplica method directly
-// instead.
+// See PromoteReadReplica for more information on using the PromoteReadReplica
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the PromoteReadReplicaRequest method.
 //    req, resp := client.PromoteReadReplicaRequest(params)
@@ -7708,7 +9080,7 @@ const opPromoteReadReplica = "PromoteReadReplica"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplica
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplica
 func (c *RDS) PromoteReadReplicaRequest(input *PromoteReadReplicaInput) (req *request.Request, output *PromoteReadReplicaOutput) {
 	op := &request.Operation{
 		Name:       opPromoteReadReplica,
@@ -7729,10 +9101,15 @@ func (c *RDS) PromoteReadReplicaRequest(input *PromoteReadReplicaInput) (req *re
 //
 // Promotes a Read Replica DB instance to a standalone DB instance.
 //
-// We recommend that you enable automated backups on your Read Replica before
-// promoting the Read Replica. This ensures that no backup is taken during the
-// promotion process. Once the instance is promoted to a primary instance, backups
-// are taken based on your backup settings.
+// Backup duration is a function of the amount of changes to the database since
+// the previous backup. If you plan to promote a Read Replica to a standalone
+// instance, we recommend that you enable backups and complete at least one
+// backup prior to promotion. In addition, a Read Replica cannot be promoted
+// to a standalone instance when it is in the backing-up status. If you have
+// enabled backups on your Read Replica, configure the automated backup window
+// so that daily backups do not interfere with Read Replica promotion.
+//
+// This command doesn't apply to Aurora MySQL and Aurora PostgreSQL.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -7743,12 +9120,12 @@ func (c *RDS) PromoteReadReplicaRequest(input *PromoteReadReplicaInput) (req *re
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplica
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplica
 func (c *RDS) PromoteReadReplica(input *PromoteReadReplicaInput) (*PromoteReadReplicaOutput, error) {
 	req, out := c.PromoteReadReplicaRequest(input)
 	return out, req.Send()
@@ -7774,19 +9151,18 @@ const opPromoteReadReplicaDBCluster = "PromoteReadReplicaDBCluster"
 
 // PromoteReadReplicaDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the PromoteReadReplicaDBCluster operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See PromoteReadReplicaDBCluster for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the PromoteReadReplicaDBCluster method directly
-// instead.
+// See PromoteReadReplicaDBCluster for more information on using the PromoteReadReplicaDBCluster
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the PromoteReadReplicaDBClusterRequest method.
 //    req, resp := client.PromoteReadReplicaDBClusterRequest(params)
@@ -7796,7 +9172,7 @@ const opPromoteReadReplicaDBCluster = "PromoteReadReplicaDBCluster"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaDBCluster
 func (c *RDS) PromoteReadReplicaDBClusterRequest(input *PromoteReadReplicaDBClusterInput) (req *request.Request, output *PromoteReadReplicaDBClusterOutput) {
 	op := &request.Operation{
 		Name:       opPromoteReadReplicaDBCluster,
@@ -7826,12 +9202,12 @@ func (c *RDS) PromoteReadReplicaDBClusterRequest(input *PromoteReadReplicaDBClus
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaDBCluster
 func (c *RDS) PromoteReadReplicaDBCluster(input *PromoteReadReplicaDBClusterInput) (*PromoteReadReplicaDBClusterOutput, error) {
 	req, out := c.PromoteReadReplicaDBClusterRequest(input)
 	return out, req.Send()
@@ -7857,19 +9233,18 @@ const opPurchaseReservedDBInstancesOffering = "PurchaseReservedDBInstancesOfferi
 
 // PurchaseReservedDBInstancesOfferingRequest generates a "aws/request.Request" representing the
 // client's request for the PurchaseReservedDBInstancesOffering operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See PurchaseReservedDBInstancesOffering for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the PurchaseReservedDBInstancesOffering method directly
-// instead.
+// See PurchaseReservedDBInstancesOffering for more information on using the PurchaseReservedDBInstancesOffering
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the PurchaseReservedDBInstancesOfferingRequest method.
 //    req, resp := client.PurchaseReservedDBInstancesOfferingRequest(params)
@@ -7879,7 +9254,7 @@ const opPurchaseReservedDBInstancesOffering = "PurchaseReservedDBInstancesOfferi
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PurchaseReservedDBInstancesOffering
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PurchaseReservedDBInstancesOffering
 func (c *RDS) PurchaseReservedDBInstancesOfferingRequest(input *PurchaseReservedDBInstancesOfferingInput) (req *request.Request, output *PurchaseReservedDBInstancesOfferingOutput) {
 	op := &request.Operation{
 		Name:       opPurchaseReservedDBInstancesOffering,
@@ -7917,7 +9292,7 @@ func (c *RDS) PurchaseReservedDBInstancesOfferingRequest(input *PurchaseReserved
 //   * ErrCodeReservedDBInstanceQuotaExceededFault "ReservedDBInstanceQuotaExceeded"
 //   Request would exceed the user's DB Instance quota.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PurchaseReservedDBInstancesOffering
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PurchaseReservedDBInstancesOffering
 func (c *RDS) PurchaseReservedDBInstancesOffering(input *PurchaseReservedDBInstancesOfferingInput) (*PurchaseReservedDBInstancesOfferingOutput, error) {
 	req, out := c.PurchaseReservedDBInstancesOfferingRequest(input)
 	return out, req.Send()
@@ -7943,19 +9318,18 @@ const opRebootDBInstance = "RebootDBInstance"
 
 // RebootDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the RebootDBInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RebootDBInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RebootDBInstance method directly
-// instead.
+// See RebootDBInstance for more information on using the RebootDBInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RebootDBInstanceRequest method.
 //    req, resp := client.RebootDBInstanceRequest(params)
@@ -7965,7 +9339,7 @@ const opRebootDBInstance = "RebootDBInstance"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RebootDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RebootDBInstance
 func (c *RDS) RebootDBInstanceRequest(input *RebootDBInstanceInput) (req *request.Request, output *RebootDBInstanceOutput) {
 	op := &request.Operation{
 		Name:       opRebootDBInstance,
@@ -7984,23 +9358,17 @@ func (c *RDS) RebootDBInstanceRequest(input *RebootDBInstanceInput) (req *reques
 
 // RebootDBInstance API operation for Amazon Relational Database Service.
 //
-// Rebooting a DB instance restarts the database engine service. A reboot also
-// applies to the DB instance any modifications to the associated DB parameter
-// group that were pending. Rebooting a DB instance results in a momentary outage
-// of the instance, during which the DB instance status is set to rebooting.
-// If the RDS instance is configured for MultiAZ, it is possible that the reboot
-// will be conducted through a failover. An Amazon RDS event is created when
-// the reboot is completed.
+// You might need to reboot your DB instance, usually for maintenance reasons.
+// For example, if you make certain modifications, or if you change the DB parameter
+// group associated with the DB instance, you must reboot the instance for the
+// changes to take effect.
 //
-// If your DB instance is deployed in multiple Availability Zones, you can force
-// a failover from one AZ to the other during the reboot. You might force a
-// failover to test the availability of your DB instance deployment or to restore
-// operations to the original AZ after a failover occurs.
+// Rebooting a DB instance restarts the database engine service. Rebooting a
+// DB instance results in a momentary outage, during which the DB instance status
+// is set to rebooting.
 //
-// The time required to reboot is a function of the specific database engine's
-// crash recovery process. To improve the reboot time, we recommend that you
-// reduce database activities as much as possible during the reboot process
-// to reduce rollback activity for in-transit transactions.
+// For more information about rebooting, see Rebooting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_RebootInstance.html)
+// in the Amazon RDS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8011,12 +9379,12 @@ func (c *RDS) RebootDBInstanceRequest(input *RebootDBInstanceInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RebootDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RebootDBInstance
 func (c *RDS) RebootDBInstance(input *RebootDBInstanceInput) (*RebootDBInstanceOutput, error) {
 	req, out := c.RebootDBInstanceRequest(input)
 	return out, req.Send()
@@ -8038,23 +9406,108 @@ func (c *RDS) RebootDBInstanceWithContext(ctx aws.Context, input *RebootDBInstan
 	return out, req.Send()
 }
 
+const opRemoveFromGlobalCluster = "RemoveFromGlobalCluster"
+
+// RemoveFromGlobalClusterRequest generates a "aws/request.Request" representing the
+// client's request for the RemoveFromGlobalCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RemoveFromGlobalCluster for more information on using the RemoveFromGlobalCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RemoveFromGlobalClusterRequest method.
+//    req, resp := client.RemoveFromGlobalClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveFromGlobalCluster
+func (c *RDS) RemoveFromGlobalClusterRequest(input *RemoveFromGlobalClusterInput) (req *request.Request, output *RemoveFromGlobalClusterOutput) {
+	op := &request.Operation{
+		Name:       opRemoveFromGlobalCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RemoveFromGlobalClusterInput{}
+	}
+
+	output = &RemoveFromGlobalClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RemoveFromGlobalCluster API operation for Amazon Relational Database Service.
+//
+// Detaches an Aurora secondary cluster from an Aurora global database cluster.
+// The cluster becomes a standalone cluster with read-write capability instead
+// of being read-only and receiving data from a primary cluster in a different
+// region.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation RemoveFromGlobalCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeGlobalClusterNotFoundFault "GlobalClusterNotFoundFault"
+//
+//   * ErrCodeInvalidGlobalClusterStateFault "InvalidGlobalClusterStateFault"
+//
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveFromGlobalCluster
+func (c *RDS) RemoveFromGlobalCluster(input *RemoveFromGlobalClusterInput) (*RemoveFromGlobalClusterOutput, error) {
+	req, out := c.RemoveFromGlobalClusterRequest(input)
+	return out, req.Send()
+}
+
+// RemoveFromGlobalClusterWithContext is the same as RemoveFromGlobalCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RemoveFromGlobalCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) RemoveFromGlobalClusterWithContext(ctx aws.Context, input *RemoveFromGlobalClusterInput, opts ...request.Option) (*RemoveFromGlobalClusterOutput, error) {
+	req, out := c.RemoveFromGlobalClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRemoveRoleFromDBCluster = "RemoveRoleFromDBCluster"
 
 // RemoveRoleFromDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveRoleFromDBCluster operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RemoveRoleFromDBCluster for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RemoveRoleFromDBCluster method directly
-// instead.
+// See RemoveRoleFromDBCluster for more information on using the RemoveRoleFromDBCluster
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RemoveRoleFromDBClusterRequest method.
 //    req, resp := client.RemoveRoleFromDBClusterRequest(params)
@@ -8064,7 +9517,7 @@ const opRemoveRoleFromDBCluster = "RemoveRoleFromDBCluster"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBCluster
 func (c *RDS) RemoveRoleFromDBClusterRequest(input *RemoveRoleFromDBClusterInput) (req *request.Request, output *RemoveRoleFromDBClusterOutput) {
 	op := &request.Operation{
 		Name:       opRemoveRoleFromDBCluster,
@@ -8078,16 +9531,16 @@ func (c *RDS) RemoveRoleFromDBClusterRequest(input *RemoveRoleFromDBClusterInput
 
 	output = &RemoveRoleFromDBClusterOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // RemoveRoleFromDBCluster API operation for Amazon Relational Database Service.
 //
-// Disassociates an Identity and Access Management (IAM) role from an Aurora
-// DB cluster. For more information, see Authorizing Amazon Aurora to Access
-// Other AWS Services On Your Behalf (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Authorizing.AWSServices.html).
+// Disassociates an AWS Identity and Access Management (IAM) role from an Amazon
+// Aurora DB cluster. For more information, see Authorizing Amazon Aurora MySQL
+// to Access Other AWS Services on Your Behalf  (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Integrating.Authorizing.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8098,16 +9551,16 @@ func (c *RDS) RemoveRoleFromDBClusterRequest(input *RemoveRoleFromDBClusterInput
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeDBClusterRoleNotFoundFault "DBClusterRoleNotFound"
-//   The specified IAM role Amazon Resource Name (ARN) is not associated with
-//   the specified DB cluster.
+//   The specified IAM role Amazon Resource Name (ARN) isn't associated with the
+//   specified DB cluster.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBCluster
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBCluster
 func (c *RDS) RemoveRoleFromDBCluster(input *RemoveRoleFromDBClusterInput) (*RemoveRoleFromDBClusterOutput, error) {
 	req, out := c.RemoveRoleFromDBClusterRequest(input)
 	return out, req.Send()
@@ -8129,23 +9582,110 @@ func (c *RDS) RemoveRoleFromDBClusterWithContext(ctx aws.Context, input *RemoveR
 	return out, req.Send()
 }
 
+const opRemoveRoleFromDBInstance = "RemoveRoleFromDBInstance"
+
+// RemoveRoleFromDBInstanceRequest generates a "aws/request.Request" representing the
+// client's request for the RemoveRoleFromDBInstance operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RemoveRoleFromDBInstance for more information on using the RemoveRoleFromDBInstance
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RemoveRoleFromDBInstanceRequest method.
+//    req, resp := client.RemoveRoleFromDBInstanceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBInstance
+func (c *RDS) RemoveRoleFromDBInstanceRequest(input *RemoveRoleFromDBInstanceInput) (req *request.Request, output *RemoveRoleFromDBInstanceOutput) {
+	op := &request.Operation{
+		Name:       opRemoveRoleFromDBInstance,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RemoveRoleFromDBInstanceInput{}
+	}
+
+	output = &RemoveRoleFromDBInstanceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// RemoveRoleFromDBInstance API operation for Amazon Relational Database Service.
+//
+// Disassociates an AWS Identity and Access Management (IAM) role from a DB
+// instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation RemoveRoleFromDBInstance for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
+//
+//   * ErrCodeDBInstanceRoleNotFoundFault "DBInstanceRoleNotFound"
+//   The specified RoleArn value doesn't match the specifed feature for the DB
+//   instance.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBInstance
+func (c *RDS) RemoveRoleFromDBInstance(input *RemoveRoleFromDBInstanceInput) (*RemoveRoleFromDBInstanceOutput, error) {
+	req, out := c.RemoveRoleFromDBInstanceRequest(input)
+	return out, req.Send()
+}
+
+// RemoveRoleFromDBInstanceWithContext is the same as RemoveRoleFromDBInstance with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RemoveRoleFromDBInstance for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) RemoveRoleFromDBInstanceWithContext(ctx aws.Context, input *RemoveRoleFromDBInstanceInput, opts ...request.Option) (*RemoveRoleFromDBInstanceOutput, error) {
+	req, out := c.RemoveRoleFromDBInstanceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRemoveSourceIdentifierFromSubscription = "RemoveSourceIdentifierFromSubscription"
 
 // RemoveSourceIdentifierFromSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveSourceIdentifierFromSubscription operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RemoveSourceIdentifierFromSubscription for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RemoveSourceIdentifierFromSubscription method directly
-// instead.
+// See RemoveSourceIdentifierFromSubscription for more information on using the RemoveSourceIdentifierFromSubscription
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RemoveSourceIdentifierFromSubscriptionRequest method.
 //    req, resp := client.RemoveSourceIdentifierFromSubscriptionRequest(params)
@@ -8155,7 +9695,7 @@ const opRemoveSourceIdentifierFromSubscription = "RemoveSourceIdentifierFromSubs
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveSourceIdentifierFromSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveSourceIdentifierFromSubscription
 func (c *RDS) RemoveSourceIdentifierFromSubscriptionRequest(input *RemoveSourceIdentifierFromSubscriptionInput) (req *request.Request, output *RemoveSourceIdentifierFromSubscriptionOutput) {
 	op := &request.Operation{
 		Name:       opRemoveSourceIdentifierFromSubscription,
@@ -8190,7 +9730,7 @@ func (c *RDS) RemoveSourceIdentifierFromSubscriptionRequest(input *RemoveSourceI
 //   * ErrCodeSourceNotFoundFault "SourceNotFound"
 //   The requested source could not be found.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveSourceIdentifierFromSubscription
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveSourceIdentifierFromSubscription
 func (c *RDS) RemoveSourceIdentifierFromSubscription(input *RemoveSourceIdentifierFromSubscriptionInput) (*RemoveSourceIdentifierFromSubscriptionOutput, error) {
 	req, out := c.RemoveSourceIdentifierFromSubscriptionRequest(input)
 	return out, req.Send()
@@ -8216,19 +9756,18 @@ const opRemoveTagsFromResource = "RemoveTagsFromResource"
 
 // RemoveTagsFromResourceRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTagsFromResource operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RemoveTagsFromResource for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RemoveTagsFromResource method directly
-// instead.
+// See RemoveTagsFromResource for more information on using the RemoveTagsFromResource
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RemoveTagsFromResourceRequest method.
 //    req, resp := client.RemoveTagsFromResourceRequest(params)
@@ -8238,7 +9777,7 @@ const opRemoveTagsFromResource = "RemoveTagsFromResource"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveTagsFromResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveTagsFromResource
 func (c *RDS) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) (req *request.Request, output *RemoveTagsFromResourceOutput) {
 	op := &request.Operation{
 		Name:       opRemoveTagsFromResource,
@@ -8252,8 +9791,7 @@ func (c *RDS) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) 
 
 	output = &RemoveTagsFromResourceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -8262,7 +9800,8 @@ func (c *RDS) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) 
 // Removes metadata tags from an Amazon RDS resource.
 //
 // For an overview on tagging an Amazon RDS resource, see Tagging Amazon RDS
-// Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html).
+// Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.Tagging.html)
+// in the Amazon RDS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8273,15 +9812,15 @@ func (c *RDS) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInput) 
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveTagsFromResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveTagsFromResource
 func (c *RDS) RemoveTagsFromResource(input *RemoveTagsFromResourceInput) (*RemoveTagsFromResourceOutput, error) {
 	req, out := c.RemoveTagsFromResourceRequest(input)
 	return out, req.Send()
@@ -8307,19 +9846,18 @@ const opResetDBClusterParameterGroup = "ResetDBClusterParameterGroup"
 
 // ResetDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ResetDBClusterParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ResetDBClusterParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ResetDBClusterParameterGroup method directly
-// instead.
+// See ResetDBClusterParameterGroup for more information on using the ResetDBClusterParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ResetDBClusterParameterGroupRequest method.
 //    req, resp := client.ResetDBClusterParameterGroupRequest(params)
@@ -8329,7 +9867,7 @@ const opResetDBClusterParameterGroup = "ResetDBClusterParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBClusterParameterGroup
 func (c *RDS) ResetDBClusterParameterGroupRequest(input *ResetDBClusterParameterGroupInput) (req *request.Request, output *DBClusterParameterGroupNameMessage) {
 	op := &request.Operation{
 		Name:       opResetDBClusterParameterGroup,
@@ -8359,8 +9897,8 @@ func (c *RDS) ResetDBClusterParameterGroupRequest(input *ResetDBClusterParameter
 // for every DB instance in your DB cluster that you want the updated static
 // parameter to apply to.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8372,13 +9910,13 @@ func (c *RDS) ResetDBClusterParameterGroupRequest(input *ResetDBClusterParameter
 // Returned Error Codes:
 //   * ErrCodeInvalidDBParameterGroupStateFault "InvalidDBParameterGroupState"
 //   The DB parameter group is in use or is in an invalid state. If you are attempting
-//   to delete the parameter group, you cannot delete it when the parameter group
+//   to delete the parameter group, you can't delete it when the parameter group
 //   is in this state.
 //
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBClusterParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBClusterParameterGroup
 func (c *RDS) ResetDBClusterParameterGroup(input *ResetDBClusterParameterGroupInput) (*DBClusterParameterGroupNameMessage, error) {
 	req, out := c.ResetDBClusterParameterGroupRequest(input)
 	return out, req.Send()
@@ -8404,19 +9942,18 @@ const opResetDBParameterGroup = "ResetDBParameterGroup"
 
 // ResetDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ResetDBParameterGroup operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See ResetDBParameterGroup for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the ResetDBParameterGroup method directly
-// instead.
+// See ResetDBParameterGroup for more information on using the ResetDBParameterGroup
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the ResetDBParameterGroupRequest method.
 //    req, resp := client.ResetDBParameterGroupRequest(params)
@@ -8426,7 +9963,7 @@ const opResetDBParameterGroup = "ResetDBParameterGroup"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBParameterGroup
 func (c *RDS) ResetDBParameterGroupRequest(input *ResetDBParameterGroupInput) (req *request.Request, output *DBParameterGroupNameMessage) {
 	op := &request.Operation{
 		Name:       opResetDBParameterGroup,
@@ -8463,13 +10000,13 @@ func (c *RDS) ResetDBParameterGroupRequest(input *ResetDBParameterGroupInput) (r
 // Returned Error Codes:
 //   * ErrCodeInvalidDBParameterGroupStateFault "InvalidDBParameterGroupState"
 //   The DB parameter group is in use or is in an invalid state. If you are attempting
-//   to delete the parameter group, you cannot delete it when the parameter group
+//   to delete the parameter group, you can't delete it when the parameter group
 //   is in this state.
 //
 //   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
-//   DBParameterGroupName does not refer to an existing DB parameter group.
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBParameterGroup
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBParameterGroup
 func (c *RDS) ResetDBParameterGroup(input *ResetDBParameterGroupInput) (*DBParameterGroupNameMessage, error) {
 	req, out := c.ResetDBParameterGroupRequest(input)
 	return out, req.Send()
@@ -8495,19 +10032,18 @@ const opRestoreDBClusterFromS3 = "RestoreDBClusterFromS3"
 
 // RestoreDBClusterFromS3Request generates a "aws/request.Request" representing the
 // client's request for the RestoreDBClusterFromS3 operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RestoreDBClusterFromS3 for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RestoreDBClusterFromS3 method directly
-// instead.
+// See RestoreDBClusterFromS3 for more information on using the RestoreDBClusterFromS3
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RestoreDBClusterFromS3Request method.
 //    req, resp := client.RestoreDBClusterFromS3Request(params)
@@ -8517,7 +10053,7 @@ const opRestoreDBClusterFromS3 = "RestoreDBClusterFromS3"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromS3
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromS3
 func (c *RDS) RestoreDBClusterFromS3Request(input *RestoreDBClusterFromS3Input) (req *request.Request, output *RestoreDBClusterFromS3Output) {
 	op := &request.Operation{
 		Name:       opRestoreDBClusterFromS3,
@@ -8538,8 +10074,9 @@ func (c *RDS) RestoreDBClusterFromS3Request(input *RestoreDBClusterFromS3Input) 
 //
 // Creates an Amazon Aurora DB cluster from data stored in an Amazon S3 bucket.
 // Amazon RDS must be authorized to access the Amazon S3 bucket and the data
-// must be created using the Percona XtraBackup utility as described in Migrating
-// Data from MySQL by Using an Amazon S3 Bucket (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Migrate.MySQL.html#Aurora.Migrate.MySQL.S3).
+// must be created using the Percona XtraBackup utility as described in  Migrating
+// Data to an Amazon Aurora MySQL DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraMySQL.Migrating.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8550,54 +10087,54 @@ func (c *RDS) RestoreDBClusterFromS3Request(input *RestoreDBClusterFromS3Input) 
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterAlreadyExistsFault "DBClusterAlreadyExistsFault"
-//   User already has a DB cluster with the given identifier.
+//   The user already has a DB cluster with the given identifier.
 //
 //   * ErrCodeDBClusterQuotaExceededFault "DBClusterQuotaExceededFault"
-//   User attempted to create a new DB cluster and the user has already reached
+//   The user attempted to create a new DB cluster and the user has already reached
 //   the maximum allowed DB cluster quota.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeInvalidDBSubnetGroupStateFault "InvalidDBSubnetGroupStateFault"
-//   The DB subnet group cannot be deleted because it is in use.
+//   The DB subnet group cannot be deleted because it's in use.
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
 //   * ErrCodeInvalidS3BucketFault "InvalidS3BucketFault"
-//   The specified Amazon S3 bucket name could not be found or Amazon RDS is not
-//   authorized to access the specified Amazon S3 bucket. Verify the SourceS3BucketName
-//   and S3IngestionRoleArn values and try again.
+//   The specified Amazon S3 bucket name can't be found or Amazon RDS isn't authorized
+//   to access the specified Amazon S3 bucket. Verify the SourceS3BucketName and
+//   S3IngestionRoleArn values and try again.
 //
 //   * ErrCodeDBClusterParameterGroupNotFoundFault "DBClusterParameterGroupNotFound"
-//   DBClusterParameterGroupName does not refer to an existing DB Cluster parameter
+//   DBClusterParameterGroupName doesn't refer to an existing DB cluster parameter
 //   group.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeInsufficientStorageClusterCapacityFault "InsufficientStorageClusterCapacity"
-//   There is insufficient storage available for the current action. You may be
-//   able to resolve this error by updating your subnet group to use different
+//   There is insufficient storage available for the current action. You might
+//   be able to resolve this error by updating your subnet group to use different
 //   Availability Zones that have more storage available.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromS3
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromS3
 func (c *RDS) RestoreDBClusterFromS3(input *RestoreDBClusterFromS3Input) (*RestoreDBClusterFromS3Output, error) {
 	req, out := c.RestoreDBClusterFromS3Request(input)
 	return out, req.Send()
@@ -8623,19 +10160,18 @@ const opRestoreDBClusterFromSnapshot = "RestoreDBClusterFromSnapshot"
 
 // RestoreDBClusterFromSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreDBClusterFromSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RestoreDBClusterFromSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RestoreDBClusterFromSnapshot method directly
-// instead.
+// See RestoreDBClusterFromSnapshot for more information on using the RestoreDBClusterFromSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RestoreDBClusterFromSnapshotRequest method.
 //    req, resp := client.RestoreDBClusterFromSnapshotRequest(params)
@@ -8645,7 +10181,7 @@ const opRestoreDBClusterFromSnapshot = "RestoreDBClusterFromSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromSnapshot
 func (c *RDS) RestoreDBClusterFromSnapshotRequest(input *RestoreDBClusterFromSnapshotInput) (req *request.Request, output *RestoreDBClusterFromSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opRestoreDBClusterFromSnapshot,
@@ -8664,13 +10200,18 @@ func (c *RDS) RestoreDBClusterFromSnapshotRequest(input *RestoreDBClusterFromSna
 
 // RestoreDBClusterFromSnapshot API operation for Amazon Relational Database Service.
 //
-// Creates a new DB cluster from a DB cluster snapshot. The target DB cluster
-// is created from the source DB cluster restore point with the same configuration
-// as the original source DB cluster, except that the new DB cluster is created
-// with the default security group.
+// Creates a new DB cluster from a DB snapshot or DB cluster snapshot.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// If a DB snapshot is specified, the target DB cluster is created from the
+// source DB snapshot with a default configuration and default security group.
+//
+// If a DB cluster snapshot is specified, the target DB cluster is created from
+// the source DB cluster restore point with the same configuration as the original
+// source DB cluster, except that the new DB cluster is created with the default
+// security group.
+//
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8681,52 +10222,52 @@ func (c *RDS) RestoreDBClusterFromSnapshotRequest(input *RestoreDBClusterFromSna
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterAlreadyExistsFault "DBClusterAlreadyExistsFault"
-//   User already has a DB cluster with the given identifier.
+//   The user already has a DB cluster with the given identifier.
 //
 //   * ErrCodeDBClusterQuotaExceededFault "DBClusterQuotaExceededFault"
-//   User attempted to create a new DB cluster and the user has already reached
+//   The user attempted to create a new DB cluster and the user has already reached
 //   the maximum allowed DB cluster quota.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
 //   * ErrCodeDBClusterSnapshotNotFoundFault "DBClusterSnapshotNotFoundFault"
-//   DBClusterSnapshotIdentifier does not refer to an existing DB cluster snapshot.
+//   DBClusterSnapshotIdentifier doesn't refer to an existing DB cluster snapshot.
 //
 //   * ErrCodeInsufficientDBClusterCapacityFault "InsufficientDBClusterCapacityFault"
-//   The DB cluster does not have enough capacity for the current operation.
+//   The DB cluster doesn't have enough capacity for the current operation.
 //
 //   * ErrCodeInsufficientStorageClusterCapacityFault "InsufficientStorageClusterCapacity"
-//   There is insufficient storage available for the current action. You may be
-//   able to resolve this error by updating your subnet group to use different
+//   There is insufficient storage available for the current action. You might
+//   be able to resolve this error by updating your subnet group to use different
 //   Availability Zones that have more storage available.
 //
 //   * ErrCodeInvalidDBSnapshotStateFault "InvalidDBSnapshotState"
-//   The state of the DB snapshot does not allow deletion.
+//   The state of the DB snapshot doesn't allow deletion.
 //
 //   * ErrCodeInvalidDBClusterSnapshotStateFault "InvalidDBClusterSnapshotStateFault"
-//   The supplied value is not a valid DB cluster snapshot state.
+//   The supplied value isn't a valid DB cluster snapshot state.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeInvalidRestoreFault "InvalidRestoreFault"
-//   Cannot restore from vpc backup to non-vpc DB instance.
+//   Cannot restore from VPC backup to non-VPC DB instance.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   The requested subnet is invalid, or multiple subnets were requested that
@@ -8736,9 +10277,13 @@ func (c *RDS) RestoreDBClusterFromSnapshotRequest(input *RestoreDBClusterFromSna
 //   The specified option group could not be found.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromSnapshot
+//   * ErrCodeDBClusterParameterGroupNotFoundFault "DBClusterParameterGroupNotFound"
+//   DBClusterParameterGroupName doesn't refer to an existing DB cluster parameter
+//   group.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromSnapshot
 func (c *RDS) RestoreDBClusterFromSnapshot(input *RestoreDBClusterFromSnapshotInput) (*RestoreDBClusterFromSnapshotOutput, error) {
 	req, out := c.RestoreDBClusterFromSnapshotRequest(input)
 	return out, req.Send()
@@ -8764,19 +10309,18 @@ const opRestoreDBClusterToPointInTime = "RestoreDBClusterToPointInTime"
 
 // RestoreDBClusterToPointInTimeRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreDBClusterToPointInTime operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RestoreDBClusterToPointInTime for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RestoreDBClusterToPointInTime method directly
-// instead.
+// See RestoreDBClusterToPointInTime for more information on using the RestoreDBClusterToPointInTime
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RestoreDBClusterToPointInTimeRequest method.
 //    req, resp := client.RestoreDBClusterToPointInTimeRequest(params)
@@ -8786,7 +10330,7 @@ const opRestoreDBClusterToPointInTime = "RestoreDBClusterToPointInTime"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterToPointInTime
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterToPointInTime
 func (c *RDS) RestoreDBClusterToPointInTimeRequest(input *RestoreDBClusterToPointInTimeInput) (req *request.Request, output *RestoreDBClusterToPointInTimeOutput) {
 	op := &request.Operation{
 		Name:       opRestoreDBClusterToPointInTime,
@@ -8811,8 +10355,15 @@ func (c *RDS) RestoreDBClusterToPointInTimeRequest(input *RestoreDBClusterToPoin
 // same configuration as the original DB cluster, except that the new DB cluster
 // is created with the default DB security group.
 //
-// For more information on Amazon Aurora, see Aurora on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Aurora.html)
-// in the Amazon RDS User Guide.
+// This action only restores the DB cluster, not the DB instances for that DB
+// cluster. You must invoke the CreateDBInstance action to create DB instances
+// for the restored DB cluster, specifying the identifier of the restored DB
+// cluster in DBClusterIdentifier. You can create DB instances only after the
+// RestoreDBClusterToPointInTime action has completed and the DB cluster is
+// available.
+//
+// For more information on Amazon Aurora, see  What Is Amazon Aurora? (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/CHAP_AuroraOverview.html)
+// in the Amazon Aurora User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8823,60 +10374,64 @@ func (c *RDS) RestoreDBClusterToPointInTimeRequest(input *RestoreDBClusterToPoin
 //
 // Returned Error Codes:
 //   * ErrCodeDBClusterAlreadyExistsFault "DBClusterAlreadyExistsFault"
-//   User already has a DB cluster with the given identifier.
+//   The user already has a DB cluster with the given identifier.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeDBClusterQuotaExceededFault "DBClusterQuotaExceededFault"
-//   User attempted to create a new DB cluster and the user has already reached
+//   The user attempted to create a new DB cluster and the user has already reached
 //   the maximum allowed DB cluster quota.
 //
 //   * ErrCodeDBClusterSnapshotNotFoundFault "DBClusterSnapshotNotFoundFault"
-//   DBClusterSnapshotIdentifier does not refer to an existing DB cluster snapshot.
+//   DBClusterSnapshotIdentifier doesn't refer to an existing DB cluster snapshot.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeInsufficientDBClusterCapacityFault "InsufficientDBClusterCapacityFault"
-//   The DB cluster does not have enough capacity for the current operation.
+//   The DB cluster doesn't have enough capacity for the current operation.
 //
 //   * ErrCodeInsufficientStorageClusterCapacityFault "InsufficientStorageClusterCapacity"
-//   There is insufficient storage available for the current action. You may be
-//   able to resolve this error by updating your subnet group to use different
+//   There is insufficient storage available for the current action. You might
+//   be able to resolve this error by updating your subnet group to use different
 //   Availability Zones that have more storage available.
 //
 //   * ErrCodeInvalidDBClusterSnapshotStateFault "InvalidDBClusterSnapshotStateFault"
-//   The supplied value is not a valid DB cluster snapshot state.
+//   The supplied value isn't a valid DB cluster snapshot state.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeInvalidDBSnapshotStateFault "InvalidDBSnapshotState"
-//   The state of the DB snapshot does not allow deletion.
+//   The state of the DB snapshot doesn't allow deletion.
 //
 //   * ErrCodeInvalidRestoreFault "InvalidRestoreFault"
-//   Cannot restore from vpc backup to non-vpc DB instance.
+//   Cannot restore from VPC backup to non-VPC DB instance.
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
 //   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
 //   The specified option group could not be found.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterToPointInTime
+//   * ErrCodeDBClusterParameterGroupNotFoundFault "DBClusterParameterGroupNotFound"
+//   DBClusterParameterGroupName doesn't refer to an existing DB cluster parameter
+//   group.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterToPointInTime
 func (c *RDS) RestoreDBClusterToPointInTime(input *RestoreDBClusterToPointInTimeInput) (*RestoreDBClusterToPointInTimeOutput, error) {
 	req, out := c.RestoreDBClusterToPointInTimeRequest(input)
 	return out, req.Send()
@@ -8902,19 +10457,18 @@ const opRestoreDBInstanceFromDBSnapshot = "RestoreDBInstanceFromDBSnapshot"
 
 // RestoreDBInstanceFromDBSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreDBInstanceFromDBSnapshot operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RestoreDBInstanceFromDBSnapshot for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RestoreDBInstanceFromDBSnapshot method directly
-// instead.
+// See RestoreDBInstanceFromDBSnapshot for more information on using the RestoreDBInstanceFromDBSnapshot
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RestoreDBInstanceFromDBSnapshotRequest method.
 //    req, resp := client.RestoreDBInstanceFromDBSnapshotRequest(params)
@@ -8924,7 +10478,7 @@ const opRestoreDBInstanceFromDBSnapshot = "RestoreDBInstanceFromDBSnapshot"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromDBSnapshot
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromDBSnapshot
 func (c *RDS) RestoreDBInstanceFromDBSnapshotRequest(input *RestoreDBInstanceFromDBSnapshotInput) (req *request.Request, output *RestoreDBInstanceFromDBSnapshotOutput) {
 	op := &request.Operation{
 		Name:       opRestoreDBInstanceFromDBSnapshot,
@@ -8953,15 +10507,18 @@ func (c *RDS) RestoreDBInstanceFromDBSnapshotRequest(input *RestoreDBInstanceFro
 //
 // If your intent is to replace your original DB instance with the new, restored
 // DB instance, then rename your original DB instance before you call the RestoreDBInstanceFromDBSnapshot
-// action. RDS does not allow two DB instances with the same name. Once you
-// have renamed your original DB instance with a different identifier, then
-// you can pass the original name of the DB instance as the DBInstanceIdentifier
-// in the call to the RestoreDBInstanceFromDBSnapshot action. The result is
-// that you will replace the original DB instance with the DB instance created
-// from the snapshot.
+// action. RDS doesn't allow two DB instances with the same name. Once you have
+// renamed your original DB instance with a different identifier, then you can
+// pass the original name of the DB instance as the DBInstanceIdentifier in
+// the call to the RestoreDBInstanceFromDBSnapshot action. The result is that
+// you will replace the original DB instance with the DB instance created from
+// the snapshot.
 //
 // If you are restoring from a shared manual DB snapshot, the DBSnapshotIdentifier
 // must be the ARN of the shared DB snapshot.
+//
+// This command doesn't apply to Aurora MySQL and Aurora PostgreSQL. For Aurora,
+// use RestoreDBClusterFromSnapshot.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8972,34 +10529,34 @@ func (c *RDS) RestoreDBInstanceFromDBSnapshotRequest(input *RestoreDBInstanceFro
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceAlreadyExistsFault "DBInstanceAlreadyExists"
-//   User already has a DB instance with the given identifier.
+//   The user already has a DB instance with the given identifier.
 //
 //   * ErrCodeDBSnapshotNotFoundFault "DBSnapshotNotFound"
-//   DBSnapshotIdentifier does not refer to an existing DB snapshot.
+//   DBSnapshotIdentifier doesn't refer to an existing DB snapshot.
 //
 //   * ErrCodeInstanceQuotaExceededFault "InstanceQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB instances.
+//   The request would result in the user exceeding the allowed number of DB instances.
 //
 //   * ErrCodeInsufficientDBInstanceCapacityFault "InsufficientDBInstanceCapacity"
-//   Specified DB instance class is not available in the specified Availability
+//   The specified DB instance class isn't available in the specified Availability
 //   Zone.
 //
 //   * ErrCodeInvalidDBSnapshotStateFault "InvalidDBSnapshotState"
-//   The state of the DB snapshot does not allow deletion.
+//   The state of the DB snapshot doesn't allow deletion.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeInvalidRestoreFault "InvalidRestoreFault"
-//   Cannot restore from vpc backup to non-vpc DB instance.
+//   Cannot restore from VPC backup to non-VPC DB instance.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
 //   Subnets in the DB subnet group should cover at least two Availability Zones
@@ -9016,25 +10573,31 @@ func (c *RDS) RestoreDBInstanceFromDBSnapshotRequest(input *RestoreDBInstanceFro
 //   The specified option group could not be found.
 //
 //   * ErrCodeStorageTypeNotSupportedFault "StorageTypeNotSupported"
-//   StorageType specified cannot be associated with the DB Instance.
+//   Storage of the StorageType specified can't be associated with the DB instance.
 //
 //   * ErrCodeAuthorizationNotFoundFault "AuthorizationNotFound"
-//   Specified CIDRIP or EC2 security group is not authorized for the specified
-//   DB security group.
+//   The specified CIDRIP or Amazon EC2 security group isn't authorized for the
+//   specified DB security group.
 //
-//   RDS may not also be authorized via IAM to perform necessary actions on your
-//   behalf.
+//   RDS also may not be authorized by using IAM to perform necessary actions
+//   on your behalf.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
 //   * ErrCodeDomainNotFoundFault "DomainNotFoundFault"
-//   Domain does not refer to an existing Active Directory Domain.
+//   Domain doesn't refer to an existing Active Directory domain.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromDBSnapshot
+//   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
+//
+//   * ErrCodeBackupPolicyNotFoundFault "BackupPolicyNotFoundFault"
+//   The backup policy was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromDBSnapshot
 func (c *RDS) RestoreDBInstanceFromDBSnapshot(input *RestoreDBInstanceFromDBSnapshotInput) (*RestoreDBInstanceFromDBSnapshotOutput, error) {
 	req, out := c.RestoreDBInstanceFromDBSnapshotRequest(input)
 	return out, req.Send()
@@ -9056,23 +10619,166 @@ func (c *RDS) RestoreDBInstanceFromDBSnapshotWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opRestoreDBInstanceFromS3 = "RestoreDBInstanceFromS3"
+
+// RestoreDBInstanceFromS3Request generates a "aws/request.Request" representing the
+// client's request for the RestoreDBInstanceFromS3 operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RestoreDBInstanceFromS3 for more information on using the RestoreDBInstanceFromS3
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RestoreDBInstanceFromS3Request method.
+//    req, resp := client.RestoreDBInstanceFromS3Request(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromS3
+func (c *RDS) RestoreDBInstanceFromS3Request(input *RestoreDBInstanceFromS3Input) (req *request.Request, output *RestoreDBInstanceFromS3Output) {
+	op := &request.Operation{
+		Name:       opRestoreDBInstanceFromS3,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RestoreDBInstanceFromS3Input{}
+	}
+
+	output = &RestoreDBInstanceFromS3Output{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RestoreDBInstanceFromS3 API operation for Amazon Relational Database Service.
+//
+// Amazon Relational Database Service (Amazon RDS) supports importing MySQL
+// databases by using backup files. You can create a backup of your on-premises
+// database, store it on Amazon Simple Storage Service (Amazon S3), and then
+// restore the backup file onto a new Amazon RDS DB instance running MySQL.
+// For more information, see Importing Data into an Amazon RDS MySQL DB Instance
+// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/MySQL.Procedural.Importing.html)
+// in the Amazon RDS User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation RestoreDBInstanceFromS3 for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBInstanceAlreadyExistsFault "DBInstanceAlreadyExists"
+//   The user already has a DB instance with the given identifier.
+//
+//   * ErrCodeInsufficientDBInstanceCapacityFault "InsufficientDBInstanceCapacity"
+//   The specified DB instance class isn't available in the specified Availability
+//   Zone.
+//
+//   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
+//
+//   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
+//
+//   * ErrCodeInstanceQuotaExceededFault "InstanceQuotaExceeded"
+//   The request would result in the user exceeding the allowed number of DB instances.
+//
+//   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
+//
+//   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
+//
+//   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
+//   Subnets in the DB subnet group should cover at least two Availability Zones
+//   unless there is only one Availability Zone.
+//
+//   * ErrCodeInvalidSubnet "InvalidSubnet"
+//   The requested subnet is invalid, or multiple subnets were requested that
+//   are not all in a common VPC.
+//
+//   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
+//
+//   * ErrCodeInvalidS3BucketFault "InvalidS3BucketFault"
+//   The specified Amazon S3 bucket name can't be found or Amazon RDS isn't authorized
+//   to access the specified Amazon S3 bucket. Verify the SourceS3BucketName and
+//   S3IngestionRoleArn values and try again.
+//
+//   * ErrCodeProvisionedIopsNotAvailableInAZFault "ProvisionedIopsNotAvailableInAZFault"
+//   Provisioned IOPS not available in the specified Availability Zone.
+//
+//   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
+//   The specified option group could not be found.
+//
+//   * ErrCodeStorageTypeNotSupportedFault "StorageTypeNotSupported"
+//   Storage of the StorageType specified can't be associated with the DB instance.
+//
+//   * ErrCodeAuthorizationNotFoundFault "AuthorizationNotFound"
+//   The specified CIDRIP or Amazon EC2 security group isn't authorized for the
+//   specified DB security group.
+//
+//   RDS also may not be authorized by using IAM to perform necessary actions
+//   on your behalf.
+//
+//   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
+//   An error occurred accessing an AWS KMS key.
+//
+//   * ErrCodeBackupPolicyNotFoundFault "BackupPolicyNotFoundFault"
+//   The backup policy was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromS3
+func (c *RDS) RestoreDBInstanceFromS3(input *RestoreDBInstanceFromS3Input) (*RestoreDBInstanceFromS3Output, error) {
+	req, out := c.RestoreDBInstanceFromS3Request(input)
+	return out, req.Send()
+}
+
+// RestoreDBInstanceFromS3WithContext is the same as RestoreDBInstanceFromS3 with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RestoreDBInstanceFromS3 for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) RestoreDBInstanceFromS3WithContext(ctx aws.Context, input *RestoreDBInstanceFromS3Input, opts ...request.Option) (*RestoreDBInstanceFromS3Output, error) {
+	req, out := c.RestoreDBInstanceFromS3Request(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRestoreDBInstanceToPointInTime = "RestoreDBInstanceToPointInTime"
 
 // RestoreDBInstanceToPointInTimeRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreDBInstanceToPointInTime operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RestoreDBInstanceToPointInTime for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RestoreDBInstanceToPointInTime method directly
-// instead.
+// See RestoreDBInstanceToPointInTime for more information on using the RestoreDBInstanceToPointInTime
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RestoreDBInstanceToPointInTimeRequest method.
 //    req, resp := client.RestoreDBInstanceToPointInTimeRequest(params)
@@ -9082,7 +10788,7 @@ const opRestoreDBInstanceToPointInTime = "RestoreDBInstanceToPointInTime"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceToPointInTime
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceToPointInTime
 func (c *RDS) RestoreDBInstanceToPointInTimeRequest(input *RestoreDBInstanceToPointInTimeInput) (req *request.Request, output *RestoreDBInstanceToPointInTimeOutput) {
 	op := &request.Operation{
 		Name:       opRestoreDBInstanceToPointInTime,
@@ -9107,12 +10813,15 @@ func (c *RDS) RestoreDBInstanceToPointInTimeRequest(input *RestoreDBInstanceToPo
 // the BackupRetentionPeriod property.
 //
 // The target database is created with most of the original configuration, but
-// in a system-selected availability zone, with the default security group,
+// in a system-selected Availability Zone, with the default security group,
 // the default subnet group, and the default DB parameter group. By default,
 // the new DB instance is created as a single-AZ deployment except when the
 // instance is a SQL Server instance that has an option group that is associated
 // with mirroring; in this case, the instance becomes a mirrored deployment
 // and not a single-AZ deployment.
+//
+// This command doesn't apply to Aurora MySQL and Aurora PostgreSQL. For Aurora,
+// use RestoreDBClusterToPointInTime.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9123,38 +10832,38 @@ func (c *RDS) RestoreDBInstanceToPointInTimeRequest(input *RestoreDBInstanceToPo
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceAlreadyExistsFault "DBInstanceAlreadyExists"
-//   User already has a DB instance with the given identifier.
+//   The user already has a DB instance with the given identifier.
 //
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeInstanceQuotaExceededFault "InstanceQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB instances.
+//   The request would result in the user exceeding the allowed number of DB instances.
 //
 //   * ErrCodeInsufficientDBInstanceCapacityFault "InsufficientDBInstanceCapacity"
-//   Specified DB instance class is not available in the specified Availability
+//   The specified DB instance class isn't available in the specified Availability
 //   Zone.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodePointInTimeRestoreNotEnabledFault "PointInTimeRestoreNotEnabled"
 //   SourceDBInstanceIdentifier refers to a DB instance with BackupRetentionPeriod
 //   equal to 0.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
-//   Request would result in user exceeding the allowed amount of storage available
-//   across all DB instances.
+//   The request would result in the user exceeding the allowed amount of storage
+//   available across all DB instances.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeInvalidRestoreFault "InvalidRestoreFault"
-//   Cannot restore from vpc backup to non-vpc DB instance.
+//   Cannot restore from VPC backup to non-VPC DB instance.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
 //   Subnets in the DB subnet group should cover at least two Availability Zones
@@ -9171,25 +10880,34 @@ func (c *RDS) RestoreDBInstanceToPointInTimeRequest(input *RestoreDBInstanceToPo
 //   The specified option group could not be found.
 //
 //   * ErrCodeStorageTypeNotSupportedFault "StorageTypeNotSupported"
-//   StorageType specified cannot be associated with the DB Instance.
+//   Storage of the StorageType specified can't be associated with the DB instance.
 //
 //   * ErrCodeAuthorizationNotFoundFault "AuthorizationNotFound"
-//   Specified CIDRIP or EC2 security group is not authorized for the specified
-//   DB security group.
+//   The specified CIDRIP or Amazon EC2 security group isn't authorized for the
+//   specified DB security group.
 //
-//   RDS may not also be authorized via IAM to perform necessary actions on your
-//   behalf.
+//   RDS also may not be authorized by using IAM to perform necessary actions
+//   on your behalf.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
 //   * ErrCodeDomainNotFoundFault "DomainNotFoundFault"
-//   Domain does not refer to an existing Active Directory Domain.
+//   Domain doesn't refer to an existing Active Directory domain.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceToPointInTime
+//   * ErrCodeBackupPolicyNotFoundFault "BackupPolicyNotFoundFault"
+//   The backup policy was not found.
+//
+//   * ErrCodeDBParameterGroupNotFoundFault "DBParameterGroupNotFound"
+//   DBParameterGroupName doesn't refer to an existing DB parameter group.
+//
+//   * ErrCodeDBInstanceAutomatedBackupNotFoundFault "DBInstanceAutomatedBackupNotFound"
+//   No automated backup for this DB instance was found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceToPointInTime
 func (c *RDS) RestoreDBInstanceToPointInTime(input *RestoreDBInstanceToPointInTimeInput) (*RestoreDBInstanceToPointInTimeOutput, error) {
 	req, out := c.RestoreDBInstanceToPointInTimeRequest(input)
 	return out, req.Send()
@@ -9215,19 +10933,18 @@ const opRevokeDBSecurityGroupIngress = "RevokeDBSecurityGroupIngress"
 
 // RevokeDBSecurityGroupIngressRequest generates a "aws/request.Request" representing the
 // client's request for the RevokeDBSecurityGroupIngress operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See RevokeDBSecurityGroupIngress for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the RevokeDBSecurityGroupIngress method directly
-// instead.
+// See RevokeDBSecurityGroupIngress for more information on using the RevokeDBSecurityGroupIngress
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the RevokeDBSecurityGroupIngressRequest method.
 //    req, resp := client.RevokeDBSecurityGroupIngressRequest(params)
@@ -9237,7 +10954,7 @@ const opRevokeDBSecurityGroupIngress = "RevokeDBSecurityGroupIngress"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RevokeDBSecurityGroupIngress
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RevokeDBSecurityGroupIngress
 func (c *RDS) RevokeDBSecurityGroupIngressRequest(input *RevokeDBSecurityGroupIngressInput) (req *request.Request, output *RevokeDBSecurityGroupIngressOutput) {
 	op := &request.Operation{
 		Name:       opRevokeDBSecurityGroupIngress,
@@ -9270,19 +10987,19 @@ func (c *RDS) RevokeDBSecurityGroupIngressRequest(input *RevokeDBSecurityGroupIn
 //
 // Returned Error Codes:
 //   * ErrCodeDBSecurityGroupNotFoundFault "DBSecurityGroupNotFound"
-//   DBSecurityGroupName does not refer to an existing DB security group.
+//   DBSecurityGroupName doesn't refer to an existing DB security group.
 //
 //   * ErrCodeAuthorizationNotFoundFault "AuthorizationNotFound"
-//   Specified CIDRIP or EC2 security group is not authorized for the specified
-//   DB security group.
+//   The specified CIDRIP or Amazon EC2 security group isn't authorized for the
+//   specified DB security group.
 //
-//   RDS may not also be authorized via IAM to perform necessary actions on your
-//   behalf.
+//   RDS also may not be authorized by using IAM to perform necessary actions
+//   on your behalf.
 //
 //   * ErrCodeInvalidDBSecurityGroupStateFault "InvalidDBSecurityGroupState"
-//   The state of the DB security group does not allow deletion.
+//   The state of the DB security group doesn't allow deletion.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RevokeDBSecurityGroupIngress
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RevokeDBSecurityGroupIngress
 func (c *RDS) RevokeDBSecurityGroupIngress(input *RevokeDBSecurityGroupIngressInput) (*RevokeDBSecurityGroupIngressOutput, error) {
 	req, out := c.RevokeDBSecurityGroupIngressRequest(input)
 	return out, req.Send()
@@ -9304,23 +11021,111 @@ func (c *RDS) RevokeDBSecurityGroupIngressWithContext(ctx aws.Context, input *Re
 	return out, req.Send()
 }
 
+const opStartDBCluster = "StartDBCluster"
+
+// StartDBClusterRequest generates a "aws/request.Request" representing the
+// client's request for the StartDBCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartDBCluster for more information on using the StartDBCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartDBClusterRequest method.
+//    req, resp := client.StartDBClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBCluster
+func (c *RDS) StartDBClusterRequest(input *StartDBClusterInput) (req *request.Request, output *StartDBClusterOutput) {
+	op := &request.Operation{
+		Name:       opStartDBCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartDBClusterInput{}
+	}
+
+	output = &StartDBClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartDBCluster API operation for Amazon Relational Database Service.
+//
+// Starts an Amazon Aurora DB cluster that was stopped using the AWS console,
+// the stop-db-cluster AWS CLI command, or the StopDBCluster action.
+//
+// For more information, see  Stopping and Starting an Aurora Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation StartDBCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBCluster
+func (c *RDS) StartDBCluster(input *StartDBClusterInput) (*StartDBClusterOutput, error) {
+	req, out := c.StartDBClusterRequest(input)
+	return out, req.Send()
+}
+
+// StartDBClusterWithContext is the same as StartDBCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartDBCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) StartDBClusterWithContext(ctx aws.Context, input *StartDBClusterInput, opts ...request.Option) (*StartDBClusterOutput, error) {
+	req, out := c.StartDBClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStartDBInstance = "StartDBInstance"
 
 // StartDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the StartDBInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See StartDBInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the StartDBInstance method directly
-// instead.
+// See StartDBInstance for more information on using the StartDBInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the StartDBInstanceRequest method.
 //    req, resp := client.StartDBInstanceRequest(params)
@@ -9330,7 +11135,7 @@ const opStartDBInstance = "StartDBInstance"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstance
 func (c *RDS) StartDBInstanceRequest(input *StartDBInstanceInput) (req *request.Request, output *StartDBInstanceOutput) {
 	op := &request.Operation{
 		Name:       opStartDBInstance,
@@ -9349,9 +11154,15 @@ func (c *RDS) StartDBInstanceRequest(input *StartDBInstanceInput) (req *request.
 
 // StartDBInstance API operation for Amazon Relational Database Service.
 //
-// Starts a DB instance that was stopped using the AWS console, the stop-db-instance
-// AWS CLI command, or the StopDBInstance action. For more information, see
-// Stopping and Starting a DB instance in the AWS RDS user guide.
+// Starts an Amazon RDS DB instance that was stopped using the AWS console,
+// the stop-db-instance AWS CLI command, or the StopDBInstance action.
+//
+// For more information, see  Starting an Amazon RDS DB instance That Was Previously
+// Stopped (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StartInstance.html)
+// in the Amazon RDS User Guide.
+//
+// This command doesn't apply to Aurora MySQL and Aurora PostgreSQL. For Aurora
+// DB clusters, use StartDBCluster instead.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9362,47 +11173,47 @@ func (c *RDS) StartDBInstanceRequest(input *StartDBInstanceInput) (req *request.
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeInsufficientDBInstanceCapacityFault "InsufficientDBInstanceCapacity"
-//   Specified DB instance class is not available in the specified Availability
+//   The specified DB instance class isn't available in the specified Availability
 //   Zone.
 //
 //   * ErrCodeDBSubnetGroupNotFoundFault "DBSubnetGroupNotFoundFault"
-//   DBSubnetGroupName does not refer to an existing DB subnet group.
+//   DBSubnetGroupName doesn't refer to an existing DB subnet group.
 //
 //   * ErrCodeDBSubnetGroupDoesNotCoverEnoughAZs "DBSubnetGroupDoesNotCoverEnoughAZs"
 //   Subnets in the DB subnet group should cover at least two Availability Zones
 //   unless there is only one Availability Zone.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
 //   * ErrCodeInvalidSubnet "InvalidSubnet"
 //   The requested subnet is invalid, or multiple subnets were requested that
 //   are not all in a common VPC.
 //
 //   * ErrCodeInvalidVPCNetworkStateFault "InvalidVPCNetworkStateFault"
-//   DB subnet group does not cover all Availability Zones after it is created
-//   because users' change.
+//   The DB subnet group doesn't cover all Availability Zones after it's created
+//   because of users' change.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
-//   DBClusterIdentifier does not refer to an existing DB cluster.
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
 //
 //   * ErrCodeAuthorizationNotFoundFault "AuthorizationNotFound"
-//   Specified CIDRIP or EC2 security group is not authorized for the specified
-//   DB security group.
+//   The specified CIDRIP or Amazon EC2 security group isn't authorized for the
+//   specified DB security group.
 //
-//   RDS may not also be authorized via IAM to perform necessary actions on your
-//   behalf.
+//   RDS also may not be authorized by using IAM to perform necessary actions
+//   on your behalf.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
-//   Error accessing KMS key.
+//   An error occurred accessing an AWS KMS key.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstance
 func (c *RDS) StartDBInstance(input *StartDBInstanceInput) (*StartDBInstanceOutput, error) {
 	req, out := c.StartDBInstanceRequest(input)
 	return out, req.Send()
@@ -9424,23 +11235,113 @@ func (c *RDS) StartDBInstanceWithContext(ctx aws.Context, input *StartDBInstance
 	return out, req.Send()
 }
 
+const opStopDBCluster = "StopDBCluster"
+
+// StopDBClusterRequest generates a "aws/request.Request" representing the
+// client's request for the StopDBCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopDBCluster for more information on using the StopDBCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopDBClusterRequest method.
+//    req, resp := client.StopDBClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBCluster
+func (c *RDS) StopDBClusterRequest(input *StopDBClusterInput) (req *request.Request, output *StopDBClusterOutput) {
+	op := &request.Operation{
+		Name:       opStopDBCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopDBClusterInput{}
+	}
+
+	output = &StopDBClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopDBCluster API operation for Amazon Relational Database Service.
+//
+// Stops an Amazon Aurora DB cluster. When you stop a DB cluster, Aurora retains
+// the DB cluster's metadata, including its endpoints and DB parameter groups.
+// Aurora also retains the transaction logs so you can do a point-in-time restore
+// if necessary.
+//
+// For more information, see  Stopping and Starting an Aurora Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-cluster-stop-start.html)
+// in the Amazon Aurora User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Relational Database Service's
+// API operation StopDBCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The requested operation can't be performed while the cluster is in this state.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The DB instance isn't in a valid state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBCluster
+func (c *RDS) StopDBCluster(input *StopDBClusterInput) (*StopDBClusterOutput, error) {
+	req, out := c.StopDBClusterRequest(input)
+	return out, req.Send()
+}
+
+// StopDBClusterWithContext is the same as StopDBCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopDBCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RDS) StopDBClusterWithContext(ctx aws.Context, input *StopDBClusterInput, opts ...request.Option) (*StopDBClusterOutput, error) {
+	req, out := c.StopDBClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opStopDBInstance = "StopDBInstance"
 
 // StopDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the StopDBInstance operation. The "output" return
-// value can be used to capture response data after the request's "Send" method
-// is called.
+// value will be populated with the request's response once the request completes
+// successfully.
 //
-// See StopDBInstance for usage and error information.
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
 //
-// Creating a request object using this method should be used when you want to inject
-// custom logic into the request's lifecycle using a custom handler, or if you want to
-// access properties on the request object before or after sending the request. If
-// you just want the service response, call the StopDBInstance method directly
-// instead.
+// See StopDBInstance for more information on using the StopDBInstance
+// API call, and error handling.
 //
-// Note: You must call the "Send" method on the returned request object in order
-// to execute the request.
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
 //
 //    // Example sending a request using the StopDBInstanceRequest method.
 //    req, resp := client.StopDBInstanceRequest(params)
@@ -9450,7 +11351,7 @@ const opStopDBInstance = "StopDBInstance"
 //        fmt.Println(resp)
 //    }
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstance
 func (c *RDS) StopDBInstanceRequest(input *StopDBInstanceInput) (req *request.Request, output *StopDBInstanceOutput) {
 	op := &request.Operation{
 		Name:       opStopDBInstance,
@@ -9469,11 +11370,17 @@ func (c *RDS) StopDBInstanceRequest(input *StopDBInstanceInput) (req *request.Re
 
 // StopDBInstance API operation for Amazon Relational Database Service.
 //
-// Stops a DB instance. When you stop a DB instance, Amazon RDS retains the
-// DB instance's metadata, including its endpoint, DB parameter group, and option
-// group membership. Amazon RDS also retains the transaction logs so you can
-// do a point-in-time restore if necessary. For more information, see Stopping
-// and Starting a DB instance in the AWS RDS user guide.
+// Stops an Amazon RDS DB instance. When you stop a DB instance, Amazon RDS
+// retains the DB instance's metadata, including its endpoint, DB parameter
+// group, and option group membership. Amazon RDS also retains the transaction
+// logs so you can do a point-in-time restore if necessary.
+//
+// For more information, see  Stopping an Amazon RDS DB Instance Temporarily
+// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_StopInstance.html)
+// in the Amazon RDS User Guide.
+//
+// This command doesn't apply to Aurora MySQL and Aurora PostgreSQL. For Aurora
+// clusters, use StopDBCluster instead.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9484,21 +11391,21 @@ func (c *RDS) StopDBInstanceRequest(input *StopDBInstanceInput) (req *request.Re
 //
 // Returned Error Codes:
 //   * ErrCodeDBInstanceNotFoundFault "DBInstanceNotFound"
-//   DBInstanceIdentifier does not refer to an existing DB instance.
+//   DBInstanceIdentifier doesn't refer to an existing DB instance.
 //
 //   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
-//   The specified DB instance is not in the available state.
+//   The DB instance isn't in a valid state.
 //
 //   * ErrCodeDBSnapshotAlreadyExistsFault "DBSnapshotAlreadyExists"
 //   DBSnapshotIdentifier is already used by an existing snapshot.
 //
 //   * ErrCodeSnapshotQuotaExceededFault "SnapshotQuotaExceeded"
-//   Request would result in user exceeding the allowed number of DB snapshots.
+//   The request would result in the user exceeding the allowed number of DB snapshots.
 //
 //   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
-//   The DB cluster is not in a valid state.
+//   The requested operation can't be performed while the cluster is in this state.
 //
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstance
+// See also, https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstance
 func (c *RDS) StopDBInstance(input *StopDBInstanceInput) (*StopDBInstanceOutput, error) {
 	req, out := c.StopDBInstanceRequest(input)
 	return out, req.Send()
@@ -9522,7 +11429,6 @@ func (c *RDS) StopDBInstanceWithContext(ctx aws.Context, input *StopDBInstanceIn
 
 // Describes a quota for an AWS account, for example, the number of DB instances
 // allowed.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AccountQuota
 type AccountQuota struct {
 	_ struct{} `type:"structure"`
 
@@ -9564,7 +11470,6 @@ func (s *AccountQuota) SetUsed(v int64) *AccountQuota {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBClusterMessage
 type AddRoleToDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9618,7 +11523,6 @@ func (s *AddRoleToDBClusterInput) SetRoleArn(v string) *AddRoleToDBClusterInput 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddRoleToDBClusterOutput
 type AddRoleToDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -9633,13 +11537,92 @@ func (s AddRoleToDBClusterOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddSourceIdentifierToSubscriptionMessage
+type AddRoleToDBInstanceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the DB instance to associate the IAM role with.
+	//
+	// DBInstanceIdentifier is a required field
+	DBInstanceIdentifier *string `type:"string" required:"true"`
+
+	// The name of the feature for the DB instance that the IAM role is to be associated
+	// with. For the list of supported feature names, see DBEngineVersion.
+	//
+	// FeatureName is a required field
+	FeatureName *string `type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the IAM role to associate with the DB instance,
+	// for example arn:aws:iam::123456789012:role/AccessRole.
+	//
+	// RoleArn is a required field
+	RoleArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AddRoleToDBInstanceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddRoleToDBInstanceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddRoleToDBInstanceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddRoleToDBInstanceInput"}
+	if s.DBInstanceIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBInstanceIdentifier"))
+	}
+	if s.FeatureName == nil {
+		invalidParams.Add(request.NewErrParamRequired("FeatureName"))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBInstanceIdentifier sets the DBInstanceIdentifier field's value.
+func (s *AddRoleToDBInstanceInput) SetDBInstanceIdentifier(v string) *AddRoleToDBInstanceInput {
+	s.DBInstanceIdentifier = &v
+	return s
+}
+
+// SetFeatureName sets the FeatureName field's value.
+func (s *AddRoleToDBInstanceInput) SetFeatureName(v string) *AddRoleToDBInstanceInput {
+	s.FeatureName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *AddRoleToDBInstanceInput) SetRoleArn(v string) *AddRoleToDBInstanceInput {
+	s.RoleArn = &v
+	return s
+}
+
+type AddRoleToDBInstanceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s AddRoleToDBInstanceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddRoleToDBInstanceOutput) GoString() string {
+	return s.String()
+}
+
 type AddSourceIdentifierToSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the event source to be added. An identifier must begin
-	// with a letter and must contain only ASCII letters, digits, and hyphens; it
-	// cannot end with a hyphen or contain two consecutive hyphens.
+	// The identifier of the event source to be added.
 	//
 	// Constraints:
 	//
@@ -9703,7 +11686,6 @@ func (s *AddSourceIdentifierToSubscriptionInput) SetSubscriptionName(v string) *
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddSourceIdentifierToSubscriptionResult
 type AddSourceIdentifierToSubscriptionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -9728,11 +11710,10 @@ func (s *AddSourceIdentifierToSubscriptionOutput) SetEventSubscription(v *EventS
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddTagsToResourceMessage
 type AddTagsToResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon RDS resource the tags will be added to. This value is an Amazon
+	// The Amazon RDS resource that the tags are added to. This value is an Amazon
 	// Resource Name (ARN). For information about creating an ARN, see  Constructing
 	// an RDS Amazon Resource Name (ARN) (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing).
 	//
@@ -9783,7 +11764,6 @@ func (s *AddTagsToResourceInput) SetTags(v []*Tag) *AddTagsToResourceInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AddTagsToResourceOutput
 type AddTagsToResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -9798,7 +11778,6 @@ func (s AddTagsToResourceOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ApplyPendingMaintenanceActionMessage
 type ApplyPendingMaintenanceActionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9810,7 +11789,7 @@ type ApplyPendingMaintenanceActionInput struct {
 	ApplyAction *string `type:"string" required:"true"`
 
 	// A value that specifies the type of opt-in request, or undoes an opt-in request.
-	// An opt-in request of type immediate cannot be undone.
+	// An opt-in request of type immediate can't be undone.
 	//
 	// Valid values:
 	//
@@ -9879,7 +11858,6 @@ func (s *ApplyPendingMaintenanceActionInput) SetResourceIdentifier(v string) *Ap
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ApplyPendingMaintenanceActionResult
 type ApplyPendingMaintenanceActionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -9903,7 +11881,6 @@ func (s *ApplyPendingMaintenanceActionOutput) SetResourcePendingMaintenanceActio
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AuthorizeDBSecurityGroupIngressMessage
 type AuthorizeDBSecurityGroupIngressInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9986,19 +11963,10 @@ func (s *AuthorizeDBSecurityGroupIngressInput) SetEC2SecurityGroupOwnerId(v stri
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AuthorizeDBSecurityGroupIngressResult
 type AuthorizeDBSecurityGroupIngressOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * DescribeDBSecurityGroups
-	//
-	//    * AuthorizeDBSecurityGroupIngress
-	//
-	//    * CreateDBSecurityGroup
-	//
-	//    * RevokeDBSecurityGroupIngress
+	// Contains the details for an Amazon RDS DB security group.
 	//
 	// This data type is used as a response element in the DescribeDBSecurityGroups
 	// action.
@@ -10026,11 +11994,10 @@ func (s *AuthorizeDBSecurityGroupIngressOutput) SetDBSecurityGroup(v *DBSecurity
 // This data type is used as an element in the following data type:
 //
 //    * OrderableDBInstanceOption
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AvailabilityZone
 type AvailabilityZone struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the availability zone.
+	// The name of the Availability Zone.
 	Name *string `type:"string"`
 }
 
@@ -10050,8 +12017,234 @@ func (s *AvailabilityZone) SetName(v string) *AvailabilityZone {
 	return s
 }
 
+// Contains the available processor feature information for the DB instance
+// class of a DB instance.
+//
+// For more information, see Configuring the Processor of the DB Instance Class
+// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#USER_ConfigureProcessor)
+// in the Amazon RDS User Guide.
+type AvailableProcessorFeature struct {
+	_ struct{} `type:"structure"`
+
+	// The allowed values for the processor feature of the DB instance class.
+	AllowedValues *string `type:"string"`
+
+	// The default value for the processor feature of the DB instance class.
+	DefaultValue *string `type:"string"`
+
+	// The name of the processor feature. Valid names are coreCount and threadsPerCore.
+	Name *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AvailableProcessorFeature) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AvailableProcessorFeature) GoString() string {
+	return s.String()
+}
+
+// SetAllowedValues sets the AllowedValues field's value.
+func (s *AvailableProcessorFeature) SetAllowedValues(v string) *AvailableProcessorFeature {
+	s.AllowedValues = &v
+	return s
+}
+
+// SetDefaultValue sets the DefaultValue field's value.
+func (s *AvailableProcessorFeature) SetDefaultValue(v string) *AvailableProcessorFeature {
+	s.DefaultValue = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *AvailableProcessorFeature) SetName(v string) *AvailableProcessorFeature {
+	s.Name = &v
+	return s
+}
+
+type BacktrackDBClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The timestamp of the time to backtrack the DB cluster to, specified in ISO
+	// 8601 format. For more information about ISO 8601, see the ISO8601 Wikipedia
+	// page. (http://en.wikipedia.org/wiki/ISO_8601)
+	//
+	// If the specified time is not a consistent time for the DB cluster, Aurora
+	// automatically chooses the nearest possible consistent time for the DB cluster.
+	//
+	// Constraints:
+	//
+	//    * Must contain a valid ISO 8601 timestamp.
+	//
+	//    * Can't contain a timestamp set in the future.
+	//
+	// Example: 2017-07-08T18:00Z
+	//
+	// BacktrackTo is a required field
+	BacktrackTo *time.Time `type:"timestamp" required:"true"`
+
+	// The DB cluster identifier of the DB cluster to be backtracked. This parameter
+	// is stored as a lowercase string.
+	//
+	// Constraints:
+	//
+	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	//
+	// Example: my-cluster1
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+
+	// A value that, if specified, forces the DB cluster to backtrack when binary
+	// logging is enabled. Otherwise, an error occurs when binary logging is enabled.
+	Force *bool `type:"boolean"`
+
+	// If BacktrackTo is set to a timestamp earlier than the earliest backtrack
+	// time, this value backtracks the DB cluster to the earliest possible backtrack
+	// time. Otherwise, an error occurs.
+	UseEarliestTimeOnPointInTimeUnavailable *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s BacktrackDBClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BacktrackDBClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BacktrackDBClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BacktrackDBClusterInput"}
+	if s.BacktrackTo == nil {
+		invalidParams.Add(request.NewErrParamRequired("BacktrackTo"))
+	}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBacktrackTo sets the BacktrackTo field's value.
+func (s *BacktrackDBClusterInput) SetBacktrackTo(v time.Time) *BacktrackDBClusterInput {
+	s.BacktrackTo = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *BacktrackDBClusterInput) SetDBClusterIdentifier(v string) *BacktrackDBClusterInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetForce sets the Force field's value.
+func (s *BacktrackDBClusterInput) SetForce(v bool) *BacktrackDBClusterInput {
+	s.Force = &v
+	return s
+}
+
+// SetUseEarliestTimeOnPointInTimeUnavailable sets the UseEarliestTimeOnPointInTimeUnavailable field's value.
+func (s *BacktrackDBClusterInput) SetUseEarliestTimeOnPointInTimeUnavailable(v bool) *BacktrackDBClusterInput {
+	s.UseEarliestTimeOnPointInTimeUnavailable = &v
+	return s
+}
+
+// This data type is used as a response element in the DescribeDBClusterBacktracks
+// action.
+type BacktrackDBClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the backtrack identifier.
+	BacktrackIdentifier *string `type:"string"`
+
+	// The timestamp of the time at which the backtrack was requested.
+	BacktrackRequestCreationTime *time.Time `type:"timestamp"`
+
+	// The timestamp of the time to which the DB cluster was backtracked.
+	BacktrackTo *time.Time `type:"timestamp"`
+
+	// The timestamp of the time from which the DB cluster was backtracked.
+	BacktrackedFrom *time.Time `type:"timestamp"`
+
+	// Contains a user-supplied DB cluster identifier. This identifier is the unique
+	// key that identifies a DB cluster.
+	DBClusterIdentifier *string `type:"string"`
+
+	// The status of the backtrack. This property returns one of the following values:
+	//
+	//    * applying - The backtrack is currently being applied to or rolled back
+	//    from the DB cluster.
+	//
+	//    * completed - The backtrack has successfully been applied to or rolled
+	//    back from the DB cluster.
+	//
+	//    * failed - An error occurred while the backtrack was applied to or rolled
+	//    back from the DB cluster.
+	//
+	//    * pending - The backtrack is currently pending application to or rollback
+	//    from the DB cluster.
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s BacktrackDBClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BacktrackDBClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetBacktrackIdentifier sets the BacktrackIdentifier field's value.
+func (s *BacktrackDBClusterOutput) SetBacktrackIdentifier(v string) *BacktrackDBClusterOutput {
+	s.BacktrackIdentifier = &v
+	return s
+}
+
+// SetBacktrackRequestCreationTime sets the BacktrackRequestCreationTime field's value.
+func (s *BacktrackDBClusterOutput) SetBacktrackRequestCreationTime(v time.Time) *BacktrackDBClusterOutput {
+	s.BacktrackRequestCreationTime = &v
+	return s
+}
+
+// SetBacktrackTo sets the BacktrackTo field's value.
+func (s *BacktrackDBClusterOutput) SetBacktrackTo(v time.Time) *BacktrackDBClusterOutput {
+	s.BacktrackTo = &v
+	return s
+}
+
+// SetBacktrackedFrom sets the BacktrackedFrom field's value.
+func (s *BacktrackDBClusterOutput) SetBacktrackedFrom(v time.Time) *BacktrackDBClusterOutput {
+	s.BacktrackedFrom = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *BacktrackDBClusterOutput) SetDBClusterIdentifier(v string) *BacktrackDBClusterOutput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *BacktrackDBClusterOutput) SetStatus(v string) *BacktrackDBClusterOutput {
+	s.Status = &v
+	return s
+}
+
 // A CA certificate for an AWS account.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Certificate
 type Certificate struct {
 	_ struct{} `type:"structure"`
 
@@ -10068,10 +12261,10 @@ type Certificate struct {
 	Thumbprint *string `type:"string"`
 
 	// The starting date from which the certificate is valid.
-	ValidFrom *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	ValidFrom *time.Time `type:"timestamp"`
 
 	// The final date that the certificate continues to be valid.
-	ValidTill *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	ValidTill *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -10121,7 +12314,6 @@ func (s *Certificate) SetValidTill(v time.Time) *Certificate {
 }
 
 // This data type is used as a response element in the action DescribeDBEngineVersions.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CharacterSet
 type CharacterSet struct {
 	_ struct{} `type:"structure"`
 
@@ -10154,29 +12346,70 @@ func (s *CharacterSet) SetCharacterSetName(v string) *CharacterSet {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterParameterGroupMessage
+// The configuration setting for the log types to be enabled for export to CloudWatch
+// Logs for a specific DB instance or DB cluster.
+//
+// The EnableLogTypes and DisableLogTypes arrays determine which logs will be
+// exported (or not exported) to CloudWatch Logs. The values within these arrays
+// depend on the DB engine being used. For more information, see Publishing
+// Database Logs to Amazon CloudWatch Logs  (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+// in the Amazon RDS User Guide.
+type CloudwatchLogsExportConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The list of log types to disable.
+	DisableLogTypes []*string `type:"list"`
+
+	// The list of log types to enable.
+	EnableLogTypes []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s CloudwatchLogsExportConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CloudwatchLogsExportConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetDisableLogTypes sets the DisableLogTypes field's value.
+func (s *CloudwatchLogsExportConfiguration) SetDisableLogTypes(v []*string) *CloudwatchLogsExportConfiguration {
+	s.DisableLogTypes = v
+	return s
+}
+
+// SetEnableLogTypes sets the EnableLogTypes field's value.
+func (s *CloudwatchLogsExportConfiguration) SetEnableLogTypes(v []*string) *CloudwatchLogsExportConfiguration {
+	s.EnableLogTypes = v
+	return s
+}
+
 type CopyDBClusterParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter
-	// group. For information about creating an ARN, see  Constructing an RDS Amazon
-	// Resource Name (ARN) (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing).
+	// group. For information about creating an ARN, see  Constructing an ARN for
+	// Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing)
+	// in the Amazon Aurora User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must specify a valid DB cluster parameter group.
 	//
-	//    * If the source DB cluster parameter group is in the same region as the
-	//    copy, specify a valid DB parameter group identifier, for example my-db-cluster-param-group,
+	//    * If the source DB cluster parameter group is in the same AWS Region as
+	//    the copy, specify a valid DB parameter group identifier, for example my-db-cluster-param-group,
 	//    or a valid ARN.
 	//
-	//    * If the source DB parameter group is in a different region than the copy,
-	//    specify a valid DB cluster parameter group ARN, for example arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1.
+	//    * If the source DB parameter group is in a different AWS Region than the
+	//    copy, specify a valid DB cluster parameter group ARN, for example arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1.
 	//
 	// SourceDBClusterParameterGroupIdentifier is a required field
 	SourceDBClusterParameterGroupIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A description for the copied DB cluster parameter group.
@@ -10188,13 +12421,13 @@ type CopyDBClusterParameterGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Cannot be null, empty, or blank
+	//    * Can't be null, empty, or blank
 	//
-	//    * Must contain from 1 to 255 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 255 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-cluster-param-group1
 	//
@@ -10255,15 +12488,12 @@ func (s *CopyDBClusterParameterGroupInput) SetTargetDBClusterParameterGroupIdent
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterParameterGroupResult
 type CopyDBClusterParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the CreateDBClusterParameterGroup
-	// or CopyDBClusterParameterGroup action.
+	// Contains the details of an Amazon RDS DB cluster parameter group.
 	//
-	// This data type is used as a request parameter in the DeleteDBClusterParameterGroup
-	// action, and as a response element in the DescribeDBClusterParameterGroups
+	// This data type is used as a response element in the DescribeDBClusterParameterGroups
 	// action.
 	DBClusterParameterGroup *DBClusterParameterGroup `type:"structure"`
 }
@@ -10284,24 +12514,19 @@ func (s *CopyDBClusterParameterGroupOutput) SetDBClusterParameterGroup(v *DBClus
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterSnapshotMessage
 type CopyDBClusterSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
 	// True to copy all tags from the source DB cluster snapshot to the target DB
-	// cluster snapshot; otherwise false. The default is false.
+	// cluster snapshot, and otherwise false. The default is false.
 	CopyTags *bool `type:"boolean"`
 
 	// DestinationRegion is used for presigning the request to a given region.
 	DestinationRegion *string `type:"string"`
 
-	// The AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key ID is
-	// the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias
-	// for the KMS encryption key.
-	//
-	// If you copy an unencrypted DB cluster snapshot and specify a value for the
-	// KmsKeyId parameter, Amazon RDS encrypts the target DB cluster snapshot using
-	// the specified KMS encryption key.
+	// The AWS AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key
+	// ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key
+	// alias for the KMS encryption key.
 	//
 	// If you copy an encrypted DB cluster snapshot from your AWS account, you can
 	// specify a value for KmsKeyId to encrypt the copy with a new KMS encryption
@@ -10311,38 +12536,41 @@ type CopyDBClusterSnapshotInput struct {
 	// If you copy an encrypted DB cluster snapshot that is shared from another
 	// AWS account, then you must specify a value for KmsKeyId.
 	//
-	// To copy an encrypted DB cluster snapshot to another region, you must set
-	// KmsKeyId to the KMS key ID you want to use to encrypt the copy of the DB
-	// cluster snapshot in the destination region. KMS encryption keys are specific
-	// to the region that they are created in, and you cannot use encryption keys
-	// from one region in another region.
+	// To copy an encrypted DB cluster snapshot to another AWS Region, you must
+	// set KmsKeyId to the KMS key ID you want to use to encrypt the copy of the
+	// DB cluster snapshot in the destination AWS Region. KMS encryption keys are
+	// specific to the AWS Region that they are created in, and you can't use encryption
+	// keys from one AWS Region in another AWS Region.
+	//
+	// If you copy an unencrypted DB cluster snapshot and specify a value for the
+	// KmsKeyId parameter, an error is returned.
 	KmsKeyId *string `type:"string"`
 
 	// The URL that contains a Signature Version 4 signed request for the CopyDBClusterSnapshot
-	// API action in the AWS region that contains the source DB cluster snapshot
+	// API action in the AWS Region that contains the source DB cluster snapshot
 	// to copy. The PreSignedUrl parameter must be used when copying an encrypted
-	// DB cluster snapshot from another AWS region.
+	// DB cluster snapshot from another AWS Region.
 	//
 	// The pre-signed URL must be a valid request for the CopyDBSClusterSnapshot
-	// API action that can be executed in the source region that contains the encrypted
-	// DB cluster snapshot to be copied. The pre-signed URL request must contain
-	// the following parameter values:
+	// API action that can be executed in the source AWS Region that contains the
+	// encrypted DB cluster snapshot to be copied. The pre-signed URL request must
+	// contain the following parameter values:
 	//
-	//    * KmsKeyId - The KMS key identifier for the key to use to encrypt the
-	//    copy of the DB cluster snapshot in the destination region. This is the
-	//    same identifier for both the CopyDBClusterSnapshot action that is called
-	//    in the destination region, and the action contained in the pre-signed
-	//    URL.
+	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
+	//    the copy of the DB cluster snapshot in the destination AWS Region. This
+	//    is the same identifier for both the CopyDBClusterSnapshot action that
+	//    is called in the destination AWS Region, and the action contained in the
+	//    pre-signed URL.
 	//
-	//    * DestinationRegion - The name of the region that the DB cluster snapshot
+	//    * DestinationRegion - The name of the AWS Region that the DB cluster snapshot
 	//    will be created in.
 	//
 	//    * SourceDBClusterSnapshotIdentifier - The DB cluster snapshot identifier
 	//    for the encrypted DB cluster snapshot to be copied. This identifier must
-	//    be in the Amazon Resource Name (ARN) format for the source region. For
-	//    example, if you are copying an encrypted DB cluster snapshot from the
-	//    us-west-2 region, then your SourceDBClusterSnapshotIdentifier looks like
-	//    the following example: arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115.
+	//    be in the Amazon Resource Name (ARN) format for the source AWS Region.
+	//    For example, if you are copying an encrypted DB cluster snapshot from
+	//    the us-west-2 AWS Region, then your SourceDBClusterSnapshotIdentifier
+	//    looks like the following example: arn:aws:rds:us-west-2:123456789012:cluster-snapshot:aurora-cluster1-snapshot-20161115.
 	//
 	// To learn how to generate a Signature Version 4 signed request, see  Authenticating
 	// Requests: Using Query Parameters (AWS Signature Version 4) (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
@@ -10352,25 +12580,20 @@ type CopyDBClusterSnapshotInput struct {
 	// The identifier of the DB cluster snapshot to copy. This parameter is not
 	// case-sensitive.
 	//
-	// You cannot copy an encrypted, shared DB cluster snapshot from one AWS region
+	// You can't copy an encrypted, shared DB cluster snapshot from one AWS Region
 	// to another.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
-	//
-	//    * First character must be a letter.
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
-	//
 	//    * Must specify a valid system snapshot in the "available" state.
 	//
-	//    * If the source snapshot is in the same region as the copy, specify a
-	//    valid DB snapshot identifier.
+	//    * If the source snapshot is in the same AWS Region as the copy, specify
+	//    a valid DB snapshot identifier.
 	//
-	//    * If the source snapshot is in a different region than the copy, specify
+	//    * If the source snapshot is in a different AWS Region than the copy, specify
 	//    a valid DB cluster snapshot ARN. For more information, go to  Copying
-	//    a DB Snapshot or DB Cluster Snapshot (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html).
+	//    Snapshots Across AWS Regions (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_CopySnapshot.html#USER_CopySnapshot.AcrossRegions)
+	//    in the Amazon Aurora User Guide.
 	//
 	// Example: my-cluster-snapshot1
 	//
@@ -10382,7 +12605,8 @@ type CopyDBClusterSnapshotInput struct {
 	// have the same region as the source ARN.
 	SourceRegion *string `type:"string" ignore:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// The identifier of the new DB cluster snapshot to create from the source DB
@@ -10390,11 +12614,11 @@ type CopyDBClusterSnapshotInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
 	//
 	// Example: my-cluster-snapshot2
 	//
@@ -10476,15 +12700,10 @@ func (s *CopyDBClusterSnapshotInput) SetTargetDBClusterSnapshotIdentifier(v stri
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBClusterSnapshotResult
 type CopyDBClusterSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBClusterSnapshot
-	//
-	//    * DeleteDBClusterSnapshot
+	// Contains the details for an Amazon RDS DB cluster snapshot
 	//
 	// This data type is used as a response element in the DescribeDBClusterSnapshots
 	// action.
@@ -10507,25 +12726,25 @@ func (s *CopyDBClusterSnapshotOutput) SetDBClusterSnapshot(v *DBClusterSnapshot)
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBParameterGroupMessage
 type CopyDBParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier or ARN for the source DB parameter group. For information
-	// about creating an ARN, see  Constructing an RDS Amazon Resource Name (ARN)
-	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing).
+	// about creating an ARN, see  Constructing an ARN for Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing)
+	// in the Amazon RDS User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must specify a valid DB parameter group.
 	//
-	//    *  Must specify a valid DB parameter group identifier, for example my-db-param-group,
+	//    * Must specify a valid DB parameter group identifier, for example my-db-param-group,
 	//    or a valid ARN.
 	//
 	// SourceDBParameterGroupIdentifier is a required field
 	SourceDBParameterGroupIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A description for the copied DB parameter group.
@@ -10537,13 +12756,13 @@ type CopyDBParameterGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Cannot be null, empty, or blank
+	//    * Can't be null, empty, or blank
 	//
-	//    * Must contain from 1 to 255 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 255 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-db-parameter-group
 	//
@@ -10604,15 +12823,13 @@ func (s *CopyDBParameterGroupInput) SetTargetDBParameterGroupIdentifier(v string
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBParameterGroupResult
 type CopyDBParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the CreateDBParameterGroup
-	// action.
+	// Contains the details of an Amazon RDS DB parameter group.
 	//
-	// This data type is used as a request parameter in the DeleteDBParameterGroup
-	// action, and as a response element in the DescribeDBParameterGroups action.
+	// This data type is used as a response element in the DescribeDBParameterGroups
+	// action.
 	DBParameterGroup *DBParameterGroup `type:"structure"`
 }
 
@@ -10632,12 +12849,11 @@ func (s *CopyDBParameterGroupOutput) SetDBParameterGroup(v *DBParameterGroup) *C
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBSnapshotMessage
 type CopyDBSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
-	// True to copy all tags from the source DB snapshot to the target DB snapshot;
-	// otherwise false. The default is false.
+	// True to copy all tags from the source DB snapshot to the target DB snapshot,
+	// and otherwise false. The default is false.
 	CopyTags *bool `type:"boolean"`
 
 	// DestinationRegion is used for presigning the request to a given region.
@@ -10658,55 +12874,57 @@ type CopyDBSnapshotInput struct {
 	// If you specify this parameter when you copy an unencrypted snapshot, the
 	// copy is encrypted.
 	//
-	// If you copy an encrypted snapshot to a different AWS region, then you must
-	// specify a KMS key for the destination AWS region. KMS encryption keys are
-	// specific to the region that they are created in, and you cannot use encryption
-	// keys from one region in another region.
+	// If you copy an encrypted snapshot to a different AWS Region, then you must
+	// specify a KMS key for the destination AWS Region. KMS encryption keys are
+	// specific to the AWS Region that they are created in, and you can't use encryption
+	// keys from one AWS Region in another AWS Region.
 	KmsKeyId *string `type:"string"`
 
-	// The name of an option group to associate with the copy.
+	// The name of an option group to associate with the copy of the snapshot.
 	//
-	// Specify this option if you are copying a snapshot from one AWS region to
-	// another, and your DB instance uses a non-default option group. If your source
+	// Specify this option if you are copying a snapshot from one AWS Region to
+	// another, and your DB instance uses a nondefault option group. If your source
 	// DB instance uses Transparent Data Encryption for Oracle or Microsoft SQL
-	// Server, you must specify this option when copying across regions. For more
-	// information, see Option Group Considerations (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Options).
+	// Server, you must specify this option when copying across AWS Regions. For
+	// more information, see Option Group Considerations (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_CopySnapshot.html#USER_CopySnapshot.Options)
+	// in the Amazon RDS User Guide.
 	OptionGroupName *string `type:"string"`
 
 	// The URL that contains a Signature Version 4 signed request for the CopyDBSnapshot
-	// API action in the source AWS region that contains the source DB snapshot
+	// API action in the source AWS Region that contains the source DB snapshot
 	// to copy.
 	//
 	// You must specify this parameter when you copy an encrypted DB snapshot from
-	// another AWS region by using the Amazon RDS API. You can specify the source
-	// region option instead of this parameter when you copy an encrypted DB snapshot
-	// from another AWS region by using the AWS CLI.
+	// another AWS Region by using the Amazon RDS API. You can specify the --source-region
+	// option instead of this parameter when you copy an encrypted DB snapshot from
+	// another AWS Region by using the AWS CLI.
 	//
 	// The presigned URL must be a valid request for the CopyDBSnapshot API action
-	// that can be executed in the source region that contains the encrypted DB
-	// snapshot to be copied. The presigned URL request must contain the following
+	// that can be executed in the source AWS Region that contains the encrypted
+	// DB snapshot to be copied. The presigned URL request must contain the following
 	// parameter values:
 	//
-	//    * DestinationRegion - The AWS Region that the encrypted DB snapshot will
-	//    be copied to. This region is the same one where the CopyDBSnapshot action
+	//    * DestinationRegion - The AWS Region that the encrypted DB snapshot is
+	//    copied to. This AWS Region is the same one where the CopyDBSnapshot action
 	//    is called that contains this presigned URL.
 	//
-	// For example, if you copy an encrypted DB snapshot from the us-west-2 region
-	//    to the us-east-1 region, then you will call the CopyDBSnapshot action
-	//    in the us-east-1 region and provide a presigned URL that contains a call
-	//    to the CopyDBSnapshot action in the us-west-2 region. For this example,
-	//    the DestinationRegion in the presigned URL must be set to the us-east-1
-	//    region.
+	// For example, if you copy an encrypted DB snapshot from the us-west-2 AWS
+	//    Region to the us-east-1 AWS Region, then you call the CopyDBSnapshot action
+	//    in the us-east-1 AWS Region and provide a presigned URL that contains
+	//    a call to the CopyDBSnapshot action in the us-west-2 AWS Region. For this
+	//    example, the DestinationRegion in the presigned URL must be set to the
+	//    us-east-1 AWS Region.
 	//
-	//    * KmsKeyId - The KMS key identifier for the key to use to encrypt the
-	//    copy of the DB snapshot in the destination region. This is the same identifier
-	//    for both the CopyDBSnapshot action that is called in the destination region,
-	//    and the action contained in the presigned URL.
+	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
+	//    the copy of the DB snapshot in the destination AWS Region. This is the
+	//    same identifier for both the CopyDBSnapshot action that is called in the
+	//    destination AWS Region, and the action contained in the presigned URL.
+	//
 	//
 	//    * SourceDBSnapshotIdentifier - The DB snapshot identifier for the encrypted
 	//    snapshot to be copied. This identifier must be in the Amazon Resource
-	//    Name (ARN) format for the source region. For example, if you are copying
-	//    an encrypted DB snapshot from the us-west-2 region, then your SourceDBSnapshotIdentifier
+	//    Name (ARN) format for the source AWS Region. For example, if you are copying
+	//    an encrypted DB snapshot from the us-west-2 AWS Region, then your SourceDBSnapshotIdentifier
 	//    looks like the following example: arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20161115.
 	//
 	//
@@ -10717,17 +12935,17 @@ type CopyDBSnapshotInput struct {
 
 	// The identifier for the source DB snapshot.
 	//
-	// If the source snapshot is in the same region as the copy, specify a valid
-	// DB snapshot identifier. For example, rds:mysql-instance1-snapshot-20130805.
+	// If the source snapshot is in the same AWS Region as the copy, specify a valid
+	// DB snapshot identifier. For example, you might specify rds:mysql-instance1-snapshot-20130805.
 	//
-	// If the source snapshot is in a different region than the copy, specify a
-	// valid DB snapshot ARN. For example, arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20130805.
+	// If the source snapshot is in a different AWS Region than the copy, specify
+	// a valid DB snapshot ARN. For example, you might specify arn:aws:rds:us-west-2:123456789012:snapshot:mysql-instance1-snapshot-20130805.
 	//
 	// If you are copying from a shared manual DB snapshot, this parameter must
 	// be the Amazon Resource Name (ARN) of the shared DB snapshot.
 	//
 	// If you are copying an encrypted snapshot this parameter must be in the ARN
-	// format for the source region, and must match the SourceDBSnapshotIdentifier
+	// format for the source AWS Region, and must match the SourceDBSnapshotIdentifier
 	// in the PreSignedUrl parameter.
 	//
 	// Constraints:
@@ -10746,20 +12964,21 @@ type CopyDBSnapshotInput struct {
 	// have the same region as the source ARN.
 	SourceRegion *string `type:"string" ignore:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// The identifier for the copy of the snapshot.
 	//
 	// Constraints:
 	//
-	//    * Cannot be null, empty, or blank
+	//    * Can't be null, empty, or blank
 	//
-	//    * Must contain from 1 to 255 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 255 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-db-snapshot
 	//
@@ -10847,15 +13066,10 @@ func (s *CopyDBSnapshotInput) SetTargetDBSnapshotIdentifier(v string) *CopyDBSna
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyDBSnapshotResult
 type CopyDBSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBSnapshot
-	//
-	//    * DeleteDBSnapshot
+	// Contains the details of an Amazon RDS DB snapshot.
 	//
 	// This data type is used as a response element in the DescribeDBSnapshots action.
 	DBSnapshot *DBSnapshot `type:"structure"`
@@ -10877,28 +13091,29 @@ func (s *CopyDBSnapshotOutput) SetDBSnapshot(v *DBSnapshot) *CopyDBSnapshotOutpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyOptionGroupMessage
 type CopyOptionGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier or ARN for the source option group. For information about
-	// creating an ARN, see  Constructing an RDS Amazon Resource Name (ARN) (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing).
+	// creating an ARN, see  Constructing an ARN for Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing)
+	// in the Amazon RDS User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must specify a valid option group.
 	//
-	//    * If the source option group is in the same region as the copy, specify
+	//    * If the source option group is in the same AWS Region as the copy, specify
 	//    a valid option group identifier, for example my-option-group, or a valid
 	//    ARN.
 	//
-	//    * If the source option group is in a different region than the copy, specify
-	//    a valid option group ARN, for example arn:aws:rds:us-west-2:123456789012:og:special-options.
+	//    * If the source option group is in a different AWS Region than the copy,
+	//    specify a valid option group ARN, for example arn:aws:rds:us-west-2:123456789012:og:special-options.
 	//
 	// SourceOptionGroupIdentifier is a required field
 	SourceOptionGroupIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// The description for the copied option group.
@@ -10910,13 +13125,13 @@ type CopyOptionGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Cannot be null, empty, or blank
+	//    * Can't be null, empty, or blank
 	//
-	//    * Must contain from 1 to 255 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 255 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-option-group
 	//
@@ -10977,7 +13192,6 @@ func (s *CopyOptionGroupInput) SetTargetOptionGroupIdentifier(v string) *CopyOpt
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CopyOptionGroupResult
 type CopyOptionGroupOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11000,14 +13214,237 @@ func (s *CopyOptionGroupOutput) SetOptionGroup(v *OptionGroup) *CopyOptionGroupO
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterMessage
+type CreateDBClusterEndpointInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier to use for the new endpoint. This parameter is stored as a
+	// lowercase string.
+	//
+	// DBClusterEndpointIdentifier is a required field
+	DBClusterEndpointIdentifier *string `type:"string" required:"true"`
+
+	// The DB cluster identifier of the DB cluster associated with the endpoint.
+	// This parameter is stored as a lowercase string.
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+
+	// The type of the endpoint. One of: READER, ANY.
+	//
+	// EndpointType is a required field
+	EndpointType *string `type:"string" required:"true"`
+
+	// List of DB instance identifiers that aren't part of the custom endpoint group.
+	// All other eligible instances are reachable through the custom endpoint. Only
+	// relevant if the list of static members is empty.
+	ExcludedMembers []*string `type:"list"`
+
+	// List of DB instance identifiers that are part of the custom endpoint group.
+	StaticMembers []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s CreateDBClusterEndpointInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateDBClusterEndpointInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateDBClusterEndpointInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateDBClusterEndpointInput"}
+	if s.DBClusterEndpointIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterEndpointIdentifier"))
+	}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+	if s.EndpointType == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndpointType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *CreateDBClusterEndpointInput) SetDBClusterEndpointIdentifier(v string) *CreateDBClusterEndpointInput {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *CreateDBClusterEndpointInput) SetDBClusterIdentifier(v string) *CreateDBClusterEndpointInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetEndpointType sets the EndpointType field's value.
+func (s *CreateDBClusterEndpointInput) SetEndpointType(v string) *CreateDBClusterEndpointInput {
+	s.EndpointType = &v
+	return s
+}
+
+// SetExcludedMembers sets the ExcludedMembers field's value.
+func (s *CreateDBClusterEndpointInput) SetExcludedMembers(v []*string) *CreateDBClusterEndpointInput {
+	s.ExcludedMembers = v
+	return s
+}
+
+// SetStaticMembers sets the StaticMembers field's value.
+func (s *CreateDBClusterEndpointInput) SetStaticMembers(v []*string) *CreateDBClusterEndpointInput {
+	s.StaticMembers = v
+	return s
+}
+
+// This data type represents the information you need to connect to an Amazon
+// Aurora DB cluster. This data type is used as a response element in the following
+// actions:
+//
+//    * CreateDBClusterEndpoint
+//
+//    * DescribeDBClusterEndpoints
+//
+//    * ModifyDBClusterEndpoint
+//
+//    * DeleteDBClusterEndpoint
+//
+// For the data structure that represents Amazon RDS DB instance endpoints,
+// see Endpoint.
+type CreateDBClusterEndpointOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The type associated with a custom endpoint. One of: READER, ANY.
+	CustomEndpointType *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the endpoint.
+	DBClusterEndpointArn *string `type:"string"`
+
+	// The identifier associated with the endpoint. This parameter is stored as
+	// a lowercase string.
+	DBClusterEndpointIdentifier *string `type:"string"`
+
+	// A unique system-generated identifier for an endpoint. It remains the same
+	// for the whole life of the endpoint.
+	DBClusterEndpointResourceIdentifier *string `type:"string"`
+
+	// The DB cluster identifier of the DB cluster associated with the endpoint.
+	// This parameter is stored as a lowercase string.
+	DBClusterIdentifier *string `type:"string"`
+
+	// The DNS address of the endpoint.
+	Endpoint *string `type:"string"`
+
+	// The type of the endpoint. One of: READER, WRITER, CUSTOM.
+	EndpointType *string `type:"string"`
+
+	// List of DB instance identifiers that aren't part of the custom endpoint group.
+	// All other eligible instances are reachable through the custom endpoint. Only
+	// relevant if the list of static members is empty.
+	ExcludedMembers []*string `type:"list"`
+
+	// List of DB instance identifiers that are part of the custom endpoint group.
+	StaticMembers []*string `type:"list"`
+
+	// The current status of the endpoint. One of: creating, available, deleting,
+	// modifying.
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateDBClusterEndpointOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateDBClusterEndpointOutput) GoString() string {
+	return s.String()
+}
+
+// SetCustomEndpointType sets the CustomEndpointType field's value.
+func (s *CreateDBClusterEndpointOutput) SetCustomEndpointType(v string) *CreateDBClusterEndpointOutput {
+	s.CustomEndpointType = &v
+	return s
+}
+
+// SetDBClusterEndpointArn sets the DBClusterEndpointArn field's value.
+func (s *CreateDBClusterEndpointOutput) SetDBClusterEndpointArn(v string) *CreateDBClusterEndpointOutput {
+	s.DBClusterEndpointArn = &v
+	return s
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *CreateDBClusterEndpointOutput) SetDBClusterEndpointIdentifier(v string) *CreateDBClusterEndpointOutput {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// SetDBClusterEndpointResourceIdentifier sets the DBClusterEndpointResourceIdentifier field's value.
+func (s *CreateDBClusterEndpointOutput) SetDBClusterEndpointResourceIdentifier(v string) *CreateDBClusterEndpointOutput {
+	s.DBClusterEndpointResourceIdentifier = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *CreateDBClusterEndpointOutput) SetDBClusterIdentifier(v string) *CreateDBClusterEndpointOutput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetEndpoint sets the Endpoint field's value.
+func (s *CreateDBClusterEndpointOutput) SetEndpoint(v string) *CreateDBClusterEndpointOutput {
+	s.Endpoint = &v
+	return s
+}
+
+// SetEndpointType sets the EndpointType field's value.
+func (s *CreateDBClusterEndpointOutput) SetEndpointType(v string) *CreateDBClusterEndpointOutput {
+	s.EndpointType = &v
+	return s
+}
+
+// SetExcludedMembers sets the ExcludedMembers field's value.
+func (s *CreateDBClusterEndpointOutput) SetExcludedMembers(v []*string) *CreateDBClusterEndpointOutput {
+	s.ExcludedMembers = v
+	return s
+}
+
+// SetStaticMembers sets the StaticMembers field's value.
+func (s *CreateDBClusterEndpointOutput) SetStaticMembers(v []*string) *CreateDBClusterEndpointOutput {
+	s.StaticMembers = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateDBClusterEndpointOutput) SetStatus(v string) *CreateDBClusterEndpointOutput {
+	s.Status = &v
+	return s
+}
+
 type CreateDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
 	// A list of EC2 Availability Zones that instances in the DB cluster can be
-	// created in. For information on regions and Availability Zones, see Regions
-	// and Availability Zones (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html).
+	// created in. For information on AWS Regions and Availability Zones, see Choosing
+	// the Regions and Availability Zones (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Concepts.RegionsAndAvailabilityZones.html)
+	// in the Amazon Aurora User Guide.
 	AvailabilityZones []*string `locationNameList:"AvailabilityZone" type:"list"`
+
+	// The target backtrack window, in seconds. To disable backtracking, set this
+	// value to 0.
+	//
+	// Default: 0
+	//
+	// Constraints:
+	//
+	//    * If specified, this value must be set to a number from 0 to 259,200 (72
+	//    hours).
+	BacktrackWindow *int64 `type:"long"`
 
 	// The number of days for which automated backups are retained. You must specify
 	// a minimum value of 1.
@@ -11027,11 +13464,11 @@ type CreateDBClusterInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
 	//
 	// Example: my-cluster1
 	//
@@ -11039,21 +13476,18 @@ type CreateDBClusterInput struct {
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
 	// The name of the DB cluster parameter group to associate with this DB cluster.
-	// If this argument is omitted, default.aurora5.6 will be used.
+	// If this argument is omitted, default.aurora5.6 is used.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the name of an existing DB cluster parameter
+	//    group.
 	DBClusterParameterGroupName *string `type:"string"`
 
 	// A DB subnet group to associate with this DB cluster.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: Must match the name of an existing DBSubnetGroup. Must not be
+	// default.
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
@@ -11063,44 +13497,75 @@ type CreateDBClusterInput struct {
 	// you are creating.
 	DatabaseName *string `type:"string"`
 
+	// Indicates if the DB cluster should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false.
+	DeletionProtection *bool `type:"boolean"`
+
 	// DestinationRegion is used for presigning the request to a given region.
 	DestinationRegion *string `type:"string"`
 
-	// A Boolean value that is true to enable mapping of AWS Identity and Access
-	// Management (IAM) accounts to database accounts, and otherwise false.
+	// The list of log types that need to be enabled for exporting to CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon Aurora User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
+	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// to database accounts, and otherwise false.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
 	// The name of the database engine to be used for this DB cluster.
 	//
-	// Valid Values: aurora
+	// Valid Values: aurora (for MySQL 5.6-compatible Aurora), aurora-mysql (for
+	// MySQL 5.7-compatible Aurora), and aurora-postgresql
 	//
 	// Engine is a required field
 	Engine *string `type:"string" required:"true"`
 
+	// The DB engine mode of the DB cluster, either provisioned, serverless, parallelquery,
+	// or global.
+	EngineMode *string `type:"string"`
+
 	// The version number of the database engine to use.
 	//
-	// Aurora
+	// Aurora MySQL
 	//
-	// Example: 5.6.10a
+	// Example: 5.6.10a, 5.7.12
+	//
+	// Aurora PostgreSQL
+	//
+	// Example: 9.6.3
 	EngineVersion *string `type:"string"`
 
-	// The KMS key identifier for an encrypted DB cluster.
+	// The global cluster ID of an Aurora cluster that becomes the primary cluster
+	// in the new global database cluster.
+	GlobalClusterIdentifier *string `type:"string"`
+
+	// The AWS KMS key identifier for an encrypted DB cluster.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
 	// key. If you are creating a DB cluster with the same AWS account that owns
 	// the KMS encryption key used to encrypt the new DB cluster, then you can use
 	// the KMS key alias instead of the ARN for the KMS encryption key.
 	//
-	// If the StorageEncrypted parameter is true, and you do not specify a value
-	// for the KmsKeyId parameter, then Amazon RDS will use your default encryption
-	// key. AWS KMS creates the default encryption key for your AWS account. Your
-	// AWS account has a different default encryption key for each AWS region.
+	// If an encryption key is not specified in KmsKeyId:
 	//
-	// If you create a Read Replica of an encrypted DB cluster in another region,
-	// you must set KmsKeyId to a KMS key ID that is valid in the destination region.
-	// This key is used to encrypt the Read Replica in that region.
+	//    * If ReplicationSourceIdentifier identifies an encrypted source, then
+	//    Amazon RDS will use the encryption key used to encrypt the source. Otherwise,
+	//    Amazon RDS will use your default encryption key.
+	//
+	//    * If the StorageEncrypted parameter is true and ReplicationSourceIdentifier
+	//    is not specified, then Amazon RDS will use your default encryption key.
+	//
+	// AWS KMS creates the default encryption key for your AWS account. Your AWS
+	// account has a different default encryption key for each AWS Region.
+	//
+	// If you create a Read Replica of an encrypted DB cluster in another AWS Region,
+	// you must set KmsKeyId to a KMS key ID that is valid in the destination AWS
+	// Region. This key is used to encrypt the Read Replica in that AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// The password for the master database user. This password can contain any
@@ -11113,48 +13578,49 @@ type CreateDBClusterInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 16 alphanumeric characters.
+	//    * Must be 1 to 16 letters or numbers.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	//    * Can't be a reserved word for the chosen database engine.
 	MasterUsername *string `type:"string"`
 
 	// A value that indicates that the DB cluster should be associated with the
 	// specified option group.
 	//
-	// Permanent options cannot be removed from an option group. The option group
-	// cannot be removed from a DB cluster once it is associated with a DB cluster.
+	// Permanent options can't be removed from an option group. The option group
+	// can't be removed from a DB cluster once it is associated with a DB cluster.
 	OptionGroupName *string `type:"string"`
 
 	// The port number on which the instances in the DB cluster accept connections.
 	//
-	// Default: 3306
+	// Default: 3306 if engine is set as aurora or 5432 if set to aurora-postgresql.
 	Port *int64 `type:"integer"`
 
 	// A URL that contains a Signature Version 4 signed request for the CreateDBCluster
-	// action to be called in the source region where the DB cluster will be replicated
+	// action to be called in the source AWS Region where the DB cluster is replicated
 	// from. You only need to specify PreSignedUrl when you are performing cross-region
 	// replication from an encrypted DB cluster.
 	//
 	// The pre-signed URL must be a valid request for the CreateDBCluster API action
-	// that can be executed in the source region that contains the encrypted DB
-	// cluster to be copied.
+	// that can be executed in the source AWS Region that contains the encrypted
+	// DB cluster to be copied.
 	//
 	// The pre-signed URL request must contain the following parameter values:
 	//
-	//    * KmsKeyId - The KMS key identifier for the key to use to encrypt the
-	//    copy of the DB cluster in the destination region. This should refer to
-	//    the same KMS key for both the CreateDBCluster action that is called in
-	//    the destination region, and the action contained in the pre-signed URL.
+	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
+	//    the copy of the DB cluster in the destination AWS Region. This should
+	//    refer to the same KMS key for both the CreateDBCluster action that is
+	//    called in the destination AWS Region, and the action contained in the
+	//    pre-signed URL.
 	//
-	//    * DestinationRegion - The name of the region that Aurora Read Replica
+	//    * DestinationRegion - The name of the AWS Region that Aurora Read Replica
 	//    will be created in.
 	//
 	//    * ReplicationSourceIdentifier - The DB cluster identifier for the encrypted
 	//    DB cluster to be copied. This identifier must be in the Amazon Resource
-	//    Name (ARN) format for the source region. For example, if you are copying
-	//    an encrypted DB cluster from the us-west-2 region, then your ReplicationSourceIdentifier
+	//    Name (ARN) format for the source AWS Region. For example, if you are copying
+	//    an encrypted DB cluster from the us-west-2 AWS Region, then your ReplicationSourceIdentifier
 	//    would look like Example: arn:aws:rds:us-west-2:123456789012:cluster:aurora-cluster1.
 	//
 	// To learn how to generate a Signature Version 4 signed request, see  Authenticating
@@ -11165,16 +13631,16 @@ type CreateDBClusterInput struct {
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled using the BackupRetentionPeriod parameter.
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region. To see the time blocks available, see  Adjusting the Preferred
-	// Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
-	// in the Amazon RDS User Guide.
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region. To see the time blocks available, see  Adjusting
+	// the Preferred DB Cluster Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora)
+	// in the Amazon Aurora User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must be in the format hh24:mi-hh24:mi.
 	//
-	//    * Times should be in Universal Coordinated Time (UTC).
+	//    * Must be in Universal Coordinated Time (UTC).
 	//
 	//    * Must not conflict with the preferred maintenance window.
 	//
@@ -11186,12 +13652,13 @@ type CreateDBClusterInput struct {
 	//
 	// Format: ddd:hh24:mi-ddd:hh24:mi
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region, occurring on a random day of the week. To see the time blocks
-	// available, see  Adjusting the Preferred Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
-	// in the Amazon RDS User Guide.
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region, occurring on a random day of the week. To see
+	// the time blocks available, see  Adjusting the Preferred DB Cluster Maintenance
+	// Window (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora)
+	// in the Amazon Aurora User Guide.
 	//
-	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
 	//
 	// Constraints: Minimum 30-minute window.
 	PreferredMaintenanceWindow *string `type:"string"`
@@ -11199,6 +13666,10 @@ type CreateDBClusterInput struct {
 	// The Amazon Resource Name (ARN) of the source DB instance or DB cluster if
 	// this DB cluster is created as a Read Replica.
 	ReplicationSourceIdentifier *string `type:"string"`
+
+	// For DB clusters in serverless DB engine mode, the scaling properties of the
+	// DB cluster.
+	ScalingConfiguration *ScalingConfiguration `type:"structure"`
 
 	// SourceRegion is the source region where the resource exists. This is not
 	// sent over the wire and is only used for presigning. This value should always
@@ -11208,7 +13679,8 @@ type CreateDBClusterInput struct {
 	// Specifies whether the DB cluster is encrypted.
 	StorageEncrypted *bool `type:"boolean"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A list of EC2 VPC security groups to associate with this DB cluster.
@@ -11244,6 +13716,12 @@ func (s *CreateDBClusterInput) Validate() error {
 // SetAvailabilityZones sets the AvailabilityZones field's value.
 func (s *CreateDBClusterInput) SetAvailabilityZones(v []*string) *CreateDBClusterInput {
 	s.AvailabilityZones = v
+	return s
+}
+
+// SetBacktrackWindow sets the BacktrackWindow field's value.
+func (s *CreateDBClusterInput) SetBacktrackWindow(v int64) *CreateDBClusterInput {
+	s.BacktrackWindow = &v
 	return s
 }
 
@@ -11283,9 +13761,21 @@ func (s *CreateDBClusterInput) SetDatabaseName(v string) *CreateDBClusterInput {
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *CreateDBClusterInput) SetDeletionProtection(v bool) *CreateDBClusterInput {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetDestinationRegion sets the DestinationRegion field's value.
 func (s *CreateDBClusterInput) SetDestinationRegion(v string) *CreateDBClusterInput {
 	s.DestinationRegion = &v
+	return s
+}
+
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *CreateDBClusterInput) SetEnableCloudwatchLogsExports(v []*string) *CreateDBClusterInput {
+	s.EnableCloudwatchLogsExports = v
 	return s
 }
 
@@ -11301,9 +13791,21 @@ func (s *CreateDBClusterInput) SetEngine(v string) *CreateDBClusterInput {
 	return s
 }
 
+// SetEngineMode sets the EngineMode field's value.
+func (s *CreateDBClusterInput) SetEngineMode(v string) *CreateDBClusterInput {
+	s.EngineMode = &v
+	return s
+}
+
 // SetEngineVersion sets the EngineVersion field's value.
 func (s *CreateDBClusterInput) SetEngineVersion(v string) *CreateDBClusterInput {
 	s.EngineVersion = &v
+	return s
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *CreateDBClusterInput) SetGlobalClusterIdentifier(v string) *CreateDBClusterInput {
+	s.GlobalClusterIdentifier = &v
 	return s
 }
 
@@ -11361,6 +13863,12 @@ func (s *CreateDBClusterInput) SetReplicationSourceIdentifier(v string) *CreateD
 	return s
 }
 
+// SetScalingConfiguration sets the ScalingConfiguration field's value.
+func (s *CreateDBClusterInput) SetScalingConfiguration(v *ScalingConfiguration) *CreateDBClusterInput {
+	s.ScalingConfiguration = v
+	return s
+}
+
 // SetSourceRegion sets the SourceRegion field's value.
 func (s *CreateDBClusterInput) SetSourceRegion(v string) *CreateDBClusterInput {
 	s.SourceRegion = &v
@@ -11385,25 +13893,13 @@ func (s *CreateDBClusterInput) SetVpcSecurityGroupIds(v []*string) *CreateDBClus
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterResult
 type CreateDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -11423,7 +13919,6 @@ func (s *CreateDBClusterOutput) SetDBCluster(v *DBCluster) *CreateDBClusterOutpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterParameterGroupMessage
 type CreateDBClusterParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11431,11 +13926,7 @@ type CreateDBClusterParameterGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the name of an existing DB cluster parameter group.
 	//
 	// This value is stored as a lowercase string.
 	//
@@ -11447,6 +13938,14 @@ type CreateDBClusterParameterGroupInput struct {
 	// and can be applied only to a DB cluster running a database engine and engine
 	// version compatible with that DB cluster parameter group family.
 	//
+	// Aurora MySQL
+	//
+	// Example: aurora5.6, aurora-mysql5.7
+	//
+	// Aurora PostgreSQL
+	//
+	// Example: aurora-postgresql9.6
+	//
 	// DBParameterGroupFamily is a required field
 	DBParameterGroupFamily *string `type:"string" required:"true"`
 
@@ -11455,7 +13954,8 @@ type CreateDBClusterParameterGroupInput struct {
 	// Description is a required field
 	Description *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -11512,15 +14012,12 @@ func (s *CreateDBClusterParameterGroupInput) SetTags(v []*Tag) *CreateDBClusterP
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterParameterGroupResult
 type CreateDBClusterParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the CreateDBClusterParameterGroup
-	// or CopyDBClusterParameterGroup action.
+	// Contains the details of an Amazon RDS DB cluster parameter group.
 	//
-	// This data type is used as a request parameter in the DeleteDBClusterParameterGroup
-	// action, and as a response element in the DescribeDBClusterParameterGroups
+	// This data type is used as a response element in the DescribeDBClusterParameterGroups
 	// action.
 	DBClusterParameterGroup *DBClusterParameterGroup `type:"structure"`
 }
@@ -11541,7 +14038,6 @@ func (s *CreateDBClusterParameterGroupOutput) SetDBClusterParameterGroup(v *DBCl
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterSnapshotMessage
 type CreateDBClusterSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
@@ -11550,11 +14046,7 @@ type CreateDBClusterSnapshotInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
-	//
-	//    * First character must be a letter.
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Must match the identifier of an existing DBCluster.
 	//
 	// Example: my-cluster1
 	//
@@ -11566,11 +14058,11 @@ type CreateDBClusterSnapshotInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
 	//
 	// Example: my-cluster1-snapshot1
 	//
@@ -11625,15 +14117,10 @@ func (s *CreateDBClusterSnapshotInput) SetTags(v []*Tag) *CreateDBClusterSnapsho
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBClusterSnapshotResult
 type CreateDBClusterSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBClusterSnapshot
-	//
-	//    * DeleteDBClusterSnapshot
+	// Contains the details for an Amazon RDS DB cluster snapshot
 	//
 	// This data type is used as a response element in the DescribeDBClusterSnapshots
 	// action.
@@ -11656,12 +14143,10 @@ func (s *CreateDBClusterSnapshotOutput) SetDBClusterSnapshot(v *DBClusterSnapsho
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceMessage
 type CreateDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The amount of storage (in gigabytes) to be initially allocated for the database
-	// instance.
+	// The amount of storage (in gibibytes) to allocate for the DB instance.
 	//
 	// Type: Integer
 	//
@@ -11673,48 +14158,95 @@ type CreateDBInstanceInput struct {
 	//
 	// MySQL
 	//
-	// Constraints: Must be an integer from 5 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 20 to 16384.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 16384.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 5 to 3072.
 	//
 	// MariaDB
 	//
-	// Constraints: Must be an integer from 5 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 20 to 16384.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 16384.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 5 to 3072.
 	//
 	// PostgreSQL
 	//
-	// Constraints: Must be an integer from 5 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 20 to 16384.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 16384.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 5 to 3072.
 	//
 	// Oracle
 	//
-	// Constraints: Must be an integer from 10 to 6144.
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2): Must be an integer from 20 to 32768.
+	//
+	//    * Provisioned IOPS storage (io1): Must be an integer from 100 to 32768.
+	//
+	//    * Magnetic storage (standard): Must be an integer from 10 to 3072.
 	//
 	// SQL Server
 	//
-	// Constraints: Must be an integer from 200 to 4096 (Standard Edition and Enterprise
-	// Edition) or from 20 to 4096 (Express Edition and Web Edition)
+	// Constraints to the amount of storage for each storage type are the following:
+	//
+	//    * General Purpose (SSD) storage (gp2):
+	//
+	// Enterprise and Standard editions: Must be an integer from 200 to 16384.
+	//
+	// Web and Express editions: Must be an integer from 20 to 16384.
+	//
+	//    * Provisioned IOPS storage (io1):
+	//
+	// Enterprise and Standard editions: Must be an integer from 200 to 16384.
+	//
+	// Web and Express editions: Must be an integer from 100 to 16384.
+	//
+	//    * Magnetic storage (standard):
+	//
+	// Enterprise and Standard editions: Must be an integer from 200 to 1024.
+	//
+	// Web and Express editions: Must be an integer from 20 to 1024.
 	AllocatedStorage *int64 `type:"integer"`
 
-	// Indicates that minor engine upgrades will be applied automatically to the
-	// DB instance during the maintenance window.
+	// Indicates that minor engine upgrades are applied automatically to the DB
+	// instance during the maintenance window.
 	//
 	// Default: true
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
-	// The EC2 Availability Zone that the database instance will be created in.
-	// For information on regions and Availability Zones, see Regions and Availability
-	// Zones (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html).
+	// The EC2 Availability Zone that the DB instance is created in. For information
+	// on AWS Regions and Availability Zones, see Regions and Availability Zones
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html).
 	//
-	// Default: A random, system-chosen Availability Zone in the endpoint's region.
+	// Default: A random, system-chosen Availability Zone in the endpoint's AWS
+	// Region.
 	//
 	// Example: us-east-1d
 	//
-	// Constraint: The AvailabilityZone parameter cannot be specified if the MultiAZ
+	// Constraint: The AvailabilityZone parameter can't be specified if the MultiAZ
 	// parameter is set to true. The specified Availability Zone must be in the
-	// same region as the current endpoint.
+	// same AWS Region as the current endpoint.
 	AvailabilityZone *string `type:"string"`
 
 	// The number of days for which automated backups are retained. Setting this
 	// parameter to a positive number enables backups. Setting this parameter to
 	// 0 disables automated backups.
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. The retention period for automated backups is managed by
+	// the DB cluster. For more information, see CreateDBCluster.
 	//
 	// Default: 1
 	//
@@ -11722,15 +14254,20 @@ type CreateDBInstanceInput struct {
 	//
 	//    * Must be a value from 0 to 35
 	//
-	//    * Cannot be set to 0 if the DB instance is a source to Read Replicas
+	//    * Can't be set to 0 if the DB instance is a source to Read Replicas
 	BackupRetentionPeriod *int64 `type:"integer"`
 
 	// For supported engines, indicates that the DB instance should be associated
 	// with the specified CharacterSet.
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. The character set is managed by the DB cluster. For more
+	// information, see CreateDBCluster.
 	CharacterSetName *string `type:"string"`
 
-	// True to copy all tags from the DB instance to snapshots of the DB instance;
-	// otherwise false. The default is false.
+	// True to copy all tags from the DB instance to snapshots of the DB instance,
+	// and otherwise false. The default is false.
 	CopyTagsToSnapshot *bool `type:"boolean"`
 
 	// The identifier of the DB cluster that the instance will belong to.
@@ -11740,15 +14277,11 @@ type CreateDBInstanceInput struct {
 	// Type: String
 	DBClusterIdentifier *string `type:"string"`
 
-	// The compute and memory capacity of the DB instance. Note that not all instance
-	// classes are available in all regions for all DB engines.
-	//
-	// Valid Values: db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge
-	// | db.m2.xlarge |db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large
-	// | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge
-	// | db.m4.4xlarge | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge
-	// | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium
-	// | db.t2.large
+	// The compute and memory capacity of the DB instance, for example, db.m4.large.
+	// Not all DB instance classes are available in all AWS Regions, or for all
+	// database engines. For the full list of DB instance classes, and availability
+	// for your engine, see DB Instance Class (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)
+	// in the Amazon RDS User Guide.
 	//
 	// DBInstanceClass is a required field
 	DBInstanceClass *string `type:"string" required:"true"`
@@ -11757,12 +14290,11 @@ type CreateDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens (1 to 15
-	//    for SQL Server).
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
 	//
 	// Example: mydbinstance
 	//
@@ -11781,9 +14313,9 @@ type CreateDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain 1 to 64 alphanumeric characters
+	//    * Must contain 1 to 64 letters or numbers.
 	//
-	//    * Cannot be a word reserved by the specified database engine
+	//    * Can't be a word reserved by the specified database engine
 	//
 	// MariaDB
 	//
@@ -11792,9 +14324,9 @@ type CreateDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain 1 to 64 alphanumeric characters
+	//    * Must contain 1 to 64 letters or numbers.
 	//
-	//    * Cannot be a word reserved by the specified database engine
+	//    * Can't be a word reserved by the specified database engine
 	//
 	// PostgreSQL
 	//
@@ -11804,12 +14336,12 @@ type CreateDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain 1 to 63 alphanumeric characters
+	//    * Must contain 1 to 63 letters, numbers, or underscores.
 	//
 	//    * Must begin with a letter or an underscore. Subsequent characters can
 	//    be letters, underscores, or digits (0-9).
 	//
-	//    * Cannot be a word reserved by the specified database engine
+	//    * Can't be a word reserved by the specified database engine
 	//
 	// Oracle
 	//
@@ -11821,7 +14353,7 @@ type CreateDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Cannot be longer than 8 characters
+	//    * Can't be longer than 8 characters
 	//
 	// SQL Server
 	//
@@ -11835,22 +14367,22 @@ type CreateDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain 1 to 64 alphanumeric characters
+	//    * Must contain 1 to 64 letters or numbers.
 	//
-	//    * Cannot be a word reserved by the specified database engine
+	//    * Can't be a word reserved by the specified database engine
 	DBName *string `type:"string"`
 
 	// The name of the DB parameter group to associate with this DB instance. If
 	// this argument is omitted, the default DBParameterGroup for the specified
-	// engine will be used.
+	// engine is used.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	DBParameterGroupName *string `type:"string"`
 
 	// A list of DB security groups to associate with this DB instance.
@@ -11863,6 +14395,11 @@ type CreateDBInstanceInput struct {
 	// If there is no DB subnet group, then it is a non-VPC DB instance.
 	DBSubnetGroupName *string `type:"string"`
 
+	// Indicates if the DB instance should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false. For more information, see  Deleting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html).
+	DeletionProtection *bool `type:"boolean"`
+
 	// Specify the Active Directory Domain to create the instance in.
 	Domain *string `type:"string"`
 
@@ -11870,10 +14407,23 @@ type CreateDBInstanceInput struct {
 	// Directory Service.
 	DomainIAMRoleName *string `type:"string"`
 
+	// The list of log types that need to be enabled for exporting to CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs  (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon Relational Database Service User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
 	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
-	// to database accounts; otherwise false.
+	// to database accounts, and otherwise false.
 	//
 	// You can enable IAM database authentication for the following database engines:
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. Mapping AWS IAM accounts to database accounts is managed
+	// by the DB cluster. For more information, see CreateDBCluster.
+	//
+	// MySQL
 	//
 	//    * For MySQL 5.6, minor version 5.6.34 or higher
 	//
@@ -11882,13 +14432,23 @@ type CreateDBInstanceInput struct {
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
+	// True to enable Performance Insights for the DB instance, and otherwise false.
+	//
+	// For more information, see Using Amazon Performance Insights (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html)
+	// in the Amazon Relational Database Service User Guide.
+	EnablePerformanceInsights *bool `type:"boolean"`
+
 	// The name of the database engine to be used for this instance.
 	//
-	// Not every database engine is available for every AWS region.
+	// Not every database engine is available for every AWS Region.
 	//
 	// Valid Values:
 	//
-	//    * aurora
+	//    * aurora (for MySQL 5.6-compatible Aurora)
+	//
+	//    * aurora-mysql (for MySQL 5.7-compatible Aurora)
+	//
+	//    * aurora-postgresql
 	//
 	//    * mariadb
 	//
@@ -11917,181 +14477,69 @@ type CreateDBInstanceInput struct {
 
 	// The version number of the database engine to use.
 	//
-	// The following are the database engines and major and minor versions that
-	// are available with Amazon RDS. Not every database engine is available for
-	// every AWS region.
+	// For a list of valid engine versions, call DescribeDBEngineVersions.
+	//
+	// The following are the database engines and links to information about the
+	// major and minor versions that are available with Amazon RDS. Not every database
+	// engine is available for every AWS Region.
 	//
 	// Amazon Aurora
 	//
-	//    * Version 5.6 (available in these AWS regions: ap-northeast-1, ap-northeast-2,
-	//    ap-south-1, ap-southeast-2, eu-west-1, us-east-1, us-east-2, us-west-2):
-	//     5.6.10a
+	// Not applicable. The version number of the database engine to be used by the
+	// DB instance is managed by the DB cluster. For more information, see CreateDBCluster.
 	//
 	// MariaDB
 	//
-	//    * 10.1.19 (supported in all AWS regions)
+	// See MariaDB on Amazon RDS Versions (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MariaDB.html#MariaDB.Concepts.VersionMgmt)
+	// in the Amazon RDS User Guide.
 	//
-	//    * 10.1.14 (supported in all regions except us-east-2)
+	// Microsoft SQL Server
 	//
-	// 10.0.28 (supported in all AWS regions)
-	//
-	//    * 10.0.24 (supported in all AWS regions)
-	//
-	//    * 10.0.17 (supported in all regions except us-east-2, ca-central-1, eu-west-2)
-	//
-	// Microsoft SQL Server 2016
-	//
-	// 13.00.4422.0.v1 (supported for all editions, and all AWS regions)
-	//
-	//    * 13.00.2164.0.v1 (supported for all editions, and all AWS regions)
-	//
-	// Microsoft SQL Server 2014
-	//
-	// 12.00.5546.0.v1 (supported for all editions, and all AWS regions)
-	//
-	//    * 12.00.5000.0.v1 (supported for all editions, and all AWS regions)
-	//
-	//    * 12.00.4422.0.v1 (supported for all editions except Enterprise Edition,
-	//    and all AWS regions except ca-central-1 and eu-west-2)
-	//
-	// Microsoft SQL Server 2012
-	//
-	// 11.00.6594.0.v1 (supported for all editions, and all AWS regions)
-	//
-	//    * 11.00.6020.0.v1 (supported for all editions, and all AWS regions)
-	//
-	//    * 11.00.5058.0.v1 (supported for all editions, and all AWS regions except
-	//    us-east-2, ca-central-1, and eu-west-2)
-	//
-	//    * 11.00.2100.60.v1 (supported for all editions, and all AWS regions except
-	//    us-east-2, ca-central-1, and eu-west-2)
-	//
-	// Microsoft SQL Server 2008 R2
-	//
-	// 10.50.6529.0.v1 (supported for all editions, and all AWS regions except us-east-2,
-	// ca-central-1, and eu-west-2)
-	//
-	//    * 10.50.6000.34.v1 (supported for all editions, and all AWS regions except
-	//    us-east-2, ca-central-1, and eu-west-2)
-	//
-	//    * 10.50.2789.0.v1 (supported for all editions, and all AWS regions except
-	//    us-east-2, ca-central-1, and eu-west-2)
+	// See Version and Feature Support on Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.FeatureSupport)
+	// in the Amazon RDS User Guide.
 	//
 	// MySQL
 	//
-	// 5.7.17 (supported in all AWS regions)
+	// See MySQL on Amazon RDS Versions (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_MySQL.html#MySQL.Concepts.VersionMgmt)
+	// in the Amazon RDS User Guide.
 	//
-	//    * 5.7.16 (supported in all AWS regions)
+	// Oracle
 	//
-	//    * 5.7.11 (supported in all AWS regions)
-	//
-	//    * 5.7.10 (supported in all regions except us-east-2, ca-central-1, eu-west-2)
-	//
-	//    * 5.6.35 (supported in all AWS regions)
-	//
-	//    * 5.6.34 (supported in all AWS regions)
-	//
-	//    * 5.6.29 (supported in all AWS regions)
-	//
-	//    * 5.6.27 (supported in all regions except us-east-2, ca-central-1, eu-west-2)
-	//
-	//    * 5.6.23 (supported in all regions except us-east-2, ap-south-1, ca-central-1,
-	//    eu-west-2)
-	//
-	//    * 5.6.22 (supported in all regions except us-east-2, ap-south-1, ap-northeast-2,
-	//    ca-central-1, eu-west-2)
-	//
-	//    * 5.6.21b (supported in all regions except us-east-2, ap-south-1, ap-northeast-2,
-	//    ca-central-1, eu-west-2)
-	//
-	//    * 5.6.21 (supported in all regions except us-east-2, ap-south-1, ap-northeast-2,
-	//    ca-central-1, eu-west-2)
-	//
-	//    * 5.6.19b (supported in all regions except us-east-2, ap-south-1, ap-northeast-2,
-	//    ca-central-1, eu-west-2)
-	//
-	//    * 5.6.19a (supported in all regions except us-east-2, ap-south-1, ap-northeast-2,
-	//    ca-central-1, eu-west-2)
-	//
-	// 5.5.54(supported in all AWS regions)
-	//
-	// 5.5.53(supported in all AWS regions)
-	//
-	// 5.5.46(supported in all AWS regions)
-	//
-	// Oracle 12c
-	//
-	// 12.1.0.2.v8(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// 12.1.0.2.v7(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// 12.1.0.2.v6(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// 12.1.0.2.v5(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// 12.1.0.2.v4(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// 12.1.0.2.v3(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// 12.1.0.2.v2(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// 12.1.0.2.v1(supported for EE in all AWS regions, and SE2 in all AWS regions except us-gov-west-1)
-	//
-	// Oracle 11g
-	//
-	// 11.2.0.4.v12(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v11(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v10(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v9(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v8(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v7(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v6(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v5(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v4(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v3(supported for EE, SE1, and SE, in all AWS regions)
-	//
-	// 11.2.0.4.v1(supported for EE, SE1, and SE, in all AWS regions)
+	// See Oracle Database Engine Release Notes (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.Oracle.PatchComposition.html)
+	// in the Amazon RDS User Guide.
 	//
 	// PostgreSQL
 	//
-	// Version 9.6.x: 9.6.1 | 9.6.2
-	//
-	// Version 9.5.x:9.5.6 | 9.5.4 | 9.5.2
-	//
-	// Version 9.4.x:9.4.11 | 9.4.9 | 9.4.7
-	//
-	// Version 9.3.x:9.3.16 | 9.3.14 | 9.3.12
+	// See Supported PostgreSQL Database Versions (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html#PostgreSQL.Concepts.General.DBVersions)
+	// in the Amazon RDS User Guide.
 	EngineVersion *string `type:"string"`
 
 	// The amount of Provisioned IOPS (input/output operations per second) to be
-	// initially allocated for the DB instance.
+	// initially allocated for the DB instance. For information about valid Iops
+	// values, see see Amazon RDS Provisioned IOPS Storage to Improve Performance
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS)
+	// in the Amazon RDS User Guide.
 	//
-	// Constraints: Must be a multiple between 3 and 10 of the storage amount for
-	// the DB instance. Must also be an integer multiple of 1000. For example, if
-	// the size of your DB instance is 500 GB, then your Iops value can be 2000,
-	// 3000, 4000, or 5000.
+	// Constraints: Must be a multiple between 1 and 50 of the storage amount for
+	// the DB instance.
 	Iops *int64 `type:"integer"`
 
-	// The KMS key identifier for an encrypted DB instance.
+	// The AWS KMS key identifier for an encrypted DB instance.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
 	// key. If you are creating a DB instance with the same AWS account that owns
 	// the KMS encryption key used to encrypt the new DB instance, then you can
 	// use the KMS key alias instead of the ARN for the KM encryption key.
 	//
+	// Amazon Aurora
+	//
+	// Not applicable. The KMS key identifier is managed by the DB cluster. For
+	// more information, see CreateDBCluster.
+	//
 	// If the StorageEncrypted parameter is true, and you do not specify a value
 	// for the KmsKeyId parameter, then Amazon RDS will use your default encryption
 	// key. AWS KMS creates the default encryption key for your AWS account. Your
-	// AWS account has a different default encryption key for each AWS region.
+	// AWS account has a different default encryption key for each AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// License model information for this DB instance.
@@ -12099,13 +14547,13 @@ type CreateDBInstanceInput struct {
 	// Valid values: license-included | bring-your-own-license | general-public-license
 	LicenseModel *string `type:"string"`
 
-	// The password for the master database user. Can be any printable ASCII character
-	// except "/", """, or "@".
+	// The password for the master user. The password can include any printable
+	// ASCII character except "/", """, or "@".
 	//
 	// Amazon Aurora
 	//
-	// Not applicable. You specify the password for the master database user when
-	// you create your DB cluster.
+	// Not applicable. The password for the master user is managed by the DB cluster.
+	// For more information, see CreateDBCluster.
 	//
 	// MariaDB
 	//
@@ -12128,60 +14576,70 @@ type CreateDBInstanceInput struct {
 	// Constraints: Must contain from 8 to 128 characters.
 	MasterUserPassword *string `type:"string"`
 
-	// The name for the master database user.
+	// The name for the master user.
 	//
 	// Amazon Aurora
 	//
-	// Not applicable. You specify the name for the master database user when you
-	// create your DB cluster.
+	// Not applicable. The name for the master user is managed by the DB cluster.
+	// For more information, see CreateDBCluster.
 	//
 	// MariaDB
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 16 alphanumeric characters.
+	//    * Required for MariaDB.
 	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	//    * Must be 1 to 16 letters or numbers.
+	//
+	//    * Can't be a reserved word for the chosen database engine.
 	//
 	// Microsoft SQL Server
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 128 alphanumeric characters.
+	//    * Required for SQL Server.
 	//
-	//    * First character must be a letter.
+	//    * Must be 1 to 128 letters or numbers.
 	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	//    * The first character must be a letter.
+	//
+	//    * Can't be a reserved word for the chosen database engine.
 	//
 	// MySQL
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 16 alphanumeric characters.
+	//    * Required for MySQL.
+	//
+	//    * Must be 1 to 16 letters or numbers.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	//    * Can't be a reserved word for the chosen database engine.
 	//
 	// Oracle
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 30 alphanumeric characters.
+	//    * Required for Oracle.
+	//
+	//    * Must be 1 to 30 letters or numbers.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	//    * Can't be a reserved word for the chosen database engine.
 	//
 	// PostgreSQL
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 63 alphanumeric characters.
+	//    * Required for PostgreSQL.
+	//
+	//    * Must be 1 to 63 letters or numbers.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	//    * Can't be a reserved word for the chosen database engine.
 	MasterUsername *string `type:"string"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -12195,25 +14653,36 @@ type CreateDBInstanceInput struct {
 	MonitoringInterval *int64 `type:"integer"`
 
 	// The ARN for the IAM role that permits RDS to send enhanced monitoring metrics
-	// to CloudWatch Logs. For example, arn:aws:iam:123456789012:role/emaccess.
+	// to Amazon CloudWatch Logs. For example, arn:aws:iam:123456789012:role/emaccess.
 	// For information on creating a monitoring role, go to Setting Up and Enabling
-	// Enhanced Monitoring (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.OS.html#USER_Monitoring.OS.Enabling).
+	// Enhanced Monitoring (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.OS.html#USER_Monitoring.OS.Enabling)
+	// in the Amazon RDS User Guide.
 	//
 	// If MonitoringInterval is set to a value other than 0, then you must supply
 	// a MonitoringRoleArn value.
 	MonitoringRoleArn *string `type:"string"`
 
-	// Specifies if the DB instance is a Multi-AZ deployment. You cannot set the
-	// AvailabilityZone parameter if the MultiAZ parameter is set to true.
+	// A value that specifies whether the DB instance is a Multi-AZ deployment.
+	// You can't set the AvailabilityZone parameter if the MultiAZ parameter is
+	// set to true.
 	MultiAZ *bool `type:"boolean"`
 
 	// Indicates that the DB instance should be associated with the specified option
 	// group.
 	//
 	// Permanent options, such as the TDE option for Oracle Advanced Security TDE,
-	// cannot be removed from an option group, and that option group cannot be removed
+	// can't be removed from an option group, and that option group can't be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
+
+	// The AWS KMS key identifier for encryption of Performance Insights data. The
+	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
+	// KMS key alias for the KMS encryption key.
+	PerformanceInsightsKMSKeyId *string `type:"string"`
+
+	// The amount of time, in days, to retain Performance Insights data. Valid values
+	// are 7 or 731 (2 years).
+	PerformanceInsightsRetentionPeriod *int64 `type:"integer"`
 
 	// The port number on which the database accepts connections.
 	//
@@ -12265,42 +14734,52 @@ type CreateDBInstanceInput struct {
 
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled, using the BackupRetentionPeriod parameter. For more
-	// information, see DB Instance Backups (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.BackingUpAndRestoringAmazonRDSInstances.html).
+	// information, see The Backup Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow)
+	// in the Amazon RDS User Guide.
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region. To see the time blocks available, see  Adjusting the Preferred
-	// DB Instance Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow).
+	// Amazon Aurora
+	//
+	// Not applicable. The daily time range for creating automated backups is managed
+	// by the DB cluster. For more information, see CreateDBCluster.
+	//
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region. To see the time blocks available, see  Adjusting
+	// the Preferred DB Instance Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow)
+	// in the Amazon RDS User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must be in the format hh24:mi-hh24:mi.
 	//
-	//    * Times should be in Universal Coordinated Time (UTC).
+	//    * Must be in Universal Coordinated Time (UTC).
 	//
 	//    * Must not conflict with the preferred maintenance window.
 	//
 	//    * Must be at least 30 minutes.
 	PreferredBackupWindow *string `type:"string"`
 
-	// The weekly time range during which system maintenance can occur, in Universal
-	// Coordinated Time (UTC). For more information, see DB Instance Maintenance
-	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBMaintenance.html).
+	// The time range each week during which system maintenance can occur, in Universal
+	// Coordinated Time (UTC). For more information, see Amazon RDS Maintenance
+	// Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html#Concepts.DBMaintenance).
 	//
 	// Format: ddd:hh24:mi-ddd:hh24:mi
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region, occurring on a random day of the week. To see the time blocks
-	// available, see  Adjusting the Preferred Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
-	// in the Amazon RDS User Guide.
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region, occurring on a random day of the week.
 	//
-	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
 	//
 	// Constraints: Minimum 30-minute window.
 	PreferredMaintenanceWindow *string `type:"string"`
 
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
+
 	// A value that specifies the order in which an Aurora Replica is promoted to
 	// the primary instance after a failure of the existing primary instance. For
-	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance).
+	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.FaultTolerance)
+	// in the Amazon Aurora User Guide.
 	//
 	// Default: 1
 	//
@@ -12312,20 +14791,34 @@ type CreateDBInstanceInput struct {
 	// which resolves to a public IP address. A value of false specifies an internal
 	// instance with a DNS name that resolves to a private IP address.
 	//
-	// Default: The default behavior varies depending on whether a VPC has been
-	// requested or not. The following list shows the default behavior in each case.
+	// Default: The default behavior varies depending on whether DBSubnetGroupName
+	// is specified.
 	//
-	//    * Default VPC: true
+	// If DBSubnetGroupName is not specified, and PubliclyAccessible is not specified,
+	// the following applies:
 	//
-	//    * VPC: false
+	//    * If the default VPC in the target region doesn’t have an Internet gateway
+	//    attached to it, the DB instance is private.
 	//
-	// If no DB subnet group has been specified as part of the request and the PubliclyAccessible
-	// value has not been set, the DB instance will be publicly accessible. If a
-	// specific DB subnet group has been specified as part of the request and the
-	// PubliclyAccessible value has not been set, the DB instance will be private.
+	//    * If the default VPC in the target region has an Internet gateway attached
+	//    to it, the DB instance is public.
+	//
+	// If DBSubnetGroupName is specified, and PubliclyAccessible is not specified,
+	// the following applies:
+	//
+	//    * If the subnets are part of a VPC that doesn’t have an Internet gateway
+	//    attached to it, the DB instance is private.
+	//
+	//    * If the subnets are part of a VPC that has an Internet gateway attached
+	//    to it, the DB instance is public.
 	PubliclyAccessible *bool `type:"boolean"`
 
 	// Specifies whether the DB instance is encrypted.
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. The encryption for DB instances is managed by the DB cluster.
+	// For more information, see CreateDBCluster.
 	//
 	// Default: false
 	StorageEncrypted *bool `type:"boolean"`
@@ -12336,16 +14829,17 @@ type CreateDBInstanceInput struct {
 	//
 	// If you specify io1, you must also include a value for the Iops parameter.
 	//
-	// Default: io1 if the Iops parameter is specified; otherwise standard
+	// Default: io1 if the Iops parameter is specified, otherwise standard
 	StorageType *string `type:"string"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
-	// The ARN from the Key Store with which to associate the instance for TDE encryption.
+	// The ARN from the key store with which to associate the instance for TDE encryption.
 	TdeCredentialArn *string `type:"string"`
 
-	// The password for the given ARN from the Key Store in order to access the
+	// The password for the given ARN from the key store in order to access the
 	// device.
 	TdeCredentialPassword *string `type:"string"`
 
@@ -12353,7 +14847,12 @@ type CreateDBInstanceInput struct {
 	// only by Microsoft SQL Server (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_SQLServer.html#SQLServer.Concepts.General.TimeZone).
 	Timezone *string `type:"string"`
 
-	// A list of EC2 VPC security groups to associate with this DB instance.
+	// A list of Amazon EC2 VPC security groups to associate with this DB instance.
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. The associated list of EC2 VPC security groups is managed
+	// by the DB cluster. For more information, see CreateDBCluster.
 	//
 	// Default: The default EC2 VPC security group for the DB subnet group's VPC.
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
@@ -12466,6 +14965,12 @@ func (s *CreateDBInstanceInput) SetDBSubnetGroupName(v string) *CreateDBInstance
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *CreateDBInstanceInput) SetDeletionProtection(v bool) *CreateDBInstanceInput {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetDomain sets the Domain field's value.
 func (s *CreateDBInstanceInput) SetDomain(v string) *CreateDBInstanceInput {
 	s.Domain = &v
@@ -12478,9 +14983,21 @@ func (s *CreateDBInstanceInput) SetDomainIAMRoleName(v string) *CreateDBInstance
 	return s
 }
 
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *CreateDBInstanceInput) SetEnableCloudwatchLogsExports(v []*string) *CreateDBInstanceInput {
+	s.EnableCloudwatchLogsExports = v
+	return s
+}
+
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *CreateDBInstanceInput) SetEnableIAMDatabaseAuthentication(v bool) *CreateDBInstanceInput {
 	s.EnableIAMDatabaseAuthentication = &v
+	return s
+}
+
+// SetEnablePerformanceInsights sets the EnablePerformanceInsights field's value.
+func (s *CreateDBInstanceInput) SetEnablePerformanceInsights(v bool) *CreateDBInstanceInput {
+	s.EnablePerformanceInsights = &v
 	return s
 }
 
@@ -12550,6 +15067,18 @@ func (s *CreateDBInstanceInput) SetOptionGroupName(v string) *CreateDBInstanceIn
 	return s
 }
 
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *CreateDBInstanceInput) SetPerformanceInsightsKMSKeyId(v string) *CreateDBInstanceInput {
+	s.PerformanceInsightsKMSKeyId = &v
+	return s
+}
+
+// SetPerformanceInsightsRetentionPeriod sets the PerformanceInsightsRetentionPeriod field's value.
+func (s *CreateDBInstanceInput) SetPerformanceInsightsRetentionPeriod(v int64) *CreateDBInstanceInput {
+	s.PerformanceInsightsRetentionPeriod = &v
+	return s
+}
+
 // SetPort sets the Port field's value.
 func (s *CreateDBInstanceInput) SetPort(v int64) *CreateDBInstanceInput {
 	s.Port = &v
@@ -12565,6 +15094,12 @@ func (s *CreateDBInstanceInput) SetPreferredBackupWindow(v string) *CreateDBInst
 // SetPreferredMaintenanceWindow sets the PreferredMaintenanceWindow field's value.
 func (s *CreateDBInstanceInput) SetPreferredMaintenanceWindow(v string) *CreateDBInstanceInput {
 	s.PreferredMaintenanceWindow = &v
+	return s
+}
+
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *CreateDBInstanceInput) SetProcessorFeatures(v []*ProcessorFeature) *CreateDBInstanceInput {
+	s.ProcessorFeatures = v
 	return s
 }
 
@@ -12622,21 +15157,10 @@ func (s *CreateDBInstanceInput) SetVpcSecurityGroupIds(v []*string) *CreateDBIns
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceResult
 type CreateDBInstanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -12658,35 +15182,32 @@ func (s *CreateDBInstanceOutput) SetDBInstance(v *DBInstance) *CreateDBInstanceO
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceReadReplicaMessage
 type CreateDBInstanceReadReplicaInput struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates that minor engine upgrades will be applied automatically to the
-	// Read Replica during the maintenance window.
+	// Indicates that minor engine upgrades are applied automatically to the Read
+	// Replica during the maintenance window.
 	//
 	// Default: Inherits from the source DB instance
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
-	// The Amazon EC2 Availability Zone that the Read Replica will be created in.
+	// The Amazon EC2 Availability Zone that the Read Replica is created in.
 	//
-	// Default: A random, system-chosen Availability Zone in the endpoint's region.
+	// Default: A random, system-chosen Availability Zone in the endpoint's AWS
+	// Region.
 	//
 	// Example: us-east-1d
 	AvailabilityZone *string `type:"string"`
 
-	// True to copy all tags from the Read Replica to snapshots of the Read Replica;
-	// otherwise false. The default is false.
+	// True to copy all tags from the Read Replica to snapshots of the Read Replica,
+	// and otherwise false. The default is false.
 	CopyTagsToSnapshot *bool `type:"boolean"`
 
-	// The compute and memory capacity of the Read Replica. Note that not all instance
-	// classes are available in all regions for all DB engines.
-	//
-	// Valid Values: db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge | db.m2.xlarge
-	// |db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge
-	// | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge
-	// | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge
-	// | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large
+	// The compute and memory capacity of the Read Replica, for example, db.m4.large.
+	// Not all DB instance classes are available in all AWS Regions, or for all
+	// database engines. For the full list of DB instance classes, and availability
+	// for your engine, see DB Instance Class (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)
+	// in the Amazon RDS User Guide.
 	//
 	// Default: Inherits from the source DB instance.
 	DBInstanceClass *string `type:"string"`
@@ -12698,38 +15219,48 @@ type CreateDBInstanceReadReplicaInput struct {
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
 
-	// Specifies a DB subnet group for the DB instance. The new DB instance will
-	// be created in the VPC associated with the DB subnet group. If no DB subnet
-	// group is specified, then the new DB instance is not created in a VPC.
+	// Specifies a DB subnet group for the DB instance. The new DB instance is created
+	// in the VPC associated with the DB subnet group. If no DB subnet group is
+	// specified, then the new DB instance is not created in a VPC.
 	//
 	// Constraints:
 	//
 	//    * Can only be specified if the source DB instance identifier specifies
-	//    a DB instance in another region.
+	//    a DB instance in another AWS Region.
 	//
-	//    * The specified DB subnet group must be in the same region in which the
-	//    operation is running.
+	//    * If supplied, must match the name of an existing DBSubnetGroup.
 	//
-	//    * All Read Replicas in one region that are created from the same source
+	//    * The specified DB subnet group must be in the same AWS Region in which
+	//    the operation is running.
+	//
+	//    * All Read Replicas in one AWS Region that are created from the same source
 	//    DB instance must either:>
 	//
-	// Specify DB subnet groups from the same VPC. All these Read Replicas will
-	//    be created in the same VPC.
+	// Specify DB subnet groups from the same VPC. All these Read Replicas are created
+	//    in the same VPC.
 	//
-	// Not specify a DB subnet group. All these Read Replicas will be created outside
+	// Not specify a DB subnet group. All these Read Replicas are created outside
 	//    of any VPC.
-	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
 
+	// Indicates if the DB instance should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false. For more information, see  Deleting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html).
+	DeletionProtection *bool `type:"boolean"`
+
 	// DestinationRegion is used for presigning the request to a given region.
 	DestinationRegion *string `type:"string"`
 
+	// The list of logs that the new DB instance is to export to CloudWatch Logs.
+	// The values in the list depend on the DB engine being used. For more information,
+	// see Publishing Database Logs to Amazon CloudWatch Logs  (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon RDS User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
 	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
-	// to database accounts; otherwise false.
+	// to database accounts, and otherwise false.
 	//
 	// You can enable IAM database authentication for the following database engines
 	//
@@ -12737,10 +15268,16 @@ type CreateDBInstanceReadReplicaInput struct {
 	//
 	//    * For MySQL 5.7, minor version 5.7.16 or higher
 	//
-	//    * Aurora 5.6 or higher.
+	//    * Aurora MySQL 5.6 or higher
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
+
+	// True to enable Performance Insights for the read replica, and otherwise false.
+	//
+	// For more information, see Using Amazon Performance Insights (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html)
+	// in the Amazon RDS User Guide.
+	EnablePerformanceInsights *bool `type:"boolean"`
 
 	// The amount of Provisioned IOPS (input/output operations per second) to be
 	// initially allocated for the DB instance.
@@ -12750,19 +15287,16 @@ type CreateDBInstanceReadReplicaInput struct {
 	// Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS
 	// encryption key.
 	//
-	// If you create an unencrypted Read Replica and specify a value for the KmsKeyId
-	// parameter, Amazon RDS encrypts the target Read Replica using the specified
-	// KMS encryption key.
+	// If you create an encrypted Read Replica in the same AWS Region as the source
+	// DB instance, then you do not have to specify a value for this parameter.
+	// The Read Replica is encrypted with the same KMS key as the source DB instance.
 	//
-	// If you create an encrypted Read Replica from your AWS account, you can specify
-	// a value for KmsKeyId to encrypt the Read Replica with a new KMS encryption
-	// key. If you don't specify a value for KmsKeyId, then the Read Replica is
-	// encrypted with the same KMS key as the source DB instance.
+	// If you create an encrypted Read Replica in a different AWS Region, then you
+	// must specify a KMS key for the destination AWS Region. KMS encryption keys
+	// are specific to the AWS Region that they are created in, and you can't use
+	// encryption keys from one AWS Region in another AWS Region.
 	//
-	// If you create an encrypted Read Replica in a different AWS region, then you
-	// must specify a KMS key for the destination AWS region. KMS encryption keys
-	// are specific to the region that they are created in, and you cannot use encryption
-	// keys from one region in another region.
+	// You can't create an encrypted Read Replica from an unencrypted DB instance.
 	KmsKeyId *string `type:"string"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -12776,17 +15310,35 @@ type CreateDBInstanceReadReplicaInput struct {
 	MonitoringInterval *int64 `type:"integer"`
 
 	// The ARN for the IAM role that permits RDS to send enhanced monitoring metrics
-	// to CloudWatch Logs. For example, arn:aws:iam:123456789012:role/emaccess.
+	// to Amazon CloudWatch Logs. For example, arn:aws:iam:123456789012:role/emaccess.
 	// For information on creating a monitoring role, go to To create an IAM role
-	// for Amazon RDS Enhanced Monitoring (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole).
+	// for Amazon RDS Enhanced Monitoring (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole)
+	// in the Amazon RDS User Guide.
 	//
 	// If MonitoringInterval is set to a value other than 0, then you must supply
 	// a MonitoringRoleArn value.
 	MonitoringRoleArn *string `type:"string"`
 
-	// The option group the DB instance will be associated with. If omitted, the
-	// default option group for the engine specified will be used.
+	// Specifies whether the Read Replica is in a Multi-AZ deployment.
+	//
+	// You can create a Read Replica as a Multi-AZ DB instance. RDS creates a standby
+	// of your replica in another Availability Zone for failover support for the
+	// replica. Creating your Read Replica as a Multi-AZ DB instance is independent
+	// of whether the source database is a Multi-AZ DB instance.
+	MultiAZ *bool `type:"boolean"`
+
+	// The option group the DB instance is associated with. If omitted, the default
+	// option group for the engine specified is used.
 	OptionGroupName *string `type:"string"`
+
+	// The AWS KMS key identifier for encryption of Performance Insights data. The
+	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
+	// KMS key alias for the KMS encryption key.
+	PerformanceInsightsKMSKeyId *string `type:"string"`
+
+	// The amount of time, in days, to retain Performance Insights data. Valid values
+	// are 7 or 731 (2 years).
+	PerformanceInsightsRetentionPeriod *int64 `type:"integer"`
 
 	// The port number that the DB instance uses for connections.
 	//
@@ -12795,58 +15347,58 @@ type CreateDBInstanceReadReplicaInput struct {
 	// Valid Values: 1150-65535
 	Port *int64 `type:"integer"`
 
-	// The URL that contains a Signature Version 4 signed request for the  CreateDBInstanceReadReplica
-	// API action in the AWS region that contains the source DB instance. The PreSignedUrl
-	// parameter must be used when encrypting a Read Replica from another AWS region.
+	// The URL that contains a Signature Version 4 signed request for the CreateDBInstanceReadReplica
+	// API action in the source AWS Region that contains the source DB instance.
+	//
+	// You must specify this parameter when you create an encrypted Read Replica
+	// from another AWS Region by using the Amazon RDS API. You can specify the
+	// --source-region option instead of this parameter when you create an encrypted
+	// Read Replica from another AWS Region by using the AWS CLI.
 	//
 	// The presigned URL must be a valid request for the CreateDBInstanceReadReplica
-	// API action that can be executed in the source region that contains the encrypted
-	// DB instance. The presigned URL request must contain the following parameter
-	// values:
+	// API action that can be executed in the source AWS Region that contains the
+	// encrypted source DB instance. The presigned URL request must contain the
+	// following parameter values:
 	//
-	//    * DestinationRegion - The AWS Region that the Read Replica is created
-	//    in. This region is the same one where the CreateDBInstanceReadReplica
+	//    * DestinationRegion - The AWS Region that the encrypted Read Replica is
+	//    created in. This AWS Region is the same one where the CreateDBInstanceReadReplica
 	//    action is called that contains this presigned URL.
 	//
-	//  For example, if you create an encrypted Read Replica in the us-east-1 region,
-	//    and the source DB instance is in the west-2 region, then you call the
-	//    CreateDBInstanceReadReplica action in the us-east-1 region and provide
-	//    a presigned URL that contains a call to the CreateDBInstanceReadReplica
-	//    action in the us-west-2 region. For this example, the DestinationRegion
-	//    in the presigned URL must be set to the us-east-1 region.
+	// For example, if you create an encrypted DB instance in the us-west-1 AWS
+	//    Region, from a source DB instance in the us-east-2 AWS Region, then you
+	//    call the CreateDBInstanceReadReplica action in the us-east-1 AWS Region
+	//    and provide a presigned URL that contains a call to the CreateDBInstanceReadReplica
+	//    action in the us-west-2 AWS Region. For this example, the DestinationRegion
+	//    in the presigned URL must be set to the us-east-1 AWS Region.
 	//
-	//    * KmsKeyId - The KMS key identifier for the key to use to encrypt the
-	//    Read Replica in the destination region. This is the same identifier for
-	//    both the CreateDBInstanceReadReplica action that is called in the destination
-	//    region, and the action contained in the presigned URL.
+	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
+	//    the Read Replica in the destination AWS Region. This is the same identifier
+	//    for both the CreateDBInstanceReadReplica action that is called in the
+	//    destination AWS Region, and the action contained in the presigned URL.
+	//
 	//
 	//    * SourceDBInstanceIdentifier - The DB instance identifier for the encrypted
-	//    Read Replica to be created. This identifier must be in the Amazon Resource
-	//    Name (ARN) format for the source region. For example, if you create an
-	//    encrypted Read Replica from a DB instance in the us-west-2 region, then
-	//    your SourceDBInstanceIdentifier would look like this example:  arn:aws:rds:us-west-2:123456789012:instance:mysql-instance1-instance-20161115.
+	//    DB instance to be replicated. This identifier must be in the Amazon Resource
+	//    Name (ARN) format for the source AWS Region. For example, if you are creating
+	//    an encrypted Read Replica from a DB instance in the us-west-2 AWS Region,
+	//    then your SourceDBInstanceIdentifier looks like the following example:
+	//    arn:aws:rds:us-west-2:123456789012:instance:mysql-instance1-20161115.
 	//
-	// To learn how to generate a Signature Version 4 signed request, see  Authenticating
+	//
+	// To learn how to generate a Signature Version 4 signed request, see Authenticating
 	// Requests: Using Query Parameters (AWS Signature Version 4) (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
-	// and  Signature Version 4 Signing Process (http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
+	// and Signature Version 4 Signing Process (http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
 	PreSignedUrl *string `type:"string"`
+
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
 
 	// Specifies the accessibility options for the DB instance. A value of true
 	// specifies an Internet-facing instance with a publicly resolvable DNS name,
 	// which resolves to a public IP address. A value of false specifies an internal
-	// instance with a DNS name that resolves to a private IP address.
-	//
-	// Default: The default behavior varies depending on whether a VPC has been
-	// requested or not. The following list shows the default behavior in each case.
-	//
-	//    * Default VPC:true
-	//
-	//    * VPC:false
-	//
-	// If no DB subnet group has been specified as part of the request and the PubliclyAccessible
-	// value has not been set, the DB instance will be publicly accessible. If a
-	// specific DB subnet group has been specified as part of the request and the
-	// PubliclyAccessible value has not been set, the DB instance will be private.
+	// instance with a DNS name that resolves to a private IP address. For more
+	// information, see CreateDBInstance.
 	PubliclyAccessible *bool `type:"boolean"`
 
 	// The identifier of the DB instance that will act as the source for the Read
@@ -12858,20 +15410,22 @@ type CreateDBInstanceReadReplicaInput struct {
 	//    DB instance.
 	//
 	//    * Can specify a DB instance that is a MySQL Read Replica only if the source
-	//    is running MySQL 5.6.
+	//    is running MySQL 5.6 or later.
 	//
 	//    * Can specify a DB instance that is a PostgreSQL DB instance only if the
-	//    source is running PostgreSQL 9.3.5 or later.
+	//    source is running PostgreSQL 9.3.5 or later (9.4.7 and higher for cross-region
+	//    replication).
 	//
 	//    * The specified DB instance must have automatic backups enabled, its backup
 	//    retention period must be greater than 0.
 	//
-	//    * If the source DB instance is in the same region as the Read Replica,
+	//    * If the source DB instance is in the same AWS Region as the Read Replica,
 	//    specify a valid DB instance identifier.
 	//
-	//    * If the source DB instance is in a different region than the Read Replica,
-	//    specify a valid DB instance ARN. For more information, go to  Constructing
-	//    a Amazon RDS Amazon Resource Name (ARN) (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing).
+	//    * If the source DB instance is in a different AWS Region than the Read
+	//    Replica, specify a valid DB instance ARN. For more information, go to
+	//     Constructing an ARN for Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing)
+	//    in the Amazon RDS User Guide.
 	//
 	// SourceDBInstanceIdentifier is a required field
 	SourceDBInstanceIdentifier *string `type:"string" required:"true"`
@@ -12887,11 +15441,21 @@ type CreateDBInstanceReadReplicaInput struct {
 	//
 	// If you specify io1, you must also include a value for the Iops parameter.
 	//
-	// Default: io1 if the Iops parameter is specified; otherwise standard
+	// Default: io1 if the Iops parameter is specified, otherwise standard
 	StorageType *string `type:"string"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
+
+	// A value that specifies that the DB instance class of the DB instance uses
+	// its default processor features.
+	UseDefaultProcessorFeatures *bool `type:"boolean"`
+
+	// A list of EC2 VPC security groups to associate with the Read Replica.
+	//
+	// Default: The default EC2 VPC security group for the DB subnet group's VPC.
+	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
 // String returns the string representation
@@ -12956,15 +15520,33 @@ func (s *CreateDBInstanceReadReplicaInput) SetDBSubnetGroupName(v string) *Creat
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetDeletionProtection(v bool) *CreateDBInstanceReadReplicaInput {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetDestinationRegion sets the DestinationRegion field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetDestinationRegion(v string) *CreateDBInstanceReadReplicaInput {
 	s.DestinationRegion = &v
 	return s
 }
 
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetEnableCloudwatchLogsExports(v []*string) *CreateDBInstanceReadReplicaInput {
+	s.EnableCloudwatchLogsExports = v
+	return s
+}
+
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetEnableIAMDatabaseAuthentication(v bool) *CreateDBInstanceReadReplicaInput {
 	s.EnableIAMDatabaseAuthentication = &v
+	return s
+}
+
+// SetEnablePerformanceInsights sets the EnablePerformanceInsights field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetEnablePerformanceInsights(v bool) *CreateDBInstanceReadReplicaInput {
+	s.EnablePerformanceInsights = &v
 	return s
 }
 
@@ -12992,9 +15574,27 @@ func (s *CreateDBInstanceReadReplicaInput) SetMonitoringRoleArn(v string) *Creat
 	return s
 }
 
+// SetMultiAZ sets the MultiAZ field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetMultiAZ(v bool) *CreateDBInstanceReadReplicaInput {
+	s.MultiAZ = &v
+	return s
+}
+
 // SetOptionGroupName sets the OptionGroupName field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetOptionGroupName(v string) *CreateDBInstanceReadReplicaInput {
 	s.OptionGroupName = &v
+	return s
+}
+
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetPerformanceInsightsKMSKeyId(v string) *CreateDBInstanceReadReplicaInput {
+	s.PerformanceInsightsKMSKeyId = &v
+	return s
+}
+
+// SetPerformanceInsightsRetentionPeriod sets the PerformanceInsightsRetentionPeriod field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetPerformanceInsightsRetentionPeriod(v int64) *CreateDBInstanceReadReplicaInput {
+	s.PerformanceInsightsRetentionPeriod = &v
 	return s
 }
 
@@ -13007,6 +15607,12 @@ func (s *CreateDBInstanceReadReplicaInput) SetPort(v int64) *CreateDBInstanceRea
 // SetPreSignedUrl sets the PreSignedUrl field's value.
 func (s *CreateDBInstanceReadReplicaInput) SetPreSignedUrl(v string) *CreateDBInstanceReadReplicaInput {
 	s.PreSignedUrl = &v
+	return s
+}
+
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetProcessorFeatures(v []*ProcessorFeature) *CreateDBInstanceReadReplicaInput {
+	s.ProcessorFeatures = v
 	return s
 }
 
@@ -13040,21 +15646,22 @@ func (s *CreateDBInstanceReadReplicaInput) SetTags(v []*Tag) *CreateDBInstanceRe
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBInstanceReadReplicaResult
+// SetUseDefaultProcessorFeatures sets the UseDefaultProcessorFeatures field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetUseDefaultProcessorFeatures(v bool) *CreateDBInstanceReadReplicaInput {
+	s.UseDefaultProcessorFeatures = &v
+	return s
+}
+
+// SetVpcSecurityGroupIds sets the VpcSecurityGroupIds field's value.
+func (s *CreateDBInstanceReadReplicaInput) SetVpcSecurityGroupIds(v []*string) *CreateDBInstanceReadReplicaInput {
+	s.VpcSecurityGroupIds = v
+	return s
+}
+
 type CreateDBInstanceReadReplicaOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -13076,7 +15683,6 @@ func (s *CreateDBInstanceReadReplicaOutput) SetDBInstance(v *DBInstance) *Create
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBParameterGroupMessage
 type CreateDBParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13085,6 +15691,13 @@ type CreateDBParameterGroupInput struct {
 	// to a DB instance running a database engine and engine version compatible
 	// with that DB parameter group family.
 	//
+	// To list all of the available parameter group families, use the following
+	// command:
+	//
+	// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
+	//
+	// The output contains duplicates.
+	//
 	// DBParameterGroupFamily is a required field
 	DBParameterGroupFamily *string `type:"string" required:"true"`
 
@@ -13092,11 +15705,11 @@ type CreateDBParameterGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// This value is stored as a lowercase string.
 	//
@@ -13108,7 +15721,8 @@ type CreateDBParameterGroupInput struct {
 	// Description is a required field
 	Description *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -13165,15 +15779,13 @@ func (s *CreateDBParameterGroupInput) SetTags(v []*Tag) *CreateDBParameterGroupI
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBParameterGroupResult
 type CreateDBParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the CreateDBParameterGroup
-	// action.
+	// Contains the details of an Amazon RDS DB parameter group.
 	//
-	// This data type is used as a request parameter in the DeleteDBParameterGroup
-	// action, and as a response element in the DescribeDBParameterGroups action.
+	// This data type is used as a response element in the DescribeDBParameterGroups
+	// action.
 	DBParameterGroup *DBParameterGroup `type:"structure"`
 }
 
@@ -13193,7 +15805,6 @@ func (s *CreateDBParameterGroupOutput) SetDBParameterGroup(v *DBParameterGroup) 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSecurityGroupMessage
 type CreateDBSecurityGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13206,11 +15817,11 @@ type CreateDBSecurityGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	//    * Must not be "Default"
 	//
@@ -13219,7 +15830,8 @@ type CreateDBSecurityGroupInput struct {
 	// DBSecurityGroupName is a required field
 	DBSecurityGroupName *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -13267,19 +15879,10 @@ func (s *CreateDBSecurityGroupInput) SetTags(v []*Tag) *CreateDBSecurityGroupInp
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSecurityGroupResult
 type CreateDBSecurityGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * DescribeDBSecurityGroups
-	//
-	//    * AuthorizeDBSecurityGroupIngress
-	//
-	//    * CreateDBSecurityGroup
-	//
-	//    * RevokeDBSecurityGroupIngress
+	// Contains the details for an Amazon RDS DB security group.
 	//
 	// This data type is used as a response element in the DescribeDBSecurityGroups
 	// action.
@@ -13302,19 +15905,14 @@ func (s *CreateDBSecurityGroupOutput) SetDBSecurityGroup(v *DBSecurityGroup) *Cr
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSnapshotMessage
 type CreateDBSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
-	// The DB instance identifier. This is the unique key that identifies a DB instance.
+	// The identifier of the DB instance that you want to create the snapshot of.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing DBInstance.
 	//
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
@@ -13323,20 +15921,21 @@ type CreateDBSnapshotInput struct {
 	//
 	// Constraints:
 	//
-	//    * Cannot be null, empty, or blank
+	//    * Can't be null, empty, or blank
 	//
-	//    * Must contain from 1 to 255 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 255 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-snapshot-id
 	//
 	// DBSnapshotIdentifier is a required field
 	DBSnapshotIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -13384,15 +15983,10 @@ func (s *CreateDBSnapshotInput) SetTags(v []*Tag) *CreateDBSnapshotInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSnapshotResult
 type CreateDBSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBSnapshot
-	//
-	//    * DeleteDBSnapshot
+	// Contains the details of an Amazon RDS DB snapshot.
 	//
 	// This data type is used as a response element in the DescribeDBSnapshots action.
 	DBSnapshot *DBSnapshot `type:"structure"`
@@ -13414,7 +16008,6 @@ func (s *CreateDBSnapshotOutput) SetDBSnapshot(v *DBSnapshot) *CreateDBSnapshotO
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSubnetGroupMessage
 type CreateDBSubnetGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13425,8 +16018,8 @@ type CreateDBSubnetGroupInput struct {
 
 	// The name for the DB subnet group. This value is stored as a lowercase string.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: Must contain no more than 255 letters, numbers, periods, underscores,
+	// spaces, or hyphens. Must not be default.
 	//
 	// Example: mySubnetgroup
 	//
@@ -13438,7 +16031,8 @@ type CreateDBSubnetGroupInput struct {
 	// SubnetIds is a required field
 	SubnetIds []*string `locationNameList:"SubnetIdentifier" type:"list" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -13495,19 +16089,10 @@ func (s *CreateDBSubnetGroupInput) SetTags(v []*Tag) *CreateDBSubnetGroupInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateDBSubnetGroupResult
 type CreateDBSubnetGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBSubnetGroup
-	//
-	//    * ModifyDBSubnetGroup
-	//
-	//    * DescribeDBSubnetGroups
-	//
-	//    * DeleteDBSubnetGroup
+	// Contains the details of an Amazon RDS DB subnet group.
 	//
 	// This data type is used as a response element in the DescribeDBSubnetGroups
 	// action.
@@ -13530,7 +16115,6 @@ func (s *CreateDBSubnetGroupOutput) SetDBSubnetGroup(v *DBSubnetGroup) *CreateDB
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateEventSubscriptionMessage
 type CreateEventSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13552,10 +16136,10 @@ type CreateEventSubscriptionInput struct {
 	// SnsTopicArn is a required field
 	SnsTopicArn *string `type:"string" required:"true"`
 
-	// The list of identifiers of the event sources for which events will be returned.
+	// The list of identifiers of the event sources for which events are returned.
 	// If not specified, then all sources are included in the response. An identifier
 	// must begin with a letter and must contain only ASCII letters, digits, and
-	// hyphens; it cannot end with a hyphen or contain two consecutive hyphens.
+	// hyphens; it can't end with a hyphen or contain two consecutive hyphens.
 	//
 	// Constraints:
 	//
@@ -13574,10 +16158,9 @@ type CreateEventSubscriptionInput struct {
 	//    supplied.
 	SourceIds []*string `locationNameList:"SourceId" type:"list"`
 
-	// The type of source that will be generating the events. For example, if you
-	// want to be notified of events generated by a DB instance, you would set this
-	// parameter to db-instance. if this value is not specified, all events are
-	// returned.
+	// The type of source that is generating the events. For example, if you want
+	// to be notified of events generated by a DB instance, you would set this parameter
+	// to db-instance. if this value is not specified, all events are returned.
 	//
 	// Valid values: db-instance | db-cluster | db-parameter-group | db-security-group
 	// | db-snapshot | db-cluster-snapshot
@@ -13590,7 +16173,8 @@ type CreateEventSubscriptionInput struct {
 	// SubscriptionName is a required field
 	SubscriptionName *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -13662,7 +16246,6 @@ func (s *CreateEventSubscriptionInput) SetTags(v []*Tag) *CreateEventSubscriptio
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateEventSubscriptionResult
 type CreateEventSubscriptionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -13687,7 +16270,110 @@ func (s *CreateEventSubscriptionOutput) SetEventSubscription(v *EventSubscriptio
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateOptionGroupMessage
+type CreateGlobalClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name for your database of up to 64 alpha-numeric characters. If you do
+	// not provide a name, Amazon Aurora will not create a database in the global
+	// database cluster you are creating.
+	DatabaseName *string `type:"string"`
+
+	// The deletion protection setting for the new global database. The global database
+	// can't be deleted when this value is set to true.
+	DeletionProtection *bool `type:"boolean"`
+
+	// Provides the name of the database engine to be used for this DB cluster.
+	Engine *string `type:"string"`
+
+	// The engine version of the Aurora global database.
+	EngineVersion *string `type:"string"`
+
+	// The cluster identifier of the new global database cluster.
+	GlobalClusterIdentifier *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) to use as the primary cluster of the global
+	// database. This parameter is optional.
+	SourceDBClusterIdentifier *string `type:"string"`
+
+	// The storage encryption setting for the new global database cluster.
+	StorageEncrypted *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s CreateGlobalClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateGlobalClusterInput) GoString() string {
+	return s.String()
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *CreateGlobalClusterInput) SetDatabaseName(v string) *CreateGlobalClusterInput {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *CreateGlobalClusterInput) SetDeletionProtection(v bool) *CreateGlobalClusterInput {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEngine sets the Engine field's value.
+func (s *CreateGlobalClusterInput) SetEngine(v string) *CreateGlobalClusterInput {
+	s.Engine = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *CreateGlobalClusterInput) SetEngineVersion(v string) *CreateGlobalClusterInput {
+	s.EngineVersion = &v
+	return s
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *CreateGlobalClusterInput) SetGlobalClusterIdentifier(v string) *CreateGlobalClusterInput {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
+// SetSourceDBClusterIdentifier sets the SourceDBClusterIdentifier field's value.
+func (s *CreateGlobalClusterInput) SetSourceDBClusterIdentifier(v string) *CreateGlobalClusterInput {
+	s.SourceDBClusterIdentifier = &v
+	return s
+}
+
+// SetStorageEncrypted sets the StorageEncrypted field's value.
+func (s *CreateGlobalClusterInput) SetStorageEncrypted(v bool) *CreateGlobalClusterInput {
+	s.StorageEncrypted = &v
+	return s
+}
+
+type CreateGlobalClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A data type representing an Aurora global database.
+	GlobalCluster *GlobalCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateGlobalClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateGlobalClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetGlobalCluster sets the GlobalCluster field's value.
+func (s *CreateGlobalClusterOutput) SetGlobalCluster(v *GlobalCluster) *CreateGlobalClusterOutput {
+	s.GlobalCluster = v
+	return s
+}
+
 type CreateOptionGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13712,18 +16398,19 @@ type CreateOptionGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters or hyphens
+	//    * Must be 1 to 255 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: myoptiongroup
 	//
 	// OptionGroupName is a required field
 	OptionGroupName *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -13789,7 +16476,6 @@ func (s *CreateOptionGroupInput) SetTags(v []*Tag) *CreateOptionGroupInput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CreateOptionGroupResult
 type CreateOptionGroupOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -13812,27 +16498,15 @@ func (s *CreateOptionGroupOutput) SetOptionGroup(v *OptionGroup) *CreateOptionGr
 	return s
 }
 
-// Contains the result of a successful invocation of the following actions:
+// Contains the details of an Amazon Aurora DB cluster.
 //
-//    * CreateDBCluster
-//
-//    * DeleteDBCluster
-//
-//    * FailoverDBCluster
-//
-//    * ModifyDBCluster
-//
-//    * RestoreDBClusterFromSnapshot
-//
-//    * RestoreDBClusterToPointInTime
-//
-// This data type is used as a response element in the DescribeDBClusters action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBCluster
+// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+// and StartDBCluster actions.
 type DBCluster struct {
 	_ struct{} `type:"structure"`
 
 	// For all database engines except Amazon Aurora, AllocatedStorage specifies
-	// the allocated storage size in gigabytes (GB). For Aurora, AllocatedStorage
+	// the allocated storage size in gibibytes (GiB). For Aurora, AllocatedStorage
 	// always returns 1, because Aurora DB cluster storage size is not fixed, but
 	// instead automatically adjusts as needed.
 	AllocatedStorage *int64 `type:"integer"`
@@ -13847,8 +16521,23 @@ type DBCluster struct {
 	// can be created in.
 	AvailabilityZones []*string `locationNameList:"AvailabilityZone" type:"list"`
 
+	// The number of change records stored for Backtrack.
+	BacktrackConsumedChangeRecords *int64 `type:"long"`
+
+	// The target backtrack window, in seconds. If this value is set to 0, backtracking
+	// is disabled for the DB cluster. Otherwise, backtracking is enabled.
+	BacktrackWindow *int64 `type:"long"`
+
 	// Specifies the number of days for which automatic DB snapshots are retained.
 	BackupRetentionPeriod *int64 `type:"integer"`
+
+	// The current capacity of an Aurora Serverless DB cluster. The capacity is
+	// 0 (zero) when the cluster is paused.
+	//
+	// For more information about Aurora Serverless, see Using Amazon Aurora Serverless
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html)
+	// in the Amazon Aurora User Guide.
+	Capacity *int64 `type:"integer"`
 
 	// If present, specifies the name of the character set that this cluster is
 	// associated with.
@@ -13859,7 +16548,10 @@ type DBCluster struct {
 
 	// Specifies the time when the DB cluster was created, in Universal Coordinated
 	// Time (UTC).
-	ClusterCreateTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	ClusterCreateTime *time.Time `type:"timestamp"`
+
+	// Identifies all custom endpoints associated with the cluster.
+	CustomEndpoints []*string `type:"list"`
 
 	// The Amazon Resource Name (ARN) for the DB cluster.
 	DBClusterArn *string `type:"string"`
@@ -13886,14 +16578,29 @@ type DBCluster struct {
 	// same name is returned for the life of the DB cluster.
 	DatabaseName *string `type:"string"`
 
-	// The region-unique, immutable identifier for the DB cluster. This identifier
-	// is found in AWS CloudTrail log entries whenever the KMS key for the DB cluster
-	// is accessed.
+	// The AWS Region-unique, immutable identifier for the DB cluster. This identifier
+	// is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB
+	// cluster is accessed.
 	DbClusterResourceId *string `type:"string"`
 
-	// Specifies the earliest time to which a database can be restored with point-in-time
+	// Indicates if the DB cluster has deletion protection enabled. The database
+	// can't be deleted when this value is set to true.
+	DeletionProtection *bool `type:"boolean"`
+
+	// The earliest time to which a DB cluster can be backtracked.
+	EarliestBacktrackTime *time.Time `type:"timestamp"`
+
+	// The earliest time to which a database can be restored with point-in-time
 	// restore.
-	EarliestRestorableTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	EarliestRestorableTime *time.Time `type:"timestamp"`
+
+	// A list of log types that this DB cluster is configured to export to CloudWatch
+	// Logs.
+	//
+	// Log types vary by DB engine. For information about the log types for each
+	// DB engine, see Amazon RDS Database Log Files (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html)
+	// in the Amazon Aurora User Guide.
+	EnabledCloudwatchLogsExports []*string `type:"list"`
 
 	// Specifies the connection endpoint for the primary instance of the DB cluster.
 	Endpoint *string `type:"string"`
@@ -13901,23 +16608,42 @@ type DBCluster struct {
 	// Provides the name of the database engine to be used for this DB cluster.
 	Engine *string `type:"string"`
 
+	// The DB engine mode of the DB cluster, either provisioned, serverless, or
+	// parallelquery.
+	EngineMode *string `type:"string"`
+
 	// Indicates the database engine version.
 	EngineVersion *string `type:"string"`
 
 	// Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.
 	HostedZoneId *string `type:"string"`
 
+	// HTTP endpoint functionality is in beta for Aurora Serverless and is subject
+	// to change.
+	//
+	// Value that is true if the HTTP endpoint for an Aurora Serverless DB cluster
+	// is enabled and false otherwise.
+	//
+	// When enabled, the HTTP endpoint provides a connectionless web service API
+	// for running SQL queries on the Aurora Serverless DB cluster. You can also
+	// query your database from inside the RDS console with the query editor.
+	//
+	// For more information about Aurora Serverless, see Using Amazon Aurora Serverless
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html)
+	// in the Amazon Aurora User Guide.
+	HttpEndpointEnabled *bool `type:"boolean"`
+
 	// True if mapping of AWS Identity and Access Management (IAM) accounts to database
-	// accounts is enabled; otherwise false.
+	// accounts is enabled, and otherwise false.
 	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
 
-	// If StorageEncrypted is true, the KMS key identifier for the encrypted DB
-	// cluster.
+	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
+	// DB cluster.
 	KmsKeyId *string `type:"string"`
 
 	// Specifies the latest time to which a database can be restored with point-in-time
 	// restore.
-	LatestRestorableTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	LatestRestorableTime *time.Time `type:"timestamp"`
 
 	// Contains the master username for the DB cluster.
 	MasterUsername *string `type:"string"`
@@ -13951,14 +16677,21 @@ type DBCluster struct {
 	// multiple Aurora Replicas in your DB cluster.
 	//
 	// If a failover occurs, and the Aurora Replica that you are connected to is
-	// promoted to be the primary instance, your connection will be dropped. To
-	// continue sending your read workload to other Aurora Replicas in the cluster,
-	// you can then reconnect to the reader endpoint.
+	// promoted to be the primary instance, your connection is dropped. To continue
+	// sending your read workload to other Aurora Replicas in the cluster, you can
+	// then reconnect to the reader endpoint.
 	ReaderEndpoint *string `type:"string"`
 
 	// Contains the identifier of the source DB cluster if this DB cluster is a
 	// Read Replica.
 	ReplicationSourceIdentifier *string `type:"string"`
+
+	// Shows the scaling configuration for an Aurora DB cluster in serverless DB
+	// engine mode.
+	//
+	// For more information, see Using Amazon Aurora Serverless (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html)
+	// in the Amazon Aurora User Guide.
+	ScalingConfigurationInfo *ScalingConfigurationInfo `type:"structure"`
 
 	// Specifies the current state of this DB cluster.
 	Status *string `type:"string"`
@@ -13998,9 +16731,27 @@ func (s *DBCluster) SetAvailabilityZones(v []*string) *DBCluster {
 	return s
 }
 
+// SetBacktrackConsumedChangeRecords sets the BacktrackConsumedChangeRecords field's value.
+func (s *DBCluster) SetBacktrackConsumedChangeRecords(v int64) *DBCluster {
+	s.BacktrackConsumedChangeRecords = &v
+	return s
+}
+
+// SetBacktrackWindow sets the BacktrackWindow field's value.
+func (s *DBCluster) SetBacktrackWindow(v int64) *DBCluster {
+	s.BacktrackWindow = &v
+	return s
+}
+
 // SetBackupRetentionPeriod sets the BackupRetentionPeriod field's value.
 func (s *DBCluster) SetBackupRetentionPeriod(v int64) *DBCluster {
 	s.BackupRetentionPeriod = &v
+	return s
+}
+
+// SetCapacity sets the Capacity field's value.
+func (s *DBCluster) SetCapacity(v int64) *DBCluster {
+	s.Capacity = &v
 	return s
 }
 
@@ -14019,6 +16770,12 @@ func (s *DBCluster) SetCloneGroupId(v string) *DBCluster {
 // SetClusterCreateTime sets the ClusterCreateTime field's value.
 func (s *DBCluster) SetClusterCreateTime(v time.Time) *DBCluster {
 	s.ClusterCreateTime = &v
+	return s
+}
+
+// SetCustomEndpoints sets the CustomEndpoints field's value.
+func (s *DBCluster) SetCustomEndpoints(v []*string) *DBCluster {
+	s.CustomEndpoints = v
 	return s
 }
 
@@ -14070,9 +16827,27 @@ func (s *DBCluster) SetDbClusterResourceId(v string) *DBCluster {
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *DBCluster) SetDeletionProtection(v bool) *DBCluster {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEarliestBacktrackTime sets the EarliestBacktrackTime field's value.
+func (s *DBCluster) SetEarliestBacktrackTime(v time.Time) *DBCluster {
+	s.EarliestBacktrackTime = &v
+	return s
+}
+
 // SetEarliestRestorableTime sets the EarliestRestorableTime field's value.
 func (s *DBCluster) SetEarliestRestorableTime(v time.Time) *DBCluster {
 	s.EarliestRestorableTime = &v
+	return s
+}
+
+// SetEnabledCloudwatchLogsExports sets the EnabledCloudwatchLogsExports field's value.
+func (s *DBCluster) SetEnabledCloudwatchLogsExports(v []*string) *DBCluster {
+	s.EnabledCloudwatchLogsExports = v
 	return s
 }
 
@@ -14088,6 +16863,12 @@ func (s *DBCluster) SetEngine(v string) *DBCluster {
 	return s
 }
 
+// SetEngineMode sets the EngineMode field's value.
+func (s *DBCluster) SetEngineMode(v string) *DBCluster {
+	s.EngineMode = &v
+	return s
+}
+
 // SetEngineVersion sets the EngineVersion field's value.
 func (s *DBCluster) SetEngineVersion(v string) *DBCluster {
 	s.EngineVersion = &v
@@ -14097,6 +16878,12 @@ func (s *DBCluster) SetEngineVersion(v string) *DBCluster {
 // SetHostedZoneId sets the HostedZoneId field's value.
 func (s *DBCluster) SetHostedZoneId(v string) *DBCluster {
 	s.HostedZoneId = &v
+	return s
+}
+
+// SetHttpEndpointEnabled sets the HttpEndpointEnabled field's value.
+func (s *DBCluster) SetHttpEndpointEnabled(v bool) *DBCluster {
+	s.HttpEndpointEnabled = &v
 	return s
 }
 
@@ -14172,6 +16959,12 @@ func (s *DBCluster) SetReplicationSourceIdentifier(v string) *DBCluster {
 	return s
 }
 
+// SetScalingConfigurationInfo sets the ScalingConfigurationInfo field's value.
+func (s *DBCluster) SetScalingConfigurationInfo(v *ScalingConfigurationInfo) *DBCluster {
+	s.ScalingConfigurationInfo = v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *DBCluster) SetStatus(v string) *DBCluster {
 	s.Status = &v
@@ -14190,8 +16983,131 @@ func (s *DBCluster) SetVpcSecurityGroups(v []*VpcSecurityGroupMembership) *DBClu
 	return s
 }
 
+// This data type represents the information you need to connect to an Amazon
+// Aurora DB cluster. This data type is used as a response element in the following
+// actions:
+//
+//    * CreateDBClusterEndpoint
+//
+//    * DescribeDBClusterEndpoints
+//
+//    * ModifyDBClusterEndpoint
+//
+//    * DeleteDBClusterEndpoint
+//
+// For the data structure that represents Amazon RDS DB instance endpoints,
+// see Endpoint.
+type DBClusterEndpoint struct {
+	_ struct{} `type:"structure"`
+
+	// The type associated with a custom endpoint. One of: READER, ANY.
+	CustomEndpointType *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the endpoint.
+	DBClusterEndpointArn *string `type:"string"`
+
+	// The identifier associated with the endpoint. This parameter is stored as
+	// a lowercase string.
+	DBClusterEndpointIdentifier *string `type:"string"`
+
+	// A unique system-generated identifier for an endpoint. It remains the same
+	// for the whole life of the endpoint.
+	DBClusterEndpointResourceIdentifier *string `type:"string"`
+
+	// The DB cluster identifier of the DB cluster associated with the endpoint.
+	// This parameter is stored as a lowercase string.
+	DBClusterIdentifier *string `type:"string"`
+
+	// The DNS address of the endpoint.
+	Endpoint *string `type:"string"`
+
+	// The type of the endpoint. One of: READER, WRITER, CUSTOM.
+	EndpointType *string `type:"string"`
+
+	// List of DB instance identifiers that aren't part of the custom endpoint group.
+	// All other eligible instances are reachable through the custom endpoint. Only
+	// relevant if the list of static members is empty.
+	ExcludedMembers []*string `type:"list"`
+
+	// List of DB instance identifiers that are part of the custom endpoint group.
+	StaticMembers []*string `type:"list"`
+
+	// The current status of the endpoint. One of: creating, available, deleting,
+	// modifying.
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DBClusterEndpoint) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DBClusterEndpoint) GoString() string {
+	return s.String()
+}
+
+// SetCustomEndpointType sets the CustomEndpointType field's value.
+func (s *DBClusterEndpoint) SetCustomEndpointType(v string) *DBClusterEndpoint {
+	s.CustomEndpointType = &v
+	return s
+}
+
+// SetDBClusterEndpointArn sets the DBClusterEndpointArn field's value.
+func (s *DBClusterEndpoint) SetDBClusterEndpointArn(v string) *DBClusterEndpoint {
+	s.DBClusterEndpointArn = &v
+	return s
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *DBClusterEndpoint) SetDBClusterEndpointIdentifier(v string) *DBClusterEndpoint {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// SetDBClusterEndpointResourceIdentifier sets the DBClusterEndpointResourceIdentifier field's value.
+func (s *DBClusterEndpoint) SetDBClusterEndpointResourceIdentifier(v string) *DBClusterEndpoint {
+	s.DBClusterEndpointResourceIdentifier = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *DBClusterEndpoint) SetDBClusterIdentifier(v string) *DBClusterEndpoint {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetEndpoint sets the Endpoint field's value.
+func (s *DBClusterEndpoint) SetEndpoint(v string) *DBClusterEndpoint {
+	s.Endpoint = &v
+	return s
+}
+
+// SetEndpointType sets the EndpointType field's value.
+func (s *DBClusterEndpoint) SetEndpointType(v string) *DBClusterEndpoint {
+	s.EndpointType = &v
+	return s
+}
+
+// SetExcludedMembers sets the ExcludedMembers field's value.
+func (s *DBClusterEndpoint) SetExcludedMembers(v []*string) *DBClusterEndpoint {
+	s.ExcludedMembers = v
+	return s
+}
+
+// SetStaticMembers sets the StaticMembers field's value.
+func (s *DBClusterEndpoint) SetStaticMembers(v []*string) *DBClusterEndpoint {
+	s.StaticMembers = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DBClusterEndpoint) SetStatus(v string) *DBClusterEndpoint {
+	s.Status = &v
+	return s
+}
+
 // Contains information about an instance that is part of a DB cluster.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterMember
 type DBClusterMember struct {
 	_ struct{} `type:"structure"`
 
@@ -14208,7 +17124,8 @@ type DBClusterMember struct {
 
 	// A value that specifies the order in which an Aurora Replica is promoted to
 	// the primary instance after a failure of the existing primary instance. For
-	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance).
+	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.FaultTolerance)
+	// in the Amazon Aurora User Guide.
 	PromotionTier *int64 `type:"integer"`
 }
 
@@ -14247,7 +17164,6 @@ func (s *DBClusterMember) SetPromotionTier(v int64) *DBClusterMember {
 }
 
 // Contains status information for a DB cluster option group.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterOptionGroupStatus
 type DBClusterOptionGroupStatus struct {
 	_ struct{} `type:"structure"`
 
@@ -14280,13 +17196,10 @@ func (s *DBClusterOptionGroupStatus) SetStatus(v string) *DBClusterOptionGroupSt
 	return s
 }
 
-// Contains the result of a successful invocation of the CreateDBClusterParameterGroup
-// or CopyDBClusterParameterGroup action.
+// Contains the details of an Amazon RDS DB cluster parameter group.
 //
-// This data type is used as a request parameter in the DeleteDBClusterParameterGroup
-// action, and as a response element in the DescribeDBClusterParameterGroups
+// This data type is used as a response element in the DescribeDBClusterParameterGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterParameterGroup
 type DBClusterParameterGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -14339,7 +17252,6 @@ func (s *DBClusterParameterGroup) SetDescription(v string) *DBClusterParameterGr
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterParameterGroupNameMessage
 type DBClusterParameterGroupNameMessage struct {
 	_ struct{} `type:"structure"`
 
@@ -14347,11 +17259,11 @@ type DBClusterParameterGroupNameMessage struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
+	//    * Must be 1 to 255 letters or numbers.
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// This value is stored as a lowercase string.
 	DBClusterParameterGroupName *string `type:"string"`
@@ -14375,9 +17287,10 @@ func (s *DBClusterParameterGroupNameMessage) SetDBClusterParameterGroupName(v st
 
 // Describes an AWS Identity and Access Management (IAM) role that is associated
 // with a DB cluster.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterRole
 type DBClusterRole struct {
 	_ struct{} `type:"structure"`
+
+	FeatureName *string `type:"string"`
 
 	// The Amazon Resource Name (ARN) of the IAM role that is associated with the
 	// DB cluster.
@@ -14407,6 +17320,12 @@ func (s DBClusterRole) GoString() string {
 	return s.String()
 }
 
+// SetFeatureName sets the FeatureName field's value.
+func (s *DBClusterRole) SetFeatureName(v string) *DBClusterRole {
+	s.FeatureName = &v
+	return s
+}
+
 // SetRoleArn sets the RoleArn field's value.
 func (s *DBClusterRole) SetRoleArn(v string) *DBClusterRole {
 	s.RoleArn = &v
@@ -14419,19 +17338,14 @@ func (s *DBClusterRole) SetStatus(v string) *DBClusterRole {
 	return s
 }
 
-// Contains the result of a successful invocation of the following actions:
-//
-//    * CreateDBClusterSnapshot
-//
-//    * DeleteDBClusterSnapshot
+// Contains the details for an Amazon RDS DB cluster snapshot
 //
 // This data type is used as a response element in the DescribeDBClusterSnapshots
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterSnapshot
 type DBClusterSnapshot struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the allocated storage size in gigabytes (GB).
+	// Specifies the allocated storage size in gibibytes (GiB).
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Provides the list of EC2 Availability Zones that instances in the DB cluster
@@ -14440,7 +17354,7 @@ type DBClusterSnapshot struct {
 
 	// Specifies the time when the DB cluster was created, in Universal Coordinated
 	// Time (UTC).
-	ClusterCreateTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	ClusterCreateTime *time.Time `type:"timestamp"`
 
 	// Specifies the DB cluster identifier of the DB cluster that this DB cluster
 	// snapshot was created from.
@@ -14459,11 +17373,11 @@ type DBClusterSnapshot struct {
 	EngineVersion *string `type:"string"`
 
 	// True if mapping of AWS Identity and Access Management (IAM) accounts to database
-	// accounts is enabled; otherwise false.
+	// accounts is enabled, and otherwise false.
 	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
 
-	// If StorageEncrypted is true, the KMS key identifier for the encrypted DB
-	// cluster snapshot.
+	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
+	// DB cluster snapshot.
 	KmsKeyId *string `type:"string"`
 
 	// Provides the license model information for this DB cluster snapshot.
@@ -14481,13 +17395,13 @@ type DBClusterSnapshot struct {
 
 	// Provides the time when the snapshot was taken, in Universal Coordinated Time
 	// (UTC).
-	SnapshotCreateTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	SnapshotCreateTime *time.Time `type:"timestamp"`
 
 	// Provides the type of the DB cluster snapshot.
 	SnapshotType *string `type:"string"`
 
 	// If the DB cluster snapshot was copied from a source DB cluster snapshot,
-	// the Amazon Resource Name (ARN) for the source DB cluster snapshot; otherwise,
+	// the Amazon Resource Name (ARN) for the source DB cluster snapshot, otherwise,
 	// a null value.
 	SourceDBClusterSnapshotArn *string `type:"string"`
 
@@ -14636,7 +17550,6 @@ func (s *DBClusterSnapshot) SetVpcId(v string) *DBClusterSnapshot {
 // Manual DB cluster snapshot attributes are used to authorize other AWS accounts
 // to restore a manual DB cluster snapshot. For more information, see the ModifyDBClusterSnapshotAttribute
 // API action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterSnapshotAttribute
 type DBClusterSnapshotAttribute struct {
 	_ struct{} `type:"structure"`
 
@@ -14685,7 +17598,6 @@ func (s *DBClusterSnapshotAttribute) SetAttributeValues(v []*string) *DBClusterS
 // Manual DB cluster snapshot attributes are used to authorize other AWS accounts
 // to copy or restore a manual DB cluster snapshot. For more information, see
 // the ModifyDBClusterSnapshotAttribute API action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterSnapshotAttributesResult
 type DBClusterSnapshotAttributesResult struct {
 	_ struct{} `type:"structure"`
 
@@ -14720,7 +17632,6 @@ func (s *DBClusterSnapshotAttributesResult) SetDBClusterSnapshotIdentifier(v str
 }
 
 // This data type is used as a response element in the action DescribeDBEngineVersions.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBEngineVersion
 type DBEngineVersion struct {
 	_ struct{} `type:"structure"`
 
@@ -14743,13 +17654,33 @@ type DBEngineVersion struct {
 	// The version number of the database engine.
 	EngineVersion *string `type:"string"`
 
+	// The types of logs that the database engine has available for export to CloudWatch
+	// Logs.
+	ExportableLogTypes []*string `type:"list"`
+
 	// A list of the character sets supported by this engine for the CharacterSetName
 	// parameter of the CreateDBInstance action.
 	SupportedCharacterSets []*CharacterSet `locationNameList:"CharacterSet" type:"list"`
 
+	// A list of the supported DB engine modes.
+	SupportedEngineModes []*string `type:"list"`
+
+	// A list of features supported by the DB engine. Supported feature names include
+	// the following.
+	//
+	//    * s3Import
+	SupportedFeatureNames []*string `type:"list"`
+
 	// A list of the time zones supported by this engine for the Timezone parameter
 	// of the CreateDBInstance action.
 	SupportedTimezones []*Timezone `locationNameList:"Timezone" type:"list"`
+
+	// A value that indicates whether the engine version supports exporting the
+	// log types specified by ExportableLogTypes to CloudWatch Logs.
+	SupportsLogExportsToCloudwatchLogs *bool `type:"boolean"`
+
+	// Indicates whether the database engine version supports read replicas.
+	SupportsReadReplica *bool `type:"boolean"`
 
 	// A list of engine versions that this database engine version can be upgraded
 	// to.
@@ -14802,9 +17733,27 @@ func (s *DBEngineVersion) SetEngineVersion(v string) *DBEngineVersion {
 	return s
 }
 
+// SetExportableLogTypes sets the ExportableLogTypes field's value.
+func (s *DBEngineVersion) SetExportableLogTypes(v []*string) *DBEngineVersion {
+	s.ExportableLogTypes = v
+	return s
+}
+
 // SetSupportedCharacterSets sets the SupportedCharacterSets field's value.
 func (s *DBEngineVersion) SetSupportedCharacterSets(v []*CharacterSet) *DBEngineVersion {
 	s.SupportedCharacterSets = v
+	return s
+}
+
+// SetSupportedEngineModes sets the SupportedEngineModes field's value.
+func (s *DBEngineVersion) SetSupportedEngineModes(v []*string) *DBEngineVersion {
+	s.SupportedEngineModes = v
+	return s
+}
+
+// SetSupportedFeatureNames sets the SupportedFeatureNames field's value.
+func (s *DBEngineVersion) SetSupportedFeatureNames(v []*string) *DBEngineVersion {
+	s.SupportedFeatureNames = v
 	return s
 }
 
@@ -14814,31 +17763,36 @@ func (s *DBEngineVersion) SetSupportedTimezones(v []*Timezone) *DBEngineVersion 
 	return s
 }
 
+// SetSupportsLogExportsToCloudwatchLogs sets the SupportsLogExportsToCloudwatchLogs field's value.
+func (s *DBEngineVersion) SetSupportsLogExportsToCloudwatchLogs(v bool) *DBEngineVersion {
+	s.SupportsLogExportsToCloudwatchLogs = &v
+	return s
+}
+
+// SetSupportsReadReplica sets the SupportsReadReplica field's value.
+func (s *DBEngineVersion) SetSupportsReadReplica(v bool) *DBEngineVersion {
+	s.SupportsReadReplica = &v
+	return s
+}
+
 // SetValidUpgradeTarget sets the ValidUpgradeTarget field's value.
 func (s *DBEngineVersion) SetValidUpgradeTarget(v []*UpgradeTarget) *DBEngineVersion {
 	s.ValidUpgradeTarget = v
 	return s
 }
 
-// Contains the result of a successful invocation of the following actions:
-//
-//    * CreateDBInstance
-//
-//    * DeleteDBInstance
-//
-//    * ModifyDBInstance
-//
-//    * StopDBInstance
-//
-//    * StartDBInstance
+// Contains the details of an Amazon RDS DB instance.
 //
 // This data type is used as a response element in the DescribeDBInstances action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBInstance
 type DBInstance struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the allocated storage size specified in gigabytes.
+	// Specifies the allocated storage size specified in gibibytes.
 	AllocatedStorage *int64 `type:"integer"`
+
+	// The AWS Identity and Access Management (IAM) roles associated with the DB
+	// instance.
+	AssociatedRoles []*DBInstanceRole `locationNameList:"DBInstanceRole" type:"list"`
 
 	// Indicates that minor version patches are applied automatically.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
@@ -14911,13 +17865,26 @@ type DBInstance struct {
 	// part of a DB cluster, this can be a different port than the DB cluster port.
 	DbInstancePort *int64 `type:"integer"`
 
-	// The region-unique, immutable identifier for the DB instance. This identifier
-	// is found in AWS CloudTrail log entries whenever the KMS key for the DB instance
-	// is accessed.
+	// The AWS Region-unique, immutable identifier for the DB instance. This identifier
+	// is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB
+	// instance is accessed.
 	DbiResourceId *string `type:"string"`
+
+	// Indicates if the DB instance has deletion protection enabled. The database
+	// can't be deleted when this value is set to true. For more information, see
+	//  Deleting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html).
+	DeletionProtection *bool `type:"boolean"`
 
 	// The Active Directory Domain membership records associated with the DB instance.
 	DomainMemberships []*DomainMembership `locationNameList:"DomainMembership" type:"list"`
+
+	// A list of log types that this DB instance is configured to export to CloudWatch
+	// Logs.
+	//
+	// Log types vary by DB engine. For information about the log types for each
+	// DB engine, see Amazon RDS Database Log Files (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html)
+	// in the Amazon RDS User Guide.
+	EnabledCloudwatchLogsExports []*string `type:"list"`
 
 	// Specifies the connection endpoint.
 	Endpoint *Endpoint `type:"structure"`
@@ -14933,7 +17900,7 @@ type DBInstance struct {
 	EnhancedMonitoringResourceArn *string `type:"string"`
 
 	// True if mapping of AWS Identity and Access Management (IAM) accounts to database
-	// accounts is enabled; otherwise false.
+	// accounts is enabled, and otherwise false.
 	//
 	// IAM database authentication can be enabled for the following database engines
 	//
@@ -14946,21 +17913,24 @@ type DBInstance struct {
 	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
 
 	// Provides the date and time the DB instance was created.
-	InstanceCreateTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	InstanceCreateTime *time.Time `type:"timestamp"`
 
 	// Specifies the Provisioned IOPS (I/O operations per second) value.
 	Iops *int64 `type:"integer"`
 
-	// If StorageEncrypted is true, the KMS key identifier for the encrypted DB
-	// instance.
+	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
+	// DB instance.
 	KmsKeyId *string `type:"string"`
 
 	// Specifies the latest time to which a database can be restored with point-in-time
 	// restore.
-	LatestRestorableTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	LatestRestorableTime *time.Time `type:"timestamp"`
 
 	// License model information for this DB instance.
 	LicenseModel *string `type:"string"`
+
+	// Specifies the listener connection endpoint for SQL Server Always On.
+	ListenerEndpoint *Endpoint `type:"structure"`
 
 	// Contains the master username for the DB instance.
 	MasterUsername *string `type:"string"`
@@ -14970,7 +17940,7 @@ type DBInstance struct {
 	MonitoringInterval *int64 `type:"integer"`
 
 	// The ARN for the IAM role that permits RDS to send Enhanced Monitoring metrics
-	// to CloudWatch Logs.
+	// to Amazon CloudWatch Logs.
 	MonitoringRoleArn *string `type:"string"`
 
 	// Specifies if the DB instance is a Multi-AZ deployment.
@@ -14983,6 +17953,19 @@ type DBInstance struct {
 	// included when changes are pending. Specific changes are identified by subelements.
 	PendingModifiedValues *PendingModifiedValues `type:"structure"`
 
+	// True if Performance Insights is enabled for the DB instance, and otherwise
+	// false.
+	PerformanceInsightsEnabled *bool `type:"boolean"`
+
+	// The AWS KMS key identifier for encryption of Performance Insights data. The
+	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
+	// KMS key alias for the KMS encryption key.
+	PerformanceInsightsKMSKeyId *string `type:"string"`
+
+	// The amount of time, in days, to retain Performance Insights data. Valid values
+	// are 7 or 731 (2 years).
+	PerformanceInsightsRetentionPeriod *int64 `type:"integer"`
+
 	// Specifies the daily time range during which automated backups are created
 	// if automated backups are enabled, as determined by the BackupRetentionPeriod.
 	PreferredBackupWindow *string `type:"string"`
@@ -14991,31 +17974,29 @@ type DBInstance struct {
 	// in Universal Coordinated Time (UTC).
 	PreferredMaintenanceWindow *string `type:"string"`
 
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
+
 	// A value that specifies the order in which an Aurora Replica is promoted to
 	// the primary instance after a failure of the existing primary instance. For
-	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance).
+	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.FaultTolerance)
+	// in the Amazon Aurora User Guide.
 	PromotionTier *int64 `type:"integer"`
 
 	// Specifies the accessibility options for the DB instance. A value of true
 	// specifies an Internet-facing instance with a publicly resolvable DNS name,
 	// which resolves to a public IP address. A value of false specifies an internal
 	// instance with a DNS name that resolves to a private IP address.
-	//
-	// Default: The default behavior varies depending on whether a VPC has been
-	// requested or not. The following list shows the default behavior in each case.
-	//
-	//    * Default VPC:true
-	//
-	//    * VPC:false
-	//
-	// If no DB subnet group has been specified as part of the request and the PubliclyAccessible
-	// value has not been set, the DB instance will be publicly accessible. If a
-	// specific DB subnet group has been specified as part of the request and the
-	// PubliclyAccessible value has not been set, the DB instance will be private.
 	PubliclyAccessible *bool `type:"boolean"`
 
-	// Contains one or more identifiers of Aurora DB clusters that are Read Replicas
-	// of this DB instance.
+	// Contains one or more identifiers of Aurora DB clusters to which the RDS DB
+	// instance is replicated as a Read Replica. For example, when you create an
+	// Aurora Read Replica of an RDS MySQL DB instance, the Aurora MySQL DB cluster
+	// for the Aurora Read Replica is shown. This output does not contain information
+	// about cross region Aurora Read Replicas.
+	//
+	// Currently, each RDS DB instance can have only one Aurora Read Replica.
 	ReadReplicaDBClusterIdentifiers []*string `locationNameList:"ReadReplicaDBClusterIdentifier" type:"list"`
 
 	// Contains one or more identifiers of the Read Replicas associated with this
@@ -15031,7 +18012,7 @@ type DBInstance struct {
 	SecondaryAvailabilityZone *string `type:"string"`
 
 	// The status of a Read Replica. If the instance is not a Read Replica, this
-	// will be blank.
+	// is blank.
 	StatusInfos []*DBInstanceStatusInfo `locationNameList:"DBInstanceStatusInfo" type:"list"`
 
 	// Specifies whether the DB instance is encrypted.
@@ -15067,6 +18048,12 @@ func (s DBInstance) GoString() string {
 // SetAllocatedStorage sets the AllocatedStorage field's value.
 func (s *DBInstance) SetAllocatedStorage(v int64) *DBInstance {
 	s.AllocatedStorage = &v
+	return s
+}
+
+// SetAssociatedRoles sets the AssociatedRoles field's value.
+func (s *DBInstance) SetAssociatedRoles(v []*DBInstanceRole) *DBInstance {
+	s.AssociatedRoles = v
 	return s
 }
 
@@ -15172,9 +18159,21 @@ func (s *DBInstance) SetDbiResourceId(v string) *DBInstance {
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *DBInstance) SetDeletionProtection(v bool) *DBInstance {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetDomainMemberships sets the DomainMemberships field's value.
 func (s *DBInstance) SetDomainMemberships(v []*DomainMembership) *DBInstance {
 	s.DomainMemberships = v
+	return s
+}
+
+// SetEnabledCloudwatchLogsExports sets the EnabledCloudwatchLogsExports field's value.
+func (s *DBInstance) SetEnabledCloudwatchLogsExports(v []*string) *DBInstance {
+	s.EnabledCloudwatchLogsExports = v
 	return s
 }
 
@@ -15238,6 +18237,12 @@ func (s *DBInstance) SetLicenseModel(v string) *DBInstance {
 	return s
 }
 
+// SetListenerEndpoint sets the ListenerEndpoint field's value.
+func (s *DBInstance) SetListenerEndpoint(v *Endpoint) *DBInstance {
+	s.ListenerEndpoint = v
+	return s
+}
+
 // SetMasterUsername sets the MasterUsername field's value.
 func (s *DBInstance) SetMasterUsername(v string) *DBInstance {
 	s.MasterUsername = &v
@@ -15274,6 +18279,24 @@ func (s *DBInstance) SetPendingModifiedValues(v *PendingModifiedValues) *DBInsta
 	return s
 }
 
+// SetPerformanceInsightsEnabled sets the PerformanceInsightsEnabled field's value.
+func (s *DBInstance) SetPerformanceInsightsEnabled(v bool) *DBInstance {
+	s.PerformanceInsightsEnabled = &v
+	return s
+}
+
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *DBInstance) SetPerformanceInsightsKMSKeyId(v string) *DBInstance {
+	s.PerformanceInsightsKMSKeyId = &v
+	return s
+}
+
+// SetPerformanceInsightsRetentionPeriod sets the PerformanceInsightsRetentionPeriod field's value.
+func (s *DBInstance) SetPerformanceInsightsRetentionPeriod(v int64) *DBInstance {
+	s.PerformanceInsightsRetentionPeriod = &v
+	return s
+}
+
 // SetPreferredBackupWindow sets the PreferredBackupWindow field's value.
 func (s *DBInstance) SetPreferredBackupWindow(v string) *DBInstance {
 	s.PreferredBackupWindow = &v
@@ -15283,6 +18306,12 @@ func (s *DBInstance) SetPreferredBackupWindow(v string) *DBInstance {
 // SetPreferredMaintenanceWindow sets the PreferredMaintenanceWindow field's value.
 func (s *DBInstance) SetPreferredMaintenanceWindow(v string) *DBInstance {
 	s.PreferredMaintenanceWindow = &v
+	return s
+}
+
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *DBInstance) SetProcessorFeatures(v []*ProcessorFeature) *DBInstance {
+	s.ProcessorFeatures = v
 	return s
 }
 
@@ -15358,8 +18387,308 @@ func (s *DBInstance) SetVpcSecurityGroups(v []*VpcSecurityGroupMembership) *DBIn
 	return s
 }
 
+// An automated backup of a DB instance. It it consists of system backups, transaction
+// logs, and the database instance properties that existed at the time you deleted
+// the source instance.
+type DBInstanceAutomatedBackup struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies the allocated storage size in gibibytes (GiB).
+	AllocatedStorage *int64 `type:"integer"`
+
+	// The Availability Zone that the automated backup was created in. For information
+	// on AWS Regions and Availability Zones, see Regions and Availability Zones
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html).
+	AvailabilityZone *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the automated backup.
+	DBInstanceArn *string `type:"string"`
+
+	// The customer id of the instance that is/was associated with the automated
+	// backup.
+	DBInstanceIdentifier *string `type:"string"`
+
+	// The identifier for the source DB instance, which can't be changed and which
+	// is unique to an AWS Region.
+	DbiResourceId *string `type:"string"`
+
+	// Specifies whether the automated backup is encrypted.
+	Encrypted *bool `type:"boolean"`
+
+	// The name of the database engine for this automated backup.
+	Engine *string `type:"string"`
+
+	// The version of the database engine for the automated backup.
+	EngineVersion *string `type:"string"`
+
+	// True if mapping of AWS Identity and Access Management (IAM) accounts to database
+	// accounts is enabled, and otherwise false.
+	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
+
+	// Provides the date and time that the DB instance was created.
+	InstanceCreateTime *time.Time `type:"timestamp"`
+
+	// The IOPS (I/O operations per second) value for the automated backup.
+	Iops *int64 `type:"integer"`
+
+	// The AWS KMS key ID for an automated backup. The KMS key ID is the Amazon
+	// Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS
+	// encryption key.
+	KmsKeyId *string `type:"string"`
+
+	// License model information for the automated backup.
+	LicenseModel *string `type:"string"`
+
+	// The license model of an automated backup.
+	MasterUsername *string `type:"string"`
+
+	// The option group the automated backup is associated with. If omitted, the
+	// default option group for the engine specified is used.
+	OptionGroupName *string `type:"string"`
+
+	// The port number that the automated backup used for connections.
+	//
+	// Default: Inherits from the source DB instance
+	//
+	// Valid Values: 1150-65535
+	Port *int64 `type:"integer"`
+
+	// The AWS Region associated with the automated backup.
+	Region *string `type:"string"`
+
+	// Earliest and latest time an instance can be restored to.
+	RestoreWindow *RestoreWindow `type:"structure"`
+
+	// Provides a list of status information for an automated backup:
+	//
+	//    * active - automated backups for current instances
+	//
+	//    * retained - automated backups for deleted instances
+	//
+	//    * creating - automated backups that are waiting for the first automated
+	//    snapshot to be available.
+	Status *string `type:"string"`
+
+	// Specifies the storage type associated with the automated backup.
+	StorageType *string `type:"string"`
+
+	// The ARN from the key store with which the automated backup is associated
+	// for TDE encryption.
+	TdeCredentialArn *string `type:"string"`
+
+	// The time zone of the automated backup. In most cases, the Timezone element
+	// is empty. Timezone content appears only for Microsoft SQL Server DB instances
+	// that were created with a time zone specified.
+	Timezone *string `type:"string"`
+
+	// Provides the VPC ID associated with the DB instance
+	VpcId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DBInstanceAutomatedBackup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DBInstanceAutomatedBackup) GoString() string {
+	return s.String()
+}
+
+// SetAllocatedStorage sets the AllocatedStorage field's value.
+func (s *DBInstanceAutomatedBackup) SetAllocatedStorage(v int64) *DBInstanceAutomatedBackup {
+	s.AllocatedStorage = &v
+	return s
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *DBInstanceAutomatedBackup) SetAvailabilityZone(v string) *DBInstanceAutomatedBackup {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetDBInstanceArn sets the DBInstanceArn field's value.
+func (s *DBInstanceAutomatedBackup) SetDBInstanceArn(v string) *DBInstanceAutomatedBackup {
+	s.DBInstanceArn = &v
+	return s
+}
+
+// SetDBInstanceIdentifier sets the DBInstanceIdentifier field's value.
+func (s *DBInstanceAutomatedBackup) SetDBInstanceIdentifier(v string) *DBInstanceAutomatedBackup {
+	s.DBInstanceIdentifier = &v
+	return s
+}
+
+// SetDbiResourceId sets the DbiResourceId field's value.
+func (s *DBInstanceAutomatedBackup) SetDbiResourceId(v string) *DBInstanceAutomatedBackup {
+	s.DbiResourceId = &v
+	return s
+}
+
+// SetEncrypted sets the Encrypted field's value.
+func (s *DBInstanceAutomatedBackup) SetEncrypted(v bool) *DBInstanceAutomatedBackup {
+	s.Encrypted = &v
+	return s
+}
+
+// SetEngine sets the Engine field's value.
+func (s *DBInstanceAutomatedBackup) SetEngine(v string) *DBInstanceAutomatedBackup {
+	s.Engine = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *DBInstanceAutomatedBackup) SetEngineVersion(v string) *DBInstanceAutomatedBackup {
+	s.EngineVersion = &v
+	return s
+}
+
+// SetIAMDatabaseAuthenticationEnabled sets the IAMDatabaseAuthenticationEnabled field's value.
+func (s *DBInstanceAutomatedBackup) SetIAMDatabaseAuthenticationEnabled(v bool) *DBInstanceAutomatedBackup {
+	s.IAMDatabaseAuthenticationEnabled = &v
+	return s
+}
+
+// SetInstanceCreateTime sets the InstanceCreateTime field's value.
+func (s *DBInstanceAutomatedBackup) SetInstanceCreateTime(v time.Time) *DBInstanceAutomatedBackup {
+	s.InstanceCreateTime = &v
+	return s
+}
+
+// SetIops sets the Iops field's value.
+func (s *DBInstanceAutomatedBackup) SetIops(v int64) *DBInstanceAutomatedBackup {
+	s.Iops = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *DBInstanceAutomatedBackup) SetKmsKeyId(v string) *DBInstanceAutomatedBackup {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLicenseModel sets the LicenseModel field's value.
+func (s *DBInstanceAutomatedBackup) SetLicenseModel(v string) *DBInstanceAutomatedBackup {
+	s.LicenseModel = &v
+	return s
+}
+
+// SetMasterUsername sets the MasterUsername field's value.
+func (s *DBInstanceAutomatedBackup) SetMasterUsername(v string) *DBInstanceAutomatedBackup {
+	s.MasterUsername = &v
+	return s
+}
+
+// SetOptionGroupName sets the OptionGroupName field's value.
+func (s *DBInstanceAutomatedBackup) SetOptionGroupName(v string) *DBInstanceAutomatedBackup {
+	s.OptionGroupName = &v
+	return s
+}
+
+// SetPort sets the Port field's value.
+func (s *DBInstanceAutomatedBackup) SetPort(v int64) *DBInstanceAutomatedBackup {
+	s.Port = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *DBInstanceAutomatedBackup) SetRegion(v string) *DBInstanceAutomatedBackup {
+	s.Region = &v
+	return s
+}
+
+// SetRestoreWindow sets the RestoreWindow field's value.
+func (s *DBInstanceAutomatedBackup) SetRestoreWindow(v *RestoreWindow) *DBInstanceAutomatedBackup {
+	s.RestoreWindow = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DBInstanceAutomatedBackup) SetStatus(v string) *DBInstanceAutomatedBackup {
+	s.Status = &v
+	return s
+}
+
+// SetStorageType sets the StorageType field's value.
+func (s *DBInstanceAutomatedBackup) SetStorageType(v string) *DBInstanceAutomatedBackup {
+	s.StorageType = &v
+	return s
+}
+
+// SetTdeCredentialArn sets the TdeCredentialArn field's value.
+func (s *DBInstanceAutomatedBackup) SetTdeCredentialArn(v string) *DBInstanceAutomatedBackup {
+	s.TdeCredentialArn = &v
+	return s
+}
+
+// SetTimezone sets the Timezone field's value.
+func (s *DBInstanceAutomatedBackup) SetTimezone(v string) *DBInstanceAutomatedBackup {
+	s.Timezone = &v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *DBInstanceAutomatedBackup) SetVpcId(v string) *DBInstanceAutomatedBackup {
+	s.VpcId = &v
+	return s
+}
+
+// Describes an AWS Identity and Access Management (IAM) role that is associated
+// with a DB instance.
+type DBInstanceRole struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the feature associated with the AWS Identity and Access Management
+	// (IAM) role. For the list of supported feature names, see DBEngineVersion.
+	FeatureName *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) of the IAM role that is associated with the
+	// DB instance.
+	RoleArn *string `type:"string"`
+
+	// Describes the state of association between the IAM role and the DB instance.
+	// The Status property returns one of the following values:
+	//
+	//    * ACTIVE - the IAM role ARN is associated with the DB instance and can
+	//    be used to access other AWS services on your behalf.
+	//
+	//    * PENDING - the IAM role ARN is being associated with the DB instance.
+	//
+	//    * INVALID - the IAM role ARN is associated with the DB instance, but the
+	//    DB instance is unable to assume the IAM role in order to access other
+	//    AWS services on your behalf.
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DBInstanceRole) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DBInstanceRole) GoString() string {
+	return s.String()
+}
+
+// SetFeatureName sets the FeatureName field's value.
+func (s *DBInstanceRole) SetFeatureName(v string) *DBInstanceRole {
+	s.FeatureName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *DBInstanceRole) SetRoleArn(v string) *DBInstanceRole {
+	s.RoleArn = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DBInstanceRole) SetStatus(v string) *DBInstanceRole {
+	s.Status = &v
+	return s
+}
+
 // Provides a list of status information for a DB instance.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBInstanceStatusInfo
 type DBInstanceStatusInfo struct {
 	_ struct{} `type:"structure"`
 
@@ -15372,7 +18701,8 @@ type DBInstanceStatusInfo struct {
 	Normal *bool `type:"boolean"`
 
 	// Status of the DB instance. For a StatusType of read replica, the values can
-	// be replicating, error, stopped, or terminated.
+	// be replicating, replication stop point set, replication stop point reached,
+	// error, stopped, or terminated.
 	Status *string `type:"string"`
 
 	// This value is currently "read replication."
@@ -15413,12 +18743,10 @@ func (s *DBInstanceStatusInfo) SetStatusType(v string) *DBInstanceStatusInfo {
 	return s
 }
 
-// Contains the result of a successful invocation of the CreateDBParameterGroup
-// action.
+// Contains the details of an Amazon RDS DB parameter group.
 //
-// This data type is used as a request parameter in the DeleteDBParameterGroup
-// action, and as a response element in the DescribeDBParameterGroups action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBParameterGroup
+// This data type is used as a response element in the DescribeDBParameterGroups
+// action.
 type DBParameterGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -15472,7 +18800,6 @@ func (s *DBParameterGroup) SetDescription(v string) *DBParameterGroup {
 
 // Contains the result of a successful invocation of the ModifyDBParameterGroup
 // or ResetDBParameterGroup action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBParameterGroupNameMessage
 type DBParameterGroupNameMessage struct {
 	_ struct{} `type:"structure"`
 
@@ -15511,7 +18838,6 @@ func (s *DBParameterGroupNameMessage) SetDBParameterGroupName(v string) *DBParam
 //    * RebootDBInstance
 //
 //    * RestoreDBInstanceFromDBSnapshot
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBParameterGroupStatus
 type DBParameterGroupStatus struct {
 	_ struct{} `type:"structure"`
 
@@ -15544,19 +18870,10 @@ func (s *DBParameterGroupStatus) SetParameterApplyStatus(v string) *DBParameterG
 	return s
 }
 
-// Contains the result of a successful invocation of the following actions:
-//
-//    * DescribeDBSecurityGroups
-//
-//    * AuthorizeDBSecurityGroupIngress
-//
-//    * CreateDBSecurityGroup
-//
-//    * RevokeDBSecurityGroupIngress
+// Contains the details for an Amazon RDS DB security group.
 //
 // This data type is used as a response element in the DescribeDBSecurityGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSecurityGroup
 type DBSecurityGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -15643,7 +18960,6 @@ func (s *DBSecurityGroup) SetVpcId(v string) *DBSecurityGroup {
 //    * RestoreDBInstanceFromDBSnapshot
 //
 //    * RestoreDBInstanceToPointInTime
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSecurityGroupMembership
 type DBSecurityGroupMembership struct {
 	_ struct{} `type:"structure"`
 
@@ -15676,18 +18992,13 @@ func (s *DBSecurityGroupMembership) SetStatus(v string) *DBSecurityGroupMembersh
 	return s
 }
 
-// Contains the result of a successful invocation of the following actions:
-//
-//    * CreateDBSnapshot
-//
-//    * DeleteDBSnapshot
+// Contains the details of an Amazon RDS DB snapshot.
 //
 // This data type is used as a response element in the DescribeDBSnapshots action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSnapshot
 type DBSnapshot struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the allocated storage size in gigabytes (GB).
+	// Specifies the allocated storage size in gibibytes (GiB).
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Specifies the name of the Availability Zone the DB instance was located in
@@ -15704,6 +19015,10 @@ type DBSnapshot struct {
 	// Specifies the identifier for the DB snapshot.
 	DBSnapshotIdentifier *string `type:"string"`
 
+	// The identifier for the source DB instance, which can't be changed and which
+	// is unique to an AWS Region.
+	DbiResourceId *string `type:"string"`
+
 	// Specifies whether the DB snapshot is encrypted.
 	Encrypted *bool `type:"boolean"`
 
@@ -15714,18 +19029,18 @@ type DBSnapshot struct {
 	EngineVersion *string `type:"string"`
 
 	// True if mapping of AWS Identity and Access Management (IAM) accounts to database
-	// accounts is enabled; otherwise false.
+	// accounts is enabled, and otherwise false.
 	IAMDatabaseAuthenticationEnabled *bool `type:"boolean"`
 
 	// Specifies the time when the snapshot was taken, in Universal Coordinated
 	// Time (UTC).
-	InstanceCreateTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	InstanceCreateTime *time.Time `type:"timestamp"`
 
 	// Specifies the Provisioned IOPS (I/O operations per second) value of the DB
 	// instance at the time of the snapshot.
 	Iops *int64 `type:"integer"`
 
-	// If Encrypted is true, the KMS key identifier for the encrypted DB snapshot.
+	// If Encrypted is true, the AWS KMS key identifier for the encrypted DB snapshot.
 	KmsKeyId *string `type:"string"`
 
 	// License model information for the restored DB instance.
@@ -15744,18 +19059,22 @@ type DBSnapshot struct {
 	// of the snapshot.
 	Port *int64 `type:"integer"`
 
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance when the DB snapshot was created.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
+
 	// Provides the time when the snapshot was taken, in Universal Coordinated Time
 	// (UTC).
-	SnapshotCreateTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	SnapshotCreateTime *time.Time `type:"timestamp"`
 
 	// Provides the type of the DB snapshot.
 	SnapshotType *string `type:"string"`
 
-	// The DB snapshot Arn that the DB snapshot was copied from. It only has value
-	// in case of cross customer or cross region copy.
+	// The DB snapshot Amazon Resource Name (ARN) that the DB snapshot was copied
+	// from. It only has value in case of cross-customer or cross-region copy.
 	SourceDBSnapshotIdentifier *string `type:"string"`
 
-	// The region that the DB snapshot was created in or copied from.
+	// The AWS Region that the DB snapshot was created in or copied from.
 	SourceRegion *string `type:"string"`
 
 	// Specifies the status of this DB snapshot.
@@ -15813,6 +19132,12 @@ func (s *DBSnapshot) SetDBSnapshotArn(v string) *DBSnapshot {
 // SetDBSnapshotIdentifier sets the DBSnapshotIdentifier field's value.
 func (s *DBSnapshot) SetDBSnapshotIdentifier(v string) *DBSnapshot {
 	s.DBSnapshotIdentifier = &v
+	return s
+}
+
+// SetDbiResourceId sets the DbiResourceId field's value.
+func (s *DBSnapshot) SetDbiResourceId(v string) *DBSnapshot {
+	s.DbiResourceId = &v
 	return s
 }
 
@@ -15888,6 +19213,12 @@ func (s *DBSnapshot) SetPort(v int64) *DBSnapshot {
 	return s
 }
 
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *DBSnapshot) SetProcessorFeatures(v []*ProcessorFeature) *DBSnapshot {
+	s.ProcessorFeatures = v
+	return s
+}
+
 // SetSnapshotCreateTime sets the SnapshotCreateTime field's value.
 func (s *DBSnapshot) SetSnapshotCreateTime(v time.Time) *DBSnapshot {
 	s.SnapshotCreateTime = &v
@@ -15947,7 +19278,6 @@ func (s *DBSnapshot) SetVpcId(v string) *DBSnapshot {
 // Manual DB snapshot attributes are used to authorize other AWS accounts to
 // restore a manual DB snapshot. For more information, see the ModifyDBSnapshotAttribute
 // API.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSnapshotAttribute
 type DBSnapshotAttribute struct {
 	_ struct{} `type:"structure"`
 
@@ -15995,7 +19325,6 @@ func (s *DBSnapshotAttribute) SetAttributeValues(v []*string) *DBSnapshotAttribu
 // Manual DB snapshot attributes are used to authorize other AWS accounts to
 // copy or restore a manual DB snapshot. For more information, see the ModifyDBSnapshotAttribute
 // API action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSnapshotAttributesResult
 type DBSnapshotAttributesResult struct {
 	_ struct{} `type:"structure"`
 
@@ -16028,19 +19357,10 @@ func (s *DBSnapshotAttributesResult) SetDBSnapshotIdentifier(v string) *DBSnapsh
 	return s
 }
 
-// Contains the result of a successful invocation of the following actions:
-//
-//    * CreateDBSubnetGroup
-//
-//    * ModifyDBSubnetGroup
-//
-//    * DescribeDBSubnetGroups
-//
-//    * DeleteDBSubnetGroup
+// Contains the details of an Amazon RDS DB subnet group.
 //
 // This data type is used as a response element in the DescribeDBSubnetGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSubnetGroup
 type DBSubnetGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -16109,7 +19429,169 @@ func (s *DBSubnetGroup) SetVpcId(v string) *DBSubnetGroup {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterMessage
+type DeleteDBClusterEndpointInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier associated with the custom endpoint. This parameter is stored
+	// as a lowercase string.
+	//
+	// DBClusterEndpointIdentifier is a required field
+	DBClusterEndpointIdentifier *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteDBClusterEndpointInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDBClusterEndpointInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteDBClusterEndpointInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteDBClusterEndpointInput"}
+	if s.DBClusterEndpointIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterEndpointIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *DeleteDBClusterEndpointInput) SetDBClusterEndpointIdentifier(v string) *DeleteDBClusterEndpointInput {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// This data type represents the information you need to connect to an Amazon
+// Aurora DB cluster. This data type is used as a response element in the following
+// actions:
+//
+//    * CreateDBClusterEndpoint
+//
+//    * DescribeDBClusterEndpoints
+//
+//    * ModifyDBClusterEndpoint
+//
+//    * DeleteDBClusterEndpoint
+//
+// For the data structure that represents Amazon RDS DB instance endpoints,
+// see Endpoint.
+type DeleteDBClusterEndpointOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The type associated with a custom endpoint. One of: READER, ANY.
+	CustomEndpointType *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the endpoint.
+	DBClusterEndpointArn *string `type:"string"`
+
+	// The identifier associated with the endpoint. This parameter is stored as
+	// a lowercase string.
+	DBClusterEndpointIdentifier *string `type:"string"`
+
+	// A unique system-generated identifier for an endpoint. It remains the same
+	// for the whole life of the endpoint.
+	DBClusterEndpointResourceIdentifier *string `type:"string"`
+
+	// The DB cluster identifier of the DB cluster associated with the endpoint.
+	// This parameter is stored as a lowercase string.
+	DBClusterIdentifier *string `type:"string"`
+
+	// The DNS address of the endpoint.
+	Endpoint *string `type:"string"`
+
+	// The type of the endpoint. One of: READER, WRITER, CUSTOM.
+	EndpointType *string `type:"string"`
+
+	// List of DB instance identifiers that aren't part of the custom endpoint group.
+	// All other eligible instances are reachable through the custom endpoint. Only
+	// relevant if the list of static members is empty.
+	ExcludedMembers []*string `type:"list"`
+
+	// List of DB instance identifiers that are part of the custom endpoint group.
+	StaticMembers []*string `type:"list"`
+
+	// The current status of the endpoint. One of: creating, available, deleting,
+	// modifying.
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteDBClusterEndpointOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDBClusterEndpointOutput) GoString() string {
+	return s.String()
+}
+
+// SetCustomEndpointType sets the CustomEndpointType field's value.
+func (s *DeleteDBClusterEndpointOutput) SetCustomEndpointType(v string) *DeleteDBClusterEndpointOutput {
+	s.CustomEndpointType = &v
+	return s
+}
+
+// SetDBClusterEndpointArn sets the DBClusterEndpointArn field's value.
+func (s *DeleteDBClusterEndpointOutput) SetDBClusterEndpointArn(v string) *DeleteDBClusterEndpointOutput {
+	s.DBClusterEndpointArn = &v
+	return s
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *DeleteDBClusterEndpointOutput) SetDBClusterEndpointIdentifier(v string) *DeleteDBClusterEndpointOutput {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// SetDBClusterEndpointResourceIdentifier sets the DBClusterEndpointResourceIdentifier field's value.
+func (s *DeleteDBClusterEndpointOutput) SetDBClusterEndpointResourceIdentifier(v string) *DeleteDBClusterEndpointOutput {
+	s.DBClusterEndpointResourceIdentifier = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *DeleteDBClusterEndpointOutput) SetDBClusterIdentifier(v string) *DeleteDBClusterEndpointOutput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetEndpoint sets the Endpoint field's value.
+func (s *DeleteDBClusterEndpointOutput) SetEndpoint(v string) *DeleteDBClusterEndpointOutput {
+	s.Endpoint = &v
+	return s
+}
+
+// SetEndpointType sets the EndpointType field's value.
+func (s *DeleteDBClusterEndpointOutput) SetEndpointType(v string) *DeleteDBClusterEndpointOutput {
+	s.EndpointType = &v
+	return s
+}
+
+// SetExcludedMembers sets the ExcludedMembers field's value.
+func (s *DeleteDBClusterEndpointOutput) SetExcludedMembers(v []*string) *DeleteDBClusterEndpointOutput {
+	s.ExcludedMembers = v
+	return s
+}
+
+// SetStaticMembers sets the StaticMembers field's value.
+func (s *DeleteDBClusterEndpointOutput) SetStaticMembers(v []*string) *DeleteDBClusterEndpointOutput {
+	s.StaticMembers = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DeleteDBClusterEndpointOutput) SetStatus(v string) *DeleteDBClusterEndpointOutput {
+	s.Status = &v
+	return s
+}
+
 type DeleteDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16118,11 +19600,7 @@ type DeleteDBClusterInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match an existing DBClusterIdentifier.
 	//
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
@@ -16135,11 +19613,11 @@ type DeleteDBClusterInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	FinalDBSnapshotIdentifier *string `type:"string"`
 
 	// Determines whether a final DB cluster snapshot is created before the DB cluster
@@ -16194,25 +19672,13 @@ func (s *DeleteDBClusterInput) SetSkipFinalSnapshot(v bool) *DeleteDBClusterInpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterResult
 type DeleteDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -16232,7 +19698,6 @@ func (s *DeleteDBClusterOutput) SetDBCluster(v *DBCluster) *DeleteDBClusterOutpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterParameterGroupMessage
 type DeleteDBClusterParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16242,9 +19707,9 @@ type DeleteDBClusterParameterGroupInput struct {
 	//
 	//    * Must be the name of an existing DB cluster parameter group.
 	//
-	//    * You cannot delete a default DB cluster parameter group.
+	//    * You can't delete a default DB cluster parameter group.
 	//
-	//    * Cannot be associated with any DB clusters.
+	//    * Can't be associated with any DB clusters.
 	//
 	// DBClusterParameterGroupName is a required field
 	DBClusterParameterGroupName *string `type:"string" required:"true"`
@@ -16279,7 +19744,6 @@ func (s *DeleteDBClusterParameterGroupInput) SetDBClusterParameterGroupName(v st
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterParameterGroupOutput
 type DeleteDBClusterParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -16294,7 +19758,6 @@ func (s DeleteDBClusterParameterGroupOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterSnapshotMessage
 type DeleteDBClusterSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16336,15 +19799,10 @@ func (s *DeleteDBClusterSnapshotInput) SetDBClusterSnapshotIdentifier(v string) 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBClusterSnapshotResult
 type DeleteDBClusterSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBClusterSnapshot
-	//
-	//    * DeleteDBClusterSnapshot
+	// Contains the details for an Amazon RDS DB cluster snapshot
 	//
 	// This data type is used as a response element in the DescribeDBClusterSnapshots
 	// action.
@@ -16367,7 +19825,71 @@ func (s *DeleteDBClusterSnapshotOutput) SetDBClusterSnapshot(v *DBClusterSnapsho
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstanceMessage
+// Parameter input for the DeleteDBInstanceAutomatedBackup operation.
+type DeleteDBInstanceAutomatedBackupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier for the source DB instance, which can't be changed and which
+	// is unique to an AWS Region.
+	//
+	// DbiResourceId is a required field
+	DbiResourceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteDBInstanceAutomatedBackupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDBInstanceAutomatedBackupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteDBInstanceAutomatedBackupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteDBInstanceAutomatedBackupInput"}
+	if s.DbiResourceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DbiResourceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDbiResourceId sets the DbiResourceId field's value.
+func (s *DeleteDBInstanceAutomatedBackupInput) SetDbiResourceId(v string) *DeleteDBInstanceAutomatedBackupInput {
+	s.DbiResourceId = &v
+	return s
+}
+
+type DeleteDBInstanceAutomatedBackupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An automated backup of a DB instance. It it consists of system backups, transaction
+	// logs, and the database instance properties that existed at the time you deleted
+	// the source instance.
+	DBInstanceAutomatedBackup *DBInstanceAutomatedBackup `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteDBInstanceAutomatedBackupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteDBInstanceAutomatedBackupOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBInstanceAutomatedBackup sets the DBInstanceAutomatedBackup field's value.
+func (s *DeleteDBInstanceAutomatedBackupOutput) SetDBInstanceAutomatedBackup(v *DBInstanceAutomatedBackup) *DeleteDBInstanceAutomatedBackupOutput {
+	s.DBInstanceAutomatedBackup = v
+	return s
+}
+
 type DeleteDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16376,16 +19898,17 @@ type DeleteDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the name of an existing DB instance.
 	//
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
 
-	// The DBSnapshotIdentifier of the new DBSnapshot created when SkipFinalSnapshot
+	// A value that indicates whether to remove automated backups immediately after
+	// the DB instance is deleted. This parameter isn't case-sensitive. This parameter
+	// defaults to true.
+	DeleteAutomatedBackups *bool `type:"boolean"`
+
+	// The DBSnapshotIdentifier of the new DB snapshot created when SkipFinalSnapshot
 	// is set to false.
 	//
 	// Specifying this parameter and also setting the SkipFinalShapshot parameter
@@ -16393,22 +19916,23 @@ type DeleteDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
+	//    * Must be 1 to 255 letters or numbers.
 	//
-	//    * First character must be a letter
+	//    * First character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
 	//
-	//    * Cannot be specified when deleting a Read Replica.
+	//    * Can't be specified when deleting a Read Replica.
 	FinalDBSnapshotIdentifier *string `type:"string"`
 
-	// Determines whether a final DB snapshot is created before the DB instance
-	// is deleted. If true is specified, no DBSnapshot is created. If false is specified,
-	// a DB snapshot is created before the DB instance is deleted.
+	// A value that indicates whether a final DB snapshot is created before the
+	// DB instance is deleted. If true is specified, no DB snapshot is created.
+	// If false is specified, a DB snapshot is created before the DB instance is
+	// deleted.
 	//
-	// Note that when a DB instance is in a failure state and has a status of 'failed',
-	// 'incompatible-restore', or 'incompatible-network', it can only be deleted
-	// when the SkipFinalSnapshot parameter is set to "true".
+	// When a DB instance is in a failure state and has a status of failed, incompatible-restore,
+	// or incompatible-network, you can only delete it when the SkipFinalSnapshot
+	// parameter is set to true.
 	//
 	// Specify true when deleting a Read Replica.
 	//
@@ -16448,6 +19972,12 @@ func (s *DeleteDBInstanceInput) SetDBInstanceIdentifier(v string) *DeleteDBInsta
 	return s
 }
 
+// SetDeleteAutomatedBackups sets the DeleteAutomatedBackups field's value.
+func (s *DeleteDBInstanceInput) SetDeleteAutomatedBackups(v bool) *DeleteDBInstanceInput {
+	s.DeleteAutomatedBackups = &v
+	return s
+}
+
 // SetFinalDBSnapshotIdentifier sets the FinalDBSnapshotIdentifier field's value.
 func (s *DeleteDBInstanceInput) SetFinalDBSnapshotIdentifier(v string) *DeleteDBInstanceInput {
 	s.FinalDBSnapshotIdentifier = &v
@@ -16460,21 +19990,10 @@ func (s *DeleteDBInstanceInput) SetSkipFinalSnapshot(v bool) *DeleteDBInstanceIn
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBInstanceResult
 type DeleteDBInstanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -16496,7 +20015,6 @@ func (s *DeleteDBInstanceOutput) SetDBInstance(v *DBInstance) *DeleteDBInstanceO
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBParameterGroupMessage
 type DeleteDBParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16506,9 +20024,9 @@ type DeleteDBParameterGroupInput struct {
 	//
 	//    * Must be the name of an existing DB parameter group
 	//
-	//    * You cannot delete a default DB parameter group
+	//    * You can't delete a default DB parameter group
 	//
-	//    * Cannot be associated with any DB instances
+	//    * Can't be associated with any DB instances
 	//
 	// DBParameterGroupName is a required field
 	DBParameterGroupName *string `type:"string" required:"true"`
@@ -16543,7 +20061,6 @@ func (s *DeleteDBParameterGroupInput) SetDBParameterGroupName(v string) *DeleteD
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBParameterGroupOutput
 type DeleteDBParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -16558,21 +20075,20 @@ func (s DeleteDBParameterGroupOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSecurityGroupMessage
 type DeleteDBSecurityGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the DB security group to delete.
 	//
-	// You cannot delete the default DB security group.
+	// You can't delete the default DB security group.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	//    * Must not be "Default"
 	//
@@ -16609,7 +20125,6 @@ func (s *DeleteDBSecurityGroupInput) SetDBSecurityGroupName(v string) *DeleteDBS
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSecurityGroupOutput
 type DeleteDBSecurityGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -16624,11 +20139,10 @@ func (s DeleteDBSecurityGroupOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSnapshotMessage
 type DeleteDBSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
-	// The DBSnapshot identifier.
+	// The DB snapshot identifier.
 	//
 	// Constraints: Must be the name of an existing DB snapshot in the available
 	// state.
@@ -16666,15 +20180,10 @@ func (s *DeleteDBSnapshotInput) SetDBSnapshotIdentifier(v string) *DeleteDBSnaps
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSnapshotResult
 type DeleteDBSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBSnapshot
-	//
-	//    * DeleteDBSnapshot
+	// Contains the details of an Amazon RDS DB snapshot.
 	//
 	// This data type is used as a response element in the DescribeDBSnapshots action.
 	DBSnapshot *DBSnapshot `type:"structure"`
@@ -16696,18 +20205,17 @@ func (s *DeleteDBSnapshotOutput) SetDBSnapshot(v *DBSnapshot) *DeleteDBSnapshotO
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSubnetGroupMessage
 type DeleteDBSubnetGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the database subnet group to delete.
 	//
-	// You cannot delete the default subnet group.
+	// You can't delete the default subnet group.
 	//
 	// Constraints:
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: Must match the name of an existing DBSubnetGroup. Must not be
+	// default.
 	//
 	// Example: mySubnetgroup
 	//
@@ -16744,7 +20252,6 @@ func (s *DeleteDBSubnetGroupInput) SetDBSubnetGroupName(v string) *DeleteDBSubne
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteDBSubnetGroupOutput
 type DeleteDBSubnetGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -16759,7 +20266,6 @@ func (s DeleteDBSubnetGroupOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteEventSubscriptionMessage
 type DeleteEventSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16798,7 +20304,6 @@ func (s *DeleteEventSubscriptionInput) SetSubscriptionName(v string) *DeleteEven
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteEventSubscriptionResult
 type DeleteEventSubscriptionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -16823,13 +20328,73 @@ func (s *DeleteEventSubscriptionOutput) SetEventSubscription(v *EventSubscriptio
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteOptionGroupMessage
+type DeleteGlobalClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The cluster identifier of the global database cluster being deleted.
+	//
+	// GlobalClusterIdentifier is a required field
+	GlobalClusterIdentifier *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteGlobalClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteGlobalClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteGlobalClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteGlobalClusterInput"}
+	if s.GlobalClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("GlobalClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *DeleteGlobalClusterInput) SetGlobalClusterIdentifier(v string) *DeleteGlobalClusterInput {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
+type DeleteGlobalClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A data type representing an Aurora global database.
+	GlobalCluster *GlobalCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteGlobalClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteGlobalClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetGlobalCluster sets the GlobalCluster field's value.
+func (s *DeleteGlobalClusterOutput) SetGlobalCluster(v *GlobalCluster) *DeleteGlobalClusterOutput {
+	s.GlobalCluster = v
+	return s
+}
+
 type DeleteOptionGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the option group to be deleted.
 	//
-	// You cannot delete default option groups.
+	// You can't delete default option groups.
 	//
 	// OptionGroupName is a required field
 	OptionGroupName *string `type:"string" required:"true"`
@@ -16864,7 +20429,6 @@ func (s *DeleteOptionGroupInput) SetOptionGroupName(v string) *DeleteOptionGroup
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DeleteOptionGroupOutput
 type DeleteOptionGroupOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -16879,7 +20443,6 @@ func (s DeleteOptionGroupOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeAccountAttributesMessage
 type DescribeAccountAttributesInput struct {
 	_ struct{} `type:"structure"`
 }
@@ -16895,7 +20458,6 @@ func (s DescribeAccountAttributesInput) GoString() string {
 }
 
 // Data returned by the DescribeAccountAttributes action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/AccountAttributesMessage
 type DescribeAccountAttributesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -16920,7 +20482,6 @@ func (s *DescribeAccountAttributesOutput) SetAccountQuotas(v []*AccountQuota) *D
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeCertificatesMessage
 type DescribeCertificatesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16930,11 +20491,7 @@ type DescribeCertificatesInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match an existing CertificateIdentifier.
 	CertificateIdentifier *string `type:"string"`
 
 	// This parameter is not currently supported.
@@ -17010,7 +20567,6 @@ func (s *DescribeCertificatesInput) SetMaxRecords(v int64) *DescribeCertificates
 }
 
 // Data returned by the DescribeCertificates action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/CertificateMessage
 type DescribeCertificatesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -17045,7 +20601,303 @@ func (s *DescribeCertificatesOutput) SetMarker(v string) *DescribeCertificatesOu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParameterGroupsMessage
+type DescribeDBClusterBacktracksInput struct {
+	_ struct{} `type:"structure"`
+
+	// If specified, this value is the backtrack identifier of the backtrack to
+	// be described.
+	//
+	// Constraints:
+	//
+	//    * Must contain a valid universally unique identifier (UUID). For more
+	//    information about UUIDs, see A Universally Unique Identifier (UUID) URN
+	//    Namespace (http://www.ietf.org/rfc/rfc4122.txt).
+	//
+	// Example: 123e4567-e89b-12d3-a456-426655440000
+	BacktrackIdentifier *string `type:"string"`
+
+	// The DB cluster identifier of the DB cluster to be described. This parameter
+	// is stored as a lowercase string.
+	//
+	// Constraints:
+	//
+	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	//
+	// Example: my-cluster1
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+
+	// A filter that specifies one or more DB clusters to describe. Supported filters
+	// include the following:
+	//
+	//    * db-cluster-backtrack-id - Accepts backtrack identifiers. The results
+	//    list includes information about only the backtracks identified by these
+	//    identifiers.
+	//
+	//    * db-cluster-backtrack-status - Accepts any of the following backtrack
+	//    status values:
+	//
+	// applying
+	//
+	// completed
+	//
+	// failed
+	//
+	// pending
+	//
+	// The results list includes information about only the backtracks identified
+	//    by these values. For more information about backtrack status values, see
+	//    DBClusterBacktrack.
+	Filters []*Filter `locationNameList:"Filter" type:"list"`
+
+	// An optional pagination token provided by a previous DescribeDBClusterBacktracks
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by MaxRecords.
+	Marker *string `type:"string"`
+
+	// The maximum number of records to include in the response. If more records
+	// exist than the specified MaxRecords value, a pagination token called a marker
+	// is included in the response so that the remaining results can be retrieved.
+	//
+	// Default: 100
+	//
+	// Constraints: Minimum 20, maximum 100.
+	MaxRecords *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s DescribeDBClusterBacktracksInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDBClusterBacktracksInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDBClusterBacktracksInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeDBClusterBacktracksInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBacktrackIdentifier sets the BacktrackIdentifier field's value.
+func (s *DescribeDBClusterBacktracksInput) SetBacktrackIdentifier(v string) *DescribeDBClusterBacktracksInput {
+	s.BacktrackIdentifier = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *DescribeDBClusterBacktracksInput) SetDBClusterIdentifier(v string) *DescribeDBClusterBacktracksInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeDBClusterBacktracksInput) SetFilters(v []*Filter) *DescribeDBClusterBacktracksInput {
+	s.Filters = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeDBClusterBacktracksInput) SetMarker(v string) *DescribeDBClusterBacktracksInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxRecords sets the MaxRecords field's value.
+func (s *DescribeDBClusterBacktracksInput) SetMaxRecords(v int64) *DescribeDBClusterBacktracksInput {
+	s.MaxRecords = &v
+	return s
+}
+
+// Contains the result of a successful invocation of the DescribeDBClusterBacktracks
+// action.
+type DescribeDBClusterBacktracksOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains a list of backtracks for the user.
+	DBClusterBacktracks []*BacktrackDBClusterOutput `locationNameList:"DBClusterBacktrack" type:"list"`
+
+	// A pagination token that can be used in a subsequent DescribeDBClusterBacktracks
+	// request.
+	Marker *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeDBClusterBacktracksOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDBClusterBacktracksOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBClusterBacktracks sets the DBClusterBacktracks field's value.
+func (s *DescribeDBClusterBacktracksOutput) SetDBClusterBacktracks(v []*BacktrackDBClusterOutput) *DescribeDBClusterBacktracksOutput {
+	s.DBClusterBacktracks = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeDBClusterBacktracksOutput) SetMarker(v string) *DescribeDBClusterBacktracksOutput {
+	s.Marker = &v
+	return s
+}
+
+type DescribeDBClusterEndpointsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the endpoint to describe. This parameter is stored as a
+	// lowercase string.
+	DBClusterEndpointIdentifier *string `type:"string"`
+
+	// The DB cluster identifier of the DB cluster associated with the endpoint.
+	// This parameter is stored as a lowercase string.
+	DBClusterIdentifier *string `type:"string"`
+
+	// A set of name-value pairs that define which endpoints to include in the output.
+	// The filters are specified as name-value pairs, in the format Name=endpoint_type,Values=endpoint_type1,endpoint_type2,....
+	// Name can be one of: db-cluster-endpoint-type, db-cluster-endpoint-custom-type,
+	// db-cluster-endpoint-id, db-cluster-endpoint-status. Values for the  db-cluster-endpoint-type
+	// filter can be one or more of: reader, writer, custom. Values for the db-cluster-endpoint-custom-type
+	// filter can be one or more of: reader, any. Values for the db-cluster-endpoint-status
+	// filter can be one or more of: available, creating, deleting, modifying.
+	Filters []*Filter `locationNameList:"Filter" type:"list"`
+
+	// An optional pagination token provided by a previous DescribeDBClusterEndpoints
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by MaxRecords.
+	Marker *string `type:"string"`
+
+	// The maximum number of records to include in the response. If more records
+	// exist than the specified MaxRecords value, a pagination token called a marker
+	// is included in the response so that the remaining results can be retrieved.
+	//
+	// Default: 100
+	//
+	// Constraints: Minimum 20, maximum 100.
+	MaxRecords *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s DescribeDBClusterEndpointsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDBClusterEndpointsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDBClusterEndpointsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeDBClusterEndpointsInput"}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *DescribeDBClusterEndpointsInput) SetDBClusterEndpointIdentifier(v string) *DescribeDBClusterEndpointsInput {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *DescribeDBClusterEndpointsInput) SetDBClusterIdentifier(v string) *DescribeDBClusterEndpointsInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeDBClusterEndpointsInput) SetFilters(v []*Filter) *DescribeDBClusterEndpointsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeDBClusterEndpointsInput) SetMarker(v string) *DescribeDBClusterEndpointsInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxRecords sets the MaxRecords field's value.
+func (s *DescribeDBClusterEndpointsInput) SetMaxRecords(v int64) *DescribeDBClusterEndpointsInput {
+	s.MaxRecords = &v
+	return s
+}
+
+type DescribeDBClusterEndpointsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the details of the endpoints associated with the cluster and matching
+	// any filter conditions.
+	DBClusterEndpoints []*DBClusterEndpoint `locationNameList:"DBClusterEndpointList" type:"list"`
+
+	// An optional pagination token provided by a previous DescribeDBClusterEndpoints
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by MaxRecords.
+	Marker *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeDBClusterEndpointsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDBClusterEndpointsOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBClusterEndpoints sets the DBClusterEndpoints field's value.
+func (s *DescribeDBClusterEndpointsOutput) SetDBClusterEndpoints(v []*DBClusterEndpoint) *DescribeDBClusterEndpointsOutput {
+	s.DBClusterEndpoints = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeDBClusterEndpointsOutput) SetMarker(v string) *DescribeDBClusterEndpointsOutput {
+	s.Marker = &v
+	return s
+}
+
 type DescribeDBClusterParameterGroupsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17053,11 +20905,7 @@ type DescribeDBClusterParameterGroupsInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the name of an existing DBClusterParameterGroup.
 	DBClusterParameterGroupName *string `type:"string"`
 
 	// This parameter is not currently supported.
@@ -17132,7 +20980,6 @@ func (s *DescribeDBClusterParameterGroupsInput) SetMaxRecords(v int64) *Describe
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterParameterGroupsMessage
 type DescribeDBClusterParameterGroupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -17167,7 +21014,6 @@ func (s *DescribeDBClusterParameterGroupsOutput) SetMarker(v string) *DescribeDB
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterParametersMessage
 type DescribeDBClusterParametersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17176,11 +21022,7 @@ type DescribeDBClusterParametersInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the name of an existing DBClusterParameterGroup.
 	//
 	// DBClusterParameterGroupName is a required field
 	DBClusterParameterGroupName *string `type:"string" required:"true"`
@@ -17272,7 +21114,6 @@ func (s *DescribeDBClusterParametersInput) SetSource(v string) *DescribeDBCluste
 
 // Provides details about a DB cluster parameter group including the parameters
 // in the DB cluster parameter group.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterParameterGroupDetails
 type DescribeDBClusterParametersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -17307,7 +21148,6 @@ func (s *DescribeDBClusterParametersOutput) SetParameters(v []*Parameter) *Descr
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshotAttributesMessage
 type DescribeDBClusterSnapshotAttributesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17346,7 +21186,6 @@ func (s *DescribeDBClusterSnapshotAttributesInput) SetDBClusterSnapshotIdentifie
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshotAttributesResult
 type DescribeDBClusterSnapshotAttributesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -17375,34 +21214,25 @@ func (s *DescribeDBClusterSnapshotAttributesOutput) SetDBClusterSnapshotAttribut
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClusterSnapshotsMessage
 type DescribeDBClusterSnapshotsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the DB cluster to retrieve the list of DB cluster snapshots for.
-	// This parameter cannot be used in conjunction with the DBClusterSnapshotIdentifier
+	// This parameter can't be used in conjunction with the DBClusterSnapshotIdentifier
 	// parameter. This parameter is not case-sensitive.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the identifier of an existing DBCluster.
 	DBClusterIdentifier *string `type:"string"`
 
-	// A specific DB cluster snapshot identifier to describe. This parameter cannot
+	// A specific DB cluster snapshot identifier to describe. This parameter can't
 	// be used in conjunction with the DBClusterIdentifier parameter. This value
 	// is stored as a lowercase string.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the identifier of an existing DBClusterSnapshot.
 	//
 	//    * If this identifier is for an automated snapshot, the SnapshotType parameter
 	//    must also be specified.
@@ -17411,17 +21241,17 @@ type DescribeDBClusterSnapshotsInput struct {
 	// This parameter is not currently supported.
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
-	// Set this value to true to include manual DB cluster snapshots that are public
-	// and can be copied or restored by any AWS account, otherwise set this value
-	// to false. The default is false. The default is false.
+	// True to include manual DB cluster snapshots that are public and can be copied
+	// or restored by any AWS account, and otherwise false. The default is false.
+	// The default is false.
 	//
 	// You can share a manual DB cluster snapshot as public by using the ModifyDBClusterSnapshotAttribute
 	// API action.
 	IncludePublic *bool `type:"boolean"`
 
-	// Set this value to true to include shared manual DB cluster snapshots from
-	// other AWS accounts that this AWS account has been given permission to copy
-	// or restore, otherwise set this value to false. The default is false.
+	// True to include shared manual DB cluster snapshots from other AWS accounts
+	// that this AWS account has been given permission to copy or restore, and otherwise
+	// false. The default is false.
 	//
 	// You can give an AWS account permission to restore a manual DB cluster snapshot
 	// from another AWS account by the ModifyDBClusterSnapshotAttribute API action.
@@ -17548,7 +21378,6 @@ func (s *DescribeDBClusterSnapshotsInput) SetSnapshotType(v string) *DescribeDBC
 
 // Provides a list of DB cluster snapshots for the user as the result of a call
 // to the DescribeDBClusterSnapshots action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterSnapshotMessage
 type DescribeDBClusterSnapshotsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -17583,7 +21412,6 @@ func (s *DescribeDBClusterSnapshotsOutput) SetMarker(v string) *DescribeDBCluste
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBClustersMessage
 type DescribeDBClustersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17593,11 +21421,7 @@ type DescribeDBClustersInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match an existing DBClusterIdentifier.
 	DBClusterIdentifier *string `type:"string"`
 
 	// A filter that specifies one or more DB clusters to describe.
@@ -17680,7 +21504,6 @@ func (s *DescribeDBClustersInput) SetMaxRecords(v int64) *DescribeDBClustersInpu
 
 // Contains the result of a successful invocation of the DescribeDBClusters
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBClusterMessage
 type DescribeDBClustersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -17713,7 +21536,6 @@ func (s *DescribeDBClustersOutput) SetMarker(v string) *DescribeDBClustersOutput
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBEngineVersionsMessage
 type DescribeDBEngineVersionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17721,11 +21543,7 @@ type DescribeDBEngineVersionsInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match an existing DBParameterGroupFamily.
 	DBParameterGroupFamily *string `type:"string"`
 
 	// Indicates that only the default version of the specified engine or engine
@@ -17740,7 +21558,7 @@ type DescribeDBEngineVersionsInput struct {
 	// Example: 5.1.49
 	EngineVersion *string `type:"string"`
 
-	// Not currently supported.
+	// This parameter is not currently supported.
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
 	// If this parameter is specified and the requested engine supports the CharacterSetName
@@ -17854,7 +21672,6 @@ func (s *DescribeDBEngineVersionsInput) SetMaxRecords(v int64) *DescribeDBEngine
 
 // Contains the result of a successful invocation of the DescribeDBEngineVersions
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBEngineVersionMessage
 type DescribeDBEngineVersionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -17889,7 +21706,151 @@ func (s *DescribeDBEngineVersionsOutput) SetMarker(v string) *DescribeDBEngineVe
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBInstancesMessage
+// Parameter input for DescribeDBInstanceAutomatedBackups.
+type DescribeDBInstanceAutomatedBackupsInput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) The user-supplied instance identifier. If this parameter is specified,
+	// it must match the identifier of an existing DB instance. It returns information
+	// from the specific DB instance' automated backup. This parameter isn't case-sensitive.
+	DBInstanceIdentifier *string `type:"string"`
+
+	// The resource ID of the DB instance that is the source of the automated backup.
+	// This parameter isn't case-sensitive.
+	DbiResourceId *string `type:"string"`
+
+	// A filter that specifies which resources to return based on status.
+	//
+	// Supported filters are the following:
+	//
+	//    * status
+	//
+	// active - automated backups for current instances
+	//
+	// retained - automated backups for deleted instances
+	//
+	// creating - automated backups that are waiting for the first automated snapshot
+	//    to be available
+	//
+	//    * db-instance-id - Accepts DB instance identifiers and Amazon Resource
+	//    Names (ARNs) for DB instances. The results list includes only information
+	//    about the DB instance automated backupss identified by these ARNs.
+	//
+	//    * dbi-resource-id - Accepts DB instance resource identifiers and DB Amazon
+	//    Resource Names (ARNs) for DB instances. The results list includes only
+	//    information about the DB instance resources identified by these ARNs.
+	//
+	// Returns all resources by default. The status for each resource is specified
+	// in the response.
+	Filters []*Filter `locationNameList:"Filter" type:"list"`
+
+	// The pagination token provided in the previous request. If this parameter
+	// is specified the response includes only records beyond the marker, up to
+	// MaxRecords.
+	Marker *string `type:"string"`
+
+	// The maximum number of records to include in the response. If more records
+	// exist than the specified MaxRecords value, a pagination token called a marker
+	// is included in the response so that the remaining results can be retrieved.
+	MaxRecords *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s DescribeDBInstanceAutomatedBackupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDBInstanceAutomatedBackupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeDBInstanceAutomatedBackupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeDBInstanceAutomatedBackupsInput"}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBInstanceIdentifier sets the DBInstanceIdentifier field's value.
+func (s *DescribeDBInstanceAutomatedBackupsInput) SetDBInstanceIdentifier(v string) *DescribeDBInstanceAutomatedBackupsInput {
+	s.DBInstanceIdentifier = &v
+	return s
+}
+
+// SetDbiResourceId sets the DbiResourceId field's value.
+func (s *DescribeDBInstanceAutomatedBackupsInput) SetDbiResourceId(v string) *DescribeDBInstanceAutomatedBackupsInput {
+	s.DbiResourceId = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeDBInstanceAutomatedBackupsInput) SetFilters(v []*Filter) *DescribeDBInstanceAutomatedBackupsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeDBInstanceAutomatedBackupsInput) SetMarker(v string) *DescribeDBInstanceAutomatedBackupsInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxRecords sets the MaxRecords field's value.
+func (s *DescribeDBInstanceAutomatedBackupsInput) SetMaxRecords(v int64) *DescribeDBInstanceAutomatedBackupsInput {
+	s.MaxRecords = &v
+	return s
+}
+
+// Contains the result of a successful invocation of the DescribeDBInstanceAutomatedBackups
+// action.
+type DescribeDBInstanceAutomatedBackupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of DBInstanceAutomatedBackup instances.
+	DBInstanceAutomatedBackups []*DBInstanceAutomatedBackup `locationNameList:"DBInstanceAutomatedBackup" type:"list"`
+
+	// An optional pagination token provided by a previous request. If this parameter
+	// is specified, the response includes only records beyond the marker, up to
+	// the value specified by MaxRecords .
+	Marker *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeDBInstanceAutomatedBackupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeDBInstanceAutomatedBackupsOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBInstanceAutomatedBackups sets the DBInstanceAutomatedBackups field's value.
+func (s *DescribeDBInstanceAutomatedBackupsOutput) SetDBInstanceAutomatedBackups(v []*DBInstanceAutomatedBackup) *DescribeDBInstanceAutomatedBackupsOutput {
+	s.DBInstanceAutomatedBackups = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeDBInstanceAutomatedBackupsOutput) SetMarker(v string) *DescribeDBInstanceAutomatedBackupsOutput {
+	s.Marker = &v
+	return s
+}
+
 type DescribeDBInstancesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17898,11 +21859,7 @@ type DescribeDBInstancesInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the identifier of an existing DBInstance.
 	DBInstanceIdentifier *string `type:"string"`
 
 	// A filter that specifies one or more DB instances to describe.
@@ -17911,7 +21868,7 @@ type DescribeDBInstancesInput struct {
 	//
 	//    * db-cluster-id - Accepts DB cluster identifiers and DB cluster Amazon
 	//    Resource Names (ARNs). The results list will only include information
-	//    about the DB instances associated with the DB Clusters identified by these
+	//    about the DB instances associated with the DB clusters identified by these
 	//    ARNs.
 	//
 	//    * db-instance-id - Accepts DB instance identifiers and DB instance Amazon
@@ -17990,7 +21947,6 @@ func (s *DescribeDBInstancesInput) SetMaxRecords(v int64) *DescribeDBInstancesIn
 
 // Contains the result of a successful invocation of the DescribeDBInstances
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBInstanceMessage
 type DescribeDBInstancesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18026,7 +21982,6 @@ func (s *DescribeDBInstancesOutput) SetMarker(v string) *DescribeDBInstancesOutp
 }
 
 // This data type is used as a response element to DescribeDBLogFiles.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBLogFilesDetails
 type DescribeDBLogFilesDetails struct {
 	_ struct{} `type:"structure"`
 
@@ -18068,7 +22023,6 @@ func (s *DescribeDBLogFilesDetails) SetSize(v int64) *DescribeDBLogFilesDetails 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBLogFilesMessage
 type DescribeDBLogFilesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18077,11 +22031,7 @@ type DescribeDBLogFilesInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing DBInstance.
 	//
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
@@ -18187,7 +22137,6 @@ func (s *DescribeDBLogFilesInput) SetMaxRecords(v int64) *DescribeDBLogFilesInpu
 }
 
 // The response from a call to DescribeDBLogFiles.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBLogFilesResponse
 type DescribeDBLogFilesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18220,7 +22169,6 @@ func (s *DescribeDBLogFilesOutput) SetMarker(v string) *DescribeDBLogFilesOutput
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParameterGroupsMessage
 type DescribeDBParameterGroupsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18228,11 +22176,7 @@ type DescribeDBParameterGroupsInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the name of an existing DBClusterParameterGroup.
 	DBParameterGroupName *string `type:"string"`
 
 	// This parameter is not currently supported.
@@ -18309,7 +22253,6 @@ func (s *DescribeDBParameterGroupsInput) SetMaxRecords(v int64) *DescribeDBParam
 
 // Contains the result of a successful invocation of the DescribeDBParameterGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBParameterGroupsMessage
 type DescribeDBParameterGroupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18344,7 +22287,6 @@ func (s *DescribeDBParameterGroupsOutput) SetMarker(v string) *DescribeDBParamet
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBParametersMessage
 type DescribeDBParametersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18352,11 +22294,7 @@ type DescribeDBParametersInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the name of an existing DBParameterGroup.
 	//
 	// DBParameterGroupName is a required field
 	DBParameterGroupName *string `type:"string" required:"true"`
@@ -18451,7 +22389,6 @@ func (s *DescribeDBParametersInput) SetSource(v string) *DescribeDBParametersInp
 
 // Contains the result of a successful invocation of the DescribeDBParameters
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBParameterGroupDetails
 type DescribeDBParametersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18486,7 +22423,6 @@ func (s *DescribeDBParametersOutput) SetParameters(v []*Parameter) *DescribeDBPa
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSecurityGroupsMessage
 type DescribeDBSecurityGroupsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18567,7 +22503,6 @@ func (s *DescribeDBSecurityGroupsInput) SetMaxRecords(v int64) *DescribeDBSecuri
 
 // Contains the result of a successful invocation of the DescribeDBSecurityGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSecurityGroupMessage
 type DescribeDBSecurityGroupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18602,7 +22537,6 @@ func (s *DescribeDBSecurityGroupsOutput) SetMarker(v string) *DescribeDBSecurity
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshotAttributesMessage
 type DescribeDBSnapshotAttributesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18641,7 +22575,6 @@ func (s *DescribeDBSnapshotAttributesInput) SetDBSnapshotIdentifier(v string) *D
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshotAttributesResult
 type DescribeDBSnapshotAttributesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18670,53 +22603,46 @@ func (s *DescribeDBSnapshotAttributesOutput) SetDBSnapshotAttributesResult(v *DB
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSnapshotsMessage
 type DescribeDBSnapshotsInput struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the DB instance to retrieve the list of DB snapshots for. This
-	// parameter cannot be used in conjunction with DBSnapshotIdentifier. This parameter
+	// parameter can't be used in conjunction with DBSnapshotIdentifier. This parameter
 	// is not case-sensitive.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the identifier of an existing DBInstance.
 	DBInstanceIdentifier *string `type:"string"`
 
-	// A specific DB snapshot identifier to describe. This parameter cannot be used
+	// A specific DB snapshot identifier to describe. This parameter can't be used
 	// in conjunction with DBInstanceIdentifier. This value is stored as a lowercase
 	// string.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters.
-	//
-	//    * First character must be a letter.
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * If supplied, must match the identifier of an existing DBSnapshot.
 	//
 	//    * If this identifier is for an automated snapshot, the SnapshotType parameter
 	//    must also be specified.
 	DBSnapshotIdentifier *string `type:"string"`
 
+	// A specific DB resource ID to describe.
+	DbiResourceId *string `type:"string"`
+
 	// This parameter is not currently supported.
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
-	// Set this value to true to include manual DB snapshots that are public and
-	// can be copied or restored by any AWS account, otherwise set this value to
-	// false. The default is false.
+	// True to include manual DB snapshots that are public and can be copied or
+	// restored by any AWS account, and otherwise false. The default is false.
 	//
 	// You can share a manual DB snapshot as public by using the ModifyDBSnapshotAttribute
 	// API.
 	IncludePublic *bool `type:"boolean"`
 
-	// Set this value to true to include shared manual DB snapshots from other AWS
-	// accounts that this AWS account has been given permission to copy or restore,
-	// otherwise set this value to false. The default is false.
+	// True to include shared manual DB snapshots from other AWS accounts that this
+	// AWS account has been given permission to copy or restore, and otherwise false.
+	// The default is false.
 	//
 	// You can give an AWS account permission to restore a manual DB snapshot from
 	// another AWS account by using the ModifyDBSnapshotAttribute API action.
@@ -18804,6 +22730,12 @@ func (s *DescribeDBSnapshotsInput) SetDBSnapshotIdentifier(v string) *DescribeDB
 	return s
 }
 
+// SetDbiResourceId sets the DbiResourceId field's value.
+func (s *DescribeDBSnapshotsInput) SetDbiResourceId(v string) *DescribeDBSnapshotsInput {
+	s.DbiResourceId = &v
+	return s
+}
+
 // SetFilters sets the Filters field's value.
 func (s *DescribeDBSnapshotsInput) SetFilters(v []*Filter) *DescribeDBSnapshotsInput {
 	s.Filters = v
@@ -18842,7 +22774,6 @@ func (s *DescribeDBSnapshotsInput) SetSnapshotType(v string) *DescribeDBSnapshot
 
 // Contains the result of a successful invocation of the DescribeDBSnapshots
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSnapshotMessage
 type DescribeDBSnapshotsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18877,7 +22808,6 @@ func (s *DescribeDBSnapshotsOutput) SetMarker(v string) *DescribeDBSnapshotsOutp
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeDBSubnetGroupsMessage
 type DescribeDBSubnetGroupsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -18958,7 +22888,6 @@ func (s *DescribeDBSubnetGroupsInput) SetMaxRecords(v int64) *DescribeDBSubnetGr
 
 // Contains the result of a successful invocation of the DescribeDBSubnetGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DBSubnetGroupMessage
 type DescribeDBSubnetGroupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -18993,7 +22922,6 @@ func (s *DescribeDBSubnetGroupsOutput) SetMarker(v string) *DescribeDBSubnetGrou
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultClusterParametersMessage
 type DescribeEngineDefaultClusterParametersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19078,7 +23006,6 @@ func (s *DescribeEngineDefaultClusterParametersInput) SetMaxRecords(v int64) *De
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultClusterParametersResult
 type DescribeEngineDefaultClusterParametersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19103,7 +23030,6 @@ func (s *DescribeEngineDefaultClusterParametersOutput) SetEngineDefaults(v *Engi
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultParametersMessage
 type DescribeEngineDefaultParametersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19112,7 +23038,7 @@ type DescribeEngineDefaultParametersInput struct {
 	// DBParameterGroupFamily is a required field
 	DBParameterGroupFamily *string `type:"string" required:"true"`
 
-	// Not currently supported.
+	// This parameter is not currently supported.
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
 	// An optional pagination token provided by a previous DescribeEngineDefaultParameters
@@ -19187,7 +23113,6 @@ func (s *DescribeEngineDefaultParametersInput) SetMaxRecords(v int64) *DescribeE
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEngineDefaultParametersResult
 type DescribeEngineDefaultParametersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19212,14 +23137,13 @@ func (s *DescribeEngineDefaultParametersOutput) SetEngineDefaults(v *EngineDefau
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventCategoriesMessage
 type DescribeEventCategoriesInput struct {
 	_ struct{} `type:"structure"`
 
 	// This parameter is not currently supported.
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
-	// The type of source that will be generating the events.
+	// The type of source that is generating the events.
 	//
 	// Valid values: db-instance | db-parameter-group | db-security-group | db-snapshot
 	SourceType *string `type:"string"`
@@ -19268,7 +23192,6 @@ func (s *DescribeEventCategoriesInput) SetSourceType(v string) *DescribeEventCat
 }
 
 // Data returned from the DescribeEventCategories action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/EventCategoriesMessage
 type DescribeEventCategoriesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19292,7 +23215,6 @@ func (s *DescribeEventCategoriesOutput) SetEventCategoriesMapList(v []*EventCate
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventSubscriptionsMessage
 type DescribeEventSubscriptionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19372,7 +23294,6 @@ func (s *DescribeEventSubscriptionsInput) SetSubscriptionName(v string) *Describ
 }
 
 // Data returned by the DescribeEventSubscriptions action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/EventSubscriptionsMessage
 type DescribeEventSubscriptionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19407,7 +23328,6 @@ func (s *DescribeEventSubscriptionsOutput) SetMarker(v string) *DescribeEventSub
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeEventsMessage
 type DescribeEventsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19421,7 +23341,7 @@ type DescribeEventsInput struct {
 	// page. (http://en.wikipedia.org/wiki/ISO_8601)
 	//
 	// Example: 2009-07-08T18:00Z
-	EndTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	EndTime *time.Time `type:"timestamp"`
 
 	// A list of event categories that trigger notifications for a event notification
 	// subscription.
@@ -19444,8 +23364,8 @@ type DescribeEventsInput struct {
 	// Constraints: Minimum 20, maximum 100.
 	MaxRecords *int64 `type:"integer"`
 
-	// The identifier of the event source for which events will be returned. If
-	// not specified, then all sources are included in the response.
+	// The identifier of the event source for which events are returned. If not
+	// specified, then all sources are included in the response.
 	//
 	// Constraints:
 	//
@@ -19462,7 +23382,7 @@ type DescribeEventsInput struct {
 	//
 	//    * If the source type is DBSnapshot, a DBSnapshotIdentifier must be supplied.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
 	SourceIdentifier *string `type:"string"`
 
 	// The event source to retrieve events for. If no value is specified, all events
@@ -19474,7 +23394,7 @@ type DescribeEventsInput struct {
 	// page. (http://en.wikipedia.org/wiki/ISO_8601)
 	//
 	// Example: 2009-07-08T18:00Z
-	StartTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	StartTime *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -19562,7 +23482,6 @@ func (s *DescribeEventsInput) SetStartTime(v time.Time) *DescribeEventsInput {
 }
 
 // Contains the result of a successful invocation of the DescribeEvents action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/EventsMessage
 type DescribeEventsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19597,12 +23516,134 @@ func (s *DescribeEventsOutput) SetMarker(v string) *DescribeEventsOutput {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroupOptionsMessage
+type DescribeGlobalClustersInput struct {
+	_ struct{} `type:"structure"`
+
+	// A filter that specifies one or more global DB clusters to describe.
+	//
+	// Supported filters:
+	//
+	//    * db-cluster-id - Accepts DB cluster identifiers and DB cluster Amazon
+	//    Resource Names (ARNs). The results list will only include information
+	//    about the DB clusters identified by these ARNs.
+	Filters []*Filter `locationNameList:"Filter" type:"list"`
+
+	// The user-supplied DB cluster identifier. If this parameter is specified,
+	// information from only the specific DB cluster is returned. This parameter
+	// isn't case-sensitive.
+	//
+	// Constraints:
+	//
+	//    * If supplied, must match an existing DBClusterIdentifier.
+	GlobalClusterIdentifier *string `type:"string"`
+
+	// An optional pagination token provided by a previous DescribeGlobalClusters
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by MaxRecords.
+	Marker *string `type:"string"`
+
+	// The maximum number of records to include in the response. If more records
+	// exist than the specified MaxRecords value, a pagination token called a marker
+	// is included in the response so that the remaining results can be retrieved.
+	//
+	// Default: 100
+	//
+	// Constraints: Minimum 20, maximum 100.
+	MaxRecords *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s DescribeGlobalClustersInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeGlobalClustersInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeGlobalClustersInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeGlobalClustersInput"}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeGlobalClustersInput) SetFilters(v []*Filter) *DescribeGlobalClustersInput {
+	s.Filters = v
+	return s
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *DescribeGlobalClustersInput) SetGlobalClusterIdentifier(v string) *DescribeGlobalClustersInput {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeGlobalClustersInput) SetMarker(v string) *DescribeGlobalClustersInput {
+	s.Marker = &v
+	return s
+}
+
+// SetMaxRecords sets the MaxRecords field's value.
+func (s *DescribeGlobalClustersInput) SetMaxRecords(v int64) *DescribeGlobalClustersInput {
+	s.MaxRecords = &v
+	return s
+}
+
+type DescribeGlobalClustersOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of global clusters returned by this request.
+	GlobalClusters []*GlobalCluster `locationNameList:"GlobalClusterMember" type:"list"`
+
+	// An optional pagination token provided by a previous DescribeGlobalClusters
+	// request. If this parameter is specified, the response includes only records
+	// beyond the marker, up to the value specified by MaxRecords.
+	Marker *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeGlobalClustersOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeGlobalClustersOutput) GoString() string {
+	return s.String()
+}
+
+// SetGlobalClusters sets the GlobalClusters field's value.
+func (s *DescribeGlobalClustersOutput) SetGlobalClusters(v []*GlobalCluster) *DescribeGlobalClustersOutput {
+	s.GlobalClusters = v
+	return s
+}
+
+// SetMarker sets the Marker field's value.
+func (s *DescribeGlobalClustersOutput) SetMarker(v string) *DescribeGlobalClustersOutput {
+	s.Marker = &v
+	return s
+}
+
 type DescribeOptionGroupOptionsInput struct {
 	_ struct{} `type:"structure"`
 
-	// A required parameter. Options available for the given engine name will be
-	// described.
+	// A required parameter. Options available for the given engine name are described.
 	//
 	// EngineName is a required field
 	EngineName *string `type:"string" required:"true"`
@@ -19692,7 +23733,6 @@ func (s *DescribeOptionGroupOptionsInput) SetMaxRecords(v int64) *DescribeOption
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionGroupOptionsMessage
 type DescribeOptionGroupOptionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19727,7 +23767,6 @@ func (s *DescribeOptionGroupOptionsOutput) SetOptionGroupOptions(v []*OptionGrou
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOptionGroupsMessage
 type DescribeOptionGroupsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19757,7 +23796,7 @@ type DescribeOptionGroupsInput struct {
 	// Constraints: Minimum 20, maximum 100.
 	MaxRecords *int64 `type:"integer"`
 
-	// The name of the option group to describe. Cannot be supplied together with
+	// The name of the option group to describe. Can't be supplied together with
 	// EngineName or MajorEngineVersion.
 	OptionGroupName *string `type:"string"`
 }
@@ -19829,7 +23868,6 @@ func (s *DescribeOptionGroupsInput) SetOptionGroupName(v string) *DescribeOption
 }
 
 // List of option groups.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionGroups
 type DescribeOptionGroupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -19864,7 +23902,6 @@ func (s *DescribeOptionGroupsOutput) SetOptionGroupsList(v []*OptionGroup) *Desc
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeOrderableDBInstanceOptionsMessage
 type DescribeOrderableDBInstanceOptionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -19990,7 +24027,6 @@ func (s *DescribeOrderableDBInstanceOptionsInput) SetVpc(v bool) *DescribeOrdera
 
 // Contains the result of a successful invocation of the DescribeOrderableDBInstanceOptions
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OrderableDBInstanceOptionsMessage
 type DescribeOrderableDBInstanceOptionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -20026,7 +24062,6 @@ func (s *DescribeOrderableDBInstanceOptionsOutput) SetOrderableDBInstanceOptions
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribePendingMaintenanceActionsMessage
 type DescribePendingMaintenanceActionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20117,7 +24152,6 @@ func (s *DescribePendingMaintenanceActionsInput) SetResourceIdentifier(v string)
 }
 
 // Data returned from the DescribePendingMaintenanceActions action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PendingMaintenanceActionsMessage
 type DescribePendingMaintenanceActionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -20152,7 +24186,6 @@ func (s *DescribePendingMaintenanceActionsOutput) SetPendingMaintenanceActions(v
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstancesMessage
 type DescribeReservedDBInstancesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20296,7 +24329,6 @@ func (s *DescribeReservedDBInstancesInput) SetReservedDBInstancesOfferingId(v st
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeReservedDBInstancesOfferingsMessage
 type DescribeReservedDBInstancesOfferingsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20338,7 +24370,9 @@ type DescribeReservedDBInstancesOfferingsInput struct {
 	OfferingType *string `type:"string"`
 
 	// Product description filter value. Specify this parameter to show only the
-	// available offerings matching the specified product description.
+	// available offerings that contain the specified product description.
+	//
+	// The results show offerings that partially match the filter value.
 	ProductDescription *string `type:"string"`
 
 	// The offering identifier filter value. Specify this parameter to show only
@@ -20434,7 +24468,6 @@ func (s *DescribeReservedDBInstancesOfferingsInput) SetReservedDBInstancesOfferi
 
 // Contains the result of a successful invocation of the DescribeReservedDBInstancesOfferings
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ReservedDBInstancesOfferingMessage
 type DescribeReservedDBInstancesOfferingsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -20471,7 +24504,6 @@ func (s *DescribeReservedDBInstancesOfferingsOutput) SetReservedDBInstancesOffer
 
 // Contains the result of a successful invocation of the DescribeReservedDBInstances
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ReservedDBInstanceMessage
 type DescribeReservedDBInstancesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -20506,7 +24538,6 @@ func (s *DescribeReservedDBInstancesOutput) SetReservedDBInstances(v []*Reserved
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DescribeSourceRegionsMessage
 type DescribeSourceRegionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20527,7 +24558,7 @@ type DescribeSourceRegionsInput struct {
 	// Constraints: Minimum 20, maximum 100.
 	MaxRecords *int64 `type:"integer"`
 
-	// The source region name. For example, us-east-1.
+	// The source AWS Region name. For example, us-east-1.
 	//
 	// Constraints:
 	//
@@ -20591,7 +24622,6 @@ func (s *DescribeSourceRegionsInput) SetRegionName(v string) *DescribeSourceRegi
 
 // Contains the result of a successful invocation of the DescribeSourceRegions
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/SourceRegionMessage
 type DescribeSourceRegionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -20601,7 +24631,7 @@ type DescribeSourceRegionsOutput struct {
 	Marker *string `type:"string"`
 
 	// A list of SourceRegion instances that contains each source AWS Region that
-	// the current region can get a Read Replica or a DB snapshot from.
+	// the current AWS Region can get a Read Replica or a DB snapshot from.
 	SourceRegions []*SourceRegion `locationNameList:"SourceRegion" type:"list"`
 }
 
@@ -20627,8 +24657,70 @@ func (s *DescribeSourceRegionsOutput) SetSourceRegions(v []*SourceRegion) *Descr
 	return s
 }
 
+type DescribeValidDBInstanceModificationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The customer identifier or the ARN of your DB instance.
+	//
+	// DBInstanceIdentifier is a required field
+	DBInstanceIdentifier *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeValidDBInstanceModificationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeValidDBInstanceModificationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeValidDBInstanceModificationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeValidDBInstanceModificationsInput"}
+	if s.DBInstanceIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBInstanceIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBInstanceIdentifier sets the DBInstanceIdentifier field's value.
+func (s *DescribeValidDBInstanceModificationsInput) SetDBInstanceIdentifier(v string) *DescribeValidDBInstanceModificationsInput {
+	s.DBInstanceIdentifier = &v
+	return s
+}
+
+type DescribeValidDBInstanceModificationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about valid modifications that you can make to your DB instance.
+	// Contains the result of a successful call to the DescribeValidDBInstanceModifications
+	// action. You can use this information when you call ModifyDBInstance.
+	ValidDBInstanceModificationsMessage *ValidDBInstanceModificationsMessage `type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeValidDBInstanceModificationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeValidDBInstanceModificationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetValidDBInstanceModificationsMessage sets the ValidDBInstanceModificationsMessage field's value.
+func (s *DescribeValidDBInstanceModificationsOutput) SetValidDBInstanceModificationsMessage(v *ValidDBInstanceModificationsMessage) *DescribeValidDBInstanceModificationsOutput {
+	s.ValidDBInstanceModificationsMessage = v
+	return s
+}
+
 // An Active Directory Domain membership record associated with the DB instance.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DomainMembership
 type DomainMembership struct {
 	_ struct{} `type:"structure"`
 
@@ -20681,7 +24773,39 @@ func (s *DomainMembership) SetStatus(v string) *DomainMembership {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DownloadDBLogFilePortionMessage
+// A range of double values.
+type DoubleRange struct {
+	_ struct{} `type:"structure"`
+
+	// The minimum value in the range.
+	From *float64 `type:"double"`
+
+	// The maximum value in the range.
+	To *float64 `type:"double"`
+}
+
+// String returns the string representation
+func (s DoubleRange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DoubleRange) GoString() string {
+	return s.String()
+}
+
+// SetFrom sets the From field's value.
+func (s *DoubleRange) SetFrom(v float64) *DoubleRange {
+	s.From = &v
+	return s
+}
+
+// SetTo sets the To field's value.
+func (s *DoubleRange) SetTo(v float64) *DoubleRange {
+	s.To = &v
+	return s
+}
+
 type DownloadDBLogFilePortionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -20690,11 +24814,7 @@ type DownloadDBLogFilePortionInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing DBInstance.
 	//
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
@@ -20710,7 +24830,7 @@ type DownloadDBLogFilePortionInput struct {
 	Marker *string `type:"string"`
 
 	// The number of lines to download. If the number of lines specified results
-	// in a file over 1 MB in size, the file will be truncated at 1 MB in size.
+	// in a file over 1 MB in size, the file is truncated at 1 MB in size.
 	//
 	// If the NumberOfLines parameter is specified, then the block of lines returned
 	// can be from the beginning or the end of the log file, depending on the value
@@ -20785,7 +24905,6 @@ func (s *DownloadDBLogFilePortionInput) SetNumberOfLines(v int64) *DownloadDBLog
 }
 
 // This data type is used as a response element to DownloadDBLogFilePortion.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/DownloadDBLogFilePortionDetails
 type DownloadDBLogFilePortionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -20835,7 +24954,6 @@ func (s *DownloadDBLogFilePortionOutput) SetMarker(v string) *DownloadDBLogFileP
 //    * DescribeDBSecurityGroups
 //
 //    * RevokeDBSecurityGroupIngress
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/EC2SecurityGroup
 type EC2SecurityGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -20888,14 +25006,18 @@ func (s *EC2SecurityGroup) SetStatus(v string) *EC2SecurityGroup {
 	return s
 }
 
-// This data type is used as a response element in the following actions:
+// This data type represents the information you need to connect to an Amazon
+// RDS DB instance. This data type is used as a response element in the following
+// actions:
 //
 //    * CreateDBInstance
 //
 //    * DescribeDBInstances
 //
 //    * DeleteDBInstance
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Endpoint
+//
+// For the data structure that represents Amazon Aurora DB cluster endpoints,
+// see DBClusterEndpoint.
 type Endpoint struct {
 	_ struct{} `type:"structure"`
 
@@ -20939,7 +25061,6 @@ func (s *Endpoint) SetPort(v int64) *Endpoint {
 
 // Contains the result of a successful invocation of the DescribeEngineDefaultParameters
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/EngineDefaults
 type EngineDefaults struct {
 	_ struct{} `type:"structure"`
 
@@ -20985,12 +25106,11 @@ func (s *EngineDefaults) SetParameters(v []*Parameter) *EngineDefaults {
 }
 
 // This data type is used as a response element in the DescribeEvents action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Event
 type Event struct {
 	_ struct{} `type:"structure"`
 
 	// Specifies the date and time of the event.
-	Date *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	Date *time.Time `type:"timestamp"`
 
 	// Specifies the category for the event.
 	EventCategories []*string `locationNameList:"EventCategory" type:"list"`
@@ -21056,7 +25176,6 @@ func (s *Event) SetSourceType(v string) *Event {
 
 // Contains the results of a successful invocation of the DescribeEventCategories
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/EventCategoriesMap
 type EventCategoriesMap struct {
 	_ struct{} `type:"structure"`
 
@@ -21091,7 +25210,6 @@ func (s *EventCategoriesMap) SetSourceType(v string) *EventCategoriesMap {
 
 // Contains the results of a successful invocation of the DescribeEventSubscriptions
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/EventSubscription
 type EventSubscription struct {
 	_ struct{} `type:"structure"`
 
@@ -21206,7 +25324,6 @@ func (s *EventSubscription) SetSubscriptionCreationTime(v string) *EventSubscrip
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverDBClusterMessage
 type FailoverDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -21214,12 +25331,10 @@ type FailoverDBClusterInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
+	//    * Must match the identifier of an existing DBCluster.
 	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
-	DBClusterIdentifier *string `type:"string"`
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
 
 	// The name of the instance to promote to the primary instance.
 	//
@@ -21238,6 +25353,19 @@ func (s FailoverDBClusterInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FailoverDBClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FailoverDBClusterInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
 func (s *FailoverDBClusterInput) SetDBClusterIdentifier(v string) *FailoverDBClusterInput {
 	s.DBClusterIdentifier = &v
@@ -21250,25 +25378,13 @@ func (s *FailoverDBClusterInput) SetTargetDBInstanceIdentifier(v string) *Failov
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/FailoverDBClusterResult
 type FailoverDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -21288,17 +25404,33 @@ func (s *FailoverDBClusterOutput) SetDBCluster(v *DBCluster) *FailoverDBClusterO
 	return s
 }
 
-// This type is not currently supported.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Filter
+// A filter name and value pair that is used to return a more specific list
+// of results from a describe operation. Filters can be used to match a set
+// of resources by specific criteria, such as IDs. The filters supported by
+// a describe operation are documented with the describe operation.
+//
+// Currently, wildcards are not supported in filters.
+//
+// The following actions can be filtered:
+//
+//    * DescribeDBClusterBacktracks
+//
+//    * DescribeDBClusterEndpoints
+//
+//    * DescribeDBClusters
+//
+//    * DescribeDBInstances
+//
+//    * DescribePendingMaintenanceActions
 type Filter struct {
 	_ struct{} `type:"structure"`
 
-	// This parameter is not currently supported.
+	// The name of the filter. Filter names are case-sensitive.
 	//
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
 
-	// This parameter is not currently supported.
+	// One or more filter values. Filter values are case-sensitive.
 	//
 	// Values is a required field
 	Values []*string `locationNameList:"Value" type:"list" required:"true"`
@@ -21342,9 +25474,162 @@ func (s *Filter) SetValues(v []*string) *Filter {
 	return s
 }
 
+// A data type representing an Aurora global database.
+type GlobalCluster struct {
+	_ struct{} `type:"structure"`
+
+	// The default database name within the new global database cluster.
+	DatabaseName *string `type:"string"`
+
+	// The deletion protection setting for the new global database cluster.
+	DeletionProtection *bool `type:"boolean"`
+
+	// The Aurora database engine used by the global database cluster.
+	Engine *string `type:"string"`
+
+	// Indicates the database engine version.
+	EngineVersion *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the global database cluster.
+	GlobalClusterArn *string `type:"string"`
+
+	// Contains a user-supplied global database cluster identifier. This identifier
+	// is the unique key that identifies a global database cluster.
+	GlobalClusterIdentifier *string `type:"string"`
+
+	// The list of cluster IDs for secondary clusters within the global database
+	// cluster. Currently limited to 1 item.
+	GlobalClusterMembers []*GlobalClusterMember `locationNameList:"GlobalClusterMember" type:"list"`
+
+	// The AWS Region-unique, immutable identifier for the global database cluster.
+	// This identifier is found in AWS CloudTrail log entries whenever the AWS KMS
+	// key for the DB cluster is accessed.
+	GlobalClusterResourceId *string `type:"string"`
+
+	// Specifies the current state of this global database cluster.
+	Status *string `type:"string"`
+
+	// The storage encryption setting for the global database cluster.
+	StorageEncrypted *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s GlobalCluster) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GlobalCluster) GoString() string {
+	return s.String()
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *GlobalCluster) SetDatabaseName(v string) *GlobalCluster {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *GlobalCluster) SetDeletionProtection(v bool) *GlobalCluster {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEngine sets the Engine field's value.
+func (s *GlobalCluster) SetEngine(v string) *GlobalCluster {
+	s.Engine = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *GlobalCluster) SetEngineVersion(v string) *GlobalCluster {
+	s.EngineVersion = &v
+	return s
+}
+
+// SetGlobalClusterArn sets the GlobalClusterArn field's value.
+func (s *GlobalCluster) SetGlobalClusterArn(v string) *GlobalCluster {
+	s.GlobalClusterArn = &v
+	return s
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *GlobalCluster) SetGlobalClusterIdentifier(v string) *GlobalCluster {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
+// SetGlobalClusterMembers sets the GlobalClusterMembers field's value.
+func (s *GlobalCluster) SetGlobalClusterMembers(v []*GlobalClusterMember) *GlobalCluster {
+	s.GlobalClusterMembers = v
+	return s
+}
+
+// SetGlobalClusterResourceId sets the GlobalClusterResourceId field's value.
+func (s *GlobalCluster) SetGlobalClusterResourceId(v string) *GlobalCluster {
+	s.GlobalClusterResourceId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *GlobalCluster) SetStatus(v string) *GlobalCluster {
+	s.Status = &v
+	return s
+}
+
+// SetStorageEncrypted sets the StorageEncrypted field's value.
+func (s *GlobalCluster) SetStorageEncrypted(v bool) *GlobalCluster {
+	s.StorageEncrypted = &v
+	return s
+}
+
+// A data structure with information about any primary and secondary clusters
+// associated with an Aurora global database.
+type GlobalClusterMember struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for each Aurora cluster.
+	DBClusterArn *string `type:"string"`
+
+	// Specifies whether the Aurora cluster is the primary cluster (that is, has
+	// read-write capability) for the Aurora global database with which it is associated.
+	IsWriter *bool `type:"boolean"`
+
+	// The Amazon Resource Name (ARN) for each read-only secondary cluster associated
+	// with the Aurora global database.
+	Readers []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s GlobalClusterMember) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GlobalClusterMember) GoString() string {
+	return s.String()
+}
+
+// SetDBClusterArn sets the DBClusterArn field's value.
+func (s *GlobalClusterMember) SetDBClusterArn(v string) *GlobalClusterMember {
+	s.DBClusterArn = &v
+	return s
+}
+
+// SetIsWriter sets the IsWriter field's value.
+func (s *GlobalClusterMember) SetIsWriter(v bool) *GlobalClusterMember {
+	s.IsWriter = &v
+	return s
+}
+
+// SetReaders sets the Readers field's value.
+func (s *GlobalClusterMember) SetReaders(v []*string) *GlobalClusterMember {
+	s.Readers = v
+	return s
+}
+
 // This data type is used as a response element in the DescribeDBSecurityGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/IPRange
 type IPRange struct {
 	_ struct{} `type:"structure"`
 
@@ -21378,7 +25663,6 @@ func (s *IPRange) SetStatus(v string) *IPRange {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ListTagsForResourceMessage
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -21386,8 +25670,9 @@ type ListTagsForResourceInput struct {
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
 	// The Amazon RDS resource with tags to be listed. This value is an Amazon Resource
-	// Name (ARN). For information about creating an ARN, see  Constructing an RDS
-	// Amazon Resource Name (ARN) (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing).
+	// Name (ARN). For information about creating an ARN, see  Constructing an ARN
+	// for Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing)
+	// in the Amazon RDS User Guide.
 	//
 	// ResourceName is a required field
 	ResourceName *string `type:"string" required:"true"`
@@ -21438,7 +25723,6 @@ func (s *ListTagsForResourceInput) SetResourceName(v string) *ListTagsForResourc
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/TagListMessage
 type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -21462,7 +25746,379 @@ func (s *ListTagsForResourceOutput) SetTagList(v []*Tag) *ListTagsForResourceOut
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterMessage
+// The minimum DB engine version required for each corresponding allowed value
+// for an option setting.
+type MinimumEngineVersionPerAllowedValue struct {
+	_ struct{} `type:"structure"`
+
+	// The allowed value for an option setting.
+	AllowedValue *string `type:"string"`
+
+	// The minimum DB engine version required for the allowed value.
+	MinimumEngineVersion *string `type:"string"`
+}
+
+// String returns the string representation
+func (s MinimumEngineVersionPerAllowedValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MinimumEngineVersionPerAllowedValue) GoString() string {
+	return s.String()
+}
+
+// SetAllowedValue sets the AllowedValue field's value.
+func (s *MinimumEngineVersionPerAllowedValue) SetAllowedValue(v string) *MinimumEngineVersionPerAllowedValue {
+	s.AllowedValue = &v
+	return s
+}
+
+// SetMinimumEngineVersion sets the MinimumEngineVersion field's value.
+func (s *MinimumEngineVersionPerAllowedValue) SetMinimumEngineVersion(v string) *MinimumEngineVersionPerAllowedValue {
+	s.MinimumEngineVersion = &v
+	return s
+}
+
+type ModifyCurrentDBClusterCapacityInput struct {
+	_ struct{} `type:"structure"`
+
+	// The DB cluster capacity.
+	//
+	// Constraints:
+	//
+	//    * Value must be 2, 4, 8, 16, 32, 64, 128, or 256.
+	Capacity *int64 `type:"integer"`
+
+	// The DB cluster identifier for the cluster being modified. This parameter
+	// is not case-sensitive.
+	//
+	// Constraints:
+	//
+	//    * Must match the identifier of an existing DB cluster.
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+
+	// The amount of time, in seconds, that Aurora Serverless tries to find a scaling
+	// point to perform seamless scaling before enforcing the timeout action. The
+	// default is 300.
+	//
+	//    * Value must be from 10 through 600.
+	SecondsBeforeTimeout *int64 `type:"integer"`
+
+	// The action to take when the timeout is reached, either ForceApplyCapacityChange
+	// or RollbackCapacityChange.
+	//
+	// ForceApplyCapacityChange, the default, sets the capacity to the specified
+	// value as soon as possible.
+	//
+	// RollbackCapacityChange ignores the capacity change if a scaling point is
+	// not found in the timeout period.
+	TimeoutAction *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ModifyCurrentDBClusterCapacityInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyCurrentDBClusterCapacityInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyCurrentDBClusterCapacityInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyCurrentDBClusterCapacityInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCapacity sets the Capacity field's value.
+func (s *ModifyCurrentDBClusterCapacityInput) SetCapacity(v int64) *ModifyCurrentDBClusterCapacityInput {
+	s.Capacity = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *ModifyCurrentDBClusterCapacityInput) SetDBClusterIdentifier(v string) *ModifyCurrentDBClusterCapacityInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetSecondsBeforeTimeout sets the SecondsBeforeTimeout field's value.
+func (s *ModifyCurrentDBClusterCapacityInput) SetSecondsBeforeTimeout(v int64) *ModifyCurrentDBClusterCapacityInput {
+	s.SecondsBeforeTimeout = &v
+	return s
+}
+
+// SetTimeoutAction sets the TimeoutAction field's value.
+func (s *ModifyCurrentDBClusterCapacityInput) SetTimeoutAction(v string) *ModifyCurrentDBClusterCapacityInput {
+	s.TimeoutAction = &v
+	return s
+}
+
+type ModifyCurrentDBClusterCapacityOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current capacity of the DB cluster.
+	CurrentCapacity *int64 `type:"integer"`
+
+	// A user-supplied DB cluster identifier. This identifier is the unique key
+	// that identifies a DB cluster.
+	DBClusterIdentifier *string `type:"string"`
+
+	// A value that specifies the capacity that the DB cluster scales to next.
+	PendingCapacity *int64 `type:"integer"`
+
+	// The number of seconds before a call to ModifyCurrentDBClusterCapacity times
+	// out.
+	SecondsBeforeTimeout *int64 `type:"integer"`
+
+	// The timeout action of a call to ModifyCurrentDBClusterCapacity, either ForceApplyCapacityChange
+	// or RollbackCapacityChange.
+	TimeoutAction *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ModifyCurrentDBClusterCapacityOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyCurrentDBClusterCapacityOutput) GoString() string {
+	return s.String()
+}
+
+// SetCurrentCapacity sets the CurrentCapacity field's value.
+func (s *ModifyCurrentDBClusterCapacityOutput) SetCurrentCapacity(v int64) *ModifyCurrentDBClusterCapacityOutput {
+	s.CurrentCapacity = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *ModifyCurrentDBClusterCapacityOutput) SetDBClusterIdentifier(v string) *ModifyCurrentDBClusterCapacityOutput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetPendingCapacity sets the PendingCapacity field's value.
+func (s *ModifyCurrentDBClusterCapacityOutput) SetPendingCapacity(v int64) *ModifyCurrentDBClusterCapacityOutput {
+	s.PendingCapacity = &v
+	return s
+}
+
+// SetSecondsBeforeTimeout sets the SecondsBeforeTimeout field's value.
+func (s *ModifyCurrentDBClusterCapacityOutput) SetSecondsBeforeTimeout(v int64) *ModifyCurrentDBClusterCapacityOutput {
+	s.SecondsBeforeTimeout = &v
+	return s
+}
+
+// SetTimeoutAction sets the TimeoutAction field's value.
+func (s *ModifyCurrentDBClusterCapacityOutput) SetTimeoutAction(v string) *ModifyCurrentDBClusterCapacityOutput {
+	s.TimeoutAction = &v
+	return s
+}
+
+type ModifyDBClusterEndpointInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the endpoint to modify. This parameter is stored as a lowercase
+	// string.
+	//
+	// DBClusterEndpointIdentifier is a required field
+	DBClusterEndpointIdentifier *string `type:"string" required:"true"`
+
+	// The type of the endpoint. One of: READER, ANY.
+	EndpointType *string `type:"string"`
+
+	// List of DB instance identifiers that aren't part of the custom endpoint group.
+	// All other eligible instances are reachable through the custom endpoint. Only
+	// relevant if the list of static members is empty.
+	ExcludedMembers []*string `type:"list"`
+
+	// List of DB instance identifiers that are part of the custom endpoint group.
+	StaticMembers []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s ModifyDBClusterEndpointInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyDBClusterEndpointInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyDBClusterEndpointInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyDBClusterEndpointInput"}
+	if s.DBClusterEndpointIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterEndpointIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *ModifyDBClusterEndpointInput) SetDBClusterEndpointIdentifier(v string) *ModifyDBClusterEndpointInput {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// SetEndpointType sets the EndpointType field's value.
+func (s *ModifyDBClusterEndpointInput) SetEndpointType(v string) *ModifyDBClusterEndpointInput {
+	s.EndpointType = &v
+	return s
+}
+
+// SetExcludedMembers sets the ExcludedMembers field's value.
+func (s *ModifyDBClusterEndpointInput) SetExcludedMembers(v []*string) *ModifyDBClusterEndpointInput {
+	s.ExcludedMembers = v
+	return s
+}
+
+// SetStaticMembers sets the StaticMembers field's value.
+func (s *ModifyDBClusterEndpointInput) SetStaticMembers(v []*string) *ModifyDBClusterEndpointInput {
+	s.StaticMembers = v
+	return s
+}
+
+// This data type represents the information you need to connect to an Amazon
+// Aurora DB cluster. This data type is used as a response element in the following
+// actions:
+//
+//    * CreateDBClusterEndpoint
+//
+//    * DescribeDBClusterEndpoints
+//
+//    * ModifyDBClusterEndpoint
+//
+//    * DeleteDBClusterEndpoint
+//
+// For the data structure that represents Amazon RDS DB instance endpoints,
+// see Endpoint.
+type ModifyDBClusterEndpointOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The type associated with a custom endpoint. One of: READER, ANY.
+	CustomEndpointType *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the endpoint.
+	DBClusterEndpointArn *string `type:"string"`
+
+	// The identifier associated with the endpoint. This parameter is stored as
+	// a lowercase string.
+	DBClusterEndpointIdentifier *string `type:"string"`
+
+	// A unique system-generated identifier for an endpoint. It remains the same
+	// for the whole life of the endpoint.
+	DBClusterEndpointResourceIdentifier *string `type:"string"`
+
+	// The DB cluster identifier of the DB cluster associated with the endpoint.
+	// This parameter is stored as a lowercase string.
+	DBClusterIdentifier *string `type:"string"`
+
+	// The DNS address of the endpoint.
+	Endpoint *string `type:"string"`
+
+	// The type of the endpoint. One of: READER, WRITER, CUSTOM.
+	EndpointType *string `type:"string"`
+
+	// List of DB instance identifiers that aren't part of the custom endpoint group.
+	// All other eligible instances are reachable through the custom endpoint. Only
+	// relevant if the list of static members is empty.
+	ExcludedMembers []*string `type:"list"`
+
+	// List of DB instance identifiers that are part of the custom endpoint group.
+	StaticMembers []*string `type:"list"`
+
+	// The current status of the endpoint. One of: creating, available, deleting,
+	// modifying.
+	Status *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ModifyDBClusterEndpointOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyDBClusterEndpointOutput) GoString() string {
+	return s.String()
+}
+
+// SetCustomEndpointType sets the CustomEndpointType field's value.
+func (s *ModifyDBClusterEndpointOutput) SetCustomEndpointType(v string) *ModifyDBClusterEndpointOutput {
+	s.CustomEndpointType = &v
+	return s
+}
+
+// SetDBClusterEndpointArn sets the DBClusterEndpointArn field's value.
+func (s *ModifyDBClusterEndpointOutput) SetDBClusterEndpointArn(v string) *ModifyDBClusterEndpointOutput {
+	s.DBClusterEndpointArn = &v
+	return s
+}
+
+// SetDBClusterEndpointIdentifier sets the DBClusterEndpointIdentifier field's value.
+func (s *ModifyDBClusterEndpointOutput) SetDBClusterEndpointIdentifier(v string) *ModifyDBClusterEndpointOutput {
+	s.DBClusterEndpointIdentifier = &v
+	return s
+}
+
+// SetDBClusterEndpointResourceIdentifier sets the DBClusterEndpointResourceIdentifier field's value.
+func (s *ModifyDBClusterEndpointOutput) SetDBClusterEndpointResourceIdentifier(v string) *ModifyDBClusterEndpointOutput {
+	s.DBClusterEndpointResourceIdentifier = &v
+	return s
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *ModifyDBClusterEndpointOutput) SetDBClusterIdentifier(v string) *ModifyDBClusterEndpointOutput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetEndpoint sets the Endpoint field's value.
+func (s *ModifyDBClusterEndpointOutput) SetEndpoint(v string) *ModifyDBClusterEndpointOutput {
+	s.Endpoint = &v
+	return s
+}
+
+// SetEndpointType sets the EndpointType field's value.
+func (s *ModifyDBClusterEndpointOutput) SetEndpointType(v string) *ModifyDBClusterEndpointOutput {
+	s.EndpointType = &v
+	return s
+}
+
+// SetExcludedMembers sets the ExcludedMembers field's value.
+func (s *ModifyDBClusterEndpointOutput) SetExcludedMembers(v []*string) *ModifyDBClusterEndpointOutput {
+	s.ExcludedMembers = v
+	return s
+}
+
+// SetStaticMembers sets the StaticMembers field's value.
+func (s *ModifyDBClusterEndpointOutput) SetStaticMembers(v []*string) *ModifyDBClusterEndpointOutput {
+	s.StaticMembers = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ModifyDBClusterEndpointOutput) SetStatus(v string) *ModifyDBClusterEndpointOutput {
+	s.Status = &v
+	return s
+}
+
 type ModifyDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -21472,15 +26128,26 @@ type ModifyDBClusterInput struct {
 	// is set to false, changes to the DB cluster are applied during the next maintenance
 	// window.
 	//
-	// The ApplyImmediately parameter only affects the NewDBClusterIdentifier and
-	// MasterUserPassword values. If you set the ApplyImmediately parameter value
-	// to false, then changes to the NewDBClusterIdentifier and MasterUserPassword
-	// values are applied during the next maintenance window. All other changes
-	// are applied immediately, regardless of the value of the ApplyImmediately
-	// parameter.
+	// The ApplyImmediately parameter only affects the EnableIAMDatabaseAuthentication,
+	// MasterUserPassword, and NewDBClusterIdentifier values. If you set the ApplyImmediately
+	// parameter value to false, then changes to the EnableIAMDatabaseAuthentication,
+	// MasterUserPassword, and NewDBClusterIdentifier values are applied during
+	// the next maintenance window. All other changes are applied immediately, regardless
+	// of the value of the ApplyImmediately parameter.
 	//
 	// Default: false
 	ApplyImmediately *bool `type:"boolean"`
+
+	// The target backtrack window, in seconds. To disable backtracking, set this
+	// value to 0.
+	//
+	// Default: 0
+	//
+	// Constraints:
+	//
+	//    * If specified, this value must be set to a number from 0 to 259,200 (72
+	//    hours).
+	BacktrackWindow *int64 `type:"long"`
 
 	// The number of days for which automated backups are retained. You must specify
 	// a minimum value of 1.
@@ -21492,18 +26159,16 @@ type ModifyDBClusterInput struct {
 	//    * Must be a value from 1 to 35
 	BackupRetentionPeriod *int64 `type:"integer"`
 
+	// The configuration setting for the log types to be enabled for export to CloudWatch
+	// Logs for a specific DB cluster.
+	CloudwatchLogsExportConfiguration *CloudwatchLogsExportConfiguration `type:"structure"`
+
 	// The DB cluster identifier for the cluster being modified. This parameter
 	// is not case-sensitive.
 	//
 	// Constraints:
 	//
-	//    * Must be the identifier for an existing DB cluster.
-	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
-	//
-	//    * First character must be a letter.
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Must match the identifier of an existing DBCluster.
 	//
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
@@ -21511,11 +26176,37 @@ type ModifyDBClusterInput struct {
 	// The name of the DB cluster parameter group to use for the DB cluster.
 	DBClusterParameterGroupName *string `type:"string"`
 
-	// A Boolean value that is true to enable mapping of AWS Identity and Access
-	// Management (IAM) accounts to database accounts, and otherwise false.
+	// Indicates if the DB cluster has deletion protection enabled. The database
+	// can't be deleted when this value is set to true.
+	DeletionProtection *bool `type:"boolean"`
+
+	// HTTP endpoint functionality is in beta for Aurora Serverless and is subject
+	// to change.
+	//
+	// A value that indicates whether to enable the HTTP endpoint for an Aurora
+	// Serverless DB cluster. By default, the HTTP endpoint is disabled.
+	//
+	// When enabled, the HTTP endpoint provides a connectionless web service API
+	// for running SQL queries on the Aurora Serverless DB cluster. You can also
+	// query your database from inside the RDS console with the query editor.
+	//
+	// For more information about Aurora Serverless, see Using Amazon Aurora Serverless
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html)
+	// in the Amazon Aurora User Guide.
+	EnableHttpEndpoint *bool `type:"boolean"`
+
+	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// to database accounts, and otherwise false.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
+
+	// The version number of the database engine to which you want to upgrade. Changing
+	// this parameter results in an outage. The change is applied during the next
+	// maintenance window unless the ApplyImmediately parameter is set to true.
+	//
+	// For a list of valid engine versions, see CreateDBCluster, or call DescribeDBEngineVersions.
+	EngineVersion *string `type:"string"`
 
 	// The new password for the master database user. This password can contain
 	// any printable ASCII character except "/", """, or "@".
@@ -21528,25 +26219,25 @@ type ModifyDBClusterInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens
 	//
-	//    * First character must be a letter
+	//    * The first character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-cluster2
 	NewDBClusterIdentifier *string `type:"string"`
 
 	// A value that indicates that the DB cluster should be associated with the
-	// specified option group. Changing this parameter does not result in an outage
+	// specified option group. Changing this parameter doesn't result in an outage
 	// except in the following case, and the change is applied during the next maintenance
 	// window unless the ApplyImmediately parameter is set to true for this request.
 	// If the parameter change results in an option group that enables OEM, this
 	// change can cause a brief (sub-second) period during which new connections
 	// are rejected but existing connections are not interrupted.
 	//
-	// Permanent options cannot be removed from an option group. The option group
-	// cannot be removed from a DB cluster once it is associated with a DB cluster.
+	// Permanent options can't be removed from an option group. The option group
+	// can't be removed from a DB cluster once it is associated with a DB cluster.
 	OptionGroupName *string `type:"string"`
 
 	// The port number on which the DB cluster accepts connections.
@@ -21559,16 +26250,16 @@ type ModifyDBClusterInput struct {
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled, using the BackupRetentionPeriod parameter.
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region. To see the time blocks available, see  Adjusting the Preferred
-	// Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
-	// in the Amazon RDS User Guide.
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region. To see the time blocks available, see  Adjusting
+	// the Preferred DB Cluster Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora)
+	// in the Amazon Aurora User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must be in the format hh24:mi-hh24:mi.
 	//
-	//    * Times should be in Universal Coordinated Time (UTC).
+	//    * Must be in Universal Coordinated Time (UTC).
 	//
 	//    * Must not conflict with the preferred maintenance window.
 	//
@@ -21580,15 +26271,20 @@ type ModifyDBClusterInput struct {
 	//
 	// Format: ddd:hh24:mi-ddd:hh24:mi
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region, occurring on a random day of the week. To see the time blocks
-	// available, see  Adjusting the Preferred Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
-	// in the Amazon RDS User Guide.
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region, occurring on a random day of the week. To see
+	// the time blocks available, see  Adjusting the Preferred DB Cluster Maintenance
+	// Window (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora)
+	// in the Amazon Aurora User Guide.
 	//
-	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
 	//
 	// Constraints: Minimum 30-minute window.
 	PreferredMaintenanceWindow *string `type:"string"`
+
+	// The scaling properties of the DB cluster. You can only modify scaling properties
+	// for DB clusters in serverless DB engine mode.
+	ScalingConfiguration *ScalingConfiguration `type:"structure"`
 
 	// A list of VPC security groups that the DB cluster will belong to.
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
@@ -21623,9 +26319,21 @@ func (s *ModifyDBClusterInput) SetApplyImmediately(v bool) *ModifyDBClusterInput
 	return s
 }
 
+// SetBacktrackWindow sets the BacktrackWindow field's value.
+func (s *ModifyDBClusterInput) SetBacktrackWindow(v int64) *ModifyDBClusterInput {
+	s.BacktrackWindow = &v
+	return s
+}
+
 // SetBackupRetentionPeriod sets the BackupRetentionPeriod field's value.
 func (s *ModifyDBClusterInput) SetBackupRetentionPeriod(v int64) *ModifyDBClusterInput {
 	s.BackupRetentionPeriod = &v
+	return s
+}
+
+// SetCloudwatchLogsExportConfiguration sets the CloudwatchLogsExportConfiguration field's value.
+func (s *ModifyDBClusterInput) SetCloudwatchLogsExportConfiguration(v *CloudwatchLogsExportConfiguration) *ModifyDBClusterInput {
+	s.CloudwatchLogsExportConfiguration = v
 	return s
 }
 
@@ -21641,9 +26349,27 @@ func (s *ModifyDBClusterInput) SetDBClusterParameterGroupName(v string) *ModifyD
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *ModifyDBClusterInput) SetDeletionProtection(v bool) *ModifyDBClusterInput {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEnableHttpEndpoint sets the EnableHttpEndpoint field's value.
+func (s *ModifyDBClusterInput) SetEnableHttpEndpoint(v bool) *ModifyDBClusterInput {
+	s.EnableHttpEndpoint = &v
+	return s
+}
+
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *ModifyDBClusterInput) SetEnableIAMDatabaseAuthentication(v bool) *ModifyDBClusterInput {
 	s.EnableIAMDatabaseAuthentication = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *ModifyDBClusterInput) SetEngineVersion(v string) *ModifyDBClusterInput {
+	s.EngineVersion = &v
 	return s
 }
 
@@ -21683,31 +26409,25 @@ func (s *ModifyDBClusterInput) SetPreferredMaintenanceWindow(v string) *ModifyDB
 	return s
 }
 
+// SetScalingConfiguration sets the ScalingConfiguration field's value.
+func (s *ModifyDBClusterInput) SetScalingConfiguration(v *ScalingConfiguration) *ModifyDBClusterInput {
+	s.ScalingConfiguration = v
+	return s
+}
+
 // SetVpcSecurityGroupIds sets the VpcSecurityGroupIds field's value.
 func (s *ModifyDBClusterInput) SetVpcSecurityGroupIds(v []*string) *ModifyDBClusterInput {
 	s.VpcSecurityGroupIds = v
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterResult
 type ModifyDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -21727,7 +26447,6 @@ func (s *ModifyDBClusterOutput) SetDBCluster(v *DBCluster) *ModifyDBClusterOutpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterParameterGroupMessage
 type ModifyDBClusterParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -21780,7 +26499,6 @@ func (s *ModifyDBClusterParameterGroupInput) SetParameters(v []*Parameter) *Modi
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterSnapshotAttributeMessage
 type ModifyDBClusterSnapshotAttributeInput struct {
 	_ struct{} `type:"structure"`
 
@@ -21869,7 +26587,6 @@ func (s *ModifyDBClusterSnapshotAttributeInput) SetValuesToRemove(v []*string) *
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBClusterSnapshotAttributeResult
 type ModifyDBClusterSnapshotAttributeOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -21898,82 +26615,22 @@ func (s *ModifyDBClusterSnapshotAttributeOutput) SetDBClusterSnapshotAttributesR
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBInstanceMessage
 type ModifyDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The new storage capacity of the RDS instance. Changing this setting does
-	// not result in an outage and the change is applied during the next maintenance
-	// window unless ApplyImmediately is set to true for this request.
+	// The new amount of storage (in gibibytes) to allocate for the DB instance.
 	//
-	// MySQL
+	// For MariaDB, MySQL, Oracle, and PostgreSQL, the value supplied must be at
+	// least 10% greater than the current value. Values that are not at least 10%
+	// greater than the existing value are rounded up so that they are 10% greater
+	// than the current value.
 	//
-	// Default: Uses existing setting
-	//
-	// Valid Values: 5-6144
-	//
-	// Constraints: Value supplied must be at least 10% greater than the current
-	// value. Values that are not at least 10% greater than the existing value are
-	// rounded up so that they are 10% greater than the current value.
-	//
-	// Type: Integer
-	//
-	// MariaDB
-	//
-	// Default: Uses existing setting
-	//
-	// Valid Values: 5-6144
-	//
-	// Constraints: Value supplied must be at least 10% greater than the current
-	// value. Values that are not at least 10% greater than the existing value are
-	// rounded up so that they are 10% greater than the current value.
-	//
-	// Type: Integer
-	//
-	// PostgreSQL
-	//
-	// Default: Uses existing setting
-	//
-	// Valid Values: 5-6144
-	//
-	// Constraints: Value supplied must be at least 10% greater than the current
-	// value. Values that are not at least 10% greater than the existing value are
-	// rounded up so that they are 10% greater than the current value.
-	//
-	// Type: Integer
-	//
-	// Oracle
-	//
-	// Default: Uses existing setting
-	//
-	// Valid Values: 10-6144
-	//
-	// Constraints: Value supplied must be at least 10% greater than the current
-	// value. Values that are not at least 10% greater than the existing value are
-	// rounded up so that they are 10% greater than the current value.
-	//
-	// SQL Server
-	//
-	// Cannot be modified.
-	//
-	// If you choose to migrate your DB instance from using standard storage to
-	// using Provisioned IOPS, or from using Provisioned IOPS to using standard
-	// storage, the process can take time. The duration of the migration depends
-	// on several factors such as database load, storage size, storage type (standard
-	// or Provisioned IOPS), amount of IOPS provisioned (if any), and the number
-	// of prior scale storage operations. Typical migration times are under 24 hours,
-	// but the process can take up to several days in some cases. During the migration,
-	// the DB instance will be available for use, but might experience performance
-	// degradation. While the migration takes place, nightly backups for the instance
-	// will be suspended. No other Amazon RDS operations can take place for the
-	// instance, including modifying the instance, rebooting the instance, deleting
-	// the instance, creating a Read Replica for the instance, and creating a DB
-	// snapshot of the instance.
+	// For the valid values for allocated storage for each engine, see CreateDBInstance.
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Indicates that major version upgrades are allowed. Changing this parameter
-	// does not result in an outage and the change is asynchronously applied as
-	// soon as possible.
+	// doesn't result in an outage and the change is asynchronously applied as soon
+	// as possible.
 	//
 	// Constraints: This parameter must be set to true when specifying a value for
 	// the EngineVersion parameter that is a different major version than the DB
@@ -21986,18 +26643,19 @@ type ModifyDBInstanceInput struct {
 	//
 	// If this parameter is set to false, changes to the DB instance are applied
 	// during the next maintenance window. Some parameter changes can cause an outage
-	// and will be applied on the next call to RebootDBInstance, or the next failure
+	// and are applied on the next call to RebootDBInstance, or the next failure
 	// reboot. Review the table of parameters in Modifying a DB Instance and Using
 	// the Apply Immediately Parameter (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Overview.DBInstance.Modifying.html)
-	// to see the impact that setting ApplyImmediately to true or false has for
-	// each modified parameter and to determine when the changes will be applied.
+	// in the Amazon RDS User Guide. to see the impact that setting ApplyImmediately
+	// to true or false has for each modified parameter and to determine when the
+	// changes are applied.
 	//
 	// Default: false
 	ApplyImmediately *bool `type:"boolean"`
 
-	// Indicates that minor version upgrades will be applied automatically to the
-	// DB instance during the maintenance window. Changing this parameter does not
-	// result in an outage except in the following case and the change is asynchronously
+	// Indicates that minor version upgrades are applied automatically to the DB
+	// instance during the maintenance window. Changing this parameter doesn't result
+	// in an outage except in the following case and the change is asynchronously
 	// applied as soon as possible. An outage will result if this parameter is set
 	// to true during the maintenance window, and a newer minor version is available,
 	// and RDS has enabled auto patching for that engine version.
@@ -22014,6 +26672,11 @@ type ModifyDBInstanceInput struct {
 	// to another non-zero value, the change is asynchronously applied as soon as
 	// possible.
 	//
+	// Amazon Aurora
+	//
+	// Not applicable. The retention period for automated backups is managed by
+	// the DB cluster. For more information, see ModifyDBCluster.
+	//
 	// Default: Uses existing setting
 	//
 	// Constraints:
@@ -22021,57 +26684,53 @@ type ModifyDBInstanceInput struct {
 	//    * Must be a value from 0 to 35
 	//
 	//    * Can be specified for a MySQL Read Replica only if the source is running
-	//    MySQL 5.6
+	//    MySQL 5.6 or later
 	//
 	//    * Can be specified for a PostgreSQL Read Replica only if the source is
 	//    running PostgreSQL 9.3.5
 	//
-	//    * Cannot be set to 0 if the DB instance is a source to Read Replicas
+	//    * Can't be set to 0 if the DB instance is a source to Read Replicas
 	BackupRetentionPeriod *int64 `type:"integer"`
 
 	// Indicates the certificate that needs to be associated with the instance.
 	CACertificateIdentifier *string `type:"string"`
 
-	// True to copy all tags from the DB instance to snapshots of the DB instance;
-	// otherwise false. The default is false.
+	// The configuration setting for the log types to be enabled for export to CloudWatch
+	// Logs for a specific DB instance.
+	//
+	// A change to the CloudwatchLogsExportConfiguration parameter is always applied
+	// to the DB instance immediately. Therefore, the ApplyImmediately parameter
+	// has no effect.
+	CloudwatchLogsExportConfiguration *CloudwatchLogsExportConfiguration `type:"structure"`
+
+	// True to copy all tags from the DB instance to snapshots of the DB instance,
+	// and otherwise false. The default is false.
 	CopyTagsToSnapshot *bool `type:"boolean"`
 
-	// The new compute and memory capacity of the DB instance. To determine the
-	// instance classes that are available for a particular DB engine, use the DescribeOrderableDBInstanceOptions
-	// action. Note that not all instance classes are available in all regions for
-	// all DB engines.
+	// The new compute and memory capacity of the DB instance, for example, db.m4.large.
+	// Not all DB instance classes are available in all AWS Regions, or for all
+	// database engines. For the full list of DB instance classes, and availability
+	// for your engine, see DB Instance Class (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)
+	// in the Amazon RDS User Guide.
 	//
-	// Passing a value for this setting causes an outage during the change and is
-	// applied during the next maintenance window, unless ApplyImmediately is specified
-	// as true for this request.
+	// If you modify the DB instance class, an outage occurs during the change.
+	// The change is applied during the next maintenance window, unless ApplyImmediately
+	// is specified as true for this request.
 	//
 	// Default: Uses existing setting
-	//
-	// Valid Values: db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge
-	// | db.m2.xlarge | db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large
-	// | db.m3.xlarge | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge
-	// | db.m4.4xlarge | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge
-	// | db.r3.4xlarge | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium
-	// | db.t2.large
 	DBInstanceClass *string `type:"string"`
 
 	// The DB instance identifier. This value is stored as a lowercase string.
 	//
 	// Constraints:
 	//
-	//    * Must be the identifier for an existing DB instance
-	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing DBInstance.
 	//
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
 
 	// The name of the DB parameter group to apply to the DB instance. Changing
-	// this setting does not result in an outage. The parameter group name itself
+	// this setting doesn't result in an outage. The parameter group name itself
 	// is changed immediately, but the actual parameter changes are not applied
 	// until you reboot the instance without failover. The db instance will NOT
 	// be rebooted automatically and the parameter changes will NOT be applied during
@@ -22132,32 +26791,33 @@ type ModifyDBInstanceInput struct {
 	DBPortNumber *int64 `type:"integer"`
 
 	// A list of DB security groups to authorize on this DB instance. Changing this
-	// setting does not result in an outage and the change is asynchronously applied
+	// setting doesn't result in an outage and the change is asynchronously applied
 	// as soon as possible.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match existing DBSecurityGroups.
 	DBSecurityGroups []*string `locationNameList:"DBSecurityGroupName" type:"list"`
 
 	// The new DB subnet group for the DB instance. You can use this parameter to
 	// move your DB instance to a different VPC. If your DB instance is not in a
 	// VPC, you can also use this parameter to move your DB instance into a VPC.
-	// For more information, see Updating the VPC for a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Non-VPC2VPC).
+	// For more information, see Updating the VPC for a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html#USER_VPC.Non-VPC2VPC)
+	// in the Amazon RDS User Guide.
 	//
 	// Changing the subnet group causes an outage during the change. The change
 	// is applied during the next maintenance window, unless you specify true for
 	// the ApplyImmediately parameter.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens.
+	// Constraints: If supplied, must match the name of an existing DBSubnetGroup.
 	//
 	// Example: mySubnetGroup
 	DBSubnetGroupName *string `type:"string"`
+
+	// Indicates if the DB instance has deletion protection enabled. The database
+	// can't be deleted when this value is set to true. For more information, see
+	//  Deleting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html).
+	DeletionProtection *bool `type:"boolean"`
 
 	// The Active Directory Domain to move the instance to. Specify none to remove
 	// the instance from its current domain. The domain must be created prior to
@@ -22169,9 +26829,16 @@ type ModifyDBInstanceInput struct {
 	DomainIAMRoleName *string `type:"string"`
 
 	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
-	// to database accounts; otherwise false.
+	// to database accounts, and otherwise false.
 	//
 	// You can enable IAM database authentication for the following database engines
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. Mapping AWS IAM accounts to database accounts is managed
+	// by the DB cluster. For more information, see ModifyDBCluster.
+	//
+	// MySQL
 	//
 	//    * For MySQL 5.6, minor version 5.6.34 or higher
 	//
@@ -22180,37 +26847,32 @@ type ModifyDBInstanceInput struct {
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
+	// True to enable Performance Insights for the DB instance, and otherwise false.
+	//
+	// For more information, see Using Amazon Performance Insights (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html)
+	// in the Amazon Relational Database Service User Guide.
+	EnablePerformanceInsights *bool `type:"boolean"`
+
 	// The version number of the database engine to upgrade to. Changing this parameter
 	// results in an outage and the change is applied during the next maintenance
 	// window unless the ApplyImmediately parameter is set to true for this request.
 	//
-	// For major version upgrades, if a non-default DB parameter group is currently
+	// For major version upgrades, if a nondefault DB parameter group is currently
 	// in use, a new DB parameter group in the DB parameter group family for the
 	// new engine version must be specified. The new DB parameter group can be the
 	// default for that DB parameter group family.
 	//
-	// For a list of valid engine versions, see CreateDBInstance.
+	// For information about valid engine versions, see CreateDBInstance, or call
+	// DescribeDBEngineVersions.
 	EngineVersion *string `type:"string"`
 
 	// The new Provisioned IOPS (I/O operations per second) value for the RDS instance.
-	// Changing this setting does not result in an outage and the change is applied
+	//
+	// Changing this setting doesn't result in an outage and the change is applied
 	// during the next maintenance window unless the ApplyImmediately parameter
-	// is set to true for this request.
-	//
-	// Default: Uses existing setting
-	//
-	// Constraints: Value supplied must be at least 10% greater than the current
-	// value. Values that are not at least 10% greater than the existing value are
-	// rounded up so that they are 10% greater than the current value. If you are
-	// migrating from Provisioned IOPS to standard storage, set this value to 0.
-	// The DB instance will require a reboot for the change in storage type to take
-	// effect.
-	//
-	// SQL Server
-	//
-	// Setting the IOPS value for the SQL Server database engine is not supported.
-	//
-	// Type: Integer
+	// is set to true for this request. If you are migrating from Provisioned IOPS
+	// to standard storage, set this value to 0. The DB instance will require a
+	// reboot for the change in storage type to take effect.
 	//
 	// If you choose to migrate your DB instance from using standard storage to
 	// using Provisioned IOPS, or from using Provisioned IOPS to using standard
@@ -22219,12 +26881,18 @@ type ModifyDBInstanceInput struct {
 	// or Provisioned IOPS), amount of IOPS provisioned (if any), and the number
 	// of prior scale storage operations. Typical migration times are under 24 hours,
 	// but the process can take up to several days in some cases. During the migration,
-	// the DB instance will be available for use, but might experience performance
-	// degradation. While the migration takes place, nightly backups for the instance
-	// will be suspended. No other Amazon RDS operations can take place for the
-	// instance, including modifying the instance, rebooting the instance, deleting
-	// the instance, creating a Read Replica for the instance, and creating a DB
-	// snapshot of the instance.
+	// the DB instance is available for use, but might experience performance degradation.
+	// While the migration takes place, nightly backups for the instance are suspended.
+	// No other Amazon RDS operations can take place for the instance, including
+	// modifying the instance, rebooting the instance, deleting the instance, creating
+	// a Read Replica for the instance, and creating a DB snapshot of the instance.
+	//
+	// Constraints: For MariaDB, MySQL, Oracle, and PostgreSQL, the value supplied
+	// must be at least 10% greater than the current value. Values that are not
+	// at least 10% greater than the existing value are rounded up so that they
+	// are 10% greater than the current value.
+	//
+	// Default: Uses existing setting
 	Iops *int64 `type:"integer"`
 
 	// The license model for the DB instance.
@@ -22232,19 +26900,40 @@ type ModifyDBInstanceInput struct {
 	// Valid values: license-included | bring-your-own-license | general-public-license
 	LicenseModel *string `type:"string"`
 
-	// The new password for the DB instance master user. Can be any printable ASCII
-	// character except "/", """, or "@".
+	// The new password for the master user. The password can include any printable
+	// ASCII character except "/", """, or "@".
 	//
-	// Changing this parameter does not result in an outage and the change is asynchronously
+	// Changing this parameter doesn't result in an outage and the change is asynchronously
 	// applied as soon as possible. Between the time of the request and the completion
 	// of the request, the MasterUserPassword element exists in the PendingModifiedValues
 	// element of the operation response.
 	//
+	// Amazon Aurora
+	//
+	// Not applicable. The password for the master user is managed by the DB cluster.
+	// For more information, see ModifyDBCluster.
+	//
 	// Default: Uses existing setting
 	//
-	// Constraints: Must be 8 to 41 alphanumeric characters (MySQL, MariaDB, and
-	// Amazon Aurora), 8 to 30 alphanumeric characters (Oracle), or 8 to 128 alphanumeric
-	// characters (SQL Server).
+	// MariaDB
+	//
+	// Constraints: Must contain from 8 to 41 characters.
+	//
+	// Microsoft SQL Server
+	//
+	// Constraints: Must contain from 8 to 128 characters.
+	//
+	// MySQL
+	//
+	// Constraints: Must contain from 8 to 41 characters.
+	//
+	// Oracle
+	//
+	// Constraints: Must contain from 8 to 30 characters.
+	//
+	// PostgreSQL
+	//
+	// Constraints: Must contain from 8 to 128 characters.
 	//
 	// Amazon RDS API actions never return the password, so this action provides
 	// a way to regain access to a primary instance user if the password is lost.
@@ -22262,19 +26951,18 @@ type ModifyDBInstanceInput struct {
 	MonitoringInterval *int64 `type:"integer"`
 
 	// The ARN for the IAM role that permits RDS to send enhanced monitoring metrics
-	// to CloudWatch Logs. For example, arn:aws:iam:123456789012:role/emaccess.
+	// to Amazon CloudWatch Logs. For example, arn:aws:iam:123456789012:role/emaccess.
 	// For information on creating a monitoring role, go to To create an IAM role
-	// for Amazon RDS Enhanced Monitoring (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole).
+	// for Amazon RDS Enhanced Monitoring (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.html#USER_Monitoring.OS.IAMRole)
+	// in the Amazon RDS User Guide.
 	//
 	// If MonitoringInterval is set to a value other than 0, then you must supply
 	// a MonitoringRoleArn value.
 	MonitoringRoleArn *string `type:"string"`
 
 	// Specifies if the DB instance is a Multi-AZ deployment. Changing this parameter
-	// does not result in an outage and the change is applied during the next maintenance
+	// doesn't result in an outage and the change is applied during the next maintenance
 	// window unless the ApplyImmediately parameter is set to true for this request.
-	//
-	// Constraints: Cannot be specified if the DB instance is a Read Replica.
 	MultiAZ *bool `type:"boolean"`
 
 	// The new DB instance identifier for the DB instance when renaming a DB instance.
@@ -22285,15 +26973,17 @@ type ModifyDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens.
 	//
-	//    * First character must be a letter
+	//    * The first character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	//
+	// Example: mydbinstance
 	NewDBInstanceIdentifier *string `type:"string"`
 
 	// Indicates that the DB instance should be associated with the specified option
-	// group. Changing this parameter does not result in an outage except in the
+	// group. Changing this parameter doesn't result in an outage except in the
 	// following case and the change is applied during the next maintenance window
 	// unless the ApplyImmediately parameter is set to true for this request. If
 	// the parameter change results in an option group that enables OEM, this change
@@ -22301,20 +26991,34 @@ type ModifyDBInstanceInput struct {
 	// but existing connections are not interrupted.
 	//
 	// Permanent options, such as the TDE option for Oracle Advanced Security TDE,
-	// cannot be removed from an option group, and that option group cannot be removed
+	// can't be removed from an option group, and that option group can't be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
 
+	// The AWS KMS key identifier for encryption of Performance Insights data. The
+	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
+	// KMS key alias for the KMS encryption key.
+	PerformanceInsightsKMSKeyId *string `type:"string"`
+
+	// The amount of time, in days, to retain Performance Insights data. Valid values
+	// are 7 or 731 (2 years).
+	PerformanceInsightsRetentionPeriod *int64 `type:"integer"`
+
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled, as determined by the BackupRetentionPeriod parameter.
-	// Changing this parameter does not result in an outage and the change is asynchronously
+	// Changing this parameter doesn't result in an outage and the change is asynchronously
 	// applied as soon as possible.
+	//
+	// Amazon Aurora
+	//
+	// Not applicable. The daily time range for creating automated backups is managed
+	// by the DB cluster. For more information, see ModifyDBCluster.
 	//
 	// Constraints:
 	//
 	//    * Must be in the format hh24:mi-hh24:mi
 	//
-	//    * Times should be in Universal Time Coordinated (UTC)
+	//    * Must be in Universal Time Coordinated (UTC)
 	//
 	//    * Must not conflict with the preferred maintenance window
 	//
@@ -22322,8 +27026,8 @@ type ModifyDBInstanceInput struct {
 	PreferredBackupWindow *string `type:"string"`
 
 	// The weekly time range (in UTC) during which system maintenance can occur,
-	// which might result in an outage. Changing this parameter does not result
-	// in an outage, except in the following situation, and the change is asynchronously
+	// which might result in an outage. Changing this parameter doesn't result in
+	// an outage, except in the following situation, and the change is asynchronously
 	// applied as soon as possible. If there are pending actions that cause a reboot,
 	// and the maintenance window is changed to include the current time, then changing
 	// this parameter will cause a reboot of the DB instance. If moving this window
@@ -22339,9 +27043,14 @@ type ModifyDBInstanceInput struct {
 	// Constraints: Must be at least 30 minutes
 	PreferredMaintenanceWindow *string `type:"string"`
 
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
+
 	// A value that specifies the order in which an Aurora Replica is promoted to
 	// the primary instance after a failure of the existing primary instance. For
-	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Aurora.Managing.html#Aurora.Managing.FaultTolerance).
+	// more information, see  Fault Tolerance for an Aurora DB Cluster (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.Managing.Backups.html#Aurora.Managing.FaultTolerance)
+	// in the Amazon Aurora User Guide.
 	//
 	// Default: 1
 	//
@@ -22366,30 +27075,49 @@ type ModifyDBInstanceInput struct {
 
 	// Specifies the storage type to be associated with the DB instance.
 	//
+	// If you specify Provisioned IOPS (io1), you must also include a value for
+	// the Iops parameter.
+	//
+	// If you choose to migrate your DB instance from using standard storage to
+	// using Provisioned IOPS, or from using Provisioned IOPS to using standard
+	// storage, the process can take time. The duration of the migration depends
+	// on several factors such as database load, storage size, storage type (standard
+	// or Provisioned IOPS), amount of IOPS provisioned (if any), and the number
+	// of prior scale storage operations. Typical migration times are under 24 hours,
+	// but the process can take up to several days in some cases. During the migration,
+	// the DB instance is available for use, but might experience performance degradation.
+	// While the migration takes place, nightly backups for the instance are suspended.
+	// No other Amazon RDS operations can take place for the instance, including
+	// modifying the instance, rebooting the instance, deleting the instance, creating
+	// a Read Replica for the instance, and creating a DB snapshot of the instance.
+	//
 	// Valid values: standard | gp2 | io1
 	//
-	// If you specify io1, you must also include a value for the Iops parameter.
-	//
-	// Default: io1 if the Iops parameter is specified; otherwise standard
+	// Default: io1 if the Iops parameter is specified, otherwise standard
 	StorageType *string `type:"string"`
 
-	// The ARN from the Key Store with which to associate the instance for TDE encryption.
+	// The ARN from the key store with which to associate the instance for TDE encryption.
 	TdeCredentialArn *string `type:"string"`
 
-	// The password for the given ARN from the Key Store in order to access the
+	// The password for the given ARN from the key store in order to access the
 	// device.
 	TdeCredentialPassword *string `type:"string"`
+
+	// A value that specifies that the DB instance class of the DB instance uses
+	// its default processor features.
+	UseDefaultProcessorFeatures *bool `type:"boolean"`
 
 	// A list of EC2 VPC security groups to authorize on this DB instance. This
 	// change is asynchronously applied as soon as possible.
 	//
+	// Amazon Aurora
+	//
+	// Not applicable. The associated list of EC2 VPC security groups is managed
+	// by the DB cluster. For more information, see ModifyDBCluster.
+	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match existing VpcSecurityGroupIds.
 	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
@@ -22452,6 +27180,12 @@ func (s *ModifyDBInstanceInput) SetCACertificateIdentifier(v string) *ModifyDBIn
 	return s
 }
 
+// SetCloudwatchLogsExportConfiguration sets the CloudwatchLogsExportConfiguration field's value.
+func (s *ModifyDBInstanceInput) SetCloudwatchLogsExportConfiguration(v *CloudwatchLogsExportConfiguration) *ModifyDBInstanceInput {
+	s.CloudwatchLogsExportConfiguration = v
+	return s
+}
+
 // SetCopyTagsToSnapshot sets the CopyTagsToSnapshot field's value.
 func (s *ModifyDBInstanceInput) SetCopyTagsToSnapshot(v bool) *ModifyDBInstanceInput {
 	s.CopyTagsToSnapshot = &v
@@ -22494,6 +27228,12 @@ func (s *ModifyDBInstanceInput) SetDBSubnetGroupName(v string) *ModifyDBInstance
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *ModifyDBInstanceInput) SetDeletionProtection(v bool) *ModifyDBInstanceInput {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetDomain sets the Domain field's value.
 func (s *ModifyDBInstanceInput) SetDomain(v string) *ModifyDBInstanceInput {
 	s.Domain = &v
@@ -22509,6 +27249,12 @@ func (s *ModifyDBInstanceInput) SetDomainIAMRoleName(v string) *ModifyDBInstance
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *ModifyDBInstanceInput) SetEnableIAMDatabaseAuthentication(v bool) *ModifyDBInstanceInput {
 	s.EnableIAMDatabaseAuthentication = &v
+	return s
+}
+
+// SetEnablePerformanceInsights sets the EnablePerformanceInsights field's value.
+func (s *ModifyDBInstanceInput) SetEnablePerformanceInsights(v bool) *ModifyDBInstanceInput {
+	s.EnablePerformanceInsights = &v
 	return s
 }
 
@@ -22566,6 +27312,18 @@ func (s *ModifyDBInstanceInput) SetOptionGroupName(v string) *ModifyDBInstanceIn
 	return s
 }
 
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *ModifyDBInstanceInput) SetPerformanceInsightsKMSKeyId(v string) *ModifyDBInstanceInput {
+	s.PerformanceInsightsKMSKeyId = &v
+	return s
+}
+
+// SetPerformanceInsightsRetentionPeriod sets the PerformanceInsightsRetentionPeriod field's value.
+func (s *ModifyDBInstanceInput) SetPerformanceInsightsRetentionPeriod(v int64) *ModifyDBInstanceInput {
+	s.PerformanceInsightsRetentionPeriod = &v
+	return s
+}
+
 // SetPreferredBackupWindow sets the PreferredBackupWindow field's value.
 func (s *ModifyDBInstanceInput) SetPreferredBackupWindow(v string) *ModifyDBInstanceInput {
 	s.PreferredBackupWindow = &v
@@ -22575,6 +27333,12 @@ func (s *ModifyDBInstanceInput) SetPreferredBackupWindow(v string) *ModifyDBInst
 // SetPreferredMaintenanceWindow sets the PreferredMaintenanceWindow field's value.
 func (s *ModifyDBInstanceInput) SetPreferredMaintenanceWindow(v string) *ModifyDBInstanceInput {
 	s.PreferredMaintenanceWindow = &v
+	return s
+}
+
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *ModifyDBInstanceInput) SetProcessorFeatures(v []*ProcessorFeature) *ModifyDBInstanceInput {
+	s.ProcessorFeatures = v
 	return s
 }
 
@@ -22608,27 +27372,22 @@ func (s *ModifyDBInstanceInput) SetTdeCredentialPassword(v string) *ModifyDBInst
 	return s
 }
 
+// SetUseDefaultProcessorFeatures sets the UseDefaultProcessorFeatures field's value.
+func (s *ModifyDBInstanceInput) SetUseDefaultProcessorFeatures(v bool) *ModifyDBInstanceInput {
+	s.UseDefaultProcessorFeatures = &v
+	return s
+}
+
 // SetVpcSecurityGroupIds sets the VpcSecurityGroupIds field's value.
 func (s *ModifyDBInstanceInput) SetVpcSecurityGroupIds(v []*string) *ModifyDBInstanceInput {
 	s.VpcSecurityGroupIds = v
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBInstanceResult
 type ModifyDBInstanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -22650,7 +27409,6 @@ func (s *ModifyDBInstanceOutput) SetDBInstance(v *DBInstance) *ModifyDBInstanceO
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBParameterGroupMessage
 type ModifyDBParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22658,13 +27416,7 @@ type ModifyDBParameterGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be the name of an existing DB parameter group
-	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the name of an existing DBParameterGroup.
 	//
 	// DBParameterGroupName is a required field
 	DBParameterGroupName *string `type:"string" required:"true"`
@@ -22722,7 +27474,6 @@ func (s *ModifyDBParameterGroupInput) SetParameters(v []*Parameter) *ModifyDBPar
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotAttributeMessage
 type ModifyDBSnapshotAttributeInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22809,7 +27560,6 @@ func (s *ModifyDBSnapshotAttributeInput) SetValuesToRemove(v []*string) *ModifyD
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotAttributeResult
 type ModifyDBSnapshotAttributeOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -22838,7 +27588,6 @@ func (s *ModifyDBSnapshotAttributeOutput) SetDBSnapshotAttributesResult(v *DBSna
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotMessage
 type ModifyDBSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22847,8 +27596,32 @@ type ModifyDBSnapshotInput struct {
 	// DBSnapshotIdentifier is a required field
 	DBSnapshotIdentifier *string `type:"string" required:"true"`
 
-	// The engine version to update the DB snapshot to.
+	// The engine version to upgrade the DB snapshot to.
+	//
+	// The following are the database engines and engine versions that are available
+	// when you upgrade a DB snapshot.
+	//
+	// MySQL
+	//
+	//    * 5.5.46 (supported for 5.1 DB snapshots)
+	//
+	// Oracle
+	//
+	//    * 12.1.0.2.v8 (supported for 12.1.0.1 DB snapshots)
+	//
+	//    * 11.2.0.4.v12 (supported for 11.2.0.2 DB snapshots)
+	//
+	//    * 11.2.0.4.v11 (supported for 11.2.0.3 DB snapshots)
 	EngineVersion *string `type:"string"`
+
+	// The option group to identify with the upgraded DB snapshot.
+	//
+	// You can specify this parameter when you upgrade an Oracle DB snapshot. The
+	// same option group considerations apply when upgrading a DB snapshot as when
+	// upgrading a DB instance. For more information, see Option Group Considerations
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Oracle.html#USER_UpgradeDBInstance.Oracle.OGPG.OG)
+	// in the Amazon RDS User Guide.
+	OptionGroupName *string `type:"string"`
 }
 
 // String returns the string representation
@@ -22886,15 +27659,16 @@ func (s *ModifyDBSnapshotInput) SetEngineVersion(v string) *ModifyDBSnapshotInpu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSnapshotResult
+// SetOptionGroupName sets the OptionGroupName field's value.
+func (s *ModifyDBSnapshotInput) SetOptionGroupName(v string) *ModifyDBSnapshotInput {
+	s.OptionGroupName = &v
+	return s
+}
+
 type ModifyDBSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBSnapshot
-	//
-	//    * DeleteDBSnapshot
+	// Contains the details of an Amazon RDS DB snapshot.
 	//
 	// This data type is used as a response element in the DescribeDBSnapshots action.
 	DBSnapshot *DBSnapshot `type:"structure"`
@@ -22916,7 +27690,6 @@ func (s *ModifyDBSnapshotOutput) SetDBSnapshot(v *DBSnapshot) *ModifyDBSnapshotO
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSubnetGroupMessage
 type ModifyDBSubnetGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -22924,9 +27697,10 @@ type ModifyDBSubnetGroupInput struct {
 	DBSubnetGroupDescription *string `type:"string"`
 
 	// The name for the DB subnet group. This value is stored as a lowercase string.
+	// You can't modify the default subnet group.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: Must match the name of an existing DBSubnetGroup. Must not be
+	// default.
 	//
 	// Example: mySubnetgroup
 	//
@@ -22983,19 +27757,10 @@ func (s *ModifyDBSubnetGroupInput) SetSubnetIds(v []*string) *ModifyDBSubnetGrou
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyDBSubnetGroupResult
 type ModifyDBSubnetGroupOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBSubnetGroup
-	//
-	//    * ModifyDBSubnetGroup
-	//
-	//    * DescribeDBSubnetGroups
-	//
-	//    * DeleteDBSubnetGroup
+	// Contains the details of an Amazon RDS DB subnet group.
 	//
 	// This data type is used as a response element in the DescribeDBSubnetGroups
 	// action.
@@ -23018,7 +27783,6 @@ func (s *ModifyDBSubnetGroupOutput) SetDBSubnetGroup(v *DBSubnetGroup) *ModifyDB
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyEventSubscriptionMessage
 type ModifyEventSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -23037,10 +27801,9 @@ type ModifyEventSubscriptionInput struct {
 	// it.
 	SnsTopicArn *string `type:"string"`
 
-	// The type of source that will be generating the events. For example, if you
-	// want to be notified of events generated by a DB instance, you would set this
-	// parameter to db-instance. if this value is not specified, all events are
-	// returned.
+	// The type of source that is generating the events. For example, if you want
+	// to be notified of events generated by a DB instance, you would set this parameter
+	// to db-instance. if this value is not specified, all events are returned.
 	//
 	// Valid values: db-instance | db-parameter-group | db-security-group | db-snapshot
 	SourceType *string `type:"string"`
@@ -23104,7 +27867,6 @@ func (s *ModifyEventSubscriptionInput) SetSubscriptionName(v string) *ModifyEven
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyEventSubscriptionResult
 type ModifyEventSubscriptionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -23129,7 +27891,87 @@ func (s *ModifyEventSubscriptionOutput) SetEventSubscription(v *EventSubscriptio
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyOptionGroupMessage
+type ModifyGlobalClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates if the global database cluster has deletion protection enabled.
+	// The global database cluster can't be deleted when this value is set to true.
+	DeletionProtection *bool `type:"boolean"`
+
+	// The DB cluster identifier for the global cluster being modified. This parameter
+	// is not case-sensitive.
+	//
+	// Constraints:
+	//
+	//    * Must match the identifier of an existing global database cluster.
+	GlobalClusterIdentifier *string `type:"string"`
+
+	// The new cluster identifier for the global database cluster when modifying
+	// a global database cluster. This value is stored as a lowercase string.
+	//
+	// Constraints:
+	//
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens
+	//
+	//    * The first character must be a letter
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens
+	//
+	// Example: my-cluster2
+	NewGlobalClusterIdentifier *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ModifyGlobalClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyGlobalClusterInput) GoString() string {
+	return s.String()
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *ModifyGlobalClusterInput) SetDeletionProtection(v bool) *ModifyGlobalClusterInput {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *ModifyGlobalClusterInput) SetGlobalClusterIdentifier(v string) *ModifyGlobalClusterInput {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
+// SetNewGlobalClusterIdentifier sets the NewGlobalClusterIdentifier field's value.
+func (s *ModifyGlobalClusterInput) SetNewGlobalClusterIdentifier(v string) *ModifyGlobalClusterInput {
+	s.NewGlobalClusterIdentifier = &v
+	return s
+}
+
+type ModifyGlobalClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A data type representing an Aurora global database.
+	GlobalCluster *GlobalCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s ModifyGlobalClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ModifyGlobalClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetGlobalCluster sets the GlobalCluster field's value.
+func (s *ModifyGlobalClusterOutput) SetGlobalCluster(v *GlobalCluster) *ModifyGlobalClusterOutput {
+	s.GlobalCluster = v
+	return s
+}
+
 type ModifyOptionGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -23140,7 +27982,7 @@ type ModifyOptionGroupInput struct {
 	// The name of the option group to be modified.
 	//
 	// Permanent options, such as the TDE option for Oracle Advanced Security TDE,
-	// cannot be removed from an option group, and that option group cannot be removed
+	// can't be removed from an option group, and that option group can't be removed
 	// from a DB instance once it is associated with a DB instance
 	//
 	// OptionGroupName is a required field
@@ -23211,7 +28053,6 @@ func (s *ModifyOptionGroupInput) SetOptionsToRemove(v []*string) *ModifyOptionGr
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ModifyOptionGroupResult
 type ModifyOptionGroupOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -23235,7 +28076,6 @@ func (s *ModifyOptionGroupOutput) SetOptionGroup(v *OptionGroup) *ModifyOptionGr
 }
 
 // Option details.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Option
 type Option struct {
 	_ struct{} `type:"structure"`
 
@@ -23334,7 +28174,6 @@ func (s *Option) SetVpcSecurityGroupMemberships(v []*VpcSecurityGroupMembership)
 }
 
 // A list of all available options
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionConfiguration
 type OptionConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -23418,7 +28257,6 @@ func (s *OptionConfiguration) SetVpcSecurityGroupMemberships(v []*string) *Optio
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionGroup
 type OptionGroup struct {
 	_ struct{} `type:"structure"`
 
@@ -23512,7 +28350,6 @@ func (s *OptionGroup) SetVpcId(v string) *OptionGroup {
 }
 
 // Provides information on the option groups the DB instance is a member of.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionGroupMembership
 type OptionGroupMembership struct {
 	_ struct{} `type:"structure"`
 
@@ -23548,7 +28385,6 @@ func (s *OptionGroupMembership) SetStatus(v string) *OptionGroupMembership {
 }
 
 // Available option.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionGroupOption
 type OptionGroupOption struct {
 	_ struct{} `type:"structure"`
 
@@ -23595,6 +28431,19 @@ type OptionGroupOption struct {
 
 	// Specifies whether the option requires a port.
 	PortRequired *bool `type:"boolean"`
+
+	// If true, you must enable the Auto Minor Version Upgrade setting for your
+	// DB instance before you can use this option. You can enable Auto Minor Version
+	// Upgrade when you first create your DB instance, or by modifying your DB instance
+	// later.
+	RequiresAutoMinorEngineVersionUpgrade *bool `type:"boolean"`
+
+	// If true, you can change the option to an earlier version of the option. This
+	// only applies to options that have different versions available.
+	SupportsOptionVersionDowngrade *bool `type:"boolean"`
+
+	// If true, you can only use this option with a DB instance that is in a VPC.
+	VpcOnly *bool `type:"boolean"`
 }
 
 // String returns the string representation
@@ -23685,10 +28534,27 @@ func (s *OptionGroupOption) SetPortRequired(v bool) *OptionGroupOption {
 	return s
 }
 
+// SetRequiresAutoMinorEngineVersionUpgrade sets the RequiresAutoMinorEngineVersionUpgrade field's value.
+func (s *OptionGroupOption) SetRequiresAutoMinorEngineVersionUpgrade(v bool) *OptionGroupOption {
+	s.RequiresAutoMinorEngineVersionUpgrade = &v
+	return s
+}
+
+// SetSupportsOptionVersionDowngrade sets the SupportsOptionVersionDowngrade field's value.
+func (s *OptionGroupOption) SetSupportsOptionVersionDowngrade(v bool) *OptionGroupOption {
+	s.SupportsOptionVersionDowngrade = &v
+	return s
+}
+
+// SetVpcOnly sets the VpcOnly field's value.
+func (s *OptionGroupOption) SetVpcOnly(v bool) *OptionGroupOption {
+	s.VpcOnly = &v
+	return s
+}
+
 // Option group option settings are used to display settings available for each
 // option with their default values and other information. These values are
 // used with the DescribeOptionGroupOptions action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionGroupOptionSetting
 type OptionGroupOptionSetting struct {
 	_ struct{} `type:"structure"`
 
@@ -23704,6 +28570,14 @@ type OptionGroupOptionSetting struct {
 	// Boolean value where true indicates that this option group option can be changed
 	// from the default value.
 	IsModifiable *bool `type:"boolean"`
+
+	// Boolean value where true indicates that a value must be specified for this
+	// option setting of the option group option.
+	IsRequired *bool `type:"boolean"`
+
+	// The minimum DB engine version required for the corresponding allowed value
+	// for this option setting.
+	MinimumEngineVersionPerAllowedValue []*MinimumEngineVersionPerAllowedValue `locationNameList:"MinimumEngineVersionPerAllowedValue" type:"list"`
 
 	// The description of the option group option.
 	SettingDescription *string `type:"string"`
@@ -23746,6 +28620,18 @@ func (s *OptionGroupOptionSetting) SetIsModifiable(v bool) *OptionGroupOptionSet
 	return s
 }
 
+// SetIsRequired sets the IsRequired field's value.
+func (s *OptionGroupOptionSetting) SetIsRequired(v bool) *OptionGroupOptionSetting {
+	s.IsRequired = &v
+	return s
+}
+
+// SetMinimumEngineVersionPerAllowedValue sets the MinimumEngineVersionPerAllowedValue field's value.
+func (s *OptionGroupOptionSetting) SetMinimumEngineVersionPerAllowedValue(v []*MinimumEngineVersionPerAllowedValue) *OptionGroupOptionSetting {
+	s.MinimumEngineVersionPerAllowedValue = v
+	return s
+}
+
 // SetSettingDescription sets the SettingDescription field's value.
 func (s *OptionGroupOptionSetting) SetSettingDescription(v string) *OptionGroupOptionSetting {
 	s.SettingDescription = &v
@@ -23762,7 +28648,6 @@ func (s *OptionGroupOptionSetting) SetSettingName(v string) *OptionGroupOptionSe
 // option. It is used when you modify an option group or describe option groups.
 // For example, the NATIVE_NETWORK_ENCRYPTION option has a setting called SQLNET.ENCRYPTION_SERVER
 // that can have several different values.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionSetting
 type OptionSetting struct {
 	_ struct{} `type:"structure"`
 
@@ -23861,11 +28746,10 @@ func (s *OptionSetting) SetValue(v string) *OptionSetting {
 
 // The version for an option. Option group option versions are returned by the
 // DescribeOptionGroupOptions action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OptionVersion
 type OptionVersion struct {
 	_ struct{} `type:"structure"`
 
-	// True if the version is the default version of the option; otherwise, false.
+	// True if the version is the default version of the option, and otherwise false.
 	IsDefault *bool `type:"boolean"`
 
 	// The version of the option.
@@ -23894,52 +28778,79 @@ func (s *OptionVersion) SetVersion(v string) *OptionVersion {
 	return s
 }
 
-// Contains a list of available options for a DB instance
+// Contains a list of available options for a DB instance.
 //
 // This data type is used as a response element in the DescribeOrderableDBInstanceOptions
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/OrderableDBInstanceOption
 type OrderableDBInstanceOption struct {
 	_ struct{} `type:"structure"`
 
-	// A list of Availability Zones for the orderable DB instance.
+	// A list of Availability Zones for a DB instance.
 	AvailabilityZones []*AvailabilityZone `locationNameList:"AvailabilityZone" type:"list"`
 
-	// The DB instance class for the orderable DB instance.
+	// A list of the available processor features for the DB instance class of a
+	// DB instance.
+	AvailableProcessorFeatures []*AvailableProcessorFeature `locationNameList:"AvailableProcessorFeature" type:"list"`
+
+	// The DB instance class for a DB instance.
 	DBInstanceClass *string `type:"string"`
 
-	// The engine type of the orderable DB instance.
+	// The engine type of a DB instance.
 	Engine *string `type:"string"`
 
-	// The engine version of the orderable DB instance.
+	// The engine version of a DB instance.
 	EngineVersion *string `type:"string"`
 
-	// The license model for the orderable DB instance.
+	// The license model for a DB instance.
 	LicenseModel *string `type:"string"`
 
-	// Indicates whether this orderable DB instance is multi-AZ capable.
+	// Maximum total provisioned IOPS for a DB instance.
+	MaxIopsPerDbInstance *int64 `type:"integer"`
+
+	// Maximum provisioned IOPS per GiB for a DB instance.
+	MaxIopsPerGib *float64 `type:"double"`
+
+	// Maximum storage size for a DB instance.
+	MaxStorageSize *int64 `type:"integer"`
+
+	// Minimum total provisioned IOPS for a DB instance.
+	MinIopsPerDbInstance *int64 `type:"integer"`
+
+	// Minimum provisioned IOPS per GiB for a DB instance.
+	MinIopsPerGib *float64 `type:"double"`
+
+	// Minimum storage size for a DB instance.
+	MinStorageSize *int64 `type:"integer"`
+
+	// Indicates whether a DB instance is Multi-AZ capable.
 	MultiAZCapable *bool `type:"boolean"`
 
-	// Indicates whether this orderable DB instance can have a Read Replica.
+	// Indicates whether a DB instance can have a Read Replica.
 	ReadReplicaCapable *bool `type:"boolean"`
 
-	// Indicates the storage type for this orderable DB instance.
+	// Indicates the storage type for a DB instance.
 	StorageType *string `type:"string"`
 
-	// Indicates whether the DB instance supports enhanced monitoring at intervals
+	// A list of the supported DB engine modes.
+	SupportedEngineModes []*string `type:"list"`
+
+	// Indicates whether a DB instance supports Enhanced Monitoring at intervals
 	// from 1 to 60 seconds.
 	SupportsEnhancedMonitoring *bool `type:"boolean"`
 
-	// Indicates whether this orderable DB instance supports IAM database authentication.
+	// Indicates whether a DB instance supports IAM database authentication.
 	SupportsIAMDatabaseAuthentication *bool `type:"boolean"`
 
-	// Indicates whether this orderable DB instance supports provisioned IOPS.
+	// Indicates whether a DB instance supports provisioned IOPS.
 	SupportsIops *bool `type:"boolean"`
 
-	// Indicates whether this orderable DB instance supports encrypted storage.
+	// True if a DB instance supports Performance Insights, otherwise false.
+	SupportsPerformanceInsights *bool `type:"boolean"`
+
+	// Indicates whether a DB instance supports encrypted storage.
 	SupportsStorageEncryption *bool `type:"boolean"`
 
-	// Indicates whether this is a VPC orderable DB instance.
+	// Indicates whether a DB instance is in a VPC.
 	Vpc *bool `type:"boolean"`
 }
 
@@ -23956,6 +28867,12 @@ func (s OrderableDBInstanceOption) GoString() string {
 // SetAvailabilityZones sets the AvailabilityZones field's value.
 func (s *OrderableDBInstanceOption) SetAvailabilityZones(v []*AvailabilityZone) *OrderableDBInstanceOption {
 	s.AvailabilityZones = v
+	return s
+}
+
+// SetAvailableProcessorFeatures sets the AvailableProcessorFeatures field's value.
+func (s *OrderableDBInstanceOption) SetAvailableProcessorFeatures(v []*AvailableProcessorFeature) *OrderableDBInstanceOption {
+	s.AvailableProcessorFeatures = v
 	return s
 }
 
@@ -23983,6 +28900,42 @@ func (s *OrderableDBInstanceOption) SetLicenseModel(v string) *OrderableDBInstan
 	return s
 }
 
+// SetMaxIopsPerDbInstance sets the MaxIopsPerDbInstance field's value.
+func (s *OrderableDBInstanceOption) SetMaxIopsPerDbInstance(v int64) *OrderableDBInstanceOption {
+	s.MaxIopsPerDbInstance = &v
+	return s
+}
+
+// SetMaxIopsPerGib sets the MaxIopsPerGib field's value.
+func (s *OrderableDBInstanceOption) SetMaxIopsPerGib(v float64) *OrderableDBInstanceOption {
+	s.MaxIopsPerGib = &v
+	return s
+}
+
+// SetMaxStorageSize sets the MaxStorageSize field's value.
+func (s *OrderableDBInstanceOption) SetMaxStorageSize(v int64) *OrderableDBInstanceOption {
+	s.MaxStorageSize = &v
+	return s
+}
+
+// SetMinIopsPerDbInstance sets the MinIopsPerDbInstance field's value.
+func (s *OrderableDBInstanceOption) SetMinIopsPerDbInstance(v int64) *OrderableDBInstanceOption {
+	s.MinIopsPerDbInstance = &v
+	return s
+}
+
+// SetMinIopsPerGib sets the MinIopsPerGib field's value.
+func (s *OrderableDBInstanceOption) SetMinIopsPerGib(v float64) *OrderableDBInstanceOption {
+	s.MinIopsPerGib = &v
+	return s
+}
+
+// SetMinStorageSize sets the MinStorageSize field's value.
+func (s *OrderableDBInstanceOption) SetMinStorageSize(v int64) *OrderableDBInstanceOption {
+	s.MinStorageSize = &v
+	return s
+}
+
 // SetMultiAZCapable sets the MultiAZCapable field's value.
 func (s *OrderableDBInstanceOption) SetMultiAZCapable(v bool) *OrderableDBInstanceOption {
 	s.MultiAZCapable = &v
@@ -23998,6 +28951,12 @@ func (s *OrderableDBInstanceOption) SetReadReplicaCapable(v bool) *OrderableDBIn
 // SetStorageType sets the StorageType field's value.
 func (s *OrderableDBInstanceOption) SetStorageType(v string) *OrderableDBInstanceOption {
 	s.StorageType = &v
+	return s
+}
+
+// SetSupportedEngineModes sets the SupportedEngineModes field's value.
+func (s *OrderableDBInstanceOption) SetSupportedEngineModes(v []*string) *OrderableDBInstanceOption {
+	s.SupportedEngineModes = v
 	return s
 }
 
@@ -24019,6 +28978,12 @@ func (s *OrderableDBInstanceOption) SetSupportsIops(v bool) *OrderableDBInstance
 	return s
 }
 
+// SetSupportsPerformanceInsights sets the SupportsPerformanceInsights field's value.
+func (s *OrderableDBInstanceOption) SetSupportsPerformanceInsights(v bool) *OrderableDBInstanceOption {
+	s.SupportsPerformanceInsights = &v
+	return s
+}
+
 // SetSupportsStorageEncryption sets the SupportsStorageEncryption field's value.
 func (s *OrderableDBInstanceOption) SetSupportsStorageEncryption(v bool) *OrderableDBInstanceOption {
 	s.SupportsStorageEncryption = &v
@@ -24036,7 +29001,6 @@ func (s *OrderableDBInstanceOption) SetVpc(v bool) *OrderableDBInstanceOption {
 //
 // This data type is used as a response element in the DescribeEngineDefaultParameters
 // and DescribeDBParameters actions.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Parameter
 type Parameter struct {
 	_ struct{} `type:"structure"`
 
@@ -24071,6 +29035,9 @@ type Parameter struct {
 
 	// Indicates the source of the parameter value.
 	Source *string `type:"string"`
+
+	// The valid DB engine modes.
+	SupportedEngineModes []*string `type:"list"`
 }
 
 // String returns the string representation
@@ -24143,35 +29110,76 @@ func (s *Parameter) SetSource(v string) *Parameter {
 	return s
 }
 
+// SetSupportedEngineModes sets the SupportedEngineModes field's value.
+func (s *Parameter) SetSupportedEngineModes(v []*string) *Parameter {
+	s.SupportedEngineModes = v
+	return s
+}
+
+// A list of the log types whose configuration is still pending. In other words,
+// these log types are in the process of being activated or deactivated.
+type PendingCloudwatchLogsExports struct {
+	_ struct{} `type:"structure"`
+
+	// Log types that are in the process of being enabled. After they are enabled,
+	// these log types are exported to CloudWatch Logs.
+	LogTypesToDisable []*string `type:"list"`
+
+	// Log types that are in the process of being deactivated. After they are deactivated,
+	// these log types aren't exported to CloudWatch Logs.
+	LogTypesToEnable []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s PendingCloudwatchLogsExports) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PendingCloudwatchLogsExports) GoString() string {
+	return s.String()
+}
+
+// SetLogTypesToDisable sets the LogTypesToDisable field's value.
+func (s *PendingCloudwatchLogsExports) SetLogTypesToDisable(v []*string) *PendingCloudwatchLogsExports {
+	s.LogTypesToDisable = v
+	return s
+}
+
+// SetLogTypesToEnable sets the LogTypesToEnable field's value.
+func (s *PendingCloudwatchLogsExports) SetLogTypesToEnable(v []*string) *PendingCloudwatchLogsExports {
+	s.LogTypesToEnable = v
+	return s
+}
+
 // Provides information about a pending maintenance action for a resource.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PendingMaintenanceAction
 type PendingMaintenanceAction struct {
 	_ struct{} `type:"structure"`
 
 	// The type of pending maintenance action that is available for the resource.
 	Action *string `type:"string"`
 
-	// The date of the maintenance window when the action will be applied. The maintenance
-	// action will be applied to the resource during its first maintenance window
-	// after this date. If this date is specified, any next-maintenance opt-in requests
+	// The date of the maintenance window when the action is applied. The maintenance
+	// action is applied to the resource during its first maintenance window after
+	// this date. If this date is specified, any next-maintenance opt-in requests
 	// are ignored.
-	AutoAppliedAfterDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	AutoAppliedAfterDate *time.Time `type:"timestamp"`
 
-	// The effective date when the pending maintenance action will be applied to
-	// the resource. This date takes into account opt-in requests received from
-	// the ApplyPendingMaintenanceAction API, the AutoAppliedAfterDate, and the
-	// ForcedApplyDate. This value is blank if an opt-in request has not been received
-	// and nothing has been specified as AutoAppliedAfterDate or ForcedApplyDate.
-	CurrentApplyDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	// The effective date when the pending maintenance action is applied to the
+	// resource. This date takes into account opt-in requests received from the
+	// ApplyPendingMaintenanceAction API, the AutoAppliedAfterDate, and the ForcedApplyDate.
+	// This value is blank if an opt-in request has not been received and nothing
+	// has been specified as AutoAppliedAfterDate or ForcedApplyDate.
+	CurrentApplyDate *time.Time `type:"timestamp"`
 
 	// A description providing more detail about the maintenance action.
 	Description *string `type:"string"`
 
-	// The date when the maintenance action will be automatically applied. The maintenance
-	// action will be applied to the resource on this date regardless of the maintenance
+	// The date when the maintenance action is automatically applied. The maintenance
+	// action is applied to the resource on this date regardless of the maintenance
 	// window for the resource. If this date is specified, any immediate opt-in
 	// requests are ignored.
-	ForcedApplyDate *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	ForcedApplyDate *time.Time `type:"timestamp"`
 
 	// Indicates the type of opt-in request that has been received for the resource.
 	OptInStatus *string `type:"string"`
@@ -24224,12 +29232,11 @@ func (s *PendingMaintenanceAction) SetOptInStatus(v string) *PendingMaintenanceA
 }
 
 // This data type is used as a response element in the ModifyDBInstance action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PendingModifiedValues
 type PendingModifiedValues struct {
 	_ struct{} `type:"structure"`
 
 	// Contains the new AllocatedStorage size for the DB instance that will be applied
-	// or is in progress.
+	// or is currently being applied.
 	AllocatedStorage *int64 `type:"integer"`
 
 	// Specifies the pending number of days for which automated backups are retained.
@@ -24239,11 +29246,11 @@ type PendingModifiedValues struct {
 	CACertificateIdentifier *string `type:"string"`
 
 	// Contains the new DBInstanceClass for the DB instance that will be applied
-	// or is in progress.
+	// or is currently being applied.
 	DBInstanceClass *string `type:"string"`
 
 	// Contains the new DBInstanceIdentifier for the DB instance that will be applied
-	// or is in progress.
+	// or is currently being applied.
 	DBInstanceIdentifier *string `type:"string"`
 
 	// The new DB subnet group for the DB instance.
@@ -24253,7 +29260,7 @@ type PendingModifiedValues struct {
 	EngineVersion *string `type:"string"`
 
 	// Specifies the new Provisioned IOPS value for the DB instance that will be
-	// applied or is being applied.
+	// applied or is currently being applied.
 	Iops *int64 `type:"integer"`
 
 	// The license model for the DB instance.
@@ -24261,15 +29268,23 @@ type PendingModifiedValues struct {
 	// Valid values: license-included | bring-your-own-license | general-public-license
 	LicenseModel *string `type:"string"`
 
-	// Contains the pending or in-progress change of the master credentials for
-	// the DB instance.
+	// Contains the pending or currently-in-progress change of the master credentials
+	// for the DB instance.
 	MasterUserPassword *string `type:"string"`
 
 	// Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.
 	MultiAZ *bool `type:"boolean"`
 
+	// A list of the log types whose configuration is still pending. In other words,
+	// these log types are in the process of being activated or deactivated.
+	PendingCloudwatchLogsExports *PendingCloudwatchLogsExports `type:"structure"`
+
 	// Specifies the pending port for the DB instance.
 	Port *int64 `type:"integer"`
+
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
 
 	// Specifies the storage type to be associated with the DB instance.
 	StorageType *string `type:"string"`
@@ -24351,9 +29366,21 @@ func (s *PendingModifiedValues) SetMultiAZ(v bool) *PendingModifiedValues {
 	return s
 }
 
+// SetPendingCloudwatchLogsExports sets the PendingCloudwatchLogsExports field's value.
+func (s *PendingModifiedValues) SetPendingCloudwatchLogsExports(v *PendingCloudwatchLogsExports) *PendingModifiedValues {
+	s.PendingCloudwatchLogsExports = v
+	return s
+}
+
 // SetPort sets the Port field's value.
 func (s *PendingModifiedValues) SetPort(v int64) *PendingModifiedValues {
 	s.Port = &v
+	return s
+}
+
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *PendingModifiedValues) SetProcessorFeatures(v []*ProcessorFeature) *PendingModifiedValues {
+	s.ProcessorFeatures = v
 	return s
 }
 
@@ -24363,7 +29390,73 @@ func (s *PendingModifiedValues) SetStorageType(v string) *PendingModifiedValues 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaDBClusterMessage
+// Contains the processor features of a DB instance class.
+//
+// To specify the number of CPU cores, use the coreCount feature name for the
+// Name parameter. To specify the number of threads per core, use the threadsPerCore
+// feature name for the Name parameter.
+//
+// You can set the processor features of the DB instance class for a DB instance
+// when you call one of the following actions:
+//
+//    * CreateDBInstance
+//
+//    * ModifyDBInstance
+//
+//    * RestoreDBInstanceFromDBSnapshot
+//
+//    * RestoreDBInstanceFromS3
+//
+//    * RestoreDBInstanceToPointInTime
+//
+// You can view the valid processor values for a particular instance class by
+// calling the DescribeOrderableDBInstanceOptions action and specifying the
+// instance class for the DBInstanceClass parameter.
+//
+// In addition, you can use the following actions for DB instance class processor
+// information:
+//
+//    * DescribeDBInstances
+//
+//    * DescribeDBSnapshots
+//
+//    * DescribeValidDBInstanceModifications
+//
+// For more information, see Configuring the Processor of the DB Instance Class
+// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html#USER_ConfigureProcessor)
+// in the Amazon RDS User Guide.
+type ProcessorFeature struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the processor feature. Valid names are coreCount and threadsPerCore.
+	Name *string `type:"string"`
+
+	// The value of a processor feature name.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ProcessorFeature) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ProcessorFeature) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *ProcessorFeature) SetName(v string) *ProcessorFeature {
+	s.Name = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *ProcessorFeature) SetValue(v string) *ProcessorFeature {
+	s.Value = &v
+	return s
+}
+
 type PromoteReadReplicaDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24372,11 +29465,7 @@ type PromoteReadReplicaDBClusterInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
-	//
-	//    * First character must be a letter.
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Must match the identifier of an existing DBCluster Read Replica.
 	//
 	// Example: my-cluster-replica1
 	//
@@ -24413,25 +29502,13 @@ func (s *PromoteReadReplicaDBClusterInput) SetDBClusterIdentifier(v string) *Pro
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaDBClusterResult
 type PromoteReadReplicaDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -24451,7 +29528,6 @@ func (s *PromoteReadReplicaDBClusterOutput) SetDBCluster(v *DBCluster) *PromoteR
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaMessage
 type PromoteReadReplicaInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24470,13 +29546,7 @@ type PromoteReadReplicaInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be the identifier for an existing Read Replica DB instance
-	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing Read Replica DB instance.
 	//
 	// Example: mydbinstance
 	//
@@ -24486,16 +29556,16 @@ type PromoteReadReplicaInput struct {
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled, using the BackupRetentionPeriod parameter.
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region. To see the time blocks available, see  Adjusting the Preferred
-	// Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region. To see the time blocks available, see  Adjusting
+	// the Preferred Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
 	// in the Amazon RDS User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must be in the format hh24:mi-hh24:mi.
 	//
-	//    * Times should be in Universal Coordinated Time (UTC).
+	//    * Must be in Universal Coordinated Time (UTC).
 	//
 	//    * Must not conflict with the preferred maintenance window.
 	//
@@ -24544,21 +29614,10 @@ func (s *PromoteReadReplicaInput) SetPreferredBackupWindow(v string) *PromoteRea
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PromoteReadReplicaResult
 type PromoteReadReplicaOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -24580,7 +29639,6 @@ func (s *PromoteReadReplicaOutput) SetDBInstance(v *DBInstance) *PromoteReadRepl
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PurchaseReservedDBInstancesOfferingMessage
 type PurchaseReservedDBInstancesOfferingInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24601,7 +29659,8 @@ type PurchaseReservedDBInstancesOfferingInput struct {
 	// ReservedDBInstancesOfferingId is a required field
 	ReservedDBInstancesOfferingId *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -24652,7 +29711,6 @@ func (s *PurchaseReservedDBInstancesOfferingInput) SetTags(v []*Tag) *PurchaseRe
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/PurchaseReservedDBInstancesOfferingResult
 type PurchaseReservedDBInstancesOfferingOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -24677,7 +29735,51 @@ func (s *PurchaseReservedDBInstancesOfferingOutput) SetReservedDBInstance(v *Res
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RebootDBInstanceMessage
+// A range of integer values.
+type Range struct {
+	_ struct{} `type:"structure"`
+
+	// The minimum value in the range.
+	From *int64 `type:"integer"`
+
+	// The step value for the range. For example, if you have a range of 5,000 to
+	// 10,000, with a step value of 1,000, the valid values start at 5,000 and step
+	// up by 1,000. Even though 7,500 is within the range, it isn't a valid value
+	// for the range. The valid values are 5,000, 6,000, 7,000, 8,000...
+	Step *int64 `type:"integer"`
+
+	// The maximum value in the range.
+	To *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s Range) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Range) GoString() string {
+	return s.String()
+}
+
+// SetFrom sets the From field's value.
+func (s *Range) SetFrom(v int64) *Range {
+	s.From = &v
+	return s
+}
+
+// SetStep sets the Step field's value.
+func (s *Range) SetStep(v int64) *Range {
+	s.Step = &v
+	return s
+}
+
+// SetTo sets the To field's value.
+func (s *Range) SetTo(v int64) *Range {
+	s.To = &v
+	return s
+}
+
 type RebootDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24685,18 +29787,14 @@ type RebootDBInstanceInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing DBInstance.
 	//
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
 
-	// When true, the reboot will be conducted through a MultiAZ failover.
+	// When true, the reboot is conducted through a MultiAZ failover.
 	//
-	// Constraint: You cannot specify true if the instance is not configured for
+	// Constraint: You can't specify true if the instance is not configured for
 	// MultiAZ.
 	ForceFailover *bool `type:"boolean"`
 }
@@ -24736,21 +29834,10 @@ func (s *RebootDBInstanceInput) SetForceFailover(v bool) *RebootDBInstanceInput 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RebootDBInstanceResult
 type RebootDBInstanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -24774,7 +29861,6 @@ func (s *RebootDBInstanceOutput) SetDBInstance(v *DBInstance) *RebootDBInstanceO
 
 // This data type is used as a response element in the DescribeReservedDBInstances
 // and DescribeReservedDBInstancesOfferings actions.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RecurringCharge
 type RecurringCharge struct {
 	_ struct{} `type:"structure"`
 
@@ -24807,7 +29893,62 @@ func (s *RecurringCharge) SetRecurringChargeFrequency(v string) *RecurringCharge
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBClusterMessage
+type RemoveFromGlobalClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) identifying the cluster that was detached
+	// from the Aurora global database cluster.
+	DbClusterIdentifier *string `type:"string"`
+
+	// The cluster identifier to detach from the Aurora global database cluster.
+	GlobalClusterIdentifier *string `type:"string"`
+}
+
+// String returns the string representation
+func (s RemoveFromGlobalClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveFromGlobalClusterInput) GoString() string {
+	return s.String()
+}
+
+// SetDbClusterIdentifier sets the DbClusterIdentifier field's value.
+func (s *RemoveFromGlobalClusterInput) SetDbClusterIdentifier(v string) *RemoveFromGlobalClusterInput {
+	s.DbClusterIdentifier = &v
+	return s
+}
+
+// SetGlobalClusterIdentifier sets the GlobalClusterIdentifier field's value.
+func (s *RemoveFromGlobalClusterInput) SetGlobalClusterIdentifier(v string) *RemoveFromGlobalClusterInput {
+	s.GlobalClusterIdentifier = &v
+	return s
+}
+
+type RemoveFromGlobalClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A data type representing an Aurora global database.
+	GlobalCluster *GlobalCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s RemoveFromGlobalClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveFromGlobalClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetGlobalCluster sets the GlobalCluster field's value.
+func (s *RemoveFromGlobalClusterOutput) SetGlobalCluster(v *GlobalCluster) *RemoveFromGlobalClusterOutput {
+	s.GlobalCluster = v
+	return s
+}
+
 type RemoveRoleFromDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24861,7 +30002,6 @@ func (s *RemoveRoleFromDBClusterInput) SetRoleArn(v string) *RemoveRoleFromDBClu
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveRoleFromDBClusterOutput
 type RemoveRoleFromDBClusterOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -24876,7 +30016,88 @@ func (s RemoveRoleFromDBClusterOutput) GoString() string {
 	return s.String()
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveSourceIdentifierFromSubscriptionMessage
+type RemoveRoleFromDBInstanceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the DB instance to disassociate the IAM role from.
+	//
+	// DBInstanceIdentifier is a required field
+	DBInstanceIdentifier *string `type:"string" required:"true"`
+
+	// The name of the feature for the DB instance that the IAM role is to be disassociated
+	// from. For the list of supported feature names, see DBEngineVersion.
+	//
+	// FeatureName is a required field
+	FeatureName *string `type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the IAM role to disassociate from the DB
+	// instance, for example arn:aws:iam::123456789012:role/AccessRole.
+	//
+	// RoleArn is a required field
+	RoleArn *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RemoveRoleFromDBInstanceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveRoleFromDBInstanceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveRoleFromDBInstanceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RemoveRoleFromDBInstanceInput"}
+	if s.DBInstanceIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBInstanceIdentifier"))
+	}
+	if s.FeatureName == nil {
+		invalidParams.Add(request.NewErrParamRequired("FeatureName"))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBInstanceIdentifier sets the DBInstanceIdentifier field's value.
+func (s *RemoveRoleFromDBInstanceInput) SetDBInstanceIdentifier(v string) *RemoveRoleFromDBInstanceInput {
+	s.DBInstanceIdentifier = &v
+	return s
+}
+
+// SetFeatureName sets the FeatureName field's value.
+func (s *RemoveRoleFromDBInstanceInput) SetFeatureName(v string) *RemoveRoleFromDBInstanceInput {
+	s.FeatureName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *RemoveRoleFromDBInstanceInput) SetRoleArn(v string) *RemoveRoleFromDBInstanceInput {
+	s.RoleArn = &v
+	return s
+}
+
+type RemoveRoleFromDBInstanceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s RemoveRoleFromDBInstanceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveRoleFromDBInstanceOutput) GoString() string {
+	return s.String()
+}
+
 type RemoveSourceIdentifierFromSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -24931,7 +30152,6 @@ func (s *RemoveSourceIdentifierFromSubscriptionInput) SetSubscriptionName(v stri
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveSourceIdentifierFromSubscriptionResult
 type RemoveSourceIdentifierFromSubscriptionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -24956,13 +30176,13 @@ func (s *RemoveSourceIdentifierFromSubscriptionOutput) SetEventSubscription(v *E
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveTagsFromResourceMessage
 type RemoveTagsFromResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon RDS resource the tags will be removed from. This value is an Amazon
-	// Resource Name (ARN). For information about creating an ARN, see  Constructing
-	// an RDS Amazon Resource Name (ARN) (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing).
+	// The Amazon RDS resource that the tags are removed from. This value is an
+	// Amazon Resource Name (ARN). For information about creating an ARN, see  Constructing
+	// an ARN for Amazon RDS (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.ARN.html#USER_Tagging.ARN.Constructing)
+	// in the Amazon RDS User Guide.
 	//
 	// ResourceName is a required field
 	ResourceName *string `type:"string" required:"true"`
@@ -25011,7 +30231,6 @@ func (s *RemoveTagsFromResourceInput) SetTagKeys(v []*string) *RemoveTagsFromRes
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RemoveTagsFromResourceOutput
 type RemoveTagsFromResourceOutput struct {
 	_ struct{} `type:"structure"`
 }
@@ -25028,7 +30247,6 @@ func (s RemoveTagsFromResourceOutput) GoString() string {
 
 // This data type is used as a response element in the DescribeReservedDBInstances
 // and PurchaseReservedDBInstancesOffering actions.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ReservedDBInstance
 type ReservedDBInstance struct {
 	_ struct{} `type:"structure"`
 
@@ -25069,7 +30287,7 @@ type ReservedDBInstance struct {
 	ReservedDBInstancesOfferingId *string `type:"string"`
 
 	// The time the reservation started.
-	StartTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	StartTime *time.Time `type:"timestamp"`
 
 	// The state of the reserved DB instance.
 	State *string `type:"string"`
@@ -25180,7 +30398,6 @@ func (s *ReservedDBInstance) SetUsagePrice(v float64) *ReservedDBInstance {
 
 // This data type is used as a response element in the DescribeReservedDBInstancesOfferings
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ReservedDBInstancesOffering
 type ReservedDBInstancesOffering struct {
 	_ struct{} `type:"structure"`
 
@@ -25285,7 +30502,6 @@ func (s *ReservedDBInstancesOffering) SetUsagePrice(v float64) *ReservedDBInstan
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBClusterParameterGroupMessage
 type ResetDBClusterParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -25295,12 +30511,12 @@ type ResetDBClusterParameterGroupInput struct {
 	DBClusterParameterGroupName *string `type:"string" required:"true"`
 
 	// A list of parameter names in the DB cluster parameter group to reset to the
-	// default values. You cannot use this parameter if the ResetAllParameters parameter
+	// default values. You can't use this parameter if the ResetAllParameters parameter
 	// is set to true.
 	Parameters []*Parameter `locationNameList:"Parameter" type:"list"`
 
 	// A value that is set to true to reset all parameters in the DB cluster parameter
-	// group to their default values, and false otherwise. You cannot use this parameter
+	// group to their default values, and false otherwise. You can't use this parameter
 	// if there is a list of parameter names specified for the Parameters parameter.
 	ResetAllParameters *bool `type:"boolean"`
 }
@@ -25346,7 +30562,6 @@ func (s *ResetDBClusterParameterGroupInput) SetResetAllParameters(v bool) *Reset
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResetDBParameterGroupMessage
 type ResetDBParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
@@ -25354,11 +30569,7 @@ type ResetDBParameterGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the name of an existing DBParameterGroup.
 	//
 	// DBParameterGroupName is a required field
 	DBParameterGroupName *string `type:"string" required:"true"`
@@ -25438,7 +30649,6 @@ func (s *ResetDBParameterGroupInput) SetResetAllParameters(v bool) *ResetDBParam
 }
 
 // Describes the pending maintenance actions for a resource.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/ResourcePendingMaintenanceActions
 type ResourcePendingMaintenanceActions struct {
 	_ struct{} `type:"structure"`
 
@@ -25472,13 +30682,23 @@ func (s *ResourcePendingMaintenanceActions) SetResourceIdentifier(v string) *Res
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromS3Message
 type RestoreDBClusterFromS3Input struct {
 	_ struct{} `type:"structure"`
 
 	// A list of EC2 Availability Zones that instances in the restored DB cluster
 	// can be created in.
 	AvailabilityZones []*string `locationNameList:"AvailabilityZone" type:"list"`
+
+	// The target backtrack window, in seconds. To disable backtracking, set this
+	// value to 0.
+	//
+	// Default: 0
+	//
+	// Constraints:
+	//
+	//    * If specified, this value must be set to a number from 0 to 259,200 (72
+	//    hours).
+	BacktrackWindow *int64 `type:"long"`
 
 	// The number of days for which automated backups of the restored DB cluster
 	// are retained. You must specify a minimum value of 1.
@@ -25494,16 +30714,16 @@ type RestoreDBClusterFromS3Input struct {
 	// with the specified CharacterSet.
 	CharacterSetName *string `type:"string"`
 
-	// The name of the DB cluster to create from the source data in the S3 bucket.
-	// This parameter is isn't case-sensitive.
+	// The name of the DB cluster to create from the source data in the Amazon S3
+	// bucket. This parameter is isn't case-sensitive.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens.
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens.
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
 	//
 	// Example: my-cluster1
 	//
@@ -25511,21 +30731,16 @@ type RestoreDBClusterFromS3Input struct {
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
 	// The name of the DB cluster parameter group to associate with the restored
-	// DB cluster. If this argument is omitted, default.aurora5.6 will be used.
+	// DB cluster. If this argument is omitted, default.aurora5.6 is used.
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 255 alphanumeric characters
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * If supplied, must match the name of an existing DBClusterParameterGroup.
 	DBClusterParameterGroupName *string `type:"string"`
 
 	// A DB subnet group to associate with the restored DB cluster.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: If supplied, must match the name of an existing DBSubnetGroup.
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
@@ -25533,27 +30748,42 @@ type RestoreDBClusterFromS3Input struct {
 	// The database name for the restored DB cluster.
 	DatabaseName *string `type:"string"`
 
-	// A Boolean value that is true to enable mapping of AWS Identity and Access
-	// Management (IAM) accounts to database accounts, and otherwise false.
+	// Indicates if the DB cluster should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false.
+	DeletionProtection *bool `type:"boolean"`
+
+	// The list of logs that the restored DB cluster is to export to CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon Aurora User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
+	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// to database accounts, and otherwise false.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
 	// The name of the database engine to be used for the restored DB cluster.
 	//
-	// Valid Values: aurora
+	// Valid Values: aurora, aurora-postgresql
 	//
 	// Engine is a required field
 	Engine *string `type:"string" required:"true"`
 
 	// The version number of the database engine to use.
 	//
-	// Aurora
+	// Aurora MySQL
 	//
 	// Example: 5.6.10a
+	//
+	// Aurora PostgreSQL
+	//
+	// Example: 9.6.3
 	EngineVersion *string `type:"string"`
 
-	// The KMS key identifier for an encrypted DB cluster.
+	// The AWS KMS key identifier for an encrypted DB cluster.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
 	// key. If you are creating a DB cluster with the same AWS account that owns
@@ -25563,7 +30793,7 @@ type RestoreDBClusterFromS3Input struct {
 	// If the StorageEncrypted parameter is true, and you do not specify a value
 	// for the KmsKeyId parameter, then Amazon RDS will use your default encryption
 	// key. AWS KMS creates the default encryption key for your AWS account. Your
-	// AWS account has a different default encryption key for each AWS region.
+	// AWS account has a different default encryption key for each AWS Region.
 	KmsKeyId *string `type:"string"`
 
 	// The password for the master database user. This password can contain any
@@ -25578,11 +30808,11 @@ type RestoreDBClusterFromS3Input struct {
 	//
 	// Constraints:
 	//
-	//    * Must be 1 to 16 alphanumeric characters.
+	//    * Must be 1 to 16 letters or numbers.
 	//
 	//    * First character must be a letter.
 	//
-	//    * Cannot be a reserved word for the chosen database engine.
+	//    * Can't be a reserved word for the chosen database engine.
 	//
 	// MasterUsername is a required field
 	MasterUsername *string `type:"string" required:"true"`
@@ -25590,8 +30820,8 @@ type RestoreDBClusterFromS3Input struct {
 	// A value that indicates that the restored DB cluster should be associated
 	// with the specified option group.
 	//
-	// Permanent options cannot be removed from an option group. An option group
-	// cannot be removed from a DB cluster once it is associated with a DB cluster.
+	// Permanent options can't be removed from an option group. An option group
+	// can't be removed from a DB cluster once it is associated with a DB cluster.
 	OptionGroupName *string `type:"string"`
 
 	// The port number on which the instances in the restored DB cluster accept
@@ -25603,16 +30833,16 @@ type RestoreDBClusterFromS3Input struct {
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled using the BackupRetentionPeriod parameter.
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region. To see the time blocks available, see  Adjusting the Preferred
-	// Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
-	// in the Amazon RDS User Guide.
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region. To see the time blocks available, see  Adjusting
+	// the Preferred Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora)
+	// in the Amazon Aurora User Guide.
 	//
 	// Constraints:
 	//
 	//    * Must be in the format hh24:mi-hh24:mi.
 	//
-	//    * Times should be in Universal Coordinated Time (UTC).
+	//    * Must be in Universal Coordinated Time (UTC).
 	//
 	//    * Must not conflict with the preferred maintenance window.
 	//
@@ -25624,12 +30854,13 @@ type RestoreDBClusterFromS3Input struct {
 	//
 	// Format: ddd:hh24:mi-ddd:hh24:mi
 	//
-	// Default: A 30-minute window selected at random from an 8-hour block of time
-	// per region, occurring on a random day of the week. To see the time blocks
-	// available, see  Adjusting the Preferred Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
-	// in the Amazon RDS User Guide.
+	// The default is a 30-minute window selected at random from an 8-hour block
+	// of time for each AWS Region, occurring on a random day of the week. To see
+	// the time blocks available, see  Adjusting the Preferred Maintenance Window
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_UpgradeDBInstance.Maintenance.html#AdjustingTheMaintenanceWindow.Aurora)
+	// in the Amazon Aurora User Guide.
 	//
-	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
 	//
 	// Constraints: Minimum 30-minute window.
 	PreferredMaintenanceWindow *string `type:"string"`
@@ -25673,7 +30904,8 @@ type RestoreDBClusterFromS3Input struct {
 	// Specifies whether the restored DB cluster is encrypted.
 	StorageEncrypted *bool `type:"boolean"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A list of EC2 VPC security groups to associate with the restored DB cluster.
@@ -25730,6 +30962,12 @@ func (s *RestoreDBClusterFromS3Input) SetAvailabilityZones(v []*string) *Restore
 	return s
 }
 
+// SetBacktrackWindow sets the BacktrackWindow field's value.
+func (s *RestoreDBClusterFromS3Input) SetBacktrackWindow(v int64) *RestoreDBClusterFromS3Input {
+	s.BacktrackWindow = &v
+	return s
+}
+
 // SetBackupRetentionPeriod sets the BackupRetentionPeriod field's value.
 func (s *RestoreDBClusterFromS3Input) SetBackupRetentionPeriod(v int64) *RestoreDBClusterFromS3Input {
 	s.BackupRetentionPeriod = &v
@@ -25763,6 +31001,18 @@ func (s *RestoreDBClusterFromS3Input) SetDBSubnetGroupName(v string) *RestoreDBC
 // SetDatabaseName sets the DatabaseName field's value.
 func (s *RestoreDBClusterFromS3Input) SetDatabaseName(v string) *RestoreDBClusterFromS3Input {
 	s.DatabaseName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBClusterFromS3Input) SetDeletionProtection(v bool) *RestoreDBClusterFromS3Input {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *RestoreDBClusterFromS3Input) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBClusterFromS3Input {
+	s.EnableCloudwatchLogsExports = v
 	return s
 }
 
@@ -25874,25 +31124,13 @@ func (s *RestoreDBClusterFromS3Input) SetVpcSecurityGroupIds(v []*string) *Resto
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromS3Result
 type RestoreDBClusterFromS3Output struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -25912,34 +31150,59 @@ func (s *RestoreDBClusterFromS3Output) SetDBCluster(v *DBCluster) *RestoreDBClus
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromSnapshotMessage
 type RestoreDBClusterFromSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
-	// Provides the list of EC2 Availability Zones that instances in the restored
-	// DB cluster can be created in.
+	// Provides the list of Amazon EC2 Availability Zones that instances in the
+	// restored DB cluster can be created in.
 	AvailabilityZones []*string `locationNameList:"AvailabilityZone" type:"list"`
 
-	// The name of the DB cluster to create from the DB cluster snapshot. This parameter
-	// isn't case-sensitive.
+	// The target backtrack window, in seconds. To disable backtracking, set this
+	// value to 0.
+	//
+	// Default: 0
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 255 alphanumeric characters or hyphens
+	//    * If specified, this value must be set to a number from 0 to 259,200 (72
+	//    hours).
+	BacktrackWindow *int64 `type:"long"`
+
+	// The name of the DB cluster to create from the DB snapshot or DB cluster snapshot.
+	// This parameter isn't case-sensitive.
+	//
+	// Constraints:
+	//
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-snapshot-id
 	//
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
+	// The name of the DB cluster parameter group to associate with this DB cluster.
+	// If this argument is omitted, the default DB cluster parameter group for the
+	// specified engine is used.
+	//
+	// Constraints:
+	//
+	//    * If supplied, must match the name of an existing default DB cluster parameter
+	//    group.
+	//
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	DBClusterParameterGroupName *string `type:"string"`
+
 	// The name of the DB subnet group to use for the new DB cluster.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: If supplied, must match the name of an existing DB subnet group.
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
@@ -25947,8 +31210,19 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// The database name for the restored DB cluster.
 	DatabaseName *string `type:"string"`
 
-	// A Boolean value that is true to enable mapping of AWS Identity and Access
-	// Management (IAM) accounts to database accounts, and otherwise false.
+	// Indicates if the DB cluster should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false.
+	DeletionProtection *bool `type:"boolean"`
+
+	// The list of logs that the restored DB cluster is to export to Amazon CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs  (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon Aurora User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
+	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// to database accounts, and otherwise false.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
@@ -25962,26 +31236,30 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Engine is a required field
 	Engine *string `type:"string" required:"true"`
 
+	// The DB engine mode of the DB cluster, either provisioned, serverless, or
+	// parallelquery.
+	EngineMode *string `type:"string"`
+
 	// The version of the database engine to use for the new DB cluster.
 	EngineVersion *string `type:"string"`
 
-	// The KMS key identifier to use when restoring an encrypted DB cluster from
-	// a DB cluster snapshot.
+	// The AWS KMS key identifier to use when restoring an encrypted DB cluster
+	// from a DB snapshot or DB cluster snapshot.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
 	// key. If you are restoring a DB cluster with the same AWS account that owns
 	// the KMS encryption key used to encrypt the new DB cluster, then you can use
 	// the KMS key alias instead of the ARN for the KMS encryption key.
 	//
-	// If you do not specify a value for the KmsKeyId parameter, then the following
-	// will occur:
+	// If you don't specify a value for the KmsKeyId parameter, then the following
+	// occurs:
 	//
-	//    * If the DB cluster snapshot is encrypted, then the restored DB cluster
-	//    is encrypted using the KMS key that was used to encrypt the DB cluster
-	//    snapshot.
+	//    * If the DB snapshot or DB cluster snapshot in SnapshotIdentifier is encrypted,
+	//    then the restored DB cluster is encrypted using the KMS key that was used
+	//    to encrypt the DB snapshot or DB cluster snapshot.
 	//
-	//    * If the DB cluster snapshot is not encrypted, then the restored DB cluster
-	//    is encrypted using the specified encryption key.
+	//    * If the DB snapshot or DB cluster snapshot in SnapshotIdentifier is not
+	//    encrypted, then the restored DB cluster is not encrypted.
 	KmsKeyId *string `type:"string"`
 
 	// The name of the option group to use for the restored DB cluster.
@@ -25989,20 +31267,24 @@ type RestoreDBClusterFromSnapshotInput struct {
 
 	// The port number on which the new DB cluster accepts connections.
 	//
-	// Constraints: Value must be 1150-65535
+	// Constraints: This value must be 1150-65535
 	//
 	// Default: The same port as the original DB cluster.
 	Port *int64 `type:"integer"`
 
-	// The identifier for the DB cluster snapshot to restore from.
+	// For DB clusters in serverless DB engine mode, the scaling properties of the
+	// DB cluster.
+	ScalingConfiguration *ScalingConfiguration `type:"structure"`
+
+	// The identifier for the DB snapshot or DB cluster snapshot to restore from.
+	//
+	// You can use either the name or the Amazon Resource Name (ARN) to specify
+	// a DB cluster snapshot. However, you can use only the ARN to specify a DB
+	// snapshot.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing Snapshot.
 	//
 	// SnapshotIdentifier is a required field
 	SnapshotIdentifier *string `type:"string" required:"true"`
@@ -26049,9 +31331,21 @@ func (s *RestoreDBClusterFromSnapshotInput) SetAvailabilityZones(v []*string) *R
 	return s
 }
 
+// SetBacktrackWindow sets the BacktrackWindow field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetBacktrackWindow(v int64) *RestoreDBClusterFromSnapshotInput {
+	s.BacktrackWindow = &v
+	return s
+}
+
 // SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetDBClusterIdentifier(v string) *RestoreDBClusterFromSnapshotInput {
 	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetDBClusterParameterGroupName sets the DBClusterParameterGroupName field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetDBClusterParameterGroupName(v string) *RestoreDBClusterFromSnapshotInput {
+	s.DBClusterParameterGroupName = &v
 	return s
 }
 
@@ -26067,6 +31361,18 @@ func (s *RestoreDBClusterFromSnapshotInput) SetDatabaseName(v string) *RestoreDB
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetDeletionProtection(v bool) *RestoreDBClusterFromSnapshotInput {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBClusterFromSnapshotInput {
+	s.EnableCloudwatchLogsExports = v
+	return s
+}
+
 // SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetEnableIAMDatabaseAuthentication(v bool) *RestoreDBClusterFromSnapshotInput {
 	s.EnableIAMDatabaseAuthentication = &v
@@ -26076,6 +31382,12 @@ func (s *RestoreDBClusterFromSnapshotInput) SetEnableIAMDatabaseAuthentication(v
 // SetEngine sets the Engine field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetEngine(v string) *RestoreDBClusterFromSnapshotInput {
 	s.Engine = &v
+	return s
+}
+
+// SetEngineMode sets the EngineMode field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetEngineMode(v string) *RestoreDBClusterFromSnapshotInput {
+	s.EngineMode = &v
 	return s
 }
 
@@ -26103,6 +31415,12 @@ func (s *RestoreDBClusterFromSnapshotInput) SetPort(v int64) *RestoreDBClusterFr
 	return s
 }
 
+// SetScalingConfiguration sets the ScalingConfiguration field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetScalingConfiguration(v *ScalingConfiguration) *RestoreDBClusterFromSnapshotInput {
+	s.ScalingConfiguration = v
+	return s
+}
+
 // SetSnapshotIdentifier sets the SnapshotIdentifier field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetSnapshotIdentifier(v string) *RestoreDBClusterFromSnapshotInput {
 	s.SnapshotIdentifier = &v
@@ -26121,25 +31439,13 @@ func (s *RestoreDBClusterFromSnapshotInput) SetVpcSecurityGroupIds(v []*string) 
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterFromSnapshotResult
 type RestoreDBClusterFromSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -26159,39 +31465,75 @@ func (s *RestoreDBClusterFromSnapshotOutput) SetDBCluster(v *DBCluster) *Restore
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterToPointInTimeMessage
 type RestoreDBClusterToPointInTimeInput struct {
 	_ struct{} `type:"structure"`
+
+	// The target backtrack window, in seconds. To disable backtracking, set this
+	// value to 0.
+	//
+	// Default: 0
+	//
+	// Constraints:
+	//
+	//    * If specified, this value must be set to a number from 0 to 259,200 (72
+	//    hours).
+	BacktrackWindow *int64 `type:"long"`
 
 	// The name of the new DB cluster to be created.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
+	// The name of the DB cluster parameter group to associate with this DB cluster.
+	// If this argument is omitted, the default DB cluster parameter group for the
+	// specified engine is used.
+	//
+	// Constraints:
+	//
+	//    * If supplied, must match the name of an existing DB cluster parameter
+	//    group.
+	//
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	DBClusterParameterGroupName *string `type:"string"`
+
 	// The DB subnet group name to use for the new DB cluster.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: If supplied, must match the name of an existing DBSubnetGroup.
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
 
-	// A Boolean value that is true to enable mapping of AWS Identity and Access
-	// Management (IAM) accounts to database accounts, and otherwise false.
+	// Indicates if the DB cluster should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false.
+	DeletionProtection *bool `type:"boolean"`
+
+	// The list of logs that the restored DB cluster is to export to CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon Aurora User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
+	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// to database accounts, and otherwise false.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
-	// The KMS key identifier to use when restoring an encrypted DB cluster from
-	// an encrypted DB cluster.
+	// The AWS KMS key identifier to use when restoring an encrypted DB cluster
+	// from an encrypted DB cluster.
 	//
 	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
 	// key. If you are restoring a DB cluster with the same AWS account that owns
@@ -26200,11 +31542,11 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	// You can restore to a new DB cluster and encrypt the new DB cluster with a
 	// KMS key that is different than the KMS key used to encrypt the source DB
-	// cluster. The new DB cluster will be encrypted with the KMS key identified
-	// by the KmsKeyId parameter.
+	// cluster. The new DB cluster is encrypted with the KMS key identified by the
+	// KmsKeyId parameter.
 	//
-	// If you do not specify a value for the KmsKeyId parameter, then the following
-	// will occur:
+	// If you don't specify a value for the KmsKeyId parameter, then the following
+	// occurs:
 	//
 	//    * If the DB cluster is encrypted, then the restored DB cluster is encrypted
 	//    using the KMS key that was used to encrypt the source DB cluster.
@@ -26221,9 +31563,9 @@ type RestoreDBClusterToPointInTimeInput struct {
 
 	// The port number on which the new DB cluster accepts connections.
 	//
-	// Constraints: Value must be 1150-65535
+	// Constraints: A value from 1150-65535.
 	//
-	// Default: The same port as the original DB cluster.
+	// Default: The default port for the engine.
 	Port *int64 `type:"integer"`
 
 	// The date and time to restore the DB cluster to.
@@ -26236,12 +31578,12 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	//    * Must be specified if UseLatestRestorableTime parameter is not provided
 	//
-	//    * Cannot be specified if UseLatestRestorableTime parameter is true
+	//    * Can't be specified if UseLatestRestorableTime parameter is true
 	//
-	//    * Cannot be specified if RestoreType parameter is copy-on-write
+	//    * Can't be specified if RestoreType parameter is copy-on-write
 	//
 	// Example: 2015-03-07T23:45:00Z
-	RestoreToTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	RestoreToTime *time.Time `type:"timestamp"`
 
 	// The type of restore to be performed. You can specify one of the following
 	// values:
@@ -26252,7 +31594,7 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//    * copy-on-write - The new DB cluster is restored as a clone of the source
 	//    DB cluster.
 	//
-	// Constraints: You cannot specify copy-on-write if the engine version of the
+	// Constraints: You can't specify copy-on-write if the engine version of the
 	// source DB cluster is earlier than 1.11.
 	//
 	// If you don't specify a RestoreType value, then the new DB cluster is restored
@@ -26263,18 +31605,13 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must be the identifier of an existing database instance
-	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Must match the identifier of an existing DBCluster.
 	//
 	// SourceDBClusterIdentifier is a required field
 	SourceDBClusterIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A value that is set to true to restore the DB cluster to the latest restorable
@@ -26282,7 +31619,7 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	// Default: false
 	//
-	// Constraints: Cannot be specified if RestoreToTime parameter is provided.
+	// Constraints: Can't be specified if RestoreToTime parameter is provided.
 	UseLatestRestorableTime *bool `type:"boolean"`
 
 	// A list of VPC security groups that the new DB cluster belongs to.
@@ -26315,15 +31652,39 @@ func (s *RestoreDBClusterToPointInTimeInput) Validate() error {
 	return nil
 }
 
+// SetBacktrackWindow sets the BacktrackWindow field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetBacktrackWindow(v int64) *RestoreDBClusterToPointInTimeInput {
+	s.BacktrackWindow = &v
+	return s
+}
+
 // SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
 func (s *RestoreDBClusterToPointInTimeInput) SetDBClusterIdentifier(v string) *RestoreDBClusterToPointInTimeInput {
 	s.DBClusterIdentifier = &v
 	return s
 }
 
+// SetDBClusterParameterGroupName sets the DBClusterParameterGroupName field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetDBClusterParameterGroupName(v string) *RestoreDBClusterToPointInTimeInput {
+	s.DBClusterParameterGroupName = &v
+	return s
+}
+
 // SetDBSubnetGroupName sets the DBSubnetGroupName field's value.
 func (s *RestoreDBClusterToPointInTimeInput) SetDBSubnetGroupName(v string) *RestoreDBClusterToPointInTimeInput {
 	s.DBSubnetGroupName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetDeletionProtection(v bool) *RestoreDBClusterToPointInTimeInput {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBClusterToPointInTimeInput {
+	s.EnableCloudwatchLogsExports = v
 	return s
 }
 
@@ -26387,25 +31748,13 @@ func (s *RestoreDBClusterToPointInTimeInput) SetVpcSecurityGroupIds(v []*string)
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBClusterToPointInTimeResult
 type RestoreDBClusterToPointInTimeOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
+	// Contains the details of an Amazon Aurora DB cluster.
 	//
-	//    * CreateDBCluster
-	//
-	//    * DeleteDBCluster
-	//
-	//    * FailoverDBCluster
-	//
-	//    * ModifyDBCluster
-	//
-	//    * RestoreDBClusterFromSnapshot
-	//
-	//    * RestoreDBClusterToPointInTime
-	//
-	// This data type is used as a response element in the DescribeDBClusters action.
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
 	DBCluster *DBCluster `type:"structure"`
 }
 
@@ -26425,35 +31774,34 @@ func (s *RestoreDBClusterToPointInTimeOutput) SetDBCluster(v *DBCluster) *Restor
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromDBSnapshotMessage
 type RestoreDBInstanceFromDBSnapshotInput struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates that minor version upgrades will be applied automatically to the
-	// DB instance during the maintenance window.
+	// Indicates that minor version upgrades are applied automatically to the DB
+	// instance during the maintenance window.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
-	// The EC2 Availability Zone that the database instance will be created in.
+	// The EC2 Availability Zone that the DB instance is created in.
 	//
 	// Default: A random, system-chosen Availability Zone.
 	//
-	// Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ
+	// Constraint: You can't specify the AvailabilityZone parameter if the MultiAZ
 	// parameter is set to true.
 	//
 	// Example: us-east-1a
 	AvailabilityZone *string `type:"string"`
 
 	// True to copy all tags from the restored DB instance to snapshots of the DB
-	// instance; otherwise false. The default is false.
+	// instance, and otherwise false. The default is false.
 	CopyTagsToSnapshot *bool `type:"boolean"`
 
-	// The compute and memory capacity of the Amazon RDS DB instance.
+	// The compute and memory capacity of the Amazon RDS DB instance, for example,
+	// db.m4.large. Not all DB instance classes are available in all AWS Regions,
+	// or for all database engines. For the full list of DB instance classes, and
+	// availability for your engine, see DB Instance Class (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)
+	// in the Amazon RDS User Guide.
 	//
-	// Valid Values: db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge
-	// | db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge
-	// | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge
-	// | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge
-	// | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large
+	// Default: The same DBInstanceClass as the original DB instance.
 	DBInstanceClass *string `type:"string"`
 
 	// Name of the DB instance to create from the DB snapshot. This parameter isn't
@@ -26461,12 +31809,11 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens (1 to 15
-	//    for SQL Server)
+	//    * Must contain from 1 to 63 numbers, letters, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// Example: my-snapshot-id
 	//
@@ -26478,29 +31825,44 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 	// This parameter doesn't apply to the MySQL, PostgreSQL, or MariaDB engines.
 	DBName *string `type:"string"`
 
+	// The name of the DB parameter group to associate with this DB instance. If
+	// this argument is omitted, the default DBParameterGroup for the specified
+	// engine is used.
+	//
+	// Constraints:
+	//
+	//    * If supplied, must match the name of an existing DBParameterGroup.
+	//
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	DBParameterGroupName *string `type:"string"`
+
 	// The identifier for the DB snapshot to restore from.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 255 alphanumeric characters or hyphens
+	//    * Must match the identifier of an existing DBSnapshot.
 	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
-	//
-	// If you are restoring from a shared manual DB snapshot, the DBSnapshotIdentifier
-	// must be the ARN of the shared DB snapshot.
+	//    * If you are restoring from a shared manual DB snapshot, the DBSnapshotIdentifier
+	//    must be the ARN of the shared DB snapshot.
 	//
 	// DBSnapshotIdentifier is a required field
 	DBSnapshotIdentifier *string `type:"string" required:"true"`
 
 	// The DB subnet group name to use for the new instance.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: If supplied, must match the name of an existing DBSubnetGroup.
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
+
+	// Indicates if the DB instance should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false. For more information, see  Deleting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html).
+	DeletionProtection *bool `type:"boolean"`
 
 	// Specify the Active Directory Domain to restore the instance in.
 	Domain *string `type:"string"`
@@ -26509,16 +31871,20 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 	// Directory Service.
 	DomainIAMRoleName *string `type:"string"`
 
+	// The list of logs that the restored DB instance is to export to CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon Aurora User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
 	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
-	// to database accounts; otherwise false.
+	// to database accounts, and otherwise false.
 	//
 	// You can enable IAM database authentication for the following database engines
 	//
 	//    * For MySQL 5.6, minor version 5.6.34 or higher
 	//
 	//    * For MySQL 5.7, minor version 5.7.16 or higher
-	//
-	//    * Aurora 5.6 or higher.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
@@ -26527,25 +31893,47 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 	//
 	// Default: The same as source
 	//
-	// Constraint: Must be compatible with the engine of the source. You can restore
-	// a MariaDB 10.1 DB instance from a MySQL 5.6 snapshot.
+	// Constraint: Must be compatible with the engine of the source. For example,
+	// you can restore a MariaDB 10.1 DB instance from a MySQL 5.6 snapshot.
 	//
-	// Valid Values: MySQL | mariadb | oracle-se1 | oracle-se | oracle-ee | sqlserver-ee
-	// | sqlserver-se | sqlserver-ex | sqlserver-web | postgres | aurora
+	// Valid Values:
+	//
+	//    * mariadb
+	//
+	//    * mysql
+	//
+	//    * oracle-ee
+	//
+	//    * oracle-se2
+	//
+	//    * oracle-se1
+	//
+	//    * oracle-se
+	//
+	//    * postgres
+	//
+	//    * sqlserver-ee
+	//
+	//    * sqlserver-se
+	//
+	//    * sqlserver-ex
+	//
+	//    * sqlserver-web
 	Engine *string `type:"string"`
 
 	// Specifies the amount of provisioned IOPS for the DB instance, expressed in
 	// I/O operations per second. If this parameter is not specified, the IOPS value
-	// will be taken from the backup. If this parameter is set to 0, the new instance
-	// will be converted to a non-PIOPS instance, which will take additional time,
-	// though your DB instance will be available for connections before the conversion
+	// is taken from the backup. If this parameter is set to 0, the new instance
+	// is converted to a non-PIOPS instance. The conversion takes additional time,
+	// though your DB instance is available for connections before the conversion
 	// starts.
 	//
+	// The provisioned IOPS value must follow the requirements for your database
+	// engine. For more information, see Amazon RDS Provisioned IOPS Storage to
+	// Improve Performance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS)
+	// in the Amazon RDS User Guide.
+	//
 	// Constraints: Must be an integer greater than 1000.
-	//
-	// SQL Server
-	//
-	// Setting the IOPS value for the SQL Server database engine is not supported.
 	Iops *int64 `type:"integer"`
 
 	// License model information for the restored DB instance.
@@ -26557,14 +31945,14 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 
 	// Specifies if the DB instance is a Multi-AZ deployment.
 	//
-	// Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ
+	// Constraint: You can't specify the AvailabilityZone parameter if the MultiAZ
 	// parameter is set to true.
 	MultiAZ *bool `type:"boolean"`
 
 	// The name of the option group to be used for the restored DB instance.
 	//
 	// Permanent options, such as the TDE option for Oracle Advanced Security TDE,
-	// cannot be removed from an option group, and that option group cannot be removed
+	// can't be removed from an option group, and that option group can't be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
 
@@ -26575,22 +31963,15 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 	// Constraints: Value must be 1150-65535
 	Port *int64 `type:"integer"`
 
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
+
 	// Specifies the accessibility options for the DB instance. A value of true
 	// specifies an Internet-facing instance with a publicly resolvable DNS name,
 	// which resolves to a public IP address. A value of false specifies an internal
-	// instance with a DNS name that resolves to a private IP address.
-	//
-	// Default: The default behavior varies depending on whether a VPC has been
-	// requested or not. The following list shows the default behavior in each case.
-	//
-	//    * Default VPC: true
-	//
-	//    * VPC: false
-	//
-	// If no DB subnet group has been specified as part of the request and the PubliclyAccessible
-	// value has not been set, the DB instance will be publicly accessible. If a
-	// specific DB subnet group has been specified as part of the request and the
-	// PubliclyAccessible value has not been set, the DB instance will be private.
+	// instance with a DNS name that resolves to a private IP address. For more
+	// information, see CreateDBInstance.
 	PubliclyAccessible *bool `type:"boolean"`
 
 	// Specifies the storage type to be associated with the DB instance.
@@ -26599,18 +31980,28 @@ type RestoreDBInstanceFromDBSnapshotInput struct {
 	//
 	// If you specify io1, you must also include a value for the Iops parameter.
 	//
-	// Default: io1 if the Iops parameter is specified; otherwise standard
+	// Default: io1 if the Iops parameter is specified, otherwise standard
 	StorageType *string `type:"string"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
-	// The ARN from the Key Store with which to associate the instance for TDE encryption.
+	// The ARN from the key store with which to associate the instance for TDE encryption.
 	TdeCredentialArn *string `type:"string"`
 
-	// The password for the given ARN from the Key Store in order to access the
+	// The password for the given ARN from the key store in order to access the
 	// device.
 	TdeCredentialPassword *string `type:"string"`
+
+	// A value that specifies that the DB instance class of the DB instance uses
+	// its default processor features.
+	UseDefaultProcessorFeatures *bool `type:"boolean"`
+
+	// A list of EC2 VPC security groups to associate with this DB instance.
+	//
+	// Default: The default EC2 VPC security group for the DB subnet group's VPC.
+	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
 // String returns the string representation
@@ -26675,6 +32066,12 @@ func (s *RestoreDBInstanceFromDBSnapshotInput) SetDBName(v string) *RestoreDBIns
 	return s
 }
 
+// SetDBParameterGroupName sets the DBParameterGroupName field's value.
+func (s *RestoreDBInstanceFromDBSnapshotInput) SetDBParameterGroupName(v string) *RestoreDBInstanceFromDBSnapshotInput {
+	s.DBParameterGroupName = &v
+	return s
+}
+
 // SetDBSnapshotIdentifier sets the DBSnapshotIdentifier field's value.
 func (s *RestoreDBInstanceFromDBSnapshotInput) SetDBSnapshotIdentifier(v string) *RestoreDBInstanceFromDBSnapshotInput {
 	s.DBSnapshotIdentifier = &v
@@ -26687,6 +32084,12 @@ func (s *RestoreDBInstanceFromDBSnapshotInput) SetDBSubnetGroupName(v string) *R
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBInstanceFromDBSnapshotInput) SetDeletionProtection(v bool) *RestoreDBInstanceFromDBSnapshotInput {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetDomain sets the Domain field's value.
 func (s *RestoreDBInstanceFromDBSnapshotInput) SetDomain(v string) *RestoreDBInstanceFromDBSnapshotInput {
 	s.Domain = &v
@@ -26696,6 +32099,12 @@ func (s *RestoreDBInstanceFromDBSnapshotInput) SetDomain(v string) *RestoreDBIns
 // SetDomainIAMRoleName sets the DomainIAMRoleName field's value.
 func (s *RestoreDBInstanceFromDBSnapshotInput) SetDomainIAMRoleName(v string) *RestoreDBInstanceFromDBSnapshotInput {
 	s.DomainIAMRoleName = &v
+	return s
+}
+
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *RestoreDBInstanceFromDBSnapshotInput) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBInstanceFromDBSnapshotInput {
+	s.EnableCloudwatchLogsExports = v
 	return s
 }
 
@@ -26741,6 +32150,12 @@ func (s *RestoreDBInstanceFromDBSnapshotInput) SetPort(v int64) *RestoreDBInstan
 	return s
 }
 
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *RestoreDBInstanceFromDBSnapshotInput) SetProcessorFeatures(v []*ProcessorFeature) *RestoreDBInstanceFromDBSnapshotInput {
+	s.ProcessorFeatures = v
+	return s
+}
+
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *RestoreDBInstanceFromDBSnapshotInput) SetPubliclyAccessible(v bool) *RestoreDBInstanceFromDBSnapshotInput {
 	s.PubliclyAccessible = &v
@@ -26771,21 +32186,22 @@ func (s *RestoreDBInstanceFromDBSnapshotInput) SetTdeCredentialPassword(v string
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceFromDBSnapshotResult
+// SetUseDefaultProcessorFeatures sets the UseDefaultProcessorFeatures field's value.
+func (s *RestoreDBInstanceFromDBSnapshotInput) SetUseDefaultProcessorFeatures(v bool) *RestoreDBInstanceFromDBSnapshotInput {
+	s.UseDefaultProcessorFeatures = &v
+	return s
+}
+
+// SetVpcSecurityGroupIds sets the VpcSecurityGroupIds field's value.
+func (s *RestoreDBInstanceFromDBSnapshotInput) SetVpcSecurityGroupIds(v []*string) *RestoreDBInstanceFromDBSnapshotInput {
+	s.VpcSecurityGroupIds = v
+	return s
+}
+
 type RestoreDBInstanceFromDBSnapshotOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -26807,35 +32223,663 @@ func (s *RestoreDBInstanceFromDBSnapshotOutput) SetDBInstance(v *DBInstance) *Re
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceToPointInTimeMessage
+type RestoreDBInstanceFromS3Input struct {
+	_ struct{} `type:"structure"`
+
+	// The amount of storage (in gigabytes) to allocate initially for the DB instance.
+	// Follow the allocation rules specified in CreateDBInstance.
+	//
+	// Be sure to allocate enough memory for your new DB instance so that the restore
+	// operation can succeed. You can also allocate additional memory for future
+	// growth.
+	AllocatedStorage *int64 `type:"integer"`
+
+	// True to indicate that minor engine upgrades are applied automatically to
+	// the DB instance during the maintenance window, and otherwise false.
+	//
+	// Default: true
+	AutoMinorVersionUpgrade *bool `type:"boolean"`
+
+	// The Availability Zone that the DB instance is created in. For information
+	// about AWS Regions and Availability Zones, see Regions and Availability Zones
+	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.RegionsAndAvailabilityZones.html)
+	// in the Amazon RDS User Guide.
+	//
+	// Default: A random, system-chosen Availability Zone in the endpoint's AWS
+	// Region.
+	//
+	// Example: us-east-1d
+	//
+	// Constraint: The AvailabilityZone parameter can't be specified if the MultiAZ
+	// parameter is set to true. The specified Availability Zone must be in the
+	// same AWS Region as the current endpoint.
+	AvailabilityZone *string `type:"string"`
+
+	// The number of days for which automated backups are retained. Setting this
+	// parameter to a positive number enables backups. For more information, see
+	// CreateDBInstance.
+	BackupRetentionPeriod *int64 `type:"integer"`
+
+	// True to copy all tags from the DB instance to snapshots of the DB instance,
+	// and otherwise false.
+	//
+	// Default: false.
+	CopyTagsToSnapshot *bool `type:"boolean"`
+
+	// The compute and memory capacity of the DB instance, for example, db.m4.large.
+	// Not all DB instance classes are available in all AWS Regions, or for all
+	// database engines. For the full list of DB instance classes, and availability
+	// for your engine, see DB Instance Class (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)
+	// in the Amazon RDS User Guide.
+	//
+	// Importing from Amazon S3 is not supported on the db.t2.micro DB instance
+	// class.
+	//
+	// DBInstanceClass is a required field
+	DBInstanceClass *string `type:"string" required:"true"`
+
+	// The DB instance identifier. This parameter is stored as a lowercase string.
+	//
+	// Constraints:
+	//
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	//
+	// Example: mydbinstance
+	//
+	// DBInstanceIdentifier is a required field
+	DBInstanceIdentifier *string `type:"string" required:"true"`
+
+	// The name of the database to create when the DB instance is created. Follow
+	// the naming rules specified in CreateDBInstance.
+	DBName *string `type:"string"`
+
+	// The name of the DB parameter group to associate with this DB instance. If
+	// this argument is omitted, the default parameter group for the specified engine
+	// is used.
+	DBParameterGroupName *string `type:"string"`
+
+	// A list of DB security groups to associate with this DB instance.
+	//
+	// Default: The default DB security group for the database engine.
+	DBSecurityGroups []*string `locationNameList:"DBSecurityGroupName" type:"list"`
+
+	// A DB subnet group to associate with this DB instance.
+	DBSubnetGroupName *string `type:"string"`
+
+	// Indicates if the DB instance should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false. For more information, see  Deleting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html).
+	DeletionProtection *bool `type:"boolean"`
+
+	// The list of logs that the restored DB instance is to export to CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon RDS User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
+	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
+	// to database accounts, and otherwise false.
+	//
+	// Default: false
+	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
+
+	// True to enable Performance Insights for the DB instance, and otherwise false.
+	//
+	// For more information, see Using Amazon Performance Insights (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html)
+	// in the Amazon Relational Database Service User Guide.
+	EnablePerformanceInsights *bool `type:"boolean"`
+
+	// The name of the database engine to be used for this instance.
+	//
+	// Valid Values: mysql
+	//
+	// Engine is a required field
+	Engine *string `type:"string" required:"true"`
+
+	// The version number of the database engine to use. Choose the latest minor
+	// version of your database engine. For information about engine versions, see
+	// CreateDBInstance, or call DescribeDBEngineVersions.
+	EngineVersion *string `type:"string"`
+
+	// The amount of Provisioned IOPS (input/output operations per second) to allocate
+	// initially for the DB instance. For information about valid Iops values, see
+	// see Amazon RDS Provisioned IOPS Storage to Improve Performance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Storage.html#USER_PIOPS)
+	// in the Amazon RDS User Guide.
+	Iops *int64 `type:"integer"`
+
+	// The AWS KMS key identifier for an encrypted DB instance.
+	//
+	// The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption
+	// key. If you are creating a DB instance with the same AWS account that owns
+	// the KMS encryption key used to encrypt the new DB instance, then you can
+	// use the KMS key alias instead of the ARN for the KM encryption key.
+	//
+	// If the StorageEncrypted parameter is true, and you do not specify a value
+	// for the KmsKeyId parameter, then Amazon RDS will use your default encryption
+	// key. AWS KMS creates the default encryption key for your AWS account. Your
+	// AWS account has a different default encryption key for each AWS Region.
+	KmsKeyId *string `type:"string"`
+
+	// The license model for this DB instance. Use general-public-license.
+	LicenseModel *string `type:"string"`
+
+	// The password for the master user. The password can include any printable
+	// ASCII character except "/", """, or "@".
+	//
+	// Constraints: Must contain from 8 to 41 characters.
+	MasterUserPassword *string `type:"string"`
+
+	// The name for the master user.
+	//
+	// Constraints:
+	//
+	//    * Must be 1 to 16 letters or numbers.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't be a reserved word for the chosen database engine.
+	MasterUsername *string `type:"string"`
+
+	// The interval, in seconds, between points when Enhanced Monitoring metrics
+	// are collected for the DB instance. To disable collecting Enhanced Monitoring
+	// metrics, specify 0.
+	//
+	// If MonitoringRoleArn is specified, then you must also set MonitoringInterval
+	// to a value other than 0.
+	//
+	// Valid Values: 0, 1, 5, 10, 15, 30, 60
+	//
+	// Default: 0
+	MonitoringInterval *int64 `type:"integer"`
+
+	// The ARN for the IAM role that permits RDS to send enhanced monitoring metrics
+	// to Amazon CloudWatch Logs. For example, arn:aws:iam:123456789012:role/emaccess.
+	// For information on creating a monitoring role, see Setting Up and Enabling
+	// Enhanced Monitoring (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.OS.html#USER_Monitoring.OS.Enabling)
+	// in the Amazon RDS User Guide.
+	//
+	// If MonitoringInterval is set to a value other than 0, then you must supply
+	// a MonitoringRoleArn value.
+	MonitoringRoleArn *string `type:"string"`
+
+	// Specifies whether the DB instance is a Multi-AZ deployment. If MultiAZ is
+	// set to true, you can't set the AvailabilityZone parameter.
+	MultiAZ *bool `type:"boolean"`
+
+	// The name of the option group to associate with this DB instance. If this
+	// argument is omitted, the default option group for the specified engine is
+	// used.
+	OptionGroupName *string `type:"string"`
+
+	// The AWS KMS key identifier for encryption of Performance Insights data. The
+	// KMS key ID is the Amazon Resource Name (ARN), the KMS key identifier, or
+	// the KMS key alias for the KMS encryption key.
+	PerformanceInsightsKMSKeyId *string `type:"string"`
+
+	// The amount of time, in days, to retain Performance Insights data. Valid values
+	// are 7 or 731 (2 years).
+	PerformanceInsightsRetentionPeriod *int64 `type:"integer"`
+
+	// The port number on which the database accepts connections.
+	//
+	// Type: Integer
+	//
+	// Valid Values: 1150-65535
+	//
+	// Default: 3306
+	Port *int64 `type:"integer"`
+
+	// The time range each day during which automated backups are created if automated
+	// backups are enabled. For more information, see The Backup Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow)
+	// in the Amazon RDS User Guide.
+	//
+	// Constraints:
+	//
+	//    * Must be in the format hh24:mi-hh24:mi.
+	//
+	//    * Must be in Universal Coordinated Time (UTC).
+	//
+	//    * Must not conflict with the preferred maintenance window.
+	//
+	//    * Must be at least 30 minutes.
+	PreferredBackupWindow *string `type:"string"`
+
+	// The time range each week during which system maintenance can occur, in Universal
+	// Coordinated Time (UTC). For more information, see Amazon RDS Maintenance
+	// Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_UpgradeDBInstance.Maintenance.html#Concepts.DBMaintenance)
+	// in the Amazon RDS User Guide.
+	//
+	// Constraints:
+	//
+	//    * Must be in the format ddd:hh24:mi-ddd:hh24:mi.
+	//
+	//    * Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
+	//
+	//    * Must be in Universal Coordinated Time (UTC).
+	//
+	//    * Must not conflict with the preferred backup window.
+	//
+	//    * Must be at least 30 minutes.
+	PreferredMaintenanceWindow *string `type:"string"`
+
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
+
+	// Specifies the accessibility options for the DB instance. A value of true
+	// specifies an Internet-facing instance with a publicly resolvable DNS name,
+	// which resolves to a public IP address. A value of false specifies an internal
+	// instance with a DNS name that resolves to a private IP address. For more
+	// information, see CreateDBInstance.
+	PubliclyAccessible *bool `type:"boolean"`
+
+	// The name of your Amazon S3 bucket that contains your database backup file.
+	//
+	// S3BucketName is a required field
+	S3BucketName *string `type:"string" required:"true"`
+
+	// An AWS Identity and Access Management (IAM) role to allow Amazon RDS to access
+	// your Amazon S3 bucket.
+	//
+	// S3IngestionRoleArn is a required field
+	S3IngestionRoleArn *string `type:"string" required:"true"`
+
+	// The prefix of your Amazon S3 bucket.
+	S3Prefix *string `type:"string"`
+
+	// The name of the engine of your source database.
+	//
+	// Valid Values: mysql
+	//
+	// SourceEngine is a required field
+	SourceEngine *string `type:"string" required:"true"`
+
+	// The engine version of your source database.
+	//
+	// Valid Values: 5.6
+	//
+	// SourceEngineVersion is a required field
+	SourceEngineVersion *string `type:"string" required:"true"`
+
+	// Specifies whether the new DB instance is encrypted or not.
+	StorageEncrypted *bool `type:"boolean"`
+
+	// Specifies the storage type to be associated with the DB instance.
+	//
+	// Valid values: standard | gp2 | io1
+	//
+	// If you specify io1, you must also include a value for the Iops parameter.
+	//
+	// Default: io1 if the Iops parameter is specified; otherwise standard
+	StorageType *string `type:"string"`
+
+	// A list of tags to associate with this DB instance. For more information,
+	// see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
+	Tags []*Tag `locationNameList:"Tag" type:"list"`
+
+	// A value that specifies that the DB instance class of the DB instance uses
+	// its default processor features.
+	UseDefaultProcessorFeatures *bool `type:"boolean"`
+
+	// A list of VPC security groups to associate with this DB instance.
+	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
+}
+
+// String returns the string representation
+func (s RestoreDBInstanceFromS3Input) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RestoreDBInstanceFromS3Input) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RestoreDBInstanceFromS3Input) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RestoreDBInstanceFromS3Input"}
+	if s.DBInstanceClass == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBInstanceClass"))
+	}
+	if s.DBInstanceIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBInstanceIdentifier"))
+	}
+	if s.Engine == nil {
+		invalidParams.Add(request.NewErrParamRequired("Engine"))
+	}
+	if s.S3BucketName == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3BucketName"))
+	}
+	if s.S3IngestionRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3IngestionRoleArn"))
+	}
+	if s.SourceEngine == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceEngine"))
+	}
+	if s.SourceEngineVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceEngineVersion"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllocatedStorage sets the AllocatedStorage field's value.
+func (s *RestoreDBInstanceFromS3Input) SetAllocatedStorage(v int64) *RestoreDBInstanceFromS3Input {
+	s.AllocatedStorage = &v
+	return s
+}
+
+// SetAutoMinorVersionUpgrade sets the AutoMinorVersionUpgrade field's value.
+func (s *RestoreDBInstanceFromS3Input) SetAutoMinorVersionUpgrade(v bool) *RestoreDBInstanceFromS3Input {
+	s.AutoMinorVersionUpgrade = &v
+	return s
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *RestoreDBInstanceFromS3Input) SetAvailabilityZone(v string) *RestoreDBInstanceFromS3Input {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetBackupRetentionPeriod sets the BackupRetentionPeriod field's value.
+func (s *RestoreDBInstanceFromS3Input) SetBackupRetentionPeriod(v int64) *RestoreDBInstanceFromS3Input {
+	s.BackupRetentionPeriod = &v
+	return s
+}
+
+// SetCopyTagsToSnapshot sets the CopyTagsToSnapshot field's value.
+func (s *RestoreDBInstanceFromS3Input) SetCopyTagsToSnapshot(v bool) *RestoreDBInstanceFromS3Input {
+	s.CopyTagsToSnapshot = &v
+	return s
+}
+
+// SetDBInstanceClass sets the DBInstanceClass field's value.
+func (s *RestoreDBInstanceFromS3Input) SetDBInstanceClass(v string) *RestoreDBInstanceFromS3Input {
+	s.DBInstanceClass = &v
+	return s
+}
+
+// SetDBInstanceIdentifier sets the DBInstanceIdentifier field's value.
+func (s *RestoreDBInstanceFromS3Input) SetDBInstanceIdentifier(v string) *RestoreDBInstanceFromS3Input {
+	s.DBInstanceIdentifier = &v
+	return s
+}
+
+// SetDBName sets the DBName field's value.
+func (s *RestoreDBInstanceFromS3Input) SetDBName(v string) *RestoreDBInstanceFromS3Input {
+	s.DBName = &v
+	return s
+}
+
+// SetDBParameterGroupName sets the DBParameterGroupName field's value.
+func (s *RestoreDBInstanceFromS3Input) SetDBParameterGroupName(v string) *RestoreDBInstanceFromS3Input {
+	s.DBParameterGroupName = &v
+	return s
+}
+
+// SetDBSecurityGroups sets the DBSecurityGroups field's value.
+func (s *RestoreDBInstanceFromS3Input) SetDBSecurityGroups(v []*string) *RestoreDBInstanceFromS3Input {
+	s.DBSecurityGroups = v
+	return s
+}
+
+// SetDBSubnetGroupName sets the DBSubnetGroupName field's value.
+func (s *RestoreDBInstanceFromS3Input) SetDBSubnetGroupName(v string) *RestoreDBInstanceFromS3Input {
+	s.DBSubnetGroupName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBInstanceFromS3Input) SetDeletionProtection(v bool) *RestoreDBInstanceFromS3Input {
+	s.DeletionProtection = &v
+	return s
+}
+
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *RestoreDBInstanceFromS3Input) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBInstanceFromS3Input {
+	s.EnableCloudwatchLogsExports = v
+	return s
+}
+
+// SetEnableIAMDatabaseAuthentication sets the EnableIAMDatabaseAuthentication field's value.
+func (s *RestoreDBInstanceFromS3Input) SetEnableIAMDatabaseAuthentication(v bool) *RestoreDBInstanceFromS3Input {
+	s.EnableIAMDatabaseAuthentication = &v
+	return s
+}
+
+// SetEnablePerformanceInsights sets the EnablePerformanceInsights field's value.
+func (s *RestoreDBInstanceFromS3Input) SetEnablePerformanceInsights(v bool) *RestoreDBInstanceFromS3Input {
+	s.EnablePerformanceInsights = &v
+	return s
+}
+
+// SetEngine sets the Engine field's value.
+func (s *RestoreDBInstanceFromS3Input) SetEngine(v string) *RestoreDBInstanceFromS3Input {
+	s.Engine = &v
+	return s
+}
+
+// SetEngineVersion sets the EngineVersion field's value.
+func (s *RestoreDBInstanceFromS3Input) SetEngineVersion(v string) *RestoreDBInstanceFromS3Input {
+	s.EngineVersion = &v
+	return s
+}
+
+// SetIops sets the Iops field's value.
+func (s *RestoreDBInstanceFromS3Input) SetIops(v int64) *RestoreDBInstanceFromS3Input {
+	s.Iops = &v
+	return s
+}
+
+// SetKmsKeyId sets the KmsKeyId field's value.
+func (s *RestoreDBInstanceFromS3Input) SetKmsKeyId(v string) *RestoreDBInstanceFromS3Input {
+	s.KmsKeyId = &v
+	return s
+}
+
+// SetLicenseModel sets the LicenseModel field's value.
+func (s *RestoreDBInstanceFromS3Input) SetLicenseModel(v string) *RestoreDBInstanceFromS3Input {
+	s.LicenseModel = &v
+	return s
+}
+
+// SetMasterUserPassword sets the MasterUserPassword field's value.
+func (s *RestoreDBInstanceFromS3Input) SetMasterUserPassword(v string) *RestoreDBInstanceFromS3Input {
+	s.MasterUserPassword = &v
+	return s
+}
+
+// SetMasterUsername sets the MasterUsername field's value.
+func (s *RestoreDBInstanceFromS3Input) SetMasterUsername(v string) *RestoreDBInstanceFromS3Input {
+	s.MasterUsername = &v
+	return s
+}
+
+// SetMonitoringInterval sets the MonitoringInterval field's value.
+func (s *RestoreDBInstanceFromS3Input) SetMonitoringInterval(v int64) *RestoreDBInstanceFromS3Input {
+	s.MonitoringInterval = &v
+	return s
+}
+
+// SetMonitoringRoleArn sets the MonitoringRoleArn field's value.
+func (s *RestoreDBInstanceFromS3Input) SetMonitoringRoleArn(v string) *RestoreDBInstanceFromS3Input {
+	s.MonitoringRoleArn = &v
+	return s
+}
+
+// SetMultiAZ sets the MultiAZ field's value.
+func (s *RestoreDBInstanceFromS3Input) SetMultiAZ(v bool) *RestoreDBInstanceFromS3Input {
+	s.MultiAZ = &v
+	return s
+}
+
+// SetOptionGroupName sets the OptionGroupName field's value.
+func (s *RestoreDBInstanceFromS3Input) SetOptionGroupName(v string) *RestoreDBInstanceFromS3Input {
+	s.OptionGroupName = &v
+	return s
+}
+
+// SetPerformanceInsightsKMSKeyId sets the PerformanceInsightsKMSKeyId field's value.
+func (s *RestoreDBInstanceFromS3Input) SetPerformanceInsightsKMSKeyId(v string) *RestoreDBInstanceFromS3Input {
+	s.PerformanceInsightsKMSKeyId = &v
+	return s
+}
+
+// SetPerformanceInsightsRetentionPeriod sets the PerformanceInsightsRetentionPeriod field's value.
+func (s *RestoreDBInstanceFromS3Input) SetPerformanceInsightsRetentionPeriod(v int64) *RestoreDBInstanceFromS3Input {
+	s.PerformanceInsightsRetentionPeriod = &v
+	return s
+}
+
+// SetPort sets the Port field's value.
+func (s *RestoreDBInstanceFromS3Input) SetPort(v int64) *RestoreDBInstanceFromS3Input {
+	s.Port = &v
+	return s
+}
+
+// SetPreferredBackupWindow sets the PreferredBackupWindow field's value.
+func (s *RestoreDBInstanceFromS3Input) SetPreferredBackupWindow(v string) *RestoreDBInstanceFromS3Input {
+	s.PreferredBackupWindow = &v
+	return s
+}
+
+// SetPreferredMaintenanceWindow sets the PreferredMaintenanceWindow field's value.
+func (s *RestoreDBInstanceFromS3Input) SetPreferredMaintenanceWindow(v string) *RestoreDBInstanceFromS3Input {
+	s.PreferredMaintenanceWindow = &v
+	return s
+}
+
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *RestoreDBInstanceFromS3Input) SetProcessorFeatures(v []*ProcessorFeature) *RestoreDBInstanceFromS3Input {
+	s.ProcessorFeatures = v
+	return s
+}
+
+// SetPubliclyAccessible sets the PubliclyAccessible field's value.
+func (s *RestoreDBInstanceFromS3Input) SetPubliclyAccessible(v bool) *RestoreDBInstanceFromS3Input {
+	s.PubliclyAccessible = &v
+	return s
+}
+
+// SetS3BucketName sets the S3BucketName field's value.
+func (s *RestoreDBInstanceFromS3Input) SetS3BucketName(v string) *RestoreDBInstanceFromS3Input {
+	s.S3BucketName = &v
+	return s
+}
+
+// SetS3IngestionRoleArn sets the S3IngestionRoleArn field's value.
+func (s *RestoreDBInstanceFromS3Input) SetS3IngestionRoleArn(v string) *RestoreDBInstanceFromS3Input {
+	s.S3IngestionRoleArn = &v
+	return s
+}
+
+// SetS3Prefix sets the S3Prefix field's value.
+func (s *RestoreDBInstanceFromS3Input) SetS3Prefix(v string) *RestoreDBInstanceFromS3Input {
+	s.S3Prefix = &v
+	return s
+}
+
+// SetSourceEngine sets the SourceEngine field's value.
+func (s *RestoreDBInstanceFromS3Input) SetSourceEngine(v string) *RestoreDBInstanceFromS3Input {
+	s.SourceEngine = &v
+	return s
+}
+
+// SetSourceEngineVersion sets the SourceEngineVersion field's value.
+func (s *RestoreDBInstanceFromS3Input) SetSourceEngineVersion(v string) *RestoreDBInstanceFromS3Input {
+	s.SourceEngineVersion = &v
+	return s
+}
+
+// SetStorageEncrypted sets the StorageEncrypted field's value.
+func (s *RestoreDBInstanceFromS3Input) SetStorageEncrypted(v bool) *RestoreDBInstanceFromS3Input {
+	s.StorageEncrypted = &v
+	return s
+}
+
+// SetStorageType sets the StorageType field's value.
+func (s *RestoreDBInstanceFromS3Input) SetStorageType(v string) *RestoreDBInstanceFromS3Input {
+	s.StorageType = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *RestoreDBInstanceFromS3Input) SetTags(v []*Tag) *RestoreDBInstanceFromS3Input {
+	s.Tags = v
+	return s
+}
+
+// SetUseDefaultProcessorFeatures sets the UseDefaultProcessorFeatures field's value.
+func (s *RestoreDBInstanceFromS3Input) SetUseDefaultProcessorFeatures(v bool) *RestoreDBInstanceFromS3Input {
+	s.UseDefaultProcessorFeatures = &v
+	return s
+}
+
+// SetVpcSecurityGroupIds sets the VpcSecurityGroupIds field's value.
+func (s *RestoreDBInstanceFromS3Input) SetVpcSecurityGroupIds(v []*string) *RestoreDBInstanceFromS3Input {
+	s.VpcSecurityGroupIds = v
+	return s
+}
+
+type RestoreDBInstanceFromS3Output struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the details of an Amazon RDS DB instance.
+	//
+	// This data type is used as a response element in the DescribeDBInstances action.
+	DBInstance *DBInstance `type:"structure"`
+}
+
+// String returns the string representation
+func (s RestoreDBInstanceFromS3Output) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RestoreDBInstanceFromS3Output) GoString() string {
+	return s.String()
+}
+
+// SetDBInstance sets the DBInstance field's value.
+func (s *RestoreDBInstanceFromS3Output) SetDBInstance(v *DBInstance) *RestoreDBInstanceFromS3Output {
+	s.DBInstance = v
+	return s
+}
+
 type RestoreDBInstanceToPointInTimeInput struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates that minor version upgrades will be applied automatically to the
-	// DB instance during the maintenance window.
+	// Indicates that minor version upgrades are applied automatically to the DB
+	// instance during the maintenance window.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
-	// The EC2 Availability Zone that the database instance will be created in.
+	// The EC2 Availability Zone that the DB instance is created in.
 	//
 	// Default: A random, system-chosen Availability Zone.
 	//
-	// Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ
+	// Constraint: You can't specify the AvailabilityZone parameter if the MultiAZ
 	// parameter is set to true.
 	//
 	// Example: us-east-1a
 	AvailabilityZone *string `type:"string"`
 
 	// True to copy all tags from the restored DB instance to snapshots of the DB
-	// instance; otherwise false. The default is false.
+	// instance, and otherwise false. The default is false.
 	CopyTagsToSnapshot *bool `type:"boolean"`
 
-	// The compute and memory capacity of the Amazon RDS DB instance.
-	//
-	// Valid Values: db.t1.micro | db.m1.small | db.m1.medium | db.m1.large | db.m1.xlarge
-	// | db.m2.2xlarge | db.m2.4xlarge | db.m3.medium | db.m3.large | db.m3.xlarge
-	// | db.m3.2xlarge | db.m4.large | db.m4.xlarge | db.m4.2xlarge | db.m4.4xlarge
-	// | db.m4.10xlarge | db.r3.large | db.r3.xlarge | db.r3.2xlarge | db.r3.4xlarge
-	// | db.r3.8xlarge | db.t2.micro | db.t2.small | db.t2.medium | db.t2.large
+	// The compute and memory capacity of the Amazon RDS DB instance, for example,
+	// db.m4.large. Not all DB instance classes are available in all AWS Regions,
+	// or for all database engines. For the full list of DB instance classes, and
+	// availability for your engine, see DB Instance Class (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.DBInstanceClass.html)
+	// in the Amazon RDS User Guide.
 	//
 	// Default: The same DBInstanceClass as the original DB instance.
 	DBInstanceClass *string `type:"string"`
@@ -26845,13 +32889,32 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	// This parameter is not used for the MySQL or MariaDB engines.
 	DBName *string `type:"string"`
 
+	// The name of the DB parameter group to associate with this DB instance. If
+	// this argument is omitted, the default DBParameterGroup for the specified
+	// engine is used.
+	//
+	// Constraints:
+	//
+	//    * If supplied, must match the name of an existing DBParameterGroup.
+	//
+	//    * Must be 1 to 255 letters, numbers, or hyphens.
+	//
+	//    * First character must be a letter.
+	//
+	//    * Can't end with a hyphen or contain two consecutive hyphens.
+	DBParameterGroupName *string `type:"string"`
+
 	// The DB subnet group name to use for the new instance.
 	//
-	// Constraints: Must contain no more than 255 alphanumeric characters, periods,
-	// underscores, spaces, or hyphens. Must not be default.
+	// Constraints: If supplied, must match the name of an existing DBSubnetGroup.
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
+
+	// Indicates if the DB instance should have deletion protection enabled. The
+	// database can't be deleted when this value is set to true. The default is
+	// false. For more information, see  Deleting a DB Instance (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html).
+	DeletionProtection *bool `type:"boolean"`
 
 	// Specify the Active Directory Domain to restore the instance in.
 	Domain *string `type:"string"`
@@ -26860,16 +32923,20 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	// Directory Service.
 	DomainIAMRoleName *string `type:"string"`
 
+	// The list of logs that the restored DB instance is to export to CloudWatch
+	// Logs. The values in the list depend on the DB engine being used. For more
+	// information, see Publishing Database Logs to Amazon CloudWatch Logs (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_LogAccess.html#USER_LogAccess.Procedural.UploadtoCloudWatch)
+	// in the Amazon RDS User Guide.
+	EnableCloudwatchLogsExports []*string `type:"list"`
+
 	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
-	// to database accounts; otherwise false.
+	// to database accounts, and otherwise false.
 	//
 	// You can enable IAM database authentication for the following database engines
 	//
 	//    * For MySQL 5.6, minor version 5.6.34 or higher
 	//
 	//    * For MySQL 5.7, minor version 5.7.16 or higher
-	//
-	//    * Aurora 5.6 or higher.
 	//
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
@@ -26880,8 +32947,29 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	//
 	// Constraint: Must be compatible with the engine of the source
 	//
-	// Valid Values: MySQL | mariadb | oracle-se1 | oracle-se | oracle-ee | sqlserver-ee
-	// | sqlserver-se | sqlserver-ex | sqlserver-web | postgres | aurora
+	// Valid Values:
+	//
+	//    * mariadb
+	//
+	//    * mysql
+	//
+	//    * oracle-ee
+	//
+	//    * oracle-se2
+	//
+	//    * oracle-se1
+	//
+	//    * oracle-se
+	//
+	//    * postgres
+	//
+	//    * sqlserver-ee
+	//
+	//    * sqlserver-se
+	//
+	//    * sqlserver-ex
+	//
+	//    * sqlserver-web
 	Engine *string `type:"string"`
 
 	// The amount of Provisioned IOPS (input/output operations per second) to be
@@ -26903,14 +32991,14 @@ type RestoreDBInstanceToPointInTimeInput struct {
 
 	// Specifies if the DB instance is a Multi-AZ deployment.
 	//
-	// Constraint: You cannot specify the AvailabilityZone parameter if the MultiAZ
+	// Constraint: You can't specify the AvailabilityZone parameter if the MultiAZ
 	// parameter is set to true.
 	MultiAZ *bool `type:"boolean"`
 
 	// The name of the option group to be used for the restored DB instance.
 	//
 	// Permanent options, such as the TDE option for Oracle Advanced Security TDE,
-	// cannot be removed from an option group, and that option group cannot be removed
+	// can't be removed from an option group, and that option group can't be removed
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
 
@@ -26921,22 +33009,15 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	// Default: The same port as the original DB instance.
 	Port *int64 `type:"integer"`
 
+	// The number of CPU cores and the number of threads per core for the DB instance
+	// class of the DB instance.
+	ProcessorFeatures []*ProcessorFeature `locationNameList:"ProcessorFeature" type:"list"`
+
 	// Specifies the accessibility options for the DB instance. A value of true
 	// specifies an Internet-facing instance with a publicly resolvable DNS name,
 	// which resolves to a public IP address. A value of false specifies an internal
-	// instance with a DNS name that resolves to a private IP address.
-	//
-	// Default: The default behavior varies depending on whether a VPC has been
-	// requested or not. The following list shows the default behavior in each case.
-	//
-	//    * Default VPC:true
-	//
-	//    * VPC:false
-	//
-	// If no DB subnet group has been specified as part of the request and the PubliclyAccessible
-	// value has not been set, the DB instance will be publicly accessible. If a
-	// specific DB subnet group has been specified as part of the request and the
-	// PubliclyAccessible value has not been set, the DB instance will be private.
+	// instance with a DNS name that resolves to a private IP address. For more
+	// information, see CreateDBInstance.
 	PubliclyAccessible *bool `type:"boolean"`
 
 	// The date and time to restore from.
@@ -26947,25 +33028,20 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	//
 	//    * Must be before the latest restorable time for the DB instance
 	//
-	//    * Cannot be specified if UseLatestRestorableTime parameter is true
+	//    * Can't be specified if UseLatestRestorableTime parameter is true
 	//
 	// Example: 2009-09-07T23:45:00Z
-	RestoreTime *time.Time `type:"timestamp" timestampFormat:"iso8601"`
+	RestoreTime *time.Time `type:"timestamp"`
 
 	// The identifier of the source DB instance from which to restore.
 	//
 	// Constraints:
 	//
-	//    * Must be the identifier of an existing database instance
-	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
-	//
-	//    * First character must be a letter
-	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
-	//
-	// SourceDBInstanceIdentifier is a required field
-	SourceDBInstanceIdentifier *string `type:"string" required:"true"`
+	//    * Must match the identifier of an existing DB instance.
+	SourceDBInstanceIdentifier *string `type:"string"`
+
+	// The resource ID of the source DB instance from which to restore.
+	SourceDbiResourceId *string `type:"string"`
 
 	// Specifies the storage type to be associated with the DB instance.
 	//
@@ -26973,39 +33049,49 @@ type RestoreDBInstanceToPointInTimeInput struct {
 	//
 	// If you specify io1, you must also include a value for the Iops parameter.
 	//
-	// Default: io1 if the Iops parameter is specified; otherwise standard
+	// Default: io1 if the Iops parameter is specified, otherwise standard
 	StorageType *string `type:"string"`
 
-	// A list of tags.
+	// A list of tags. For more information, see Tagging Amazon RDS Resources (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Tagging.html)
+	// in the Amazon RDS User Guide.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
-	// The name of the new database instance to be created.
+	// The name of the new DB instance to be created.
 	//
 	// Constraints:
 	//
-	//    * Must contain from 1 to 63 alphanumeric characters or hyphens
+	//    * Must contain from 1 to 63 letters, numbers, or hyphens
 	//
 	//    * First character must be a letter
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Can't end with a hyphen or contain two consecutive hyphens
 	//
 	// TargetDBInstanceIdentifier is a required field
 	TargetDBInstanceIdentifier *string `type:"string" required:"true"`
 
-	// The ARN from the Key Store with which to associate the instance for TDE encryption.
+	// The ARN from the key store with which to associate the instance for TDE encryption.
 	TdeCredentialArn *string `type:"string"`
 
-	// The password for the given ARN from the Key Store in order to access the
+	// The password for the given ARN from the key store in order to access the
 	// device.
 	TdeCredentialPassword *string `type:"string"`
+
+	// A value that specifies that the DB instance class of the DB instance uses
+	// its default processor features.
+	UseDefaultProcessorFeatures *bool `type:"boolean"`
 
 	// Specifies whether (true) or not (false) the DB instance is restored from
 	// the latest backup time.
 	//
 	// Default: false
 	//
-	// Constraints: Cannot be specified if RestoreTime parameter is provided.
+	// Constraints: Can't be specified if RestoreTime parameter is provided.
 	UseLatestRestorableTime *bool `type:"boolean"`
+
+	// A list of EC2 VPC security groups to associate with this DB instance.
+	//
+	// Default: The default EC2 VPC security group for the DB subnet group's VPC.
+	VpcSecurityGroupIds []*string `locationNameList:"VpcSecurityGroupId" type:"list"`
 }
 
 // String returns the string representation
@@ -27021,9 +33107,6 @@ func (s RestoreDBInstanceToPointInTimeInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RestoreDBInstanceToPointInTimeInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RestoreDBInstanceToPointInTimeInput"}
-	if s.SourceDBInstanceIdentifier == nil {
-		invalidParams.Add(request.NewErrParamRequired("SourceDBInstanceIdentifier"))
-	}
 	if s.TargetDBInstanceIdentifier == nil {
 		invalidParams.Add(request.NewErrParamRequired("TargetDBInstanceIdentifier"))
 	}
@@ -27064,9 +33147,21 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetDBName(v string) *RestoreDBInst
 	return s
 }
 
+// SetDBParameterGroupName sets the DBParameterGroupName field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetDBParameterGroupName(v string) *RestoreDBInstanceToPointInTimeInput {
+	s.DBParameterGroupName = &v
+	return s
+}
+
 // SetDBSubnetGroupName sets the DBSubnetGroupName field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetDBSubnetGroupName(v string) *RestoreDBInstanceToPointInTimeInput {
 	s.DBSubnetGroupName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetDeletionProtection(v bool) *RestoreDBInstanceToPointInTimeInput {
+	s.DeletionProtection = &v
 	return s
 }
 
@@ -27079,6 +33174,12 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetDomain(v string) *RestoreDBInst
 // SetDomainIAMRoleName sets the DomainIAMRoleName field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetDomainIAMRoleName(v string) *RestoreDBInstanceToPointInTimeInput {
 	s.DomainIAMRoleName = &v
+	return s
+}
+
+// SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBInstanceToPointInTimeInput {
+	s.EnableCloudwatchLogsExports = v
 	return s
 }
 
@@ -27124,6 +33225,12 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetPort(v int64) *RestoreDBInstanc
 	return s
 }
 
+// SetProcessorFeatures sets the ProcessorFeatures field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetProcessorFeatures(v []*ProcessorFeature) *RestoreDBInstanceToPointInTimeInput {
+	s.ProcessorFeatures = v
+	return s
+}
+
 // SetPubliclyAccessible sets the PubliclyAccessible field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetPubliclyAccessible(v bool) *RestoreDBInstanceToPointInTimeInput {
 	s.PubliclyAccessible = &v
@@ -27139,6 +33246,12 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetRestoreTime(v time.Time) *Resto
 // SetSourceDBInstanceIdentifier sets the SourceDBInstanceIdentifier field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetSourceDBInstanceIdentifier(v string) *RestoreDBInstanceToPointInTimeInput {
 	s.SourceDBInstanceIdentifier = &v
+	return s
+}
+
+// SetSourceDbiResourceId sets the SourceDbiResourceId field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetSourceDbiResourceId(v string) *RestoreDBInstanceToPointInTimeInput {
+	s.SourceDbiResourceId = &v
 	return s
 }
 
@@ -27172,27 +33285,28 @@ func (s *RestoreDBInstanceToPointInTimeInput) SetTdeCredentialPassword(v string)
 	return s
 }
 
+// SetUseDefaultProcessorFeatures sets the UseDefaultProcessorFeatures field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetUseDefaultProcessorFeatures(v bool) *RestoreDBInstanceToPointInTimeInput {
+	s.UseDefaultProcessorFeatures = &v
+	return s
+}
+
 // SetUseLatestRestorableTime sets the UseLatestRestorableTime field's value.
 func (s *RestoreDBInstanceToPointInTimeInput) SetUseLatestRestorableTime(v bool) *RestoreDBInstanceToPointInTimeInput {
 	s.UseLatestRestorableTime = &v
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RestoreDBInstanceToPointInTimeResult
+// SetVpcSecurityGroupIds sets the VpcSecurityGroupIds field's value.
+func (s *RestoreDBInstanceToPointInTimeInput) SetVpcSecurityGroupIds(v []*string) *RestoreDBInstanceToPointInTimeInput {
+	s.VpcSecurityGroupIds = v
+	return s
+}
+
 type RestoreDBInstanceToPointInTimeOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -27214,13 +33328,45 @@ func (s *RestoreDBInstanceToPointInTimeOutput) SetDBInstance(v *DBInstance) *Res
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RevokeDBSecurityGroupIngressMessage
+// Earliest and latest time an instance can be restored to:
+type RestoreWindow struct {
+	_ struct{} `type:"structure"`
+
+	// The earliest time you can restore an instance to.
+	EarliestTime *time.Time `type:"timestamp"`
+
+	// The latest time you can restore an instance to.
+	LatestTime *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation
+func (s RestoreWindow) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RestoreWindow) GoString() string {
+	return s.String()
+}
+
+// SetEarliestTime sets the EarliestTime field's value.
+func (s *RestoreWindow) SetEarliestTime(v time.Time) *RestoreWindow {
+	s.EarliestTime = &v
+	return s
+}
+
+// SetLatestTime sets the LatestTime field's value.
+func (s *RestoreWindow) SetLatestTime(v time.Time) *RestoreWindow {
+	s.LatestTime = &v
+	return s
+}
+
 type RevokeDBSecurityGroupIngressInput struct {
 	_ struct{} `type:"structure"`
 
 	// The IP range to revoke access from. Must be a valid CIDR range. If CIDRIP
 	// is specified, EC2SecurityGroupName, EC2SecurityGroupId and EC2SecurityGroupOwnerId
-	// cannot be provided.
+	// can't be provided.
 	CIDRIP *string `type:"string"`
 
 	// The name of the DB security group to revoke ingress from.
@@ -27299,19 +33445,10 @@ func (s *RevokeDBSecurityGroupIngressInput) SetEC2SecurityGroupOwnerId(v string)
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/RevokeDBSecurityGroupIngressResult
 type RevokeDBSecurityGroupIngressOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * DescribeDBSecurityGroups
-	//
-	//    * AuthorizeDBSecurityGroupIngress
-	//
-	//    * CreateDBSecurityGroup
-	//
-	//    * RevokeDBSecurityGroupIngress
+	// Contains the details for an Amazon RDS DB security group.
 	//
 	// This data type is used as a response element in the DescribeDBSecurityGroups
 	// action.
@@ -27334,19 +33471,144 @@ func (s *RevokeDBSecurityGroupIngressOutput) SetDBSecurityGroup(v *DBSecurityGro
 	return s
 }
 
+// Contains the scaling configuration of an Aurora Serverless DB cluster.
+//
+// For more information, see Using Amazon Aurora Serverless (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html)
+// in the Amazon Aurora User Guide.
+type ScalingConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// A value that specifies whether to allow or disallow automatic pause for an
+	// Aurora DB cluster in serverless DB engine mode. A DB cluster can be paused
+	// only when it's idle (it has no connections).
+	//
+	// If a DB cluster is paused for more than seven days, the DB cluster might
+	// be backed up with a snapshot. In this case, the DB cluster is restored when
+	// there is a request to connect to it.
+	AutoPause *bool `type:"boolean"`
+
+	// The maximum capacity for an Aurora DB cluster in serverless DB engine mode.
+	//
+	// Valid capacity values are 2, 4, 8, 16, 32, 64, 128, and 256.
+	//
+	// The maximum capacity must be greater than or equal to the minimum capacity.
+	MaxCapacity *int64 `type:"integer"`
+
+	// The minimum capacity for an Aurora DB cluster in serverless DB engine mode.
+	//
+	// Valid capacity values are 2, 4, 8, 16, 32, 64, 128, and 256.
+	//
+	// The minimum capacity must be less than or equal to the maximum capacity.
+	MinCapacity *int64 `type:"integer"`
+
+	// The time, in seconds, before an Aurora DB cluster in serverless mode is paused.
+	SecondsUntilAutoPause *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s ScalingConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScalingConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetAutoPause sets the AutoPause field's value.
+func (s *ScalingConfiguration) SetAutoPause(v bool) *ScalingConfiguration {
+	s.AutoPause = &v
+	return s
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *ScalingConfiguration) SetMaxCapacity(v int64) *ScalingConfiguration {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetMinCapacity sets the MinCapacity field's value.
+func (s *ScalingConfiguration) SetMinCapacity(v int64) *ScalingConfiguration {
+	s.MinCapacity = &v
+	return s
+}
+
+// SetSecondsUntilAutoPause sets the SecondsUntilAutoPause field's value.
+func (s *ScalingConfiguration) SetSecondsUntilAutoPause(v int64) *ScalingConfiguration {
+	s.SecondsUntilAutoPause = &v
+	return s
+}
+
+// Shows the scaling configuration for an Aurora DB cluster in serverless DB
+// engine mode.
+//
+// For more information, see Using Amazon Aurora Serverless (http://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/aurora-serverless.html)
+// in the Amazon Aurora User Guide.
+type ScalingConfigurationInfo struct {
+	_ struct{} `type:"structure"`
+
+	// A value that indicates whether automatic pause is allowed for the Aurora
+	// DB cluster in serverless DB engine mode.
+	AutoPause *bool `type:"boolean"`
+
+	// The maximum capacity for an Aurora DB cluster in serverless DB engine mode.
+	MaxCapacity *int64 `type:"integer"`
+
+	// The maximum capacity for the Aurora DB cluster in serverless DB engine mode.
+	MinCapacity *int64 `type:"integer"`
+
+	// The remaining amount of time, in seconds, before the Aurora DB cluster in
+	// serverless mode is paused. A DB cluster can be paused only when it's idle
+	// (it has no connections).
+	SecondsUntilAutoPause *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s ScalingConfigurationInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ScalingConfigurationInfo) GoString() string {
+	return s.String()
+}
+
+// SetAutoPause sets the AutoPause field's value.
+func (s *ScalingConfigurationInfo) SetAutoPause(v bool) *ScalingConfigurationInfo {
+	s.AutoPause = &v
+	return s
+}
+
+// SetMaxCapacity sets the MaxCapacity field's value.
+func (s *ScalingConfigurationInfo) SetMaxCapacity(v int64) *ScalingConfigurationInfo {
+	s.MaxCapacity = &v
+	return s
+}
+
+// SetMinCapacity sets the MinCapacity field's value.
+func (s *ScalingConfigurationInfo) SetMinCapacity(v int64) *ScalingConfigurationInfo {
+	s.MinCapacity = &v
+	return s
+}
+
+// SetSecondsUntilAutoPause sets the SecondsUntilAutoPause field's value.
+func (s *ScalingConfigurationInfo) SetSecondsUntilAutoPause(v int64) *ScalingConfigurationInfo {
+	s.SecondsUntilAutoPause = &v
+	return s
+}
+
 // Contains an AWS Region name as the result of a successful call to the DescribeSourceRegions
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/SourceRegion
 type SourceRegion struct {
 	_ struct{} `type:"structure"`
 
-	// The source region endpoint.
+	// The endpoint for the source AWS Region endpoint.
 	Endpoint *string `type:"string"`
 
-	// The source region name.
+	// The name of the source AWS Region.
 	RegionName *string `type:"string"`
 
-	// The status of the source region.
+	// The status of the source AWS Region.
 	Status *string `type:"string"`
 }
 
@@ -27378,7 +33640,71 @@ func (s *SourceRegion) SetStatus(v string) *SourceRegion {
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstanceMessage
+type StartDBClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The DB cluster identifier of the Amazon Aurora DB cluster to be started.
+	// This parameter is stored as a lowercase string.
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartDBClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDBClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDBClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartDBClusterInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *StartDBClusterInput) SetDBClusterIdentifier(v string) *StartDBClusterInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+type StartDBClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the details of an Amazon Aurora DB cluster.
+	//
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
+	DBCluster *DBCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartDBClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDBClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBCluster sets the DBCluster field's value.
+func (s *StartDBClusterOutput) SetDBCluster(v *DBCluster) *StartDBClusterOutput {
+	s.DBCluster = v
+	return s
+}
+
 type StartDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -27417,21 +33743,10 @@ func (s *StartDBInstanceInput) SetDBInstanceIdentifier(v string) *StartDBInstanc
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StartDBInstanceResult
 type StartDBInstanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -27453,7 +33768,71 @@ func (s *StartDBInstanceOutput) SetDBInstance(v *DBInstance) *StartDBInstanceOut
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstanceMessage
+type StopDBClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The DB cluster identifier of the Amazon Aurora DB cluster to be stopped.
+	// This parameter is stored as a lowercase string.
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopDBClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDBClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopDBClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopDBClusterInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *StopDBClusterInput) SetDBClusterIdentifier(v string) *StopDBClusterInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+type StopDBClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Contains the details of an Amazon Aurora DB cluster.
+	//
+	// This data type is used as a response element in the DescribeDBClusters, StopDBCluster,
+	// and StartDBCluster actions.
+	DBCluster *DBCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopDBClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDBClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBCluster sets the DBCluster field's value.
+func (s *StopDBClusterOutput) SetDBCluster(v *DBCluster) *StopDBClusterOutput {
+	s.DBCluster = v
+	return s
+}
+
 type StopDBInstanceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -27502,21 +33881,10 @@ func (s *StopDBInstanceInput) SetDBSnapshotIdentifier(v string) *StopDBInstanceI
 	return s
 }
 
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/StopDBInstanceResult
 type StopDBInstanceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Contains the result of a successful invocation of the following actions:
-	//
-	//    * CreateDBInstance
-	//
-	//    * DeleteDBInstance
-	//
-	//    * ModifyDBInstance
-	//
-	//    * StopDBInstance
-	//
-	//    * StartDBInstance
+	// Contains the details of an Amazon RDS DB instance.
 	//
 	// This data type is used as a response element in the DescribeDBInstances action.
 	DBInstance *DBInstance `type:"structure"`
@@ -27540,7 +33908,6 @@ func (s *StopDBInstanceOutput) SetDBInstance(v *DBInstance) *StopDBInstanceOutpu
 
 // This data type is used as a response element in the DescribeDBSubnetGroups
 // action.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Subnet
 type Subnet struct {
 	_ struct{} `type:"structure"`
 
@@ -27587,18 +33954,17 @@ func (s *Subnet) SetSubnetStatus(v string) *Subnet {
 }
 
 // Metadata assigned to an Amazon RDS resource consisting of a key-value pair.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Tag
 type Tag struct {
 	_ struct{} `type:"structure"`
 
 	// A key is the required name of the tag. The string value can be from 1 to
-	// 128 Unicode characters in length and cannot be prefixed with "aws:" or "rds:".
+	// 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:".
 	// The string can only contain only the set of Unicode letters, digits, white-space,
 	// '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").
 	Key *string `type:"string"`
 
 	// A value is the optional value of the tag. The string value can be from 1
-	// to 256 Unicode characters in length and cannot be prefixed with "aws:" or
+	// to 256 Unicode characters in length and can't be prefixed with "aws:" or
 	// "rds:". The string can only contain only the set of Unicode letters, digits,
 	// white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").
 	Value *string `type:"string"`
@@ -27629,7 +33995,6 @@ func (s *Tag) SetValue(v string) *Tag {
 // A time zone associated with a DBInstance or a DBSnapshot. This data type
 // is an element in the response to the DescribeDBInstances, the DescribeDBSnapshots,
 // and the DescribeDBEngineVersions actions.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/Timezone
 type Timezone struct {
 	_ struct{} `type:"structure"`
 
@@ -27654,12 +34019,11 @@ func (s *Timezone) SetTimezoneName(v string) *Timezone {
 }
 
 // The version of the database engine that a DB instance can be upgraded to.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/UpgradeTarget
 type UpgradeTarget struct {
 	_ struct{} `type:"structure"`
 
-	// A value that indicates whether the target version will be applied to any
-	// source DB instances that have AutoMinorVersionUpgrade set to true.
+	// A value that indicates whether the target version is applied to any source
+	// DB instances that have AutoMinorVersionUpgrade set to true.
 	AutoUpgrade *bool `type:"boolean"`
 
 	// The version of the database engine that a DB instance can be upgraded to.
@@ -27671,8 +34035,7 @@ type UpgradeTarget struct {
 	// The version number of the upgrade target database engine.
 	EngineVersion *string `type:"string"`
 
-	// A value that indicates whether a database engine will be upgraded to a major
-	// version.
+	// A value that indicates whether a database engine is upgraded to a major version.
 	IsMajorVersionUpgrade *bool `type:"boolean"`
 }
 
@@ -27716,9 +34079,98 @@ func (s *UpgradeTarget) SetIsMajorVersionUpgrade(v bool) *UpgradeTarget {
 	return s
 }
 
+// Information about valid modifications that you can make to your DB instance.
+// Contains the result of a successful call to the DescribeValidDBInstanceModifications
+// action. You can use this information when you call ModifyDBInstance.
+type ValidDBInstanceModificationsMessage struct {
+	_ struct{} `type:"structure"`
+
+	// Valid storage options for your DB instance.
+	Storage []*ValidStorageOptions `locationNameList:"ValidStorageOptions" type:"list"`
+
+	// Valid processor features for your DB instance.
+	ValidProcessorFeatures []*AvailableProcessorFeature `locationNameList:"AvailableProcessorFeature" type:"list"`
+}
+
+// String returns the string representation
+func (s ValidDBInstanceModificationsMessage) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ValidDBInstanceModificationsMessage) GoString() string {
+	return s.String()
+}
+
+// SetStorage sets the Storage field's value.
+func (s *ValidDBInstanceModificationsMessage) SetStorage(v []*ValidStorageOptions) *ValidDBInstanceModificationsMessage {
+	s.Storage = v
+	return s
+}
+
+// SetValidProcessorFeatures sets the ValidProcessorFeatures field's value.
+func (s *ValidDBInstanceModificationsMessage) SetValidProcessorFeatures(v []*AvailableProcessorFeature) *ValidDBInstanceModificationsMessage {
+	s.ValidProcessorFeatures = v
+	return s
+}
+
+// Information about valid modifications that you can make to your DB instance.
+// Contains the result of a successful call to the DescribeValidDBInstanceModifications
+// action.
+type ValidStorageOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The valid range of Provisioned IOPS to gibibytes of storage multiplier. For
+	// example, 3-10, which means that provisioned IOPS can be between 3 and 10
+	// times storage.
+	IopsToStorageRatio []*DoubleRange `locationNameList:"DoubleRange" type:"list"`
+
+	// The valid range of provisioned IOPS. For example, 1000-20000.
+	ProvisionedIops []*Range `locationNameList:"Range" type:"list"`
+
+	// The valid range of storage in gibibytes. For example, 100 to 16384.
+	StorageSize []*Range `locationNameList:"Range" type:"list"`
+
+	// The valid storage types for your DB instance. For example, gp2, io1.
+	StorageType *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ValidStorageOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ValidStorageOptions) GoString() string {
+	return s.String()
+}
+
+// SetIopsToStorageRatio sets the IopsToStorageRatio field's value.
+func (s *ValidStorageOptions) SetIopsToStorageRatio(v []*DoubleRange) *ValidStorageOptions {
+	s.IopsToStorageRatio = v
+	return s
+}
+
+// SetProvisionedIops sets the ProvisionedIops field's value.
+func (s *ValidStorageOptions) SetProvisionedIops(v []*Range) *ValidStorageOptions {
+	s.ProvisionedIops = v
+	return s
+}
+
+// SetStorageSize sets the StorageSize field's value.
+func (s *ValidStorageOptions) SetStorageSize(v []*Range) *ValidStorageOptions {
+	s.StorageSize = v
+	return s
+}
+
+// SetStorageType sets the StorageType field's value.
+func (s *ValidStorageOptions) SetStorageType(v string) *ValidStorageOptions {
+	s.StorageType = &v
+	return s
+}
+
 // This data type is used as a response element for queries on VPC security
 // group membership.
-// Please also see https://docs.aws.amazon.com/goto/WebAPI/rds-2014-10-31/VpcSecurityGroupMembership
 type VpcSecurityGroupMembership struct {
 	_ struct{} `type:"structure"`
 

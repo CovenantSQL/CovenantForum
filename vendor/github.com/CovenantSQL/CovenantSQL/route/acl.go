@@ -57,7 +57,7 @@ ACLs:
   		ACL: Open to world
 */
 
-// RemoteFunc defines the RPC Call name
+// RemoteFunc defines the RPC Call name.
 type RemoteFunc int
 
 const (
@@ -67,8 +67,8 @@ const (
 	DHTFindNeighbor
 	// DHTFindNode gets node info
 	DHTFindNode
-	// KayakCall is used by BP for data consistency
-	KayakCall
+	// DHTGSetNode is used by BP for dht data gossip
+	DHTGSetNode
 	// MetricUploadMetrics uploads node metrics
 	MetricUploadMetrics
 	// DBSQuery is used by client to read/write database
@@ -77,10 +77,8 @@ const (
 	DBSAck
 	// DBSDeploy is used by BP to create/drop/update database
 	DBSDeploy
-	// DBSSubscribeTransactions is used by dbms to handle observer subscription request
-	DBSSubscribeTransactions
-	// DBSCancelSubscription is used by dbms to handle observer subscription cancellation request
-	DBSCancelSubscription
+	// DBSObserverFetchBlock is used by observer to fetch block.
+	DBSObserverFetchBlock
 	// DBCCall is used by Miner for data consistency
 	DBCCall
 	// SQLCAdviseNewBlock is used by sqlchain to advise new block between adjacent node
@@ -95,8 +93,6 @@ const (
 	SQLCSignBilling
 	// SQLCLaunchBilling is used by blockproducer to trigger the billing process in sqlchain
 	SQLCLaunchBilling
-	// OBSAdviseNewBlock is used by sqlchain to push new block to observers
-	OBSAdviseNewBlock
 	// MCCAdviseNewBlock is used by block producer to push block to adjacent nodes
 	MCCAdviseNewBlock
 	// MCCAdviseTxBilling is used by block producer to push billing transaction to adjacent nodes
@@ -122,16 +118,17 @@ const (
 	MCCQueryAccountTokenBalance
 	// MCCQueryTxState is used by client to query transaction state.
 	MCCQueryTxState
+
 	// DHTRPCName defines the block producer dh-rpc service name
 	DHTRPCName = "DHT"
+	// DHTGossipRPCName defines the block producer dh-rpc gossip service name
+	DHTGossipRPCName = "DHTG"
 	// BlockProducerRPCName defines main chain rpc name
 	BlockProducerRPCName = "MCC"
 	// SQLChainRPCName defines the sql chain rpc name
 	SQLChainRPCName = "SQLC"
 	// DBRPCName defines the sql chain db service rpc name
 	DBRPCName = "DBS"
-	// ObserverRPCName defines the observer node service rpc name
-	ObserverRPCName = "OBS"
 )
 
 // String returns the RemoteFunc string.
@@ -143,20 +140,18 @@ func (s RemoteFunc) String() string {
 		return "DHT.FindNeighbor"
 	case DHTFindNode:
 		return "DHT.FindNode"
+	case DHTGSetNode:
+		return "DHTG.SetNode"
 	case MetricUploadMetrics:
 		return "Metric.UploadMetrics"
-	case KayakCall:
-		return "Kayak.Call"
 	case DBSQuery:
 		return "DBS.Query"
 	case DBSAck:
 		return "DBS.Ack"
 	case DBSDeploy:
 		return "DBS.Deploy"
-	case DBSSubscribeTransactions:
-		return "DBS.SubscribeTransactions"
-	case DBSCancelSubscription:
-		return "DBS.CancelSubscription"
+	case DBSObserverFetchBlock:
+		return "DBS.ObserverFetchBlock"
 	case DBCCall:
 		return "DBC.Call"
 	case SQLCAdviseNewBlock:
@@ -171,8 +166,6 @@ func (s RemoteFunc) String() string {
 		return "SQLC.SignBilling"
 	case SQLCLaunchBilling:
 		return "SQLC.LaunchBilling"
-	case OBSAdviseNewBlock:
-		return "OBS.AdviseNewBlock"
 	case MCCAdviseNewBlock:
 		return "MCC.AdviseNewBlock"
 	case MCCAdviseTxBilling:
@@ -222,8 +215,8 @@ func IsPermitted(callerEnvelope *proto.Envelope, funcName RemoteFunc) (ok bool) 
 		// DHT related
 		case DHTPing, DHTFindNode, DHTFindNeighbor, MetricUploadMetrics:
 			return true
-			// Kayak related
-		case KayakCall:
+			// DHTGSetNode is for block producer to update node info
+		case DHTGSetNode:
 			return false
 			// DBSDeploy
 		case DBSDeploy:

@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // AWSMarketplace Metering.
@@ -67,6 +67,10 @@ type MarketplaceMeteringAPI interface {
 	MeterUsage(*marketplacemetering.MeterUsageInput) (*marketplacemetering.MeterUsageOutput, error)
 	MeterUsageWithContext(aws.Context, *marketplacemetering.MeterUsageInput, ...request.Option) (*marketplacemetering.MeterUsageOutput, error)
 	MeterUsageRequest(*marketplacemetering.MeterUsageInput) (*request.Request, *marketplacemetering.MeterUsageOutput)
+
+	RegisterUsage(*marketplacemetering.RegisterUsageInput) (*marketplacemetering.RegisterUsageOutput, error)
+	RegisterUsageWithContext(aws.Context, *marketplacemetering.RegisterUsageInput, ...request.Option) (*marketplacemetering.RegisterUsageOutput, error)
+	RegisterUsageRequest(*marketplacemetering.RegisterUsageInput) (*request.Request, *marketplacemetering.RegisterUsageOutput)
 
 	ResolveCustomer(*marketplacemetering.ResolveCustomerInput) (*marketplacemetering.ResolveCustomerOutput, error)
 	ResolveCustomerWithContext(aws.Context, *marketplacemetering.ResolveCustomerInput, ...request.Option) (*marketplacemetering.ResolveCustomerOutput, error)

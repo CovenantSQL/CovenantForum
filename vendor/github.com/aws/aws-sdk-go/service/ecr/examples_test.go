@@ -3,8 +3,8 @@
 package ecr_test
 
 import (
-	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -14,7 +14,7 @@ import (
 )
 
 var _ time.Duration
-var _ bytes.Buffer
+var _ strings.Reader
 var _ aws.Config
 
 func parseTime(layout, value string) *time.Time {
@@ -121,6 +121,10 @@ func ExampleECR_CreateRepository_shared00() {
 				fmt.Println(ecr.ErrCodeServerException, aerr.Error())
 			case ecr.ErrCodeInvalidParameterException:
 				fmt.Println(ecr.ErrCodeInvalidParameterException, aerr.Error())
+			case ecr.ErrCodeInvalidTagParameterException:
+				fmt.Println(ecr.ErrCodeInvalidTagParameterException, aerr.Error())
+			case ecr.ErrCodeTooManyTagsException:
+				fmt.Println(ecr.ErrCodeTooManyTagsException, aerr.Error())
 			case ecr.ErrCodeRepositoryAlreadyExistsException:
 				fmt.Println(ecr.ErrCodeRepositoryAlreadyExistsException, aerr.Error())
 			case ecr.ErrCodeLimitExceededException:

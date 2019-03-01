@@ -21,7 +21,7 @@ import (
 //
 // The best way to use this interface is so the SDK's service client's calls
 // can be stubbed out for unit testing your code with the SDK without needing
-// to inject custom request handlers into the the SDK's request pipeline.
+// to inject custom request handlers into the SDK's request pipeline.
 //
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Budgets.
@@ -87,6 +87,10 @@ type BudgetsAPI interface {
 	DescribeBudget(*budgets.DescribeBudgetInput) (*budgets.DescribeBudgetOutput, error)
 	DescribeBudgetWithContext(aws.Context, *budgets.DescribeBudgetInput, ...request.Option) (*budgets.DescribeBudgetOutput, error)
 	DescribeBudgetRequest(*budgets.DescribeBudgetInput) (*request.Request, *budgets.DescribeBudgetOutput)
+
+	DescribeBudgetPerformanceHistory(*budgets.DescribeBudgetPerformanceHistoryInput) (*budgets.DescribeBudgetPerformanceHistoryOutput, error)
+	DescribeBudgetPerformanceHistoryWithContext(aws.Context, *budgets.DescribeBudgetPerformanceHistoryInput, ...request.Option) (*budgets.DescribeBudgetPerformanceHistoryOutput, error)
+	DescribeBudgetPerformanceHistoryRequest(*budgets.DescribeBudgetPerformanceHistoryInput) (*request.Request, *budgets.DescribeBudgetPerformanceHistoryOutput)
 
 	DescribeBudgets(*budgets.DescribeBudgetsInput) (*budgets.DescribeBudgetsOutput, error)
 	DescribeBudgetsWithContext(aws.Context, *budgets.DescribeBudgetsInput, ...request.Option) (*budgets.DescribeBudgetsOutput, error)

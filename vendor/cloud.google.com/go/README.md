@@ -8,7 +8,7 @@ Go packages for [Google Cloud Platform](https://cloud.google.com) services.
 import "cloud.google.com/go"
 ```
 
-To install the packages on your system,
+To install the packages on your system, *do not clone the repo*. Instead use
 
 ```
 $ go get -u cloud.google.com/go/...
@@ -26,51 +26,60 @@ make backwards-incompatible changes.
   * [Cloud Datastore](#cloud-datastore-)
   * [Cloud Storage](#cloud-storage-)
   * [Cloud Pub/Sub](#cloud-pub-sub-)
-  * [Cloud BigQuery](#cloud-bigquery-)
+  * [BigQuery](#cloud-bigquery-)
   * [Stackdriver Logging](#stackdriver-logging-)
   * [Cloud Spanner](#cloud-spanner-)
 
 
 ## News
 
-_March 17, 2017_
+_7 August 2018_
 
-Breaking Pubsub changes.
-* Publish is now asynchronous
-([announcement](https://groups.google.com/d/topic/google-api-go-announce/aaqRDIQ3rvU/discussion)).
-* Subscription.Pull replaced by Subscription.Receive, which takes a callback ([announcement](https://groups.google.com/d/topic/google-api-go-announce/8pt6oetAdKc/discussion)).
-* Message.Done replaced with Message.Ack and Message.Nack.
-
-_February 14, 2017_
-
-Release of a client library for Spanner. See
-the
-[blog post](https://cloudplatform.googleblog.com/2017/02/introducing-Cloud-Spanner-a-global-database-service-for-mission-critical-applications.html).
-
-Note that although the Spanner service is beta, the Go client library is alpha.
+As of November 1, the code in the repo will no longer support Go versions 1.8
+and earlier. No one other than AppEngine users should be on those old versions,
+and AppEngine
+[Standard](https://groups.google.com/forum/#!topic/google-appengine-go/e7oPNomd7ak)
+and
+[Flex](https://groups.google.com/forum/#!topic/google-appengine-go/wHsYtxvEbXI)
+will stop supporting new deployments with those versions on that date.
 
 
-[Older news](https://github.com/GoogleCloudPlatform/google-cloud-go/blob/master/old-news.md)
+Changes have been moved to [CHANGES](https://github.com/GoogleCloudPlatform/google-cloud-go/blob/master/CHANGES.md).
+
 
 ## Supported APIs
 
-Google API                       | Status       | Package
----------------------------------|--------------|-----------------------------------------------------------
-[Datastore][cloud-datastore]     | stable       | [`cloud.google.com/go/datastore`][cloud-datastore-ref]
-[Storage][cloud-storage]         | stable       | [`cloud.google.com/go/storage`][cloud-storage-ref]
-[Bigtable][cloud-bigtable]       | beta         | [`cloud.google.com/go/bigtable`][cloud-bigtable-ref]
-[BigQuery][cloud-bigquery]       | beta         | [`cloud.google.com/go/bigquery`][cloud-bigquery-ref]
-[Logging][cloud-logging]         | stable       | [`cloud.google.com/go/logging`][cloud-logging-ref]
-[Monitoring][cloud-monitoring]   | alpha        | [`cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
-[Pub/Sub][cloud-pubsub]          | alpha        | [`cloud.google.com/go/pubsub`][cloud-pubsub-ref]
-[Vision][cloud-vision]           | beta         | [`cloud.google.com/go/vision`][cloud-vision-ref]
-[Language][cloud-language]       | beta         | [`cloud.google.com/go/language/apiv1`][cloud-language-ref]
-[Speech][cloud-speech]           | beta         | [`cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
-[Spanner][cloud-spanner]         | alpha        | [`cloud.google.com/go/spanner`][cloud-spanner-ref]
-[Translation][cloud-translation] | beta         | [`cloud.google.com/go/translate`][cloud-translation-ref]
-[Trace][cloud-trace]             | alpha        | [`cloud.google.com/go/trace`][cloud-trace-ref]
-[ErrorReporting][cloud-errors]   | alpha        | [`cloud.google.com/go/errors`][cloud-errors-ref]
-
+Google API                                   | Status       | Package
+---------------------------------------------|--------------|-----------------------------------------------------------
+[Asset][cloud-asset]                         | alpha        | [`cloud.google.com/go/asset/v1beta`][cloud-asset-ref]
+[BigQuery][cloud-bigquery]                   | stable       | [`cloud.google.com/go/bigquery`][cloud-bigquery-ref]
+[Bigtable][cloud-bigtable]                   | stable       | [`cloud.google.com/go/bigtable`][cloud-bigtable-ref]
+[Cloudtasks][cloud-tasks]                    | beta         | [`cloud.google.com/go/cloudtasks/apiv2beta3`][cloud-tasks-ref]
+[Container][cloud-container]                 | stable       | [`cloud.google.com/go/container/apiv1`][cloud-container-ref]
+[ContainerAnalysis][cloud-containeranalysis] | beta         | [`cloud.google.com/go/containeranalysis/apiv1beta1`][cloud-containeranalysis-ref]
+[Dataproc][cloud-dataproc]                   | stable       | [`cloud.google.com/go/dataproc/apiv1`][cloud-dataproc-ref]
+[Datastore][cloud-datastore]                 | stable       | [`cloud.google.com/go/datastore`][cloud-datastore-ref]
+[Debugger][cloud-debugger]                   | alpha        | [`cloud.google.com/go/debugger/apiv2`][cloud-debugger-ref]
+[Dialogflow][cloud-dialogflow]               | alpha        | [`cloud.google.com/go/dialogflow/apiv2`][cloud-dialogflow-ref]
+[Data Loss Prevention][cloud-dlp]            | alpha        | [`cloud.google.com/go/dlp/apiv2`][cloud-dlp-ref]
+[ErrorReporting][cloud-errors]               | alpha        | [`cloud.google.com/go/errorreporting`][cloud-errors-ref]
+[Firestore][cloud-firestore]                 | beta         | [`cloud.google.com/go/firestore`][cloud-firestore-ref]
+[IAM][cloud-iam]                             | stable       | [`cloud.google.com/go/iam`][cloud-iam-ref]
+[KMS][cloud-kms]                             | stable       | [`cloud.google.com/go/kms`][cloud-kms-ref]
+[Natural Language][cloud-natural-language]   | stable       | [`cloud.google.com/go/language/apiv1`][cloud-natural-language-ref]
+[Logging][cloud-logging]                     | stable       | [`cloud.google.com/go/logging`][cloud-logging-ref]
+[Monitoring][cloud-monitoring]               | alpha        | [`cloud.google.com/go/monitoring/apiv3`][cloud-monitoring-ref]
+[OS Login][cloud-oslogin]                    | alpha        | [`cloud.google.com/compute/docs/oslogin/rest`][cloud-oslogin-ref]
+[Pub/Sub][cloud-pubsub]                      | stable       | [`cloud.google.com/go/pubsub`][cloud-pubsub-ref]
+[Memorystore][cloud-memorystore]             | stable       | [`cloud.google.com/go/redis/apiv1beta1`][cloud-memorystore-ref]
+[Spanner][cloud-spanner]                     | stable       | [`cloud.google.com/go/spanner`][cloud-spanner-ref]
+[Speech][cloud-speech]                       | stable       | [`cloud.google.com/go/speech/apiv1`][cloud-speech-ref]
+[Storage][cloud-storage]                     | stable       | [`cloud.google.com/go/storage`][cloud-storage-ref]
+[Text To Speech][cloud-texttospeech]         | alpha        | [`cloud.google.com/go/texttospeech/apiv1`][cloud-storage-ref]
+[Trace][cloud-trace]                         | alpha        | [`cloud.google.com/go/trace/apiv2`][cloud-translation-ref]
+[Translation][cloud-translation]             | stable       | [`cloud.google.com/go/translate`][cloud-translation-ref]
+[Video Intelligence][cloud-video]            | alpha        | [`cloud.google.com/go/videointelligence/apiv1beta1`][cloud-video-ref]
+[Vision][cloud-vision]                       | stable       | [`cloud.google.com/go/vision/apiv1`][cloud-vision-ref]
 
 > **Alpha status**: the API is still being actively developed. As a
 > result, it might change in backward-incompatible ways and is not recommended
@@ -93,9 +102,7 @@ for updates on these packages.
 ## Go Versions Supported
 
 We support the two most recent major versions of Go. If Google App Engine uses
-an older version, we support that as well. You can see which versions are
-currently supported by looking at the lines following `go:` in
-[`.travis.yml`](.travis.yml).
+an older version, we support that as well.
 
 ## Authorization
 
@@ -111,12 +118,12 @@ client, err := storage.NewClient(ctx)
 To authorize using a
 [JSON key file](https://cloud.google.com/iam/docs/managing-service-account-keys),
 pass
-[`option.WithServiceAccountFile`](https://godoc.org/google.golang.org/api/option#WithServiceAccountFile)
+[`option.WithCredentialsFile`](https://godoc.org/google.golang.org/api/option#WithCredentialsFile)
 to the `NewClient` function of the desired package. For example:
 
 [snip]:# (auth-JSON)
 ```go
-client, err := storage.NewClient(ctx, option.WithServiceAccountFile("path/to/keyfile.json"))
+client, err := storage.NewClient(ctx, option.WithCredentialsFile("path/to/keyfile.json"))
 ```
 
 You can exert more control over authorization by using the
@@ -252,9 +259,9 @@ if err != nil {
 }
 ```
 
-## Cloud BigQuery [![GoDoc](https://godoc.org/cloud.google.com/go/bigquery?status.svg)](https://godoc.org/cloud.google.com/go/bigquery)
+## BigQuery [![GoDoc](https://godoc.org/cloud.google.com/go/bigquery?status.svg)](https://godoc.org/cloud.google.com/go/bigquery)
 
-- [About Cloud BigQuery][cloud-bigquery]
+- [About BigQuery][cloud-bigquery]
 - [API documentation][cloud-bigquery-docs]
 - [Go client documentation][cloud-bigquery-ref]
 - [Complete sample programs](https://github.com/GoogleCloudPlatform/golang-samples/tree/master/bigquery)
@@ -390,6 +397,11 @@ for more information.
 [cloud-datastore-docs]: https://cloud.google.com/datastore/docs
 [cloud-datastore-activation]: https://cloud.google.com/datastore/docs/activate
 
+[cloud-firestore]: https://cloud.google.com/firestore/
+[cloud-firestore-ref]: https://godoc.org/cloud.google.com/go/firestore
+[cloud-firestore-docs]: https://cloud.google.com/firestore/docs
+[cloud-firestore-activation]: https://cloud.google.com/firestore/docs/activate
+
 [cloud-pubsub]: https://cloud.google.com/pubsub/
 [cloud-pubsub-ref]: https://godoc.org/cloud.google.com/go/pubsub
 [cloud-pubsub-docs]: https://cloud.google.com/pubsub/docs
@@ -413,11 +425,14 @@ for more information.
 [cloud-monitoring]: https://cloud.google.com/monitoring/
 [cloud-monitoring-ref]: https://godoc.org/cloud.google.com/go/monitoring/apiv3
 
-[cloud-vision]: https://cloud.google.com/vision/
-[cloud-vision-ref]: https://godoc.org/cloud.google.com/go/vision
+[cloud-vision]: https://cloud.google.com/vision
+[cloud-vision-ref]: https://godoc.org/cloud.google.com/go/vision/apiv1
 
 [cloud-language]: https://cloud.google.com/natural-language
 [cloud-language-ref]: https://godoc.org/cloud.google.com/go/language/apiv1
+
+[cloud-oslogin]: https://cloud.google.com/compute/docs/oslogin/rest
+[cloud-oslogin-ref]: https://cloud.google.com/compute/docs/oslogin/rest
 
 [cloud-speech]: https://cloud.google.com/speech
 [cloud-speech-ref]: https://godoc.org/cloud.google.com/go/speech/apiv1
@@ -429,10 +444,62 @@ for more information.
 [cloud-translation]: https://cloud.google.com/translation
 [cloud-translation-ref]: https://godoc.org/cloud.google.com/go/translation
 
-[cloud-trace]: https://cloud.google.com/trace/
-[cloud-trace-ref]: https://godoc.org/cloud.google.com/go/trace
+[cloud-video]: https://cloud.google.com/video-intelligence/
+[cloud-video-ref]: https://godoc.org/cloud.google.com/go/videointelligence/apiv1beta1
 
 [cloud-errors]: https://cloud.google.com/error-reporting/
-[cloud-errors-ref]: https://godoc.org/cloud.google.com/go/errors
+[cloud-errors-ref]: https://godoc.org/cloud.google.com/go/errorreporting
+
+[cloud-container]: https://cloud.google.com/containers/
+[cloud-container-ref]: https://godoc.org/cloud.google.com/go/container/apiv1
+
+[cloud-debugger]: https://cloud.google.com/debugger/
+[cloud-debugger-ref]: https://godoc.org/cloud.google.com/go/debugger/apiv2
+
+[cloud-dlp]: https://cloud.google.com/dlp/
+[cloud-dlp-ref]: https://godoc.org/cloud.google.com/go/dlp/apiv2beta1
 
 [default-creds]: https://developers.google.com/identity/protocols/application-default-credentials
+
+[cloud-dataproc]: https://cloud.google.com/dataproc/
+[cloud-dataproc-docs]: https://cloud.google.com/dataproc/docs
+[cloud-dataproc-ref]: https://godoc.org/cloud.google.com/go/dataproc/apiv1
+
+[cloud-iam]: https://cloud.google.com/iam/
+[cloud-iam-docs]: https://cloud.google.com/iam/docs
+[cloud-iam-ref]: https://godoc.org/cloud.google.com/go/iam
+
+[cloud-kms]: https://cloud.google.com/kms/
+[cloud-kms-docs]: https://cloud.google.com/kms/docs
+[cloud-kms-ref]: https://godoc.org/cloud.google.com/go/kms/apiv1
+
+[cloud-natural-language]: https://cloud.google.com/natural-language/
+[cloud-natural-language-docs]: https://cloud.google.com/natural-language/docs
+[cloud-natural-language-ref]: https://godoc.org/cloud.google.com/go/language/apiv1
+
+[cloud-memorystore]: https://cloud.google.com/memorystore/
+[cloud-memorystore-docs]: https://cloud.google.com/memorystore/docs
+[cloud-memorystore-ref]: https://godoc.org/cloud.google.com/go/redis/apiv1beta1
+
+[cloud-texttospeech]: https://cloud.google.com/texttospeech/
+[cloud-texttospeech-docs]: https://cloud.google.com/texttospeech/docs
+[cloud-texttospeech-ref]: https://godoc.org/cloud.google.com/go/texttospeech/apiv1
+
+[cloud-trace]: https://cloud.google.com/trace/
+[cloud-trace-docs]: https://cloud.google.com/trace/docs
+[cloud-trace-ref]: https://godoc.org/cloud.google.com/go/trace/apiv1
+
+[cloud-dialogflow]: https://cloud.google.com/dialogflow-enterprise/
+[cloud-dialogflow-docs]: https://cloud.google.com/dialogflow-enterprise/docs/
+[cloud-dialogflow-ref]: https://godoc.org/cloud.google.com/go/dialogflow/apiv2
+
+[cloud-containeranalysis]: https://cloud.google.com/container-registry/docs/container-analysis
+[cloud-containeranalysis-docs]: https://cloud.google.com/container-analysis/api/reference/rest/
+[cloud-containeranalysis-ref]: https://godoc.org/cloud.google.com/go/devtools/containeranalysis/apiv1beta1
+
+[cloud-asset]: https://cloud.google.com/security-command-center/docs/how-to-asset-inventory
+[cloud-asset-docs]: https://cloud.google.com/security-command-center/docs/how-to-asset-inventory
+[cloud-asset-ref]: https://godoc.org/cloud.google.com/go/asset/apiv1
+
+[cloud-tasks]: https://cloud.google.com/tasks/
+[cloud-tasks-ref]: https://godoc.org/cloud.google.com/go/cloudtasks/apiv2beta3

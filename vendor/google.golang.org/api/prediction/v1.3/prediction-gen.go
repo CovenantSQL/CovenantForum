@@ -1,3 +1,9 @@
+// Copyright 2018 Google Inc. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// AUTO-GENERATED CODE. DO NOT EDIT.
+
 // Package prediction provides access to the Prediction API.
 //
 // See https://developers.google.com/prediction/docs/developer-guide
@@ -11,18 +17,18 @@ package prediction // import "google.golang.org/api/prediction/v1.3"
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	context "golang.org/x/net/context"
-	ctxhttp "golang.org/x/net/context/ctxhttp"
-	gensupport "google.golang.org/api/gensupport"
-	googleapi "google.golang.org/api/googleapi"
 	"io"
 	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
+
+	gensupport "google.golang.org/api/gensupport"
+	googleapi "google.golang.org/api/googleapi"
 )
 
 // Always reference these packages, just in case the auto-generated code
@@ -38,7 +44,6 @@ var _ = googleapi.Version
 var _ = errors.New
 var _ = strings.Replace
 var _ = context.Canceled
-var _ = ctxhttp.Do
 
 const apiId = "prediction:v1.3"
 const apiName = "prediction"
@@ -127,8 +132,8 @@ type Input struct {
 }
 
 func (s *Input) MarshalJSON() ([]byte, error) {
-	type noMethod Input
-	raw := noMethod(*s)
+	type NoMethod Input
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -156,8 +161,8 @@ type InputInput struct {
 }
 
 func (s *InputInput) MarshalJSON() ([]byte, error) {
-	type noMethod InputInput
-	raw := noMethod(*s)
+	type NoMethod InputInput
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -203,18 +208,18 @@ type Output struct {
 }
 
 func (s *Output) MarshalJSON() ([]byte, error) {
-	type noMethod Output
-	raw := noMethod(*s)
+	type NoMethod Output
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *Output) UnmarshalJSON(data []byte) error {
-	type noMethod Output
+	type NoMethod Output
 	var s1 struct {
 		OutputValue gensupport.JSONFloat64 `json:"outputValue"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -247,18 +252,18 @@ type OutputOutputMulti struct {
 }
 
 func (s *OutputOutputMulti) MarshalJSON() ([]byte, error) {
-	type noMethod OutputOutputMulti
-	raw := noMethod(*s)
+	type NoMethod OutputOutputMulti
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *OutputOutputMulti) UnmarshalJSON(data []byte) error {
-	type noMethod OutputOutputMulti
+	type NoMethod OutputOutputMulti
 	var s1 struct {
 		Score gensupport.JSONFloat64 `json:"score"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -309,8 +314,8 @@ type Training struct {
 }
 
 func (s *Training) MarshalJSON() ([]byte, error) {
-	type noMethod Training
-	raw := noMethod(*s)
+	type NoMethod Training
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -376,20 +381,20 @@ type TrainingModelInfo struct {
 }
 
 func (s *TrainingModelInfo) MarshalJSON() ([]byte, error) {
-	type noMethod TrainingModelInfo
-	raw := noMethod(*s)
+	type NoMethod TrainingModelInfo
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 func (s *TrainingModelInfo) UnmarshalJSON(data []byte) error {
-	type noMethod TrainingModelInfo
+	type NoMethod TrainingModelInfo
 	var s1 struct {
 		ClassWeightedAccuracy  gensupport.JSONFloat64 `json:"classWeightedAccuracy"`
 		ClassificationAccuracy gensupport.JSONFloat64 `json:"classificationAccuracy"`
 		MeanSquaredError       gensupport.JSONFloat64 `json:"meanSquaredError"`
-		*noMethod
+		*NoMethod
 	}
-	s1.noMethod = (*noMethod)(s)
+	s1.NoMethod = (*NoMethod)(s)
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
@@ -424,8 +429,8 @@ type Update struct {
 }
 
 func (s *Update) MarshalJSON() ([]byte, error) {
-	type noMethod Update
-	raw := noMethod(*s)
+	type NoMethod Update
+	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
@@ -529,7 +534,7 @@ func (c *HostedmodelsPredictCall) Do(opts ...googleapi.CallOption) (*Output, err
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -764,7 +769,7 @@ func (c *TrainingGetCall) Do(opts ...googleapi.CallOption) (*Training, error) {
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -889,7 +894,7 @@ func (c *TrainingInsertCall) Do(opts ...googleapi.CallOption) (*Training, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1014,7 +1019,7 @@ func (c *TrainingPredictCall) Do(opts ...googleapi.CallOption) (*Output, error) 
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
@@ -1147,7 +1152,7 @@ func (c *TrainingUpdateCall) Do(opts ...googleapi.CallOption) (*Training, error)
 		},
 	}
 	target := &ret
-	if err := json.NewDecoder(res.Body).Decode(target); err != nil {
+	if err := gensupport.DecodeResponse(target, res); err != nil {
 		return nil, err
 	}
 	return ret, nil
