@@ -1,5 +1,7 @@
 # CovenantForum
 
+![](logo.png)
+        
 CovenantForum is a simple **decentralized** forum web app powered by [CovenantSQL](https://github.com/CovenantSQL/CovenantSQL).
 
 ## Decentralized forum?
