@@ -1,5 +1,5 @@
-![](logo.png)
-        
+<img src='logo.png' width='350' title='Decentralized Forum'>
+ 
 CovenantForum is a simple **decentralized** forum web app powered by [CovenantSQL](https://github.com/CovenantSQL/CovenantSQL).
 
 ## Decentralized forum?
