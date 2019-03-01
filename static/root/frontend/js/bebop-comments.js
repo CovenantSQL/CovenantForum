@@ -48,7 +48,7 @@ var BebopComments = Vue.component("bebop-comments", {
           <div class="avatar-block">
             <div class="cqldb comment">
               <a target="_blank" :href="comment.createdAt | getCommentSQLRequestHref"  v-bind:class="{ disabled: isCommentSQLRequestHrefEmpty(comment.createdAt) }">
-                <img src="http://developers.covenantsql.io/img/logo.svg" alt="logo" style="width: 19px;">CovenantSQL
+                <img src="https://developers.covenantsql.io/img/logo.svg" alt="logo" style="width: 19px;">CovenantSQL
               </a>
             </div>
             <div class="avatar-block-l">
