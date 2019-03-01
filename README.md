@@ -6,7 +6,7 @@ CovenantForum is a simple **decentralized** forum web app powered by [CovenantSQ
 
 - Data and files are saved in **decentralized database**. Anyone with a permission granted private key and the DSN(Database Serial Num) can serve the forum anywhere.
 - Also, all posts related data are saved on an unique `SQLChain Block` like [this](https://explorer.dbhub.org/dbs/e08d944b4ebd69e12aa69dade1798bb98cea4e2833e55fb6decc1f447fc720a4/requests/f39f9cb46c2821f6354d001fea9a5eaf2b96b06e83c218d46d810f353a039ec8).
-- Anyone can create your "blockchain powered forum" with just [few steps](#getting-started).
+- Anyone can create your "blockchain powered forum" with just [few steps](#create-your-new-forum).
 
 ## Features
 
