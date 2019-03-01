@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 func TestUser(t *testing.T) {

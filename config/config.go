@@ -1,4 +1,4 @@
-// Package config provides the bebop configuration file structure,
+// Package config provides the forum configuration file structure,
 // initialization and reading.
 package config
 
@@ -16,7 +16,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-// Config is a bebop configuration struct.
+// Config is a forum configuration struct.
 type Config struct {
 	Address string `hcl:"address" envconfig:"BEBOP_ADDRESS"`
 	BaseURL string `hcl:"base_url" envconfig:"BEBOP_BASE_URL"`
@@ -56,22 +56,6 @@ type Config struct {
 	Store struct {
 		Type string `hcl:"type" envconfig:"BEBOP_STORE_TYPE"`
 
-		PostgreSQL struct {
-			Address     string `hcl:"address" envconfig:"BEBOP_STORE_POSTGRESQL_ADDRESS"`
-			Username    string `hcl:"username" envconfig:"BEBOP_STORE_POSTGRESQL_USERNAME"`
-			Password    string `hcl:"password" envconfig:"BEBOP_STORE_POSTGRESQL_PASSWORD"`
-			Database    string `hcl:"database" envconfig:"BEBOP_STORE_POSTGRESQL_DATABASE"`
-			SSLMode     string `hcl:"sslmode" envconfig:"BEBOP_STORE_POSTGRESQL_SSLMODE"`
-			SSLRootCert string `hcl:"sslrootcert" envconfig:"BEBOP_STORE_POSTGRESQL_SSLROOTCERT"`
-		} `hcl:"postgresql"`
-
-		MySQL struct {
-			Address  string `hcl:"address" envconfig:"BEBOP_STORE_MYSQL_ADDRESS"`
-			Username string `hcl:"username" envconfig:"BEBOP_STORE_MYSQL_USERNAME"`
-			Password string `hcl:"password" envconfig:"BEBOP_STORE_MYSQL_PASSWORD"`
-			Database string `hcl:"database" envconfig:"BEBOP_STORE_MYSQL_DATABASE"`
-		} `hcl:"mysql"`
-
 		CovenantSQL struct {
 			Database  string `hcl:"database" envconfig:"BEBOP_STORE_COVENANTSQL_DATABASE"`
 			Config    string `hcl:"config" envconfig:"BEBOP_STORE_COVENANTSQL_CONFIG"`
@@ -97,7 +81,7 @@ type Config struct {
 	} `hcl:"oauth"`
 }
 
-// ReadFile reads a bebop config from file.
+// ReadFile reads a forum config from file.
 func ReadFile(filename string) (*Config, error) {
 	f, err := os.Open(filename)
 	if err != nil {
@@ -120,7 +104,7 @@ func ReadFile(filename string) (*Config, error) {
 	return cfg, nil
 }
 
-// ReadEnv reads a bebop config from environment variables.
+// ReadEnv reads a forum config from environment variables.
 func ReadEnv() (*Config, error) {
 	cfg := &Config{}
 	if err := envconfig.Process("", cfg); err != nil {
@@ -160,49 +144,28 @@ func GenKeyHex(byteLen int) string {
 var tpl = template.Must(template.New("initial-config").Parse(strings.TrimSpace(`
 address  = "127.0.0.1:8080"
 base_url = "https://example.com/forum"
-title    = "bebop"
+title    = "CovenantForum"
 
 jwt {
   secret = "{{.jwt_secret}}"
 }
 
 file_storage {
-  type = "local"
+  type = "covenant_s3"
 
   local {
-    dir = "./bebop_data/public/"
+    dir = "./"
   }
 
-  google_cloud_storage {
-    service_account_file = ""
-    bucket               = ""
-  }
-
-  amazon_s3 {
-    access_key = ""
-    secret_key = ""
-    region     = ""
-    bucket     = ""
+  covenant_s3 {
+    database  = ""
+    config    = ""
+    masterkey = ""
   }
 }
 
 store {
-  type = "postgresql"
-
-  postgresql {
-    address  = "127.0.0.1:5432"
-    username = ""
-    password = ""
-    database = ""
-    sslmode  = "disable"
-  }
-
-  mysql {
-    address  = "127.0.0.1:3306"
-    username = ""
-    password = ""
-    database = ""
-  }
+  type = "covenantsql"
 
   covenantsql {
     database  = ""

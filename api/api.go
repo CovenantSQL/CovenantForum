@@ -1,4 +1,4 @@
-// Package api provides an HTTP handler that handles the bebop REST API requests.
+// Package api provides an HTTP handler that handles the forum REST API requests.
 package api
 
 import (
@@ -12,9 +12,9 @@ import (
 
 	"github.com/go-chi/chi"
 
-	"github.com/CovenantSQL/bebop/avatar"
-	"github.com/CovenantSQL/bebop/jwt"
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/avatar"
+	"github.com/CovenantSQL/CovenantForum/jwt"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 // Config is an API handler configuration.

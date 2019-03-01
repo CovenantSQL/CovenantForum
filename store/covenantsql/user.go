@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 type userStore struct {

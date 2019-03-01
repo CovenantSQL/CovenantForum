@@ -28,7 +28,7 @@ bin/
 *.dll
 *.so
 *.dylib
-cmd/bebop/bebop
+cmd/forum/forum
 
 # Test binary, build with `go test -c`
 *.test
@@ -42,5 +42,3 @@ test/covenantsql*
 # Project-local glide cache, RE: https://github.com/Masterminds/glide/issues/736
 .glide/
 .idea/
-
-cmd/bebop/bebop_data/public/avatars/

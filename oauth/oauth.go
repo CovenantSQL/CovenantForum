@@ -15,8 +15,8 @@ import (
 	"github.com/satori/go.uuid"
 	"golang.org/x/oauth2"
 
-	"github.com/CovenantSQL/bebop/jwt"
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/jwt"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 const (

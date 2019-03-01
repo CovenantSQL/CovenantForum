@@ -1,7 +1,7 @@
 package avatar
 
 import (
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 // MockService is a mock implementation of avatar.Service

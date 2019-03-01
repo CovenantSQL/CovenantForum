@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/CovenantSQL/bebop/avatar"
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/avatar"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 const avatarUploadMaxBytes = 5 * 1024 * 1024

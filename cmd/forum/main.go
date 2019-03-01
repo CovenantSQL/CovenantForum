@@ -1,5 +1,5 @@
-// Bebop is a simple discussion board / forum web application.
-// The bebop command is a command-line tool that manages the bebop web server.
+// CovenantSQL is a simple discussion board / forum web application.
+// The forum command is a command-line tool that manages the forum web server.
 package main
 
 import (
@@ -38,14 +38,14 @@ func main() {
 
 func help() {
 	fmt.Fprintln(os.Stderr, `Usage:
-	bebop start                      - start the server
-	bebop init                       - create an initial configuration file
-	bebop gen-key                    - generate a random 32-byte hex-encoded key
-	bebop admins                     - show the admin list
-	bebop add-admin <username>       - add a user to the admin list
-	bebop remove-admin <username>    - remove a user from the admin list
-	bebop help                       - show this message
+	forum start                      - start the server
+	forum init                       - create an initial configuration file
+	forum gen-key                    - generate a random 32-byte hex-encoded key
+	forum admins                     - show the admin list
+	forum add-admin <username>       - add a user to the admin list
+	forum remove-admin <username>    - remove a user from the admin list
+	forum help                       - show this message
 Use -e flag to read configuration from environment variables instead of a file. E.g.:
-	bebop -e start
-	bebop -e admins`)
+	forum -e start
+	forum -e admins`)
 }

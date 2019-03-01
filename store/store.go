@@ -1,4 +1,4 @@
-// Package store provides a bebop data store interface.
+// Package store provides a forum data store interface.
 package store
 
 import (
@@ -12,14 +12,14 @@ var (
 	ErrConflict = errors.New("store: item conflict")
 )
 
-// Store is a bebop data store interface.
+// Store is a forum data store interface.
 type Store interface {
 	Users() UserStore
 	Topics() TopicStore
 	Comments() CommentStore
 }
 
-// UserStore is a bebop user data store interface.
+// UserStore is a forum user data store interface.
 type UserStore interface {
 	New(authService string, authID string) (int64, error)
 	Get(id int64) (*User, error)
@@ -33,7 +33,7 @@ type UserStore interface {
 	SetAvatar(id int64, avatar string) error
 }
 
-// TopicStore is a bebop topic data store interface.
+// TopicStore is a forum topic data store interface.
 type TopicStore interface {
 	New(authorID int64, title string) (int64, error)
 	Get(id int64) (*Topic, error)
@@ -42,7 +42,7 @@ type TopicStore interface {
 	Delete(id int64) error
 }
 
-// CommentStore is a bebop comment data store interface.
+// CommentStore is a forum comment data store interface.
 type CommentStore interface {
 	New(topicID int64, authorID int64, content string) (int64, error)
 	Get(id int64) (*Comment, error)

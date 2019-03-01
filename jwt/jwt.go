@@ -1,5 +1,5 @@
 // Package jwt provides a service to create and verify
-// JWT auth tokens for the bebop web app.
+// JWT auth tokens for the forum web app.
 package jwt
 
 import (

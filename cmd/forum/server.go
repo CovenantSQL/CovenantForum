@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CovenantSQL/bebop/filestorage"
+	"github.com/CovenantSQL/CovenantForum/filestorage"
 	"net/http"
 	"net/url"
 	"sort"
@@ -11,15 +11,15 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 
-	"github.com/CovenantSQL/bebop/api"
-	"github.com/CovenantSQL/bebop/avatar"
-	"github.com/CovenantSQL/bebop/config"
-	"github.com/CovenantSQL/bebop/jwt"
-	"github.com/CovenantSQL/bebop/oauth"
-	"github.com/CovenantSQL/bebop/static"
+	"github.com/CovenantSQL/CovenantForum/api"
+	"github.com/CovenantSQL/CovenantForum/avatar"
+	"github.com/CovenantSQL/CovenantForum/config"
+	"github.com/CovenantSQL/CovenantForum/jwt"
+	"github.com/CovenantSQL/CovenantForum/oauth"
+	"github.com/CovenantSQL/CovenantForum/static"
 )
 
-// startServer configures and starts the bebop web server.
+// startServer configures and starts the forum web server.
 func startServer() {
 	cfg, err := getConfig()
 	if err != nil {

@@ -1,7 +1,7 @@
 package mock
 
 import (
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 // Store is a mock implementation of store.Store.

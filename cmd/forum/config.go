@@ -2,18 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/CovenantSQL/bebop/store/covenantsql"
+	"github.com/CovenantSQL/CovenantForum/store/covenantsql"
 	"io/ioutil"
 	"os"
 
-	"github.com/CovenantSQL/bebop/config"
-	"github.com/CovenantSQL/bebop/filestorage"
-	"github.com/CovenantSQL/bebop/store"
-	"github.com/CovenantSQL/bebop/store/mysql"
-	"github.com/CovenantSQL/bebop/store/postgresql"
+	"github.com/CovenantSQL/CovenantForum/config"
+	"github.com/CovenantSQL/CovenantForum/filestorage"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
-const configFile = "bebop.conf"
+const configFile = "forum.conf"
 
 // initConfig creates an initial configuration file inside the current directory.
 func initConfig() {
@@ -82,22 +80,6 @@ func getFileStorage(cfg *config.Config) (filestorage.FileStorage, error) {
 
 func getStore(cfg *config.Config) (store.Store, error) {
 	switch cfg.Store.Type {
-	case "mysql":
-		return mysql.Connect(
-			cfg.Store.MySQL.Address,
-			cfg.Store.MySQL.Username,
-			cfg.Store.MySQL.Password,
-			cfg.Store.MySQL.Database,
-		)
-	case "postgresql":
-		return postgresql.Connect(
-			cfg.Store.PostgreSQL.Address,
-			cfg.Store.PostgreSQL.Username,
-			cfg.Store.PostgreSQL.Password,
-			cfg.Store.PostgreSQL.Database,
-			cfg.Store.PostgreSQL.SSLMode,
-			cfg.Store.PostgreSQL.SSLRootCert,
-		)
 	case "covenantsql":
 		return covenantsql.Connect(
 			cfg.Store.CovenantSQL.Database,

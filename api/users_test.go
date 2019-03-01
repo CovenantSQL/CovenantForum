@@ -11,10 +11,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/CovenantSQL/bebop/avatar"
-	"github.com/CovenantSQL/bebop/jwt"
-	"github.com/CovenantSQL/bebop/store"
-	"github.com/CovenantSQL/bebop/store/mock"
+	"github.com/CovenantSQL/CovenantForum/avatar"
+	"github.com/CovenantSQL/CovenantForum/jwt"
+	"github.com/CovenantSQL/CovenantForum/store"
+	"github.com/CovenantSQL/CovenantForum/store/mock"
 )
 
 func TestHandleMe(t *testing.T) {

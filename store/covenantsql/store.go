@@ -1,4 +1,4 @@
-// Package covenantsql provides a CovenantSQL implementation of the bebop data store interface.
+// Package covenantsql provides a CovenantSQL implementation of the forum data store interface.
 package covenantsql
 
 import (
@@ -6,7 +6,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/CovenantSQL/CovenantSQL/client"
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/store"
 	"log"
 	"strings"
 )

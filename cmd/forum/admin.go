@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 // printAdmins prints all the administrator users.

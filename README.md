@@ -38,29 +38,29 @@ Comparison between Traditional and Decentralized forum:
   * Get PTC by replying to the [topic](https://demo.covenantsql.io/forum/#/t/2) with your wallet address. 
   * Create a new empty CovenantSQL database with [cql](https://github.com/CovenantSQL/CovenantSQL/wiki/Testnet-Quickstart#4-create-a-database-using-cli).
 
-  * Obtain OAuth 2.0 credentials (client_id and secret) from at least one of the providers (Google, Facebook, Github) so users can log into the web application. The OAuth callback url will be `<base_url>/oauth/end/<provider>`. The `<base_url>` is where the bebop web app will be mounted on your site and the `<provider>` is the lowercase provider name. For example, if base_url is `https://my.website.com/forum/`, then the oauth callback url for google will be `https://my.website.com/forum/oauth/end/google`.
+  * Obtain OAuth 2.0 credentials (client_id and secret) from at least one of the providers (Google, Facebook, Github) so users can log into the web application. The OAuth callback url will be `<base_url>/oauth/end/<provider>`. The `<base_url>` is where the forum web app will be mounted on your site and the `<provider>` is the lowercase provider name. For example, if base_url is `https://my.website.com/forum/`, then the oauth callback url for google will be `https://my.website.com/forum/oauth/end/google`.
 
-  * Download and compile the bebop binary:
+  * Download and compile the forum binary:
     ```
-    $ go get -u github.com/CovenantSQL/bebop/cmd/bebop
+    $ go get -u github.com/CovenantSQL/CovenantForum/cmd/forum
     ```
 
   * Inside an empty directory run:
     ```
-    $ bebop init
+    $ forum init
     ```
-    This will generate an initial configuration file "bebop.conf" inside the current dir.
+    This will generate an initial configuration file "forum.conf" inside the current dir.
     Edit the configuration file to set the server listen address, the base url, the database and file storage parameters, OAuth credentials, etc.
 
-  * Run the following command to start the bebop web server.
+  * Run the following command to start the forum web server.
     ```
-    $ bebop start
+    $ forum start
     ```
 
   * Sign in into your web application using one of the social login providers.
     Then run the following command to grant admin privileges to your user.
     ```
-    $ bebop add-admin <your-username>
+    $ forum add-admin <your-username>
     ```
 
 ## Screenshots
@@ -81,4 +81,4 @@ Comparison between Traditional and Decentralized forum:
 
 ## License
 
-- Most code is derivated from a simple traditional forum [disintegration/bebop](https://github.com/disintegration/bebop)
+- Most code is derivated from a simple traditional forum [disintegration/bebop](https://github.com/disintegration/bebop), but CovenantForum has a totally different purpose. So, we just create a new project.

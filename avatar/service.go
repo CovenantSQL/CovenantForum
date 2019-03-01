@@ -1,4 +1,4 @@
-// Package avatar provides a service that manages bebop user avatars.
+// Package avatar provides a service that manages forum user avatars.
 package avatar
 
 import (
@@ -23,8 +23,8 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 	"github.com/satori/go.uuid"
 
-	"github.com/CovenantSQL/bebop/filestorage"
-	"github.com/CovenantSQL/bebop/store"
+	"github.com/CovenantSQL/CovenantForum/filestorage"
+	"github.com/CovenantSQL/CovenantForum/store"
 )
 
 const (
