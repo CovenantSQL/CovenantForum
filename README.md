@@ -8,6 +8,10 @@ CovenantForum is a simple **decentralized** forum web app powered by [CovenantSQ
 - Also, all posts related data are saved on an unique `SQLChain Block` like [this](https://explorer.dbhub.org/dbs/e08d944b4ebd69e12aa69dade1798bb98cea4e2833e55fb6decc1f447fc720a4/requests/f39f9cb46c2821f6354d001fea9a5eaf2b96b06e83c218d46d810f353a039ec8).
 - Anyone can create your "blockchain powered forum" with just [few steps](#create-your-new-forum).
 
+## Twitter Bot
+
+- [@iBlockPin](https://twitter.com/iblockpin) will record your tweet to CovenantForum and the Blockchain.
+
 ## Features
 
 - Static files and database are powered by decentralized database: CovenantSQL.
