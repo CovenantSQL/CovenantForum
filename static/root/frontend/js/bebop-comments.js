@@ -47,13 +47,13 @@ var BebopComments = Vue.component("bebop-comments", {
 
           <div class="avatar-block">
             <div class="cqldb comment">
-              <a target="_blank" :href="comment.createdAt | getCommentSQLRequestHref"  v-bind:class="{ disabled: isCommentSQLRequestHrefEmpty(comment.createdAt) }">
-                <img src="https://developers.covenantsql.io/img/logo.svg" alt="logo" style="width: 19px;">CovenantSQL
+              <a target="_blank" :href="comment.requestHash | getCommentSQLRequestHref"  v-bind:class="{ disabled: isCommentHashEmpty(comment) }">
+                <img src="https://raw.githubusercontent.com/CovenantSQL/logos/master/logo_icon_white.svg" alt="logo" style="width: 19px;">CovenantSQL
               </a>
             </div>
             <div class="avatar-block-l">
-              <img v-if="users[comment.authorId].avatar" class="img-circle" :src="users[comment.authorId].avatar" width="35" height="35"> 
-              <img v-else class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" width="35" height="35"> 
+              <img v-if="users[comment.authorId].avatar" class="img-circle" :src="users[comment.authorId].avatar" width="35" height="35">
+              <img v-else class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" width="35" height="35">
             </div>
             <div class="avatar-block-r">
               <div class="comments-comment-author">{{users[comment.authorId].name}}</div>
@@ -71,7 +71,6 @@ var BebopComments = Vue.component("bebop-comments", {
             <span v-if="topic.commentCount > 1" class="info-separator"> | </span>
             <router-link :to="'/u/' + users[comment.authorId].id" class="a-tool"><i class="fa fa-user" aria-hidden="true"></i> user profile</router-link>
           </div>
-        
         </div>
 
         <div v-if="auth.authenticated && page === lastPage" class="comments-comment-new">
@@ -176,9 +175,8 @@ var BebopComments = Vue.component("bebop-comments", {
   },
 
   filters: {
-    getCommentSQLRequestHref: function (createdAt) {
-      let hash = findCommentHashByCreatedAt(createdAt)
-      console.log('// found hash:', hash)
+    getCommentSQLRequestHref: function (hash) {
+      // let hash = findCommentHashByCreatedAt(createdAt)
       return !!hash ? `${window.API_HOST}/dbs/${window.DBID}/requests/${hash}` : ''
     },
   },
@@ -200,8 +198,9 @@ var BebopComments = Vue.component("bebop-comments", {
       this.getComments().then(this.getCommentSQLQueries);
     },
 
-    isCommentSQLRequestHrefEmpty: function (createdAt) {
-      return findCommentHashByCreatedAt(createdAt) === ''
+    // if comment.requestHash is empty, disable the button
+    isCommentHashEmpty: function (comment) {
+      return comment.requestHash === ''
     },
     getCommentSQLQueries: function () {
       this.comments.forEach(comment => {
@@ -209,7 +208,8 @@ var BebopComments = Vue.component("bebop-comments", {
         const possibleHeight = this.computeTimeHeight(timestamp)
         console.log('// -- current comment possible height:', possibleHeight)
 
-        this.getTimeRelatedBlocks(possibleHeight)
+        // DEPRECATED find possible height by Chenxi 2019-04-24
+        // this.getTimeRelatedBlocks(possibleHeight)
       })
     },
     writeSQL: function (block) {

@@ -23,7 +23,7 @@ var BebopApp = new Vue({
       <div id="main">
         <router-view :config="config" :auth="auth" :rawConfig="rawConfig"></router-view>
       </div>
-      
+
       <footer class="nav-footer" id="footer">
         <a
           href="https://github.com/CovenantSQL/CovenantSQL"
@@ -90,11 +90,18 @@ var BebopApp = new Vue({
     getBlockHead: function () {
       if (window.DBID) {
         let url = HEAD_API()
-        console.log('// get current lead block for ', DBID)
+        console.log("   ___                                 _   __   ____  __ ")
+        console.log("  / __\\_____   _____ _ __   __ _ _ __ | |_/ _\\ /___ \\/ /")
+        console.log(" / /  / _ \\ \\ / / _ | '_ \\ / _\` | '_ \\| __\\ \\ //  / / /")
+        console.log("/ /__| (_) \\ V |  __| | | | (_| | | | | |__\\ / \\_/ / /___")
+        console.log("\\____/\\___/ \\_/ \\___|_| |_|\\__,_|_| |_|\\__\\__\\___,_\\____/")
+        console.log('--- connected')
+        console.log('')
+        console.log('--- current lead block for ', DBID)
 
         fetch(url).then(res => res.json()).then((d) => {
           let head = _.get(d, 'data.block', {})
-          console.log('// current head block', head)
+          console.log('--- current head block', head)
           db.set('head', head).write()
         }).catch(e => {
           console.error(e)
