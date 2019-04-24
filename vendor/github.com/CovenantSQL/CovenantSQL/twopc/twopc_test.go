@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package twopc
+package twopc_test
 
 import (
 	"context"
@@ -27,8 +27,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/CovenantSQL/CovenantSQL/twopc"
+
 	"github.com/CovenantSQL/CovenantSQL/crypto/etls"
 	"github.com/CovenantSQL/CovenantSQL/rpc"
+	"github.com/CovenantSQL/CovenantSQL/rpc/mux"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
 )
 
@@ -49,7 +52,7 @@ const (
 )
 
 var (
-	nodes  []Worker
+	nodes  []twopc.Worker
 	policy TestPolicy
 	pass   = "DU>p~[/dd2iImUs*"
 )
@@ -57,7 +60,7 @@ var (
 type RaftTxID uint64
 
 type RaftNodeRPCServer struct {
-	server *rpc.Server
+	server *mux.Server
 	addr   string
 
 	mu    sync.Mutex // Protects following fields
@@ -118,7 +121,7 @@ func NewRaftNode() (r *RaftNode, err error) {
 
 var simpleCipherHandler etls.CipherHandler = func(conn net.Conn) (cryptoConn *etls.CryptoConn, err error) {
 	cipher := etls.NewCipher([]byte(pass))
-	cryptoConn = etls.NewConn(conn, cipher, nil)
+	cryptoConn = etls.NewConn(conn, cipher)
 	return
 }
 
@@ -126,20 +129,21 @@ func (r *RaftNode) start() (err error) {
 	// Start a local RPC server to simulate a Raft node
 	addr := "127.0.0.1:0"
 
-	l, err := etls.NewCryptoListener("tcp", addr, simpleCipherHandler)
+	l, err := net.Listen("tcp", addr)
 	r.addr = l.Addr().String()
 
 	if err != nil {
 		return err
 	}
 
-	r.server, err = rpc.NewServerWithService(rpc.ServiceMap{"Raft": &r.RaftNodeRPCServer})
+	r.server, err = mux.NewServerWithService(mux.ServiceMap{"Raft": &r.RaftNodeRPCServer})
 
 	if err != nil {
 		return err
 	}
 
 	r.server.SetListener(l)
+	r.server.WithAcceptConnFunc(rpc.NewAcceptCryptoConnFunc(simpleCipherHandler))
 	go r.server.Serve()
 
 	return nil
@@ -215,7 +219,7 @@ func (r *RaftNodeRPCServer) RPCRollback(req *RaftRollbackReq, resp *RaftRollback
 	return nil
 }
 
-func (r *RaftNode) Prepare(ctx context.Context, wb WriteBatch) (err error) {
+func (r *RaftNode) Prepare(ctx context.Context, wb twopc.WriteBatch) (err error) {
 	log.WithFields(log.Fields{
 		"addr":  r.addr,
 		"phase": "prepare",
@@ -239,16 +243,16 @@ func (r *RaftNode) Prepare(ctx context.Context, wb WriteBatch) (err error) {
 		return err
 	}
 
-	client, err := rpc.InitClientConn(conn)
-
+	muxconn, err := mux.NewOneOffMuxConn(conn)
 	if err != nil {
-		return err
+		return
 	}
 
+	client := rpc.NewClient(muxconn)
 	d, ok := ctx.Deadline()
 
 	if ok {
-		err = conn.SetDeadline(d)
+		err = muxconn.SetDeadline(d)
 
 		if err != nil {
 			return err
@@ -269,7 +273,7 @@ func (r *RaftNode) Prepare(ctx context.Context, wb WriteBatch) (err error) {
 	return err
 }
 
-func (r *RaftNode) Commit(ctx context.Context, wb WriteBatch) (result interface{}, err error) {
+func (r *RaftNode) Commit(ctx context.Context, wb twopc.WriteBatch) (result interface{}, err error) {
 	log.Debugf("executing 2pc: addr = %s, phase = commit", r.addr)
 	defer log.Debugf("2pc result: addr = %s, phase = commit, result = %v", r.addr, err)
 
@@ -287,16 +291,16 @@ func (r *RaftNode) Commit(ctx context.Context, wb WriteBatch) (result interface{
 		return
 	}
 
-	client, err := rpc.InitClientConn(conn)
-
+	muxconn, err := mux.NewOneOffMuxConn(conn)
 	if err != nil {
 		return
 	}
 
+	client := rpc.NewClient(muxconn)
 	d, ok := ctx.Deadline()
 
 	if ok {
-		err = conn.SetDeadline(d)
+		err = muxconn.SetDeadline(d)
 
 		if err != nil {
 			return
@@ -318,7 +322,7 @@ func (r *RaftNode) Commit(ctx context.Context, wb WriteBatch) (result interface{
 	return
 }
 
-func (r *RaftNode) Rollback(ctx context.Context, wb WriteBatch) (err error) {
+func (r *RaftNode) Rollback(ctx context.Context, wb twopc.WriteBatch) (err error) {
 	log.Debugf("executing 2pc: addr = %s, phase = rollback", r.addr)
 	defer log.Debugf("2pc result: addr = %s, phase = rollback, result = %v", r.addr, err)
 
@@ -336,16 +340,16 @@ func (r *RaftNode) Rollback(ctx context.Context, wb WriteBatch) (err error) {
 		return err
 	}
 
-	client, err := rpc.InitClientConn(conn)
-
+	muxconn, err := mux.NewOneOffMuxConn(conn)
 	if err != nil {
-		return err
+		return
 	}
 
+	client := rpc.NewClient(muxconn)
 	d, ok := ctx.Deadline()
 
 	if ok {
-		err = conn.SetDeadline(d)
+		err = muxconn.SetDeadline(d)
 
 		if err != nil {
 			return err
@@ -368,7 +372,7 @@ func (r *RaftNode) Rollback(ctx context.Context, wb WriteBatch) (err error) {
 
 func testSetup() (err error) {
 	log.SetLevel(log.DebugLevel)
-	nodes = make([]Worker, 10)
+	nodes = make([]twopc.Worker, 10)
 
 	for index := 0; index < 10; index++ {
 		nodes[index], err = NewRaftNode()
@@ -414,7 +418,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestTwoPhaseCommit(t *testing.T) {
-	c := NewCoordinator(&Options{timeout: 5 * time.Second})
+	c := twopc.NewCoordinator(twopc.NewOptions(5 * time.Second))
 
 	testNodeReset()
 
@@ -461,29 +465,30 @@ func TestTwoPhaseCommit_WithHooks(t *testing.T) {
 	beforeRollbackError := errors.New("before rollback error")
 	policy = AllGood
 
-	c := NewCoordinator(&Options{
-		timeout: 5 * time.Second,
-		beforePrepare: func(cxt context.Context) error {
+	c := twopc.NewCoordinator(twopc.NewOptionsWithCallback(
+		5*time.Second,
+		func(cxt context.Context) error {
 			if errorBeforePrepare {
 				return beforePrepareError
 			}
 
 			return nil
-		},
-		beforeCommit: func(ctx context.Context) error {
+		}, // before prepare
+		func(ctx context.Context) error {
 			if errorBeforeCommit {
 				return beforeCommitError
 			}
 
 			return nil
-		},
-		beforeRollback: func(ctx context.Context) error {
+		}, // before commit
+		func(ctx context.Context) error {
 			if errorBeforeRollback {
 				return beforeRollbackError
 			}
 
 			return nil
-		}})
+		}, // before rollback
+		nil))
 
 	testNodeReset()
 

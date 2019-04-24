@@ -37,7 +37,7 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/crypto/kms"
 	"github.com/CovenantSQL/CovenantSQL/proto"
 	"github.com/CovenantSQL/CovenantSQL/route"
-	"github.com/CovenantSQL/CovenantSQL/rpc"
+	rpc "github.com/CovenantSQL/CovenantSQL/rpc/mux"
 	"github.com/CovenantSQL/CovenantSQL/types"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
@@ -66,7 +66,8 @@ var (
 	globalSeqNo         uint64
 	randSource          = rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	defaultConfigFile = "~/.cql/config.yaml"
+	// DefaultConfigFile is the default path of config file
+	DefaultConfigFile = "~/.cql/config.yaml"
 )
 
 func init() {
@@ -99,14 +100,24 @@ func (d *covenantSQLDriver) Open(dsn string) (conn driver.Conn, err error) {
 
 // ResourceMeta defines new database resources requirement descriptions.
 type ResourceMeta struct {
-	types.ResourceMeta
-	GasPrice       uint64
-	AdvancePayment uint64
+	// copied fields from types.ResourceMeta
+	TargetMiners           []proto.AccountAddress `json:"target-miners,omitempty"`        // designated miners
+	Node                   uint16                 `json:"node,omitempty"`                 // reserved node count
+	Space                  uint64                 `json:"space,omitempty"`                // reserved storage space in bytes
+	Memory                 uint64                 `json:"memory",omitempty`               // reserved memory in bytes
+	LoadAvgPerCPU          float64                `json:"load-avg-per-cpu",omitempty`     // max loadAvg15 per CPU
+	EncryptionKey          string                 `json:"encrypt-key,omitempty"`          // encryption key for database instance
+	UseEventualConsistency bool                   `json:"eventual-consistency,omitempty"` // use eventual consistency replication if enabled
+	ConsistencyLevel       float64                `json:"consistency-level,omitempty"`    // customized strong consistency level
+	IsolationLevel         int                    `json:"isolation-level,omitempty"`      // customized isolation level
+
+	GasPrice       uint64 `json:"gas-price"`       // customized gas price
+	AdvancePayment uint64 `json:"advance-payment"` // customized advance payment
 }
 
 func defaultInit() (err error) {
-	configFile := utils.HomeDirExpand(defaultConfigFile)
-	if configFile == defaultConfigFile {
+	configFile := utils.HomeDirExpand(DefaultConfigFile)
+	if configFile == DefaultConfigFile {
 		//System not support ~ dir, need Init manually.
 		log.Debugf("Could not find CovenantSQL default config location: %v", configFile)
 		return ErrNotInitialized
@@ -185,8 +196,18 @@ func Create(meta ResourceMeta) (txHash hash.Hash, dsn string, err error) {
 
 	req.TTL = 1
 	req.Tx = types.NewCreateDatabase(&types.CreateDatabaseHeader{
-		Owner:          clientAddr,
-		ResourceMeta:   meta.ResourceMeta,
+		Owner: clientAddr,
+		ResourceMeta: types.ResourceMeta{
+			TargetMiners:           meta.TargetMiners,
+			Node:                   meta.Node,
+			Space:                  meta.Space,
+			Memory:                 meta.Memory,
+			LoadAvgPerCPU:          meta.LoadAvgPerCPU,
+			EncryptionKey:          meta.EncryptionKey,
+			UseEventualConsistency: meta.UseEventualConsistency,
+			ConsistencyLevel:       meta.ConsistencyLevel,
+			IsolationLevel:         meta.IsolationLevel,
+		},
 		GasPrice:       meta.GasPrice,
 		AdvancePayment: meta.AdvancePayment,
 		TokenType:      types.Particle,
@@ -282,9 +303,10 @@ func Drop(dsn string) (txHash hash.Hash, err error) {
 		return
 	}
 
-	_ = cfg
+	peerList.Delete(cfg.DatabaseID)
 
-	// currently not supported
+	//TODO(laodouya) currently not supported
+	//err = errors.New("drop db current not support")
 
 	return
 }
@@ -507,7 +529,9 @@ func registerNode() (err error) {
 		return
 	}
 
-	err = rpc.PingBP(nodeInfo, conf.GConf.BP.NodeID)
+	if nodeInfo.Role != proto.Leader && nodeInfo.Role != proto.Follower {
+		err = rpc.PingBP(nodeInfo, conf.GConf.BP.NodeID)
+	}
 
 	return
 }

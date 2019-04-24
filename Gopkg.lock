@@ -18,7 +18,8 @@
   version = "v0.36.0"
 
 [[projects]]
-  digest = "1:c32bb8f958202256144120534764c70c59d012b2bc455de884b5cf0e800182c7"
+  branch = "develop"
+  digest = "1:ff906bb3105dff5adae7bbb1e6d96e76a1978b37098f367dabb6273c0ed7c856"
   name = "github.com/CovenantSQL/CovenantSQL"
   packages = [
     "blockproducer",
@@ -35,10 +36,12 @@
     "crypto/symmetric",
     "crypto/verifier",
     "merkle",
+    "naconn",
     "pow/cpuminer",
     "proto",
     "route",
     "rpc",
+    "rpc/mux",
     "storage",
     "twopc",
     "types",
@@ -49,8 +52,7 @@
     "xenomint/sqlite",
   ]
   pruneopts = ""
-  revision = "cc7ca590bc99b324aecfda3d72033c16dceebb2b"
-  version = "v0.4.0"
+  revision = "f676b009921d26753e8f35366f892fe38102665c"
 
 [[projects]]
   digest = "1:eb83163ae01838cb1dc3cb1b798f306597673e935f85b0e23ed09793ba3ce2cf"
@@ -59,6 +61,14 @@
   pruneopts = ""
   revision = "6ae9d78bb97f20c0dbbdb74485974242bbbbdad5"
   version = "v2.0.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:36a7ce1536a6180a17cde1139aa5072149d5d438a08b5b063ea10e5165faefb8"
+  name = "github.com/CovenantSQL/beacon"
+  packages = ["ipv6"]
+  pruneopts = ""
+  revision = "9f84f37adc0c8ead41f8a1135bdedfd86403fb8b"
 
 [[projects]]
   digest = "1:bc03901fc8f0965ccba8bc453eae21a9b04f95999eab664c7de6dc7290f4e8f4"
@@ -128,14 +138,6 @@
   packages = ["base58"]
   pruneopts = ""
   revision = "4c204d6978034c001714728401fcd63060d568b4"
-
-[[projects]]
-  digest = "1:8fe1bf6222077787bf88db4eae509f1c910743be1b82e1a6a57444fe092fc4a5"
-  name = "github.com/coreos/bbolt"
-  packages = ["."]
-  pruneopts = ""
-  revision = "63597a96ec0ad9e6d43c3fc81e809909e0237461"
-  version = "v1.3.2"
 
 [[projects]]
   digest = "1:5e28203babfbe4fa2c77b35556f8e8cc798cc4a2990efaf567f7a3e308460035"
@@ -250,14 +252,6 @@
   pruneopts = ""
   revision = "f55edac94c9bbba5d6182a4be46d86a2c9b5b50e"
   version = "v1.0.2"
-
-[[projects]]
-  digest = "1:103c1001b79009329824bc60f93f8f7150bf1ad31f18d29a476deb8a2de0f002"
-  name = "github.com/miekg/dns"
-  packages = ["."]
-  pruneopts = ""
-  revision = "8fc2e5773bbd308ca2fcc962fd8d25c1bd0f6743"
-  version = "v1.1.4"
 
 [[projects]]
   branch = "master"
@@ -377,11 +371,7 @@
   branch = "master"
   digest = "1:7a77b79efe106f3304dcf50dc86836151758f246169b527722552a5eb2ae14fc"
   name = "golang.org/x/crypto"
-  packages = [
-    "ed25519",
-    "ed25519/internal/edwards25519",
-    "ssh/terminal",
-  ]
+  packages = ["ssh/terminal"]
   pruneopts = ""
   revision = "8dd112bcdc25174059e45e07517d9fc663123347"
 
@@ -408,18 +398,13 @@
   digest = "1:2b08539d056d6b2da4233648f5014d84cb70a9c278523374c75776a75a32d03e"
   name = "golang.org/x/net"
   packages = [
-    "bpf",
     "context",
     "context/ctxhttp",
     "http/httpguts",
     "http2",
     "http2/hpack",
     "idna",
-    "internal/iana",
-    "internal/socket",
     "internal/timeseries",
-    "ipv4",
-    "ipv6",
     "trace",
   ]
   pruneopts = ""

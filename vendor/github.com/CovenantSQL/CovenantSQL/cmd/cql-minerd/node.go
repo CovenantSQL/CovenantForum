@@ -18,7 +18,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"syscall"
 	"time"
 
@@ -28,12 +27,14 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/crypto/kms"
 	"github.com/CovenantSQL/CovenantSQL/route"
 	"github.com/CovenantSQL/CovenantSQL/rpc"
+	"github.com/CovenantSQL/CovenantSQL/rpc/mux"
+	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
 )
 
-func initNode() (server *rpc.Server, err error) {
+func initNode() (server *mux.Server, direct *rpc.Server, err error) {
 	var masterKey []byte
-	if !conf.GConf.IsTestMode {
+	if !conf.GConf.UseTestMasterKey {
 		// read master key
 		fmt.Print("Type in Master key to continue: ")
 		masterKey, err = terminal.ReadPassword(syscall.Stdin)
@@ -53,30 +54,44 @@ func initNode() (server *rpc.Server, err error) {
 	// init kms routing
 	route.InitKMS(conf.GConf.PubKeyStoreFile)
 
-	err = rpc.RegisterNodeToBP(30 * time.Second)
+	err = mux.RegisterNodeToBP(30 * time.Second)
 	if err != nil {
 		log.Fatalf("register node to BP failed: %v", err)
 	}
 
 	// init server
+	utils.RemoveAll(conf.GConf.PubKeyStoreFile + "*")
 	if server, err = createServer(
-		conf.GConf.PrivateKeyFile, conf.GConf.PubKeyStoreFile, masterKey, conf.GConf.ListenAddr); err != nil {
+		conf.GConf.PrivateKeyFile, masterKey, conf.GConf.ListenAddr); err != nil {
 		log.WithError(err).Error("create server failed")
+		return
+	}
+	if direct, err = createDirectServer(
+		conf.GConf.PrivateKeyFile, masterKey, conf.GConf.ListenDirectAddr); err != nil {
+		log.WithError(err).Error("create direct server failed")
 		return
 	}
 
 	return
 }
 
-func createServer(privateKeyPath, pubKeyStorePath string, masterKey []byte, listenAddr string) (server *rpc.Server, err error) {
-	os.Remove(pubKeyStorePath)
+func createServer(privateKeyPath string, masterKey []byte, listenAddr string) (server *mux.Server, err error) {
+	server = mux.NewServer()
+	if err != nil {
+		return
+	}
+	err = server.InitRPCServer(listenAddr, privateKeyPath, masterKey)
+	return
+}
 
+func createDirectServer(privateKeyPath string, masterKey []byte, listenAddr string) (server *rpc.Server, err error) {
+	if listenAddr == "" {
+		return nil, nil
+	}
 	server = rpc.NewServer()
 	if err != nil {
 		return
 	}
-
 	err = server.InitRPCServer(listenAddr, privateKeyPath, masterKey)
-
 	return
 }

@@ -1,30 +1,68 @@
-#!/bin/bash
+#! /usr/bin/env bash
+set -euo pipefail
 
-param=$1
+declare pkg="github.com/CovenantSQL/CovenantSQL/cmd/cql-minerd"
+declare flags=(
+    "-bench=^BenchmarkMinerGNTE$"
+    "-benchtime=10s"
+    "-run=^$"
+)
 
-#make -C ../../ clean && \
-#make -C ../../ use_all_cores && \
+clean() {
+    if [ -n "${TEST_WD}" ]; then
+        # Clean
+        sudo ${TEST_WD}/GNTE/scripts/cleanupDB.sh
+        bash -x ${TEST_WD}/GNTE/generate.sh ${delay_file}
+        sleep 5
+    fi
+}
 
-if [ "fast" == "$param" ]; then
-    go test -bench=^BenchmarkMinerGNTE1$ -benchtime=10s -run ^$ |tee gnte.log
-    go test -bench=^BenchmarkMinerGNTE2$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=1 -bench=^BenchmarkMinerGNTE2$ -benchtime=10s -run ^$ |tee -a gnte.log
-else
-    go test -bench=^BenchmarkMinerGNTE1$ -benchtime=10s -run ^$ |tee gnte.log
-    go test -bench=^BenchmarkMinerGNTE2$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -bench=^BenchmarkMinerGNTE3$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -bench=^BenchmarkMinerGNTE4$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -bench=^BenchmarkMinerGNTE8$ -benchtime=10s -run ^$ |tee -a gnte.log
+fast() {
+    echo "Fast benchmarking with flags: $@"
+    clean
+    go test        "${flags[@]}" "$pkg" "$@"                      | tee -a gnte.log
+    clean
+    go test        "${flags[@]}" "$pkg" "$@" -bench-miner-count=2 | tee -a gnte.log
+    clean
+    go test -cpu=1 "${flags[@]}" "$pkg" "$@" -bench-miner-count=2 | tee -a gnte.log
+}
 
-    go test -cpu=4 -bench=^BenchmarkMinerGNTE1$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=4 -bench=^BenchmarkMinerGNTE2$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=4 -bench=^BenchmarkMinerGNTE3$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=4 -bench=^BenchmarkMinerGNTE4$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=4 -bench=^BenchmarkMinerGNTE8$ -benchtime=10s -run ^$ |tee -a gnte.log
+full() {
+    echo "Full benchmarking with flags: $@"
+    local cpus=("" 4 1) counts=(1 2 4 8)
+    local cpu count caseflags
+    for cpu in "${cpus[@]}"; do
+        if [[ -z $cpu ]]; then
+            caseflags=("${flags[@]}")
+        else
+            caseflags=("-cpu=$cpu" "${flags[@]}")
+        fi
+        for count in "${counts[@]}"; do
+            clean
 
-    go test -cpu=1 -bench=^BenchmarkMinerGNTE1$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=1 -bench=^BenchmarkMinerGNTE2$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=1 -bench=^BenchmarkMinerGNTE3$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=1 -bench=^BenchmarkMinerGNTE4$ -benchtime=10s -run ^$ |tee -a gnte.log
-    go test -cpu=1 -bench=^BenchmarkMinerGNTE8$ -benchtime=10s -run ^$ |tee -a gnte.log
-fi
+            go test "${caseflags[@]}" "$pkg" "$@" -bench-miner-count=$count | tee -a gnte.log
+
+            ips=(2 3 4 5 6 7 8 9)
+            cur_sec=`date '+%s'`
+            for ip in "${ips[@]}"; do
+                go tool pprof -png -inuse_objects http://10.250.100.${ip}:6060/debug/pprof/heap \
+                        > ${WORKSPACE}/${cur_sec}_minor_${ip}_objectinuse.png
+                go tool pprof -png http://10.250.100.${ip}:6060/debug/pprof/heap \
+                        > ${WORKSPACE}/${cur_sec}_minor_${ip}_heapinuse.png
+            done
+        done
+    done
+}
+
+main() {
+    rm -f gnte.log
+    touch gnte.log
+    if [[ $# -gt 0 && $1 = "fast" ]]; then
+        fast
+    else
+        full
+        full -bench-eventual-consistency
+    fi
+}
+
+main "$@"
