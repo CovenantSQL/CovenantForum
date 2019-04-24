@@ -51,7 +51,7 @@ func (s *commentStore) New(topicID int64, authorID int64, content string) (int64
 	_, err = tx.Exec(
 		`update comments set request_hash=? where id=?`,
 		receipt.RequestHash.String(),
-		topicID,
+		id,
 	)
 	if err != nil {
 		return 0, err
