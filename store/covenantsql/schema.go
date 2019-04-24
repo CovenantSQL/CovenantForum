@@ -41,6 +41,13 @@ var migrate = []string{
 	`,
 }
 
+var upgrade = []string{
+	`alter table topics add column request_hash text not null default '';
+	`,
+	`alter table comments add column request_hash text not null default '';
+	`,
+}
+
 var drop = []string{
 	`drop table if exists users`,
 	`drop table if exists topics`,

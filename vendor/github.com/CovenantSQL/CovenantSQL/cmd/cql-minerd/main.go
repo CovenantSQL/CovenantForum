@@ -24,9 +24,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"os"
-	"os/signal"
 	"runtime"
-	"syscall"
 	"time"
 
 	graphite "github.com/cyberdelia/go-metrics-graphite"
@@ -37,8 +35,10 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/crypto/kms"
 	"github.com/CovenantSQL/CovenantSQL/metric"
 	"github.com/CovenantSQL/CovenantSQL/rpc"
+	"github.com/CovenantSQL/CovenantSQL/rpc/mux"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
+	_ "github.com/CovenantSQL/CovenantSQL/utils/log/debug"
 	"github.com/CovenantSQL/CovenantSQL/utils/trace"
 	"github.com/CovenantSQL/CovenantSQL/worker"
 )
@@ -170,8 +170,11 @@ func main() {
 	conf.GConf.GenerateKeyPair = genKeyPair
 
 	// start rpc
-	var server *rpc.Server
-	if server, err = initNode(); err != nil {
+	var (
+		server *mux.Server
+		direct *rpc.Server
+	)
+	if server, direct, err = initNode(); err != nil {
 		log.WithError(err).Fatal("init node failed")
 	}
 
@@ -214,7 +217,7 @@ func main() {
 
 	// start dbms
 	var dbms *worker.DBMS
-	if dbms, err = startDBMS(server, func() {
+	if dbms, err = startDBMS(server, direct, func() {
 		sendProvideService(reg)
 	}); err != nil {
 		log.WithError(err).Fatal("start dbms failed")
@@ -226,18 +229,15 @@ func main() {
 	go func() {
 		server.Serve()
 	}()
-	defer func() {
-		_ = server.Listener.Close()
-		server.Stop()
-	}()
+	defer server.Stop()
 
-	signalCh := make(chan os.Signal, 1)
-	signal.Notify(
-		signalCh,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-	)
-	signal.Ignore(syscall.SIGHUP, syscall.SIGTTIN, syscall.SIGTTOU)
+	// start direct rpc server
+	if direct != nil {
+		go func() {
+			direct.Serve()
+		}()
+		defer direct.Stop()
+	}
 
 	if metricLog {
 		go metrics.Log(metrics.DefaultRegistry, 5*time.Second, log.StandardLogger())
@@ -270,7 +270,7 @@ func main() {
 		defer trace.Stop()
 	}
 
-	<-signalCh
+	<-utils.WaitForExit()
 	utils.StopProfile()
 
 	log.Info("miner stopped")

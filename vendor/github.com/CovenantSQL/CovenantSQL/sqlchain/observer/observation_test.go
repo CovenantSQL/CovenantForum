@@ -1,5 +1,3 @@
-// +build !testbinary
-
 /*
  * Copyright 2018 The CovenantSQL Authors.
  *
@@ -45,7 +43,7 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/crypto/kms"
 	"github.com/CovenantSQL/CovenantSQL/proto"
 	"github.com/CovenantSQL/CovenantSQL/route"
-	"github.com/CovenantSQL/CovenantSQL/rpc"
+	rpc "github.com/CovenantSQL/CovenantSQL/rpc/mux"
 	"github.com/CovenantSQL/CovenantSQL/test"
 	"github.com/CovenantSQL/CovenantSQL/types"
 	"github.com/CovenantSQL/CovenantSQL/utils"
@@ -91,7 +89,7 @@ func startNodes() {
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cqld.test"),
 		[]string{"-config", FJ(testWorkingDir, "./observation/node_0/config.yaml"),
-			"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/leader.cover.out"),
+			"-test.coverprofile", FJ(baseDir, "./cmd/cql/leader-observer.cover.out"),
 		},
 		"leader", testWorkingDir, logDir, false,
 	); err == nil {
@@ -102,7 +100,7 @@ func startNodes() {
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cqld.test"),
 		[]string{"-config", FJ(testWorkingDir, "./observation/node_1/config.yaml"),
-			"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/follower1.cover.out"),
+			"-test.coverprofile", FJ(baseDir, "./cmd/cql/follower1-observer.cover.out"),
 		},
 		"follower1", testWorkingDir, logDir, false,
 	); err == nil {
@@ -113,7 +111,7 @@ func startNodes() {
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cqld.test"),
 		[]string{"-config", FJ(testWorkingDir, "./observation/node_2/config.yaml"),
-			"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/follower2.cover.out"),
+			"-test.coverprofile", FJ(baseDir, "./cmd/cql/follower2-observer.cover.out"),
 		},
 		"follower2", testWorkingDir, logDir, false,
 	); err == nil {
@@ -150,7 +148,7 @@ func startNodes() {
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cql-minerd.test"),
 		[]string{"-config", FJ(testWorkingDir, "./observation/node_miner_0/config.yaml"),
-			"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/miner0.cover.out"),
+			"-test.coverprofile", FJ(baseDir, "./cmd/cql/miner0-observer.cover.out"),
 		},
 		"miner0", testWorkingDir, logDir, false,
 	); err == nil {
@@ -163,7 +161,7 @@ func startNodes() {
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cql-minerd.test"),
 		[]string{"-config", FJ(testWorkingDir, "./observation/node_miner_1/config.yaml"),
-			"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/miner1.cover.out"),
+			"-test.coverprofile", FJ(baseDir, "./cmd/cql/miner1-observer.cover.out"),
 		},
 		"miner1", testWorkingDir, logDir, false,
 	); err == nil {
@@ -176,7 +174,7 @@ func startNodes() {
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cql-minerd.test"),
 		[]string{"-config", FJ(testWorkingDir, "./observation/node_miner_2/config.yaml"),
-			"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/miner2.cover.out"),
+			"-test.coverprofile", FJ(baseDir, "./cmd/cql/miner2-observer.cover.out"),
 		},
 		"miner2", testWorkingDir, logDir, false,
 	); err == nil {
@@ -483,22 +481,25 @@ func TestFullProcess(t *testing.T) {
 		So(err, ShouldBeNil)
 
 		// remove previous observation result
-		os.Remove(FJ(testWorkingDir, "./observation/node_observer/observer.db"))
+		_ = os.Remove(FJ(testWorkingDir, "./observation/node_observer/observer.db"))
 
 		var observerCmd *utils.CMD
 		observerCmd, err = utils.RunCommandNB(
-			FJ(baseDir, "./bin/cql-observer.test"),
-			[]string{"-config", FJ(testWorkingDir, "./observation/node_observer/config.yaml"),
-				"-log-level", "debug",
-				"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/observer.cover.out"),
+			FJ(baseDir, "./bin/cql.test"),
+			[]string{"-test.coverprofile", FJ(baseDir, "./cmd/cql/observer.cover.out"),
+				"explorer",
+				"-config", FJ(testWorkingDir, "./observation/node_observer/config.yaml"),
+				"-no-password",
+				"-bg-log-level", "debug",
+				"127.0.0.1:4663",
 			},
 			"observer", testWorkingDir, logDir, false,
 		)
 		So(err, ShouldBeNil)
 
 		defer func() {
-			observerCmd.Cmd.Process.Signal(os.Interrupt)
-			observerCmd.Cmd.Wait()
+			_ = observerCmd.Cmd.Process.Signal(syscall.SIGTERM)
+			_ = observerCmd.Cmd.Wait()
 		}()
 
 		err = utils.WaitToConnect(context.Background(), "127.0.0.1", []int{4663}, time.Millisecond*200)
@@ -507,8 +508,6 @@ func TestFullProcess(t *testing.T) {
 		time.Sleep(time.Second)
 		// trigger the db subscription
 		res, err := getJSON("v1/head/%v", dbID)
-		So(err, ShouldNotBeNil)
-		log.Debug(err)
 
 		// wait for the observer to collect blocks
 		time.Sleep(conf.GConf.SQLChainPeriod * 5)
@@ -712,14 +711,18 @@ func TestFullProcess(t *testing.T) {
 		_, err = client.Drop(dsn2)
 		So(err, ShouldBeNil)
 
-		observerCmd.Cmd.Process.Signal(os.Interrupt)
-		observerCmd.Cmd.Wait()
+		_ = observerCmd.Cmd.Process.Signal(syscall.SIGTERM)
+		_ = observerCmd.Cmd.Wait()
 
 		// start observer again
 		observerCmd, err = utils.RunCommandNB(
-			FJ(baseDir, "./bin/cql-observer.test"),
-			[]string{"-config", FJ(testWorkingDir, "./observation/node_observer/config.yaml"),
-				"-test.coverprofile", FJ(baseDir, "./cmd/cql-observer/observer.cover.out"),
+			FJ(baseDir, "./bin/cql.test"),
+			[]string{"-test.coverprofile", FJ(baseDir, "./cmd/cql/observer.cover.out"),
+				"explorer",
+				"-config", FJ(testWorkingDir, "./observation/node_observer/config.yaml"),
+				"-no-password",
+				"-bg-log-level", "debug",
+				"127.0.0.1:4663",
 			},
 			"observer", testWorkingDir, logDir, false,
 		)

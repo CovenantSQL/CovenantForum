@@ -1,8 +1,12 @@
 package covenantsql
 
 import (
+	"context"
 	"database/sql"
+	"errors"
 	"time"
+
+	"github.com/CovenantSQL/CovenantSQL/client"
 
 	"github.com/CovenantSQL/CovenantForum/store"
 )
@@ -16,45 +20,56 @@ func (s *commentStore) New(topicID int64, authorID int64, content string) (int64
 	now := time.Now()
 
 	tx, err := s.db.Begin()
+	defer func() { _ = tx.Rollback() }()
 	if err != nil {
 		return 0, err
 	}
 
-	res, err := s.db.Exec(
+	ctx := client.WithReceipt(context.Background())
+	res, err := s.db.ExecContext(
+		ctx,
 		`insert into comments(topic_id, author_id, content, created_at) values (?, ?, ?, ?)`,
 		topicID, authorID, content, now,
 	)
 	if err != nil {
-		tx.Rollback()
 		return 0, err
+	}
+	receipt, ok := client.GetReceipt(ctx)
+	if !ok {
+		return 0, errors.New("comment receipt not found")
 	}
 
 	id, err := res.LastInsertId()
 	if err != nil {
-		tx.Rollback()
 		return 0, err
 	}
 
 	_, err = tx.Exec(`update topics set last_comment_at=?, comment_count=comment_count+1 where id=?`, now, topicID)
 	if err != nil {
-		tx.Rollback()
+		return 0, err
+	}
+	_, err = tx.Exec(
+		`update comments set request_hash=? where id=?`,
+		receipt.RequestHash.String(),
+		topicID,
+	)
+	if err != nil {
 		return 0, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
-		tx.Rollback()
 		return 0, err
 	}
 
 	return id, nil
 }
 
-const selectFromComments = `select id, topic_id, author_id, content, created_at from comments`
+const selectFromComments = `select id, topic_id, author_id, content, created_at, request_hash from comments`
 
 func (s *commentStore) scanComment(scanner scanner) (*store.Comment, error) {
 	c := new(store.Comment)
-	err := scanner.Scan(&c.ID, &c.TopicID, &c.AuthorID, &c.Content, &c.CreatedAt)
+	err := scanner.Scan(&c.ID, &c.TopicID, &c.AuthorID, &c.Content, &c.CreatedAt, &c.RequestHash)
 	if err == sql.ErrNoRows {
 		return nil, store.ErrNotFound
 	}

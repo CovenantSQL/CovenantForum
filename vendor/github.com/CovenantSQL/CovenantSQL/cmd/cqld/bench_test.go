@@ -20,7 +20,6 @@ package main
 
 import (
 	"context"
-	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -34,6 +33,7 @@ import (
 	"github.com/CovenantSQL/CovenantSQL/proto"
 	"github.com/CovenantSQL/CovenantSQL/route"
 	"github.com/CovenantSQL/CovenantSQL/rpc"
+	"github.com/CovenantSQL/CovenantSQL/rpc/mux"
 	"github.com/CovenantSQL/CovenantSQL/utils"
 	"github.com/CovenantSQL/CovenantSQL/utils/log"
 )
@@ -63,7 +63,7 @@ func start3BPs() {
 	var cmd *utils.CMD
 	os.Remove(FJ(testWorkingDir, "./node_0/chain.db"))
 	os.Remove(FJ(testWorkingDir, "./node_0/dht.db"))
-	os.Remove(FJ(testWorkingDir, "./node_0/public.keystore"))
+	utils.RemoveAll(FJ(testWorkingDir, "./node_0/public.keystore*"))
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cqld.test"),
 		[]string{"-config", FJ(testWorkingDir, "./node_0/config.yaml"),
@@ -77,7 +77,7 @@ func start3BPs() {
 	}
 	os.Remove(FJ(testWorkingDir, "./node_1/chain.db"))
 	os.Remove(FJ(testWorkingDir, "./node_1/dht.db"))
-	os.Remove(FJ(testWorkingDir, "./node_1/public.keystore"))
+	utils.RemoveAll(FJ(testWorkingDir, "./node_1/public.keystore*"))
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cqld.test"),
 		[]string{"-config", FJ(testWorkingDir, "./node_1/config.yaml"),
@@ -91,7 +91,7 @@ func start3BPs() {
 	}
 	os.Remove(FJ(testWorkingDir, "./node_2/chain.db"))
 	os.Remove(FJ(testWorkingDir, "./node_2/dht.db"))
-	os.Remove(FJ(testWorkingDir, "./node_2/public.keystore"))
+	utils.RemoveAll(FJ(testWorkingDir, "./node_2/public.keystore*"))
 	if cmd, err = utils.RunCommandNB(
 		FJ(baseDir, "./bin/cqld.test"),
 		[]string{"-config", FJ(testWorkingDir, "./node_2/config.yaml"),
@@ -104,7 +104,7 @@ func start3BPs() {
 		log.Errorf("start node failed: %v", err)
 	}
 	os.Remove(FJ(testWorkingDir, "./node_c/dht.db"))
-	os.Remove(FJ(testWorkingDir, "./node_c/public.keystore"))
+	utils.RemoveAll(FJ(testWorkingDir, "./node_c/public.keystore*"))
 }
 
 func stopNodes() {
@@ -162,14 +162,9 @@ func TestStartBP_CallRPC(t *testing.T) {
 	}
 
 	leaderNodeID := kms.BP.NodeID
-	var conn net.Conn
-	var RPCClient *rpc.Client
-
-	if conn, err = rpc.DialToNode(leaderNodeID, rpc.GetSessionPoolInstance(), false); err != nil {
-		t.Fatal(err)
-	}
-	if RPCClient, err = rpc.InitClientConn(conn); err != nil {
-		t.Fatal(err)
+	var RPCClient rpc.Client
+	if RPCClient, err = rpc.DialToNodeWithPool(mux.GetSessionPoolInstance(), leaderNodeID, false); err != nil {
+		return
 	}
 
 	nodePayload := proto.NewNode()
@@ -223,9 +218,10 @@ func TestStartBP_CallRPC(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	caller := rpc.NewCaller()
+	time.Sleep(3 * time.Second)
+	caller := mux.NewCaller()
 	for _, n := range conf.GConf.KnownNodes {
-		if n.Role == proto.Follower {
+		if n.Role == proto.Follower || n.Role == proto.Leader {
 			err = caller.CallNode(n.ID, "DHT."+reqType, reqFN, respFN)
 			log.Debugf("respFN %s: %##v", reqType, respFN.Node)
 			if err != nil || respFN.Node.Addr != "nodePayloadAddr" {
@@ -293,13 +289,8 @@ func BenchmarkKVServer_GetAllNodeInfo(b *testing.B) {
 	//}
 
 	leaderNodeID := kms.BP.NodeID
-	var conn net.Conn
-	var RPCClient *rpc.Client
-
-	if conn, err = rpc.DialToNode(leaderNodeID, rpc.GetSessionPoolInstance(), false); err != nil {
-		return
-	}
-	if RPCClient, err = rpc.InitClientConn(conn); err != nil {
+	var RPCClient rpc.Client
+	if RPCClient, err = rpc.DialToNodeWithPool(mux.GetSessionPoolInstance(), leaderNodeID, false); err != nil {
 		return
 	}
 

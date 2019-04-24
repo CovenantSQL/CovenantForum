@@ -5,8 +5,8 @@ import (
 	"bytes"
 	"database/sql"
 	"fmt"
-	"github.com/CovenantSQL/CovenantSQL/client"
 	"github.com/CovenantSQL/CovenantForum/store"
+	"github.com/CovenantSQL/CovenantSQL/client"
 	"log"
 	"strings"
 )
@@ -74,6 +74,13 @@ func (s *Store) Migrate() error {
 		_, err := s.db.Exec(q)
 		if err != nil {
 			return fmt.Errorf("sql exec error: %s; query: %q", err, q)
+		}
+	}
+	// upgrade, ignore duplicate column errors
+	for _, q := range upgrade {
+		_, err := s.db.Exec(q)
+		if err != nil {
+			log.Printf("fail to execute upgrade: %s, error: %s\n", q, err)
 		}
 	}
 	return nil

@@ -2,3 +2,6 @@
   name = "github.com/go-chi/chi"
   version = "^3.0.0"
 
+[[override]]
+  name = "github.com/CovenantSQL/CovenantSQL"
+  branch = "develop"

@@ -26,6 +26,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
 
@@ -668,15 +669,15 @@ func startAPI(service *Service, listenAddr string, version string) (server *http
 	}
 
 	router := mux.NewRouter()
-	fs := http.FileServer(statikFS)
-	router.Handle("/", fs)
-	router.Handle("/static/{type}/{file}", fs)
+	fsh := http.FileServer(statikFS)
+	router.Handle("/", fsh)
+	router.Handle("/static/{type}/{file}", fsh)
 	router.PathPrefix("/dbs").HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		r2 := new(http.Request)
 		*r2 = *request
 		r2.URL = new(url.URL)
 		r2.URL.Path = "/"
-		fs.ServeHTTP(writer, r2)
+		fsh.ServeHTTP(writer, r2)
 	})
 	router.HandleFunc("/version", func(rw http.ResponseWriter, r *http.Request) {
 		sendResponse(http.StatusOK, true, nil, map[string]interface{}{
@@ -687,7 +688,8 @@ func startAPI(service *Service, listenAddr string, version string) (server *http
 	api := &explorerAPI{
 		service: service,
 	}
-	v1Router := router.PathPrefix(apiProxyPrefix + "/v1").Subrouter()
+	apiRouter := router.PathPrefix(apiProxyPrefix).Subrouter()
+	v1Router := apiRouter.PathPrefix("/v1").Subrouter()
 	v1Router.HandleFunc("/ack/{db}/{hash}", api.GetAck).Methods("GET")
 	v1Router.HandleFunc("/offset/{db}/{offset:[0-9]+}",
 		func(writer http.ResponseWriter, request *http.Request) {
@@ -699,9 +701,9 @@ func startAPI(service *Service, listenAddr string, version string) (server *http
 	v1Router.HandleFunc("/count/{db}/{count:[0-9]+}", api.GetBlockByCount).Methods("GET")
 	v1Router.HandleFunc("/height/{db}/{height:[0-9]+}", api.GetBlockByHeight).Methods("GET")
 	v1Router.HandleFunc("/head/{db}", api.GetHighestBlock).Methods("GET")
-	v2Router := router.PathPrefix(apiProxyPrefix + "/v2").Subrouter()
+	v2Router := apiRouter.PathPrefix("/v2").Subrouter()
 	v2Router.HandleFunc("/head/{db}", api.GetHighestBlockV2).Methods("GET")
-	v3Router := router.PathPrefix(apiProxyPrefix + "/v3").Subrouter()
+	v3Router := apiRouter.PathPrefix("/v3").Subrouter()
 	v3Router.HandleFunc("/response/{db}/{hash}", api.GetResponse).Methods("GET")
 	v3Router.HandleFunc("/block/{db}/{hash}", api.GetBlockV3).Methods("GET")
 	v3Router.HandleFunc("/count/{db}/{count:[0-9]+}", api.GetBlockByCountV3).Methods("GET")
@@ -714,7 +716,9 @@ func startAPI(service *Service, listenAddr string, version string) (server *http
 		WriteTimeout: apiTimeout * 10,
 		ReadTimeout:  apiTimeout,
 		IdleTimeout:  apiTimeout,
-		Handler:      router,
+		Handler: handlers.CORS(
+			handlers.AllowedHeaders([]string{"Content-Type"}),
+		)(router),
 	}
 
 	go func() {

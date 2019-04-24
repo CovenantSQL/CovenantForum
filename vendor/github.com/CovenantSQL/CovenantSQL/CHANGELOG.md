@@ -1,5 +1,71 @@
 # Changelog
 
+## [v0.5.0](https://github.com/CovenantSQL/CovenantSQL/tree/v0.5.0) (2019-03-28)
+
+[Full Changelog](https://github.com/CovenantSQL/CovenantSQL/compare/v0.4.0...v0.5.0)
+
+**Closed issues:**
+
+- 生成的钱包地址无效 [\#282](https://github.com/CovenantSQL/CovenantSQL/issues/282)
+- I have developed an Excel add-in for this project [\#281](https://github.com/CovenantSQL/CovenantSQL/issues/281)
+- get stable coin balance failed [\#245](https://github.com/CovenantSQL/CovenantSQL/issues/245)
+- cql cannot parse covenantsql url with params [\#148](https://github.com/CovenantSQL/CovenantSQL/issues/148)
+- Error with fio test on cql-fuse [\#123](https://github.com/CovenantSQL/CovenantSQL/issues/123)
+- testnet.covenantsql.io上facebook发完有检测不到的情况 [\#107](https://github.com/CovenantSQL/CovenantSQL/issues/107)
+- Master key should not be input with env or args [\#106](https://github.com/CovenantSQL/CovenantSQL/issues/106)
+
+**Merged pull requests:**
+
+- Support version upgrade in update billing tx header [\#299](https://github.com/CovenantSQL/CovenantSQL/pull/299) ([xq262144](https://github.com/xq262144))
+- Promote beta branch [\#298](https://github.com/CovenantSQL/CovenantSQL/pull/298) ([leventeliu](https://github.com/leventeliu))
+- Revert a transaction type removal [\#297](https://github.com/CovenantSQL/CovenantSQL/pull/297) ([leventeliu](https://github.com/leventeliu))
+- Merge beta upstream [\#296](https://github.com/CovenantSQL/CovenantSQL/pull/296) ([leventeliu](https://github.com/leventeliu))
+- Reduce meta key length using byte version database id [\#294](https://github.com/CovenantSQL/CovenantSQL/pull/294) ([xq262144](https://github.com/xq262144))
+- Move all cql-utils functions to cql command [\#291](https://github.com/CovenantSQL/CovenantSQL/pull/291) ([laodouya](https://github.com/laodouya))
+- Simplify cql config and use IPv6 for bootstrap [\#290](https://github.com/CovenantSQL/CovenantSQL/pull/290) ([auxten](https://github.com/auxten))
+- Use a global leveldb instance for multiple chains [\#289](https://github.com/CovenantSQL/CovenantSQL/pull/289) ([leventeliu](https://github.com/leventeliu))
+- Support read-only local mirror [\#288](https://github.com/CovenantSQL/CovenantSQL/pull/288) ([xq262144](https://github.com/xq262144))
+- Use sqlite for dht key store [\#287](https://github.com/CovenantSQL/CovenantSQL/pull/287) ([xq262144](https://github.com/xq262144))
+- Refactor faucet for new testnet logic [\#286](https://github.com/CovenantSQL/CovenantSQL/pull/286) ([xq262144](https://github.com/xq262144))
+-  Refactor benchmark codes and scripts [\#285](https://github.com/CovenantSQL/CovenantSQL/pull/285) ([leventeliu](https://github.com/leventeliu))
+- Refactor cql command [\#284](https://github.com/CovenantSQL/CovenantSQL/pull/284) ([laodouya](https://github.com/laodouya))
+- Support content-type header in cors [\#280](https://github.com/CovenantSQL/CovenantSQL/pull/280) ([xq262144](https://github.com/xq262144))
+- Add end to end decrypt encrypt func [\#279](https://github.com/CovenantSQL/CovenantSQL/pull/279) ([auxten](https://github.com/auxten))
+- Trim release pkg [\#278](https://github.com/CovenantSQL/CovenantSQL/pull/278) ([auxten](https://github.com/auxten))
+- Use host default name server in docker [\#276](https://github.com/CovenantSQL/CovenantSQL/pull/276) ([auxten](https://github.com/auxten))
+- Skip empty block producing and add read queries [\#275](https://github.com/CovenantSQL/CovenantSQL/pull/275) ([leventeliu](https://github.com/leventeliu))
+- Update beta branch [\#274](https://github.com/CovenantSQL/CovenantSQL/pull/274) ([leventeliu](https://github.com/leventeliu))
+- Combine cql-adapter command into cql command. [\#273](https://github.com/CovenantSQL/CovenantSQL/pull/273) ([laodouya](https://github.com/laodouya))
+- Add http log level switcher for debug purpose [\#272](https://github.com/CovenantSQL/CovenantSQL/pull/272) ([xq262144](https://github.com/xq262144))
+- Fix isolation level auto rollback bug [\#271](https://github.com/CovenantSQL/CovenantSQL/pull/271) ([xq262144](https://github.com/xq262144))
+- Fix transaction directives, add commit to query sanitizer ignore list [\#270](https://github.com/CovenantSQL/CovenantSQL/pull/270) ([xq262144](https://github.com/xq262144))
+- Add previous version compatibility test [\#269](https://github.com/CovenantSQL/CovenantSQL/pull/269) ([laodouya](https://github.com/laodouya))
+
+## [v0.4.0](https://github.com/CovenantSQL/CovenantSQL/tree/v0.4.0) (2019-02-25)
+
+[Full Changelog](https://github.com/CovenantSQL/CovenantSQL/compare/v0.3.0...v0.4.0)
+
+**Merged pull requests:**
+
+- Use minimum assertion instead of exact version [\#265](https://github.com/CovenantSQL/CovenantSQL/pull/265) ([leventeliu](https://github.com/leventeliu))
+- Promote beta branch [\#264](https://github.com/CovenantSQL/CovenantSQL/pull/264) ([leventeliu](https://github.com/leventeliu))
+- Add imports format script and format all codes [\#263](https://github.com/CovenantSQL/CovenantSQL/pull/263) ([leventeliu](https://github.com/leventeliu))
+- Add listen flag for adapter [\#262](https://github.com/CovenantSQL/CovenantSQL/pull/262) ([auxten](https://github.com/auxten))
+- Use rpc broadcast for dht node info synchronization instead of kayak [\#261](https://github.com/CovenantSQL/CovenantSQL/pull/261) ([xq262144](https://github.com/xq262144))
+- Merge observer and explorer into cql [\#260](https://github.com/CovenantSQL/CovenantSQL/pull/260) ([auxten](https://github.com/auxten))
+-  Add transaction hash as return value in create/drop [\#259](https://github.com/CovenantSQL/CovenantSQL/pull/259) ([leventeliu](https://github.com/leventeliu))
+- Combine createRandomBlock functions into one. [\#258](https://github.com/CovenantSQL/CovenantSQL/pull/258) ([laodouya](https://github.com/laodouya))
+- Improve unit test cover ratio [\#257](https://github.com/CovenantSQL/CovenantSQL/pull/257) ([laodouya](https://github.com/laodouya))
+- Refactor observer synchronization to pull mode [\#256](https://github.com/CovenantSQL/CovenantSQL/pull/256) ([xq262144](https://github.com/xq262144))
+- Refactor observer synchronization to pull mode [\#255](https://github.com/CovenantSQL/CovenantSQL/pull/255) ([xq262144](https://github.com/xq262144))
+- Fix SQLChain forks [\#254](https://github.com/CovenantSQL/CovenantSQL/pull/254) ([xq262144](https://github.com/xq262144))
+- Update beta with develop updates [\#253](https://github.com/CovenantSQL/CovenantSQL/pull/253) ([xq262144](https://github.com/xq262144))
+- Improve unit test cover ratio. [\#251](https://github.com/CovenantSQL/CovenantSQL/pull/251) ([laodouya](https://github.com/laodouya))
+- Add blocks cache limit for block producers [\#249](https://github.com/CovenantSQL/CovenantSQL/pull/249) ([leventeliu](https://github.com/leventeliu))
+- Support pprof http handler in BlockProducer [\#248](https://github.com/CovenantSQL/CovenantSQL/pull/248) ([xq262144](https://github.com/xq262144))
+- Unit all docker client config to same private.key [\#247](https://github.com/CovenantSQL/CovenantSQL/pull/247) ([laodouya](https://github.com/laodouya))
+- Make observer API writeTimeout = 10 \* readTimeout [\#246](https://github.com/CovenantSQL/CovenantSQL/pull/246) ([auxten](https://github.com/auxten))
+
 ## [v0.3.0](https://github.com/CovenantSQL/CovenantSQL/tree/v0.3.0) (2019-01-30)
 
 [Full Changelog](https://github.com/CovenantSQL/CovenantSQL/compare/v0.2.0...v0.3.0)
