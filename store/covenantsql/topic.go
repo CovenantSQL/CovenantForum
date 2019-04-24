@@ -1,8 +1,12 @@
 package covenantsql
 
 import (
+	"context"
 	"database/sql"
+	"errors"
 	"time"
+
+	"github.com/CovenantSQL/CovenantSQL/client"
 
 	"github.com/CovenantSQL/CovenantForum/store"
 )
@@ -15,7 +19,9 @@ type topicStore struct {
 func (s *topicStore) New(authorID int64, title string) (int64, error) {
 	now := time.Now()
 
-	res, err := s.db.Exec(
+	ctx := client.WithReceipt(context.Background())
+	res, err := s.db.ExecContext(
+		ctx,
 		`
 			insert into topics(author_id, title, created_at, last_comment_at)
 			values(?, ?, ?, ?)
@@ -25,15 +31,33 @@ func (s *topicStore) New(authorID int64, title string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	receipt, ok := client.GetReceipt(ctx)
+	if !ok {
+		return 0, errors.New("topic receipt not found")
+	}
 
-	return res.LastInsertId()
+	topicID, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	_, err = s.db.Exec(
+		`update topics set request_hash=? where id=?`,
+		receipt.RequestHash.String(),
+		topicID,
+	)
+	if err != nil {
+		return 0, err
+	}
+
+	return topicID, nil
 }
 
-const selectFromTopics = `select id, author_id, title, created_at, last_comment_at, comment_count from topics`
+const selectFromTopics = `select id, author_id, title, created_at, last_comment_at, comment_count, request_hash from topics`
 
 func (s *topicStore) scanTopic(scanner scanner) (*store.Topic, error) {
 	t := new(store.Topic)
-	err := scanner.Scan(&t.ID, &t.AuthorID, &t.Title, &t.CreatedAt, &t.LastCommentAt, &t.CommentCount)
+	err := scanner.Scan(&t.ID, &t.AuthorID, &t.Title, &t.CreatedAt, &t.LastCommentAt, &t.CommentCount, &t.RequestHash)
 	if err == sql.ErrNoRows {
 		return nil, store.ErrNotFound
 	}

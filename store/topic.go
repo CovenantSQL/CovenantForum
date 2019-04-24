@@ -13,6 +13,7 @@ type Topic struct {
 	CreatedAt     time.Time `json:"createdAt"`
 	LastCommentAt time.Time `json:"lastCommentAt"`
 	CommentCount  int       `json:"commentCount"`
+	RequestHash   string    `json:"requestHash"`
 }
 
 const (

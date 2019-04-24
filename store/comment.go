@@ -7,11 +7,12 @@ import (
 
 // Comment is a single comment on a topic.
 type Comment struct {
-	ID        int64     `json:"id"`
-	TopicID   int64     `json:"topicId"`
-	AuthorID  int64     `json:"authorId"`
-	Content   string    `json:"content"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID          int64     `json:"id"`
+	TopicID     int64     `json:"topicId"`
+	AuthorID    int64     `json:"authorId"`
+	Content     string    `json:"content"`
+	CreatedAt   time.Time `json:"createdAt"`
+	RequestHash string    `json:"requestHash"`
 }
 
 const (
