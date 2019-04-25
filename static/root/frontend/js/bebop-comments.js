@@ -47,8 +47,9 @@ var BebopComments = Vue.component("bebop-comments", {
 
           <div class="avatar-block">
             <div class="cqldb comment">
-              <a target="_blank" :href="comment.requestHash | getCommentSQLRequestHref"  v-bind:class="{ disabled: !isCommentHashReady(comment) }">
-                <svg style="transform: translateY(6px);" width="20px" height="20px" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M0 0h45v45H0z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><g mask="url(#b)"><path d="M22.44 2L5 12.08v20.07l17.4 10.1h.06a60.48 60.48 0 0 1-.84-10.59v-1a8.94 8.94 0 1 1 7.85-3.31l.71.45a38.42 38.42 0 0 0 9.72 4.4V12.06L22.44 2zm-8.71 14.19a7.94 7.94 0 0 1 .51-7.32s.06-.09.08 0a14.83 14.83 0 0 0 1.11 3.58c.233.375.497.73.79 1.06a10.49 10.49 0 0 0-2.49 2.68zm17.38-.27a10.49 10.49 0 0 0-2.52-2.55 8 8 0 0 0 .75-1 7.91 7.91 0 0 0 1.1-3.44v-.18c0-.12 0-.07.08 0a7.94 7.94 0 0 1 .59 7.17z" fill="#FFF" fill-rule="nonzero"/></g></g></svg>
+              <a target="_blank" :href="comment.requestHash | getCommentSQLRequestHref" v-bind:class="{ disabled: !requestHashReady[comment.requestHash] }" >
+                <svg v-show="!requestHashReady[comment.requestHash]" style="transform: translateY(6px);" width="20px" height="20px" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg"><path opacity=".2" fill="#fff" d="M20.201 5.169c-8.254 0-14.946 6.692-14.946 14.946 0 8.255 6.692 14.946 14.946 14.946s14.946-6.691 14.946-14.946c-.001-8.254-6.692-14.946-14.946-14.946zm0 26.58c-6.425 0-11.634-5.208-11.634-11.634 0-6.425 5.209-11.634 11.634-11.634 6.425 0 11.633 5.209 11.633 11.634 0 6.426-5.208 11.634-11.633 11.634z"/><path fill="#fff" d="M26.013 10.047l1.654-2.866a14.855 14.855 0 0 0-7.466-2.012v3.312c2.119 0 4.1.576 5.812 1.566z"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="0.5s" repeatCount="indefinite"/></path></svg>
+                <svg v-show="requestHashReady[comment.requestHash]" style="transform: translateY(6px);" width="20px" height="20px" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M0 0h45v45H0z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><g mask="url(#b)"><path d="M22.44 2L5 12.08v20.07l17.4 10.1h.06a60.48 60.48 0 0 1-.84-10.59v-1a8.94 8.94 0 1 1 7.85-3.31l.71.45a38.42 38.42 0 0 0 9.72 4.4V12.06L22.44 2zm-8.71 14.19a7.94 7.94 0 0 1 .51-7.32s.06-.09.08 0a14.83 14.83 0 0 0 1.11 3.58c.233.375.497.73.79 1.06a10.49 10.49 0 0 0-2.49 2.68zm17.38-.27a10.49 10.49 0 0 0-2.52-2.55 8 8 0 0 0 .75-1 7.91 7.91 0 0 0 1.1-3.44v-.18c0-.12 0-.07.08 0a7.94 7.94 0 0 1 .59 7.17z" fill="#FFF" fill-rule="nonzero"/></g></g></svg>
                 CovenantSQL
               </a>
             </div>
@@ -101,6 +102,7 @@ var BebopComments = Vue.component("bebop-comments", {
     return {
       topic: {},
       topicReady: false,
+      requestHashReady: {},
       comments: [],
       commentCount: 0,
       commentsReady: false,
@@ -209,7 +211,13 @@ var BebopComments = Vue.component("bebop-comments", {
       // Add polling to get current requestHash's block by Chenxi 2019-04-25
       // set requestHashReady when the block is not emtpy, then stop polling
       this.comments.forEach(comment => {
+        // init requestHashReady
         const hash = comment.requestHash
+        // if comment created two mins ago then consider it as on-chain
+        let initState = (new Date()).getTime() - (new Date(comment.createdAt)).getTime() > 1000 * 120 ? true : false
+        this.$set(this.requestHashReady, hash, initState)
+        console.log('init hash ready', hash, initState)
+
         if (hash) {
           let interval = setInterval(() => {
             let url = window.SQL_HASH_API(hash)
