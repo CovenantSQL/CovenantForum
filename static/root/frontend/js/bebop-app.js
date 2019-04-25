@@ -5,6 +5,7 @@ const BEBOP_OAUTH_RESULT_COOKIE = "bebop_oauth_result";
 window.API_HOST = "https://explorer.dbhub.org"
 window.DBID = ""
 window.HEAD_API = () => `${window.API_HOST}/apiproxy.covenantsql/v2/head/${window.DBID}`
+window.SQL_HASH_API = (hash) => `${window.API_HOST}/apiproxy.covenantsql/v1/request/${window.DBID}/${hash}`
 window.BLOCK_API = (height) => `${window.API_HOST}/apiproxy.covenantsql/v3/count/${window.DBID}/${height}?page=1&size=999`
 
 // lowdb
@@ -95,9 +96,7 @@ var BebopApp = new Vue({
         console.log(" / /  / _ \\ \\ / / _ | '_ \\ / _\` | '_ \\| __\\ \\ //  / / /")
         console.log("/ /__| (_) \\ V |  __| | | | (_| | | | | |__\\ / \\_/ / /___")
         console.log("\\____/\\___/ \\_/ \\___|_| |_|\\__,_|_| |_|\\__\\__\\___,_\\____/")
-        console.log('--- connected')
-        console.log('')
-        console.log('--- current lead block for ', DBID)
+        console.log('--- connected db:', DBID)
 
         fetch(url).then(res => res.json()).then((d) => {
           let head = _.get(d, 'data.block', {})

@@ -47,7 +47,7 @@ var BebopComments = Vue.component("bebop-comments", {
 
           <div class="avatar-block">
             <div class="cqldb comment">
-              <a target="_blank" :href="comment.requestHash | getCommentSQLRequestHref"  v-bind:class="{ disabled: isCommentHashEmpty(comment) }">
+              <a target="_blank" :href="comment.requestHash | getCommentSQLRequestHref"  v-bind:class="{ disabled: !isCommentHashReady(comment) }">
                 <svg style="transform: translateY(6px);" width="20px" height="20px" viewBox="0 0 45 45" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="a" d="M0 0h45v45H0z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><g mask="url(#b)"><path d="M22.44 2L5 12.08v20.07l17.4 10.1h.06a60.48 60.48 0 0 1-.84-10.59v-1a8.94 8.94 0 1 1 7.85-3.31l.71.45a38.42 38.42 0 0 0 9.72 4.4V12.06L22.44 2zm-8.71 14.19a7.94 7.94 0 0 1 .51-7.32s.06-.09.08 0a14.83 14.83 0 0 0 1.11 3.58c.233.375.497.73.79 1.06a10.49 10.49 0 0 0-2.49 2.68zm17.38-.27a10.49 10.49 0 0 0-2.52-2.55 8 8 0 0 0 .75-1 7.91 7.91 0 0 0 1.1-3.44v-.18c0-.12 0-.07.08 0a7.94 7.94 0 0 1 .59 7.17z" fill="#FFF" fill-rule="nonzero"/></g></g></svg>
                 CovenantSQL
               </a>
@@ -186,6 +186,7 @@ var BebopComments = Vue.component("bebop-comments", {
     load: function () {
       this.topic = {};
       this.topicReady = false;
+      this.requestHashReady = {};
       this.comments = [];
       this.commentCount = 0;
       this.commentsReady = false;
@@ -200,19 +201,31 @@ var BebopComments = Vue.component("bebop-comments", {
     },
 
     // if comment.requestHash is empty, disable the button
-    isCommentHashEmpty: function (comment) {
-      return comment.requestHash === ''
+    isCommentHashReady: function (comment) {
+      return this.requestHashReady[comment.requestHash] === true
     },
     getCommentSQLQueries: function () {
       // DEPRECATED find possible height by Chenxi 2019-04-24
-      return
-      // this.comments.forEach(comment => {
-      //   const timestamp = (new Date(comment.createdAt)).getTime()
-      //   const possibleHeight = this.computeTimeHeight(timestamp)
-      //   console.log('// -- current comment possible height:', possibleHeight)
-      //
-      //   this.getTimeRelatedBlocks(possibleHeight)
-      // })
+      // Add polling to get current requestHash's block by Chenxi 2019-04-25
+      // set requestHashReady when the block is not emtpy, then stop polling
+      this.comments.forEach(comment => {
+        const hash = comment.requestHash
+        if (hash) {
+          let interval = setInterval(() => {
+            let url = window.SQL_HASH_API(hash)
+            fetch(url).then(res => res.json())
+              .then(d => {
+                if (d && d.data) {
+                  clearInterval(interval)
+                  this.requestHashReady[hash] = true
+                  console.log(hash, this.requestHashReady[hash])
+                }
+              })
+              .catch(e => { console.info("get hash's block", e) })
+          }, 3000)
+        }
+        // this.getTimeRelatedBlocks(possibleHeight)
+      })
     },
     writeSQL: function (block) {
       if (!_.isEmpty(block)) {
